@@ -1,1 +1,0 @@
-a:8:{i:0;s:2:"id";i:1;s:9:"articleId";i:2;s:8:"userName";i:3;s:4:"body";i:4;s:4:"face";i:5;s:11:"dateandtime";s:3:"_pk";s:2:"id";s:5:"_type";a:6:{s:2:"id";s:7:"int(11)";s:9:"articleId";s:7:"int(11)";s:8:"userName";s:12:"varchar(100)";s:4:"body";s:13:"varchar(1000)";s:4:"face";s:11:"varchar(20)";s:11:"dateandtime";s:9:"timestamp";}}
