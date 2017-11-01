@@ -10,16 +10,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-    <link rel="icon" type="image/png" href="/CIGO_CRM/CIGO_CRM/xige/public/i/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="/CIGO_CRM/CIGO_CRM/xige/public/i/app-icon72x72@2x.png">
+    <link rel="icon" type="image/png" href="/xige/Public/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="/xige/Public/i/app-icon72x72@2x.png">
     <meta name="apple-mobile-web-app-title" content="Amaze UI" />
-    <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/amazeui.min.css" />
-    <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/admin.css">
-    <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/app.css">
-    <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/boot.css">
-    <link rel="stylesheet" type="text/css" href="/CIGO_CRM/CIGO_CRM/xige/public/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/daterangepicker.css">
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="/xige/Public/css/amazeui.min.css" />
+    <link rel="stylesheet" href="/xige/Public/css/admin.css">
+    <link rel="stylesheet" href="/xige/Public/css/app.css">
+    <link rel="stylesheet" href="/xige/Public/css/boot.css">
+    <link rel="stylesheet" type="text/css" href="/xige/Public/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/xige/Public/css/daterangepicker.css">
+    <script src="/xige/Public/js/jquery.min.js"></script>
 
 </head>
 <!-- <script>
@@ -175,10 +175,10 @@
                 </div>
                 <div class="tpl-alert"></div>
             </div>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/amazeui.min.js"></script>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/app.js"></script>
-    <script type="text/javascript" src="/CIGO_CRM/CIGO_CRM/xige/public/js/moment.js"></script>
-<script type="text/javascript" src="/CIGO_CRM/CIGO_CRM/xige/public/js/daterangepicker.js"></script>
+    <script src="/xige/Public/js/amazeui.min.js"></script>
+    <script src="/xige/Public/js/app.js"></script>
+    <script type="text/javascript" src="/xige/Public/js/moment.js"></script>
+<script type="text/javascript" src="/xige/Public/js/daterangepicker.js"></script>
 <script type="text/javascript">
     $('#daterange-btn').daterangepicker({
             ranges: {

@@ -10,13 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-    <link rel="icon" type="image/png" href="/CIGO_CRM/CIGO_CRM/xige/public/i/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="/CIGO_CRM/CIGO_CRM/xige/public/i/app-icon72x72@2x.png">
+    <link rel="icon" type="image/png" href="/xige/Public/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="/xige/Public/i/app-icon72x72@2x.png">
     <meta name="apple-mobile-web-app-title" content="Amaze UI" />
-    <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/amazeui.min.css" />
-    <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/admin.css">
-    <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/app.css">
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/xige/Public/css/amazeui.min.css" />
+    <link rel="stylesheet" href="/xige/Public/css/admin.css">
+    <link rel="stylesheet" href="/xige/Public/css/app.css">
+    <script src="/xige/Public/js/echarts.min.js"></script>
     <style>
         html { overflow-x:hidden; }
     </style>
@@ -155,7 +155,7 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <img src="/CIGO_CRM/CIGO_CRM/xige/public/img/user01.png" alt="" class="user-pic">
+                                            <img src="/xige/Public/img/user01.png" alt="" class="user-pic">
                                             <a class="user-name" href="###">禁言小张</a>
                                         </td>
                                         <td>￥3213</td>
@@ -164,7 +164,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <img src="/CIGO_CRM/CIGO_CRM/xige/public/img/user02.png" alt="" class="user-pic">
+                                            <img src="/xige/Public/img/user02.png" alt="" class="user-pic">
                                             <a class="user-name" href="###">Alex.</a>
                                         </td>
                                         <td>￥2635</td>
@@ -173,7 +173,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <img src="/CIGO_CRM/CIGO_CRM/xige/public/img/user03.png" alt="" class="user-pic">
+                                            <img src="/xige/Public/img/user03.png" alt="" class="user-pic">
                                             <a class="user-name" href="###">Tinker404</a>
                                         </td>
                                         <td>￥1267</td>
@@ -182,7 +182,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <img src="/CIGO_CRM/CIGO_CRM/xige/public/img/user04.png" alt="" class="user-pic">
+                                            <img src="/xige/Public/img/user04.png" alt="" class="user-pic">
                                             <a class="user-name" href="###">Arron.y</a>
                                         </td>
                                         <td>￥657</td>
@@ -191,7 +191,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <img src="/CIGO_CRM/CIGO_CRM/xige/public/img/user05.png" alt="" class="user-pic">
+                                            <img src="/xige/Public/img/user05.png" alt="" class="user-pic">
                                             <a class="user-name" href="###">Yves</a>
                                         </td>
                                         <td>￥3907</td>
@@ -200,7 +200,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <img src="/CIGO_CRM/CIGO_CRM/xige/public/img/user06.png" alt="" class="user-pic">
+                                            <img src="/xige/Public/img/user06.png" alt="" class="user-pic">
                                             <a class="user-name" href="###">小黄鸡</a>
                                         </td>
                                         <td>￥900</td>
@@ -784,10 +784,10 @@
                     </div>
                 </div>
             </div>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/jquery.min.js"></script>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/amazeui.min.js"></script>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/iscroll.js"></script>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/app.js"></script>
+    <script src="/xige/Public/js/jquery.min.js"></script>
+    <script src="/xige/Public/js/amazeui.min.js"></script>
+    <script src="/xige/Public/js/iscroll.js"></script>
+    <script src="/xige/Public/js/app.js"></script>
 </body>
 
 </html>

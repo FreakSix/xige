@@ -10,13 +10,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="renderer" content="webkit">
   <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <link rel="icon" type="image/png" href="/CIGO_CRM/CIGO_CRM/xige/public/i/favicon.png">
-  <link rel="apple-touch-icon-precomposed" href="/CIGO_CRM/CIGO_CRM/xige/public/i/app-icon72x72@2x.png">
+  <link rel="icon" type="image/png" href="/xige/Public/i/favicon.png">
+  <link rel="apple-touch-icon-precomposed" href="/xige/Public/i/app-icon72x72@2x.png">
   <meta name="apple-mobile-web-app-title" content="Amaze UI" />
-  <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/amazeui.min.css" />
-  <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/admin.css">
-  <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/app.css">
-  <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/jquery.min.js"></script>
+  <link rel="stylesheet" href="/xige/Public/css/amazeui.min.css" />
+  <link rel="stylesheet" href="/xige/Public/css/admin.css">
+  <link rel="stylesheet" href="/xige/Public/css/app.css">
+  <script src="/xige/Public/js/jquery.min.js"></script>
   <script type="text/javascript">
   $(document).ready(function(){
     $(".myapp-login").height($(window).height());
@@ -50,7 +50,7 @@
 					<div class="am-form-group codes">
 						<input type="text" class="code" id="doc-ipt-code-1" placeholder="验证码">
 						<div class="validate">
-							<div><img src="/CIGO_CRM/CIGO_CRM/xige/public/img/passcode.jpg"/><div class="code-tip">点击刷新验证码</div></div>
+							<div><img src="/xige/Public/img/passcode.jpg"/><div class="code-tip">点击刷新验证码</div></div>
 						</div>
 					</div>
 					<p><button type="submit" class="am-btn am-btn-default">登录</button></p>
@@ -60,8 +60,8 @@
 	</div>
 </div>
 
-  <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/amazeui.min.js"></script>
-  <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/app.js"></script>
+  <script src="/xige/Public/js/amazeui.min.js"></script>
+  <script src="/xige/Public/js/app.js"></script>
 </body>
 
 </html>

@@ -10,13 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-    <link rel="icon" type="image/png" href="/CIGO_CRM/CIGO_CRM/xige/public/i/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="/CIGO_CRM/CIGO_CRM/xige/public/i/app-icon72x72@2x.png">
+    <link rel="icon" type="image/png" href="/xige/public/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="/xige/public/i/app-icon72x72@2x.png">
     <meta name="apple-mobile-web-app-title" content="Amaze UI" />
-    <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/amazeui.min.css" />
-    <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/admin.css">
-    <link rel="stylesheet" href="/CIGO_CRM/CIGO_CRM/xige/public/css/app.css">
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/xige/public/css/amazeui.min.css" />
+    <link rel="stylesheet" href="/xige/public/css/admin.css">
+    <link rel="stylesheet" href="/xige/public/css/app.css">
+    <script src="/xige/public/js/echarts.min.js"></script>
 </head>
 
 <body data-type="chart">
@@ -103,9 +103,9 @@
                 </div>
 
             </div>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/jquery.min.js"></script>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/amazeui.min.js"></script>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/app.js"></script>
+    <script src="/xige/public/js/jquery.min.js"></script>
+    <script src="/xige/public/js/amazeui.min.js"></script>
+    <script src="/xige/public/js/app.js"></script>
 </body>
 
 </html>

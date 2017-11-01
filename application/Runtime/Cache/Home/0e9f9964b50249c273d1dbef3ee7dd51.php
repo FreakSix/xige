@@ -11,24 +11,24 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
 
-    <link href="/CIGO_CRM/CIGO_CRM/xige/public/css/amazeui.min.css" type="text/css" rel="stylesheet" />
-    <link href="/CIGO_CRM/CIGO_CRM/xige/public/css/admin.css" type="text/css" rel="stylesheet" />
-    <link href="/CIGO_CRM/CIGO_CRM/xige/public/css/app.css" type="text/css" rel="stylesheet" />
+    <link href="/xige/Public/css/amazeui.min.css" type="text/css" rel="stylesheet" />
+    <link href="/xige/Public/css/admin.css" type="text/css" rel="stylesheet" />
+    <link href="/xige/Public/css/app.css" type="text/css" rel="stylesheet" />
 
-    <link rel="icon" type="image/png" href="/CIGO_CRM/CIGO_CRM/xige/public/i/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="/CIGO_CRM/CIGO_CRM/xige/public/i/app-icon72x72@2x.png">
+    <link rel="icon" type="image/png" href="/xige/Public/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="/xige/Public/i/app-icon72x72@2x.png">
     <meta name="apple-mobile-web-app-title" content="Amaze UI" />
 
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/echarts.min.js"></script>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/jquery.min.js"></script>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/plus.js"></script>
+    <script src="/xige/Public/js/echarts.min.js"></script>
+    <script src="/xige/Public/js/jquery.min.js"></script>
+    <script src="/xige/Public/js/plus.js"></script>
 
 </head>
 <body data-type="index">
     <header class="am-topbar am-topbar-inverse admin-header">
         <div class="am-topbar-brand">
             <a href="javascript:;" class="tpl-logo">
-                <img src="/CIGO_CRM/CIGO_CRM/xige/public/img/logo.png" alt="">
+                <img src="/xige/Public/img/logo.png" alt="">
             </a>
         </div>
         <!--<div class="am-icon-list tpl-header-nav-hover-ico am-fl am-margin-right"></div>-->
@@ -40,7 +40,7 @@
 
                 <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
                     <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                        <span class="tpl-header-list-user-nick">Admin</span><span class="tpl-header-list-user-ico"> <img src="/CIGO_CRM/CIGO_CRM/xige/public/img/user01.png"></span>
+                        <span class="tpl-header-list-user-nick">Admin</span><span class="tpl-header-list-user-ico"> <img src="/xige/Public/img/user01.png"></span>
                     </a>
                     <ul class="am-dropdown-content">
                         <li><a href="#"><span class="am-icon-bell-o"></span> 资料</a></li>
@@ -86,13 +86,13 @@
             <div class="tpl-left-nav-list">
                 <ul class="tpl-left-nav-menu">
                     <li class="tpl-left-nav-item">
-                        <a href="/CIGO_CRM/CIGO_CRM/xige/index.php/Index/main" target="main" class="nav-link active">
+                        <a href="/xige/index.php/Index/main" target="main" class="nav-link active">
                             <i class="am-icon-home"></i>
                             <span>首页</span>
                         </a>
                     </li>
                     <li class="tpl-left-nav-item">
-                        <a href="/CIGO_CRM/CIGO_CRM/xige/index.php/Order/index" target="main" class="nav-link tpl-left-nav-link-list">
+                        <a href="/xige/index.php/Order/index" target="main" class="nav-link tpl-left-nav-link-list">
                             <i class="am-icon-bar-chart"></i>
                             <span>订单管理</span>
                         </a>
@@ -113,7 +113,7 @@
                                 </a>
                                 <ul class="tpl-left-nav-sub-menu-first">
                                     <li>
-                                        <a href="/CIGO_CRM/CIGO_CRM/xige/index.php/Goods/index" target="main">
+                                        <a href="/xige/index.php/Goods/index" target="main">
                                             <i class="am-icon-credit-card"></i>
                                             <span>名片</span>
                                         </a>
@@ -143,13 +143,13 @@
                         </ul>
                     </li>
                     <li class="tpl-left-nav-item">
-                        <a href="/CIGO_CRM/CIGO_CRM/xige/index.php/Customer/index" target="main" class="nav-link tpl-left-nav-link-list">
+                        <a href="/xige/index.php/Customer/index" target="main" class="nav-link tpl-left-nav-link-list">
                             <i class="am-icon-bar-chart"></i>
                             <span>客户管理</span>
                         </a>
                     </li>
                     <li class="tpl-left-nav-item">
-                        <a href="/CIGO_CRM/CIGO_CRM/xige/index.php/Supplier/index" target="main" class="nav-link tpl-left-nav-link-list">
+                        <a href="/xige/index.php/Supplier/index" target="main" class="nav-link tpl-left-nav-link-list">
                             <i class="am-icon-bar-chart"></i>
                             <span>供应商管理</span>
                         </a>
@@ -162,7 +162,7 @@
                         </a>
                         <ul class="tpl-left-nav-sub-menu">
                             <li>
-                                <a href="/CIGO_CRM/CIGO_CRM/xige/index.php/Statistics/index" target="main">
+                                <a href="/xige/index.php/Statistics/index" target="main">
                                     <i class="am-icon-angle-right"></i>
                                     <span>基本信息统计</span>
                                     <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
@@ -217,7 +217,7 @@
                         </a>
                         <ul class="tpl-left-nav-sub-menu">
                             <li>
-                                <a href="/CIGO_CRM/CIGO_CRM/xige/index.php/PersonalCenter/index" target="main">
+                                <a href="/xige/index.php/PersonalCenter/index" target="main">
                                     <i class="am-icon-angle-right"></i>
                                     <span>基本信息</span>
                                     <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
@@ -241,7 +241,7 @@
                         </a>
                     </li>
                     <li class="tpl-left-nav-item">
-                        <a href="/CIGO_CRM/CIGO_CRM/xige/index.php/Login/index" class="nav-link tpl-left-nav-link-list">
+                        <a href="/xige/index.php/Login/index" class="nav-link tpl-left-nav-link-list">
                             <i class="am-icon-key"></i>
                             <span>登录</span>
                         </a>
@@ -253,12 +253,12 @@
 </html>
         </div>
         <div class="tpl-content-wrapper">
-            <iframe name="main" id="main-iframe" src="/CIGO_CRM/CIGO_CRM/xige/index.php/Index/main" style="overflow: hidden"></iframe>
+            <iframe name="main" id="main-iframe" src="/xige/index.php/Index/main" style="overflow: hidden"></iframe>
         </div>
     </div>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/amazeui.min.js"></script>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/iscroll.js"></script>
-    <script src="/CIGO_CRM/CIGO_CRM/xige/public/js/app.js"></script>
+    <script src="/xige/Public/js/amazeui.min.js"></script>
+    <script src="/xige/Public/js/iscroll.js"></script>
+    <script src="/xige/Public/js/app.js"></script>
 </body>
 
 </html>
