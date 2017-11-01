@@ -1,0 +1,26 @@
+
+.goods-title {
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+}
+.goods-name-detail li {
+	text-align: center;
+	line-height: 30px;
+	font-size: 16px;
+	display: block;
+	margin-top: 10px;
+}
+.goods-name-detail li a {
+	color: #999;
+	display: block;
+}
+.goods-name-detail li a:hover {
+	color: #222;
+	background: #ccc;
+}
+.select-box-selected {
+	color: #222;
+	font-weight: bold;
+	border: 1px solid #222;
+}
