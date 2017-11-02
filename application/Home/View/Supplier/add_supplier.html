@@ -1,0 +1,258 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Amaze UI Admin index Examples</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="__PUBLIC__/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="__PUBLIC__/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/app.css">
+    <style>
+    </style>
+</head>
+
+<body data-type="generalComponents">
+    <ol class="am-breadcrumb">
+        <li><a href="#" class="am-icon-home">首页</a></li>
+        <li><a href="#">供应商管理</a></li>
+        <li class="am-active">新增供应商</li>
+    </ol>
+    <div class="tpl-portlet-components">
+        <div class="portlet-title">
+            <div class="caption font-green bold">新增供应商</div>
+                <div class="tpl-portlet-input tpl-fz-ml">
+                <div class="am-btn-group am-btn-group-xs">
+                    <button type="button" onclick="javascript:history.back(-1);" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-angle-left"></span> 返回</button>
+                    </div>
+                </div>
+        </div>
+        <div class="tpl-block ">
+            <div class="am-g tpl-amazeui-form">
+                <div class="am-u-sm-12 am-u-md-9">
+                    <form class="am-form am-form-horizontal" action="__APP__/Supplier/add_supplier" method="post" enctype="multipart/form-data">
+                        <!-- 公司信息 -->
+                        <h4>公司信息</h4>
+                        <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-2 am-form-label">供应商名称</label>
+                            <div class="am-u-sm-4">
+                                <input type="text" id="sname" name="sname" >
+                            </div>
+                            <div id="sname_notice_div">
+                                <span id="sname_notice" style="color:#FF0000"> *</span>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-2 am-form-label">公司电话</label>
+                            <div class="am-u-sm-4">
+                                <input type="text" id="tell" name="tell">
+                            </div>
+                            <span id="tell_notice" style="color:#FF0000"> *</span>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-email" class="am-u-sm-2 am-form-label">所在区域</label>
+                            <div class="am-u-sm-2">
+                                <select id="doc-select-1">
+                                    <option value="option1">北京市</option>
+                                    <option value="option2">河北省</option>
+                                    <option value="option3">上海市</option>
+                                </select>
+                            </div>
+                            <div class="am-u-sm-2">
+                                <select id="doc-select-1">
+                                    <option value="option1">朝阳区</option>
+                                    <option value="option2">丰台区</option>
+                                    <option value="option3">通州区</option>
+                                </select>
+                            </div>
+                            <div class="am-u-sm-2">
+                                <select id="doc-select-1">
+                                    <option value="option1">朝阳区</option>
+                                    <option value="option2">丰台区</option>
+                                    <option value="option3">通州区</option>
+                                </select>
+                            </div>
+                            <label for="user-name" class="am-u-sm-2 am-form-label"></label>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-address" class="am-u-sm-2 am-form-label">所做产品</label>
+                            <div class="am-u-sm-10">
+                                <input type="checkbox" name="checkbox[]" value="复选一"> 复选一 &nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" name="checkbox[]" value="复选一"> 复选二 &nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" name="checkbox[]" value="复选一"> 复选三 &nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" name="checkbox[]" value="复选一"> 复选四 &nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" name="checkbox[]" value="复选一"> 复选五 &nbsp;&nbsp;&nbsp;
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-address" class="am-u-sm-2 am-form-label">详细地址</label>
+                            <div class="am-u-sm-2">
+                                <select id="doc-select-1">
+                                    <option value="option1">北京市</option>
+                                    <option value="option2">河北省</option>
+                                    <option value="option3">上海市</option>
+                                </select>
+                            </div>
+                            <div class="am-u-sm-2">
+                                <select id="doc-select-1">
+                                    <option value="option1">朝阳区</option>
+                                    <option value="option2">丰台区</option>
+                                    <option value="option3">通州区</option>
+                                </select>
+                            </div>
+                            <div class="am-u-sm-2">
+                                <select id="doc-select-1">
+                                    <option value="option1">朝阳区</option>
+                                    <option value="option2">丰台区</option>
+                                    <option value="option3">通州区</option>
+                                </select>
+                            </div>
+                            <label for="user-name" class="am-u-sm-2 am-form-label"></label>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-address" class="am-u-sm-2 am-form-label"></label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="user_street" name="user_street" >
+                            </div>
+                        </div>
+                        <hr/>
+                        <!-- 联系人信息 -->
+                        <h4>联系人</h4>
+                        <div class="am-form-group">
+                            <label for="contact-name" class="am-u-sm-2 am-form-label">联系人</label>
+                            <div class="am-u-sm-4">
+                                <input type="tel" id="contact_name" name="contact_name">
+                            </div>
+                            <label for="contact-phone" class="am-u-sm-2 am-form-label">联系电话</label>
+                            <div class="am-u-sm-4">
+                                <input type="tel" id="contact_phone" name="contact_phone">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="contact-wechat" class="am-u-sm-2 am-form-label">微信</label>
+                            <div class="am-u-sm-4">
+                                <input type="tel" id="contact_weixin" name="contact_weixin">
+                            </div>
+                            <label for="contact-email" class="am-u-sm-2 am-form-label">QQ</label>
+                            <div class="am-u-sm-4">
+                                <input type="email" id="contact_qq" name="contact_qq">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">邮箱</label>
+                            <div class="am-u-sm-4">
+                                <input type="text" id="contact_email" name="contact_email">
+                            </div>
+                            <label for="contact-department" class="am-u-sm-2 am-form-label"></label>
+                        </div>
+                        <hr/>
+                        
+                        <hr/>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-10 am-u-sm-push-2">
+                                <button type="submit" class="am-btn am-btn-primary">确认添加</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<script src="__PUBLIC__/js/jquery.min.js"></script>
+<script src="__PUBLIC__/js/amazeui.min.js"></script>
+<script src="__PUBLIC__/js/app.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#sname").blur(function(){
+            var sname = $("#sname").val();
+            if(sname == ''){
+                $("#sname_notice").html("* 供应商名称不能为空！");
+            }else{
+                $.ajax({
+                    "url":"__APP__/Supplier/checkSname", //发送ajax请求的地址
+                    "type":"post",     //以post形式发送数据
+                    "data":"sname="+sname,
+                    // "data":{
+                    //      "username":$("#username").val(),
+                    //      "password":$("#password").val()
+                    // },         //data是ajax发送请求的数据 
+                    //"data":"username=tom&password=123",      
+                    "success":function(response){
+                         if(response==1){
+                             // alert(111);
+                             $("#sname_notice").html("* 该供应商的数据已存在！");
+                         }else if(response==2){
+                             // alert(22222);
+                             $("#sname_notice").html("* 没有该供应商的数据！");
+                         }
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript" >
+
+    // $("#sname").blur(function(){
+    //     alert(99999999);
+    //     // alert($("#sname").attr("value"));
+    //     // var registed_callback = false;
+    //     var sname = $("#sname").val();
+    //     // $("#sname").css("font-size","50px");
+    //     alert(sname);
+      
+    //     if (sname == '')
+    //     {
+    //         alert(44444);
+    //         // document.getElementById('sname_notice').innerHTML = msg_sname_blank;
+    //         $("sname_notice")html("<strong>msg_sname_blank</strong>")
+    //         registed_callback = true;
+    //     }
+    // });
+
+//     function checkName(sname)
+//     {
+//       var registed_callback = false;
+      
+//       if (sname == '')
+//       {
+//         document.getElementById('sname_notice').innerHTML = msg_sname_blank;
+//         registed_callback = true;
+//       }
+//       else if (!Utils.isEmail(email))
+//       {
+//         document.getElementById('email_notice').innerHTML = msg_email_format;
+//         submit_disabled = true;
+//       }
+     
+//       if( submit_disabled )
+//       {
+//         document.forms['formUser'].elements['Submit'].disabled = 'disabled';
+//         return false;
+//       }
+//       Ajax.call('http://localhost/xige/xige/index.php/Supplier/checkusername', 'sname=' + sname, registed_callback , 'GET', 'TEXT', true, true );
+// }
+</script>
+
+<script type="text/javascript">
+  //<![CDATA[
+        var msg_sname_blank = "* 供应商名称不能为空";
+  //]]>
+  </script>
+
+</body>
+
+</html>

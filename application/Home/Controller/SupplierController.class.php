@@ -5,15 +5,40 @@
 	class SupplierController extends BaseController{
 		
 		public function index(){
-			$typeId = $_GET['typeId'];
-			//共有多少条新闻
-			$typeCount = M("newstypes")->where("typeId={$typeId}" )->find();
-			//
-			$newsType = M("newsarticles")->where("typeId={$typeId} and zt=1")->select();
+
+			// $supplier = M("xg_supplier");
+			// $arr = $supplier->select();
+			// var_dump($arr);exit;
 			
-			$this->assign("newsType",$newsType);
-			$this->assign("typeCount",$typeCount);
 			$this -> display();
 		}
+
+		//添加供应商信息
+		public function add_supplier(){
+			
+			var_dump($_POST);
+			if(!empty($_POST)){
+				$this -> display("index");	
+			}else{
+				$this -> display();
+			}
+			
+		}
+
+		//验证供应商是否已存在
+		function checkSname(){
+			$sname = $_GET['sname'];
+			//echo $proid;
+	 		$supplier = M("xg_supplier");
+			$arr = $supplier->where("sname = $sname")->select();
+			// var_dump($arr);exit;
+	 		if(!empty($arr)){
+	 			$res = 1;
+	 		}else{
+	 			$res = 2;
+	 		}
+	 			echo json_encode($res);
+	}
+
 		
 	}
