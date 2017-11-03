@@ -13,8 +13,8 @@ $(document).ready(function(){
     }
     var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
     if (userAgent.indexOf("Chrome") > -1){
-        $(".tpl-left-nav").height($(document.body).height()-45);
-        $(".b-box").height($(document.body).height()-95);
+        $(".tpl-left-nav").height($(document.body).height()+45);
+        $(".b-box").height($(document.body).height()+45);
         $(".tpl-content-wrapper").width($(window).width()-240);
         $("#main-iframe").width($(window).width()-240);
     }else{

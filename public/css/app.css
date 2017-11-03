@@ -475,12 +475,12 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     font-weight: 400;
 }
 .b-box{
-    width:210px;
-   /*  overflow-x: hidden ;*/
+    width:220px;
+    overflow-x: hidden ;
    } 
 .tpl-left-nav {
     width: 200px;
-    /* overflow-x: hidden ; */
+    overflow-x: hidden ; 
     float: left;
     border-radius: 0px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -2026,6 +2026,9 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     }
 }
 @media screen and (max-width: 1199px) {
+    .abc{
+        overflow:auto;
+    }
     .tpl-content-wrapper {
         padding-left: 230px;
         width:1200px;
