@@ -11,11 +11,11 @@ $(document).ready(function(){
     if($(window).width()<1000){
         $(".tpl-content-wrapper").width($(window).width());
         $("#main-iframe").width($(window).width());
-    }else if(1000<$(window).width()<1280){
+    }else if($(window).width()>1280){
 		
 		if (userAgent.indexOf("Chrome") > -1){
-		    $(".tpl-left-nav").height($(document.body).height()+45);
-		    $(".b-box").height($(document.body).height()+45);
+		    $(".tpl-left-nav").height($(document.body).height()-45);
+		    $(".b-box").height($(document.body).height()-100);
 		    $(".tpl-content-wrapper").width($(window).width()-240);
 		    $("#main-iframe").width($(window).width()-240);
 		}else{
