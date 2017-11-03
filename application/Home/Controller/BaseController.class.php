@@ -4,11 +4,8 @@
 	
 	class BaseController extends Controller
 	{
-		public function _initialize(){
-			$typeInfo = M("newstypes")->select();
+		function _initialize(){
 			
-			
-			$this->assign("typeInfo",$typeInfo);
 			
 		}
 	}
