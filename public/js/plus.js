@@ -11,7 +11,7 @@ $(document).ready(function(){
     if($(window).width()<1000){
         $(".tpl-content-wrapper").width($(window).width());
         $("#main-iframe").width($(window).width());
-    }else if($(window).width()>1280){
+    }else if($(window).width()>1390){
 		
 		if (userAgent.indexOf("Chrome") > -1){
 		    $(".tpl-left-nav").height($(document.body).height()-45);
