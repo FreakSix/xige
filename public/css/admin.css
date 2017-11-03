@@ -216,7 +216,7 @@ ul {
   padding: 4px 8px;
 }
 
-/*@media only screen and (min-width: 641px) {
+@media only screen and (min-width: 641px) {
   .admin-sidebar {
     display: block;
     position: static;
@@ -236,9 +236,9 @@ ul {
   .admin-offcanvas-bar:after {
     content: none;
   }
-}*/
+}
 
-/*@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 640px) {
   .admin-sidebar {
     width: inherit;
   }
@@ -278,7 +278,7 @@ ul {
     text-align: left !important;
   }
 
-}*/
+}
 
 /*
 * user.html css
@@ -328,12 +328,12 @@ ul {
   width: 100px;
 }
 
-/*@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 640px) {
   .table-select {
     margin-top: 10px;
     margin-left: 5px;
   }
-}*/
+}
 
 /*
 gallery.html css
