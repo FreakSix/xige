@@ -85,9 +85,12 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <foreach name="customerInfo" item="v">
+                                    <option value="{$v['code']}" >{$v['name']}</option>
+                                    
                                 <tr>
                                     <td><input type="checkbox"></td>
-                                    <td>北京细格广告传媒公司</td>
+                                    <td>{$v['cname']}</td>
                                     <td>企业</td>
                                     <td>五级</td>
                                     <td>北京市-朝阳区</td>
@@ -105,6 +108,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                </foreach>
                                 <tr>
                                     <td><input type="checkbox"></td>
                                     <td>2</td>

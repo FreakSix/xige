@@ -9,6 +9,10 @@
 			//
 			$province = $this->getProvince("110000");
 			var_dump($province);
+			// $time = time();
+			// var_dump($time);
+			// $a =  date('Y-m-d H:i:s',$time);
+			// var_dump($a);exit;
 		
 			$this -> display();
 		}

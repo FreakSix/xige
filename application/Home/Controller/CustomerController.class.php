@@ -6,42 +6,32 @@
 		
 		public function index(){
 			
-			$articleId = $_GET['articleId'];
-			//新闻内容
-			$newsInfo = M("newsarticles")->join("inner join newstypes")->where("articleId={$articleId}")->find();
-			//$newsInfo = M("")->query("select * from newsarticles as a inner join newstypes as t on a.typeId=t.typeId where articleId='{$articleId}'");
-			
-			//查询评论内容
-			$reviews = M("reviews")->where("articleId={$articleId}")->select();
-						
-			if(!empty($_POST)){
-				$userName = $_POST['userName'];
-				$body = $_POST['body'];
-				$face = $_POST['face'];
-				//$result = M("reviews")->add($_POST);
-				$result = M("reviews")->add(array("articleId"=>"{$articleId}","userName"=>"{$userName}","body"=>"{$body}","face"=>"{$face}"));
-				if($result > 0)
-				{
-					$this->success("评论成功！",__APP__."/News/index/articleId/{$articleId}.html");
-						
-				}
-				else
-				{
-					$this->success("评论失败！",__APP__."/News/index/articleId/{$articleId}.html");
-			
-				}
-				//exit;
-			}else{
-			
-				//点击量加一
-				$hints = $newsInfo['hints'];
-				$hint = $hints + 1;
-				M("newsarticles")->where("articleId={$articleId}")->save(array("hints"=>"{$hint}"));
+			//查询客户公司信息
+			$customer = M("xg_customer");
+			$customerInfo = $customer->select();
+			// var_dump($customerInfo);
+
+			$level = M("xg_customer_level");
+			foreach ($customerInfo as $k => $v) {
+				// var_dump($v);
+				//得到客户等级名称
+				$levelInfo = $level->where("id = ".$v["level_id"])->find();
+				// var_dump($levelInfo);
+				$customerInfo[$k]["level_name"] = $levelInfo["name"];
+				//得到省份名称
+				$provinceInfo = $this->getProvince($v["local_procode"]);
+				$customerInfo[$k]["local_pro_name"] = $provinceInfo["0"]["name"];
+				//得到城市名称
+				$cityInfo = $this->getCity($v["local_citycode"]);
+				$customerInfo[$k]["local_city_name"] = $cityInfo["0"]["name"];
+
 			}
-			
-			
-			$this->assign("reviews",$reviews);
-			$this->assign("newsInfo",$newsInfo);
+			var_dump($customerInfo);
+			exit;
+			//客户联系人信息
+			$customerLinkman = M("xg_customer_linkman");
+			$this->assign("customerInfo",$customerInfo);
+
 			$this->display();
 		}
 		
