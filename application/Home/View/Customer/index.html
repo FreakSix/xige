@@ -37,7 +37,7 @@
                 <div class="am-u-sm-12 am-u-md-6">
                     <div class="am-btn-toolbar">
                         <div class="am-btn-group am-btn-group-xs">
-                            <button type="button" onclick="window.open('add_customer.html','main')" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增客户</button>
+                            <button type="button" onclick="window.open('__APP__/Customer/addCustomer','main')" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增客户</button>
                             <!-- <div id="div1nnn" style="display:none;"><iframe src="add.html" width=100% height=100% id=""></iframe></div> -->
                             <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出数据</button>
                             <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除所选内容</button>
@@ -91,12 +91,19 @@
                                 <tr>
                                     <td><input type="checkbox"></td>
                                     <td>{$v['cname']}</td>
-                                    <td>企业</td>
-                                    <td>五级</td>
-                                    <td>北京市-朝阳区</td>
-                                    <td>定福庄北街瑞和国际一号楼1904</td>
-                                    <td>梁锐 [<a href="#">更多</a>] [<a href="#">添加</a>]</td>
-                                    <td>15265429865</td>
+                                    <if condition="$v['type_id'] eq 1">
+                                        <td>企业</td>
+                                    <elseif condition="$v['type_id'] eq 2" />
+                                        <td>个人</td>
+                                    <else/>
+                                        <td>政府机构</td>
+                                    </if>
+                                    
+                                    <td>{$v['level_name']}</td>
+                                    <td>{$v['local_name']}</td>
+                                    <td>{$v['local_address']}</td>
+                                    <td>{$v['link_name']} [<a href="#">更多</a>] [<a href="#">添加</a>]</td>
+                                    <td>{$v['link_phone']}</td>
                                     <!-- <td class="am-hide-sm-only">刘东旭</td> -->
                                     <!-- <td class="am-hide-sm-only">备注里边说点啥</td> -->
                                     <td>
@@ -109,32 +116,13 @@
                                     </td>
                                 </tr>
                                 </foreach>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>2</td>
-                                    <td>个人</td>
-                                    <td>二级</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>王五 [<a href="#">更多</a>] [<a href="#">添加</a>]</td>
-                                    <td></td>
-                                    <!-- <td class="am-hide-sm-only">测试1号</td> -->
-                                    <!-- <td class="am-hide-sm-only">2014年9月4日 7:28:47</td> -->
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                
                             </tbody>
                         </table>
                         <div class="am-cf">
 
                             <div class="am-fr">
-                                <ul class="am-pagination tpl-pagination">
+                                <!-- <ul class="am-pagination tpl-pagination">
                                     <li class="am-disabled"><a href="#">«</a></li>
                                     <li class="am-active"><a href="#">1</a></li>
                                     <li><a href="#">2</a></li>
@@ -142,7 +130,8 @@
                                     <li><a href="#">4</a></li>
                                     <li><a href="#">5</a></li>
                                     <li><a href="#">»</a></li>
-                                </ul>
+                                </ul> -->
+                                {$pageStr}
                             </div>
                         </div>
                         <hr>

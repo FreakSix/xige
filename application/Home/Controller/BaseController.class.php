@@ -44,4 +44,33 @@
 	 		}
 	 		return $arr;
 		}
+
+		//联动查询城市信息
+		public function getCitys(){
+		
+			$procode = $_GET['procode'];
+			//echo $proid;
+	 		$city = M("xg_city");
+	 		if($procode == 0){
+	 			$arr = $city->select();
+	 		}else{
+	 			$arr = $city->where("provincecode = $procode")->select();
+	 		}
+	 			echo json_encode($arr);
+		}
+
+		
+		//联动查询地区信息
+		public function getAreas(){
+		
+			$citycode = $_GET['citycode'];
+	 		$area = M("xg_area");
+	 		if($citycode == 0){
+	 			$arr = $area->select();
+	 		}else{
+	 			$arr = $area->where("citycode = $citycode")->select();
+	 		}
+	 			echo json_encode($arr);
+		}
+		
 	}
