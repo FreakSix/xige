@@ -8,7 +8,7 @@
 
 			//总记录数
 	 		$totalCount = M("xg_customer")->count();
-	 		$pageSize = 5;
+	 		$pageSize = 1;
 	 		//实例化分页类
 	 		$page = new \Think\Page($totalCount,$pageSize);
 	 		//获取起始位置
@@ -66,7 +66,7 @@
 
 			$post = $_POST;
 			if ($post) {
-				var_dump($post);
+// 				var_dump($post);exit;
 			
 				//将表单中提交过来的数据添加到 xg_customer 表中
 				$ob=M("xg_customer");
@@ -91,11 +91,20 @@
 				$res_1 = $ob->data($customer)->add();
 				// 将表单提交过来的数据添加到 xg_customer_linkman 表中
 				if($res_1 > 0){
-					$cus_link['c_id']=$res_1;
-					$cus_link['name']=$post['link_name'];
-					$cus_link['phone']=$post['link_phone'];
-					$cus_link['address']=$post['link_address'];
-					$res_2 = M("xg_customer_linkman")->data($cus_link)->add();
+					$select_num_hide = $post['select_num_hide'];
+					for($i=0;$i<=$select_num_hide;$i++){
+						$cus_link['c_id']=$res_1;    //公司的id
+						$cus_link['name']=$post['link_name'.$i];
+						$cus_link['phone']=$post['link_phone'.$i];
+						$cus_link['address']=$post['link_address'.$i];
+						print_r($cus_link);
+						$res_2 = M("xg_customer_linkman")->data($cus_link)->add();
+					}
+// 					$cus_link['c_id']=$res_1;
+// 					$cus_link['name']=$post['link_name'];
+// 					$cus_link['phone']=$post['link_phone'];
+// 					$cus_link['address']=$post['link_address'];
+// 					$res_2 = M("xg_customer_linkman")->data($cus_link)->add();
 				}
 
 				//根据数据添加的情况来判断页面跳转
