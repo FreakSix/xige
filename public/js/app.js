@@ -401,3 +401,14 @@ var pageData = {
         echartsA.setOption(option);
     }
 }
+
+// ===============================================
+// 添加客户信息页
+// ===============================================
+$("#add-contact").click(function(){
+    var i = 1;
+    $("#add-contact").attr("num",i);
+    alert($("#add-contact").attr("num"));
+    var html = '<div class="am-form-group"><label class="am-u-sm-2 am-form-label">联系人姓名<span id="sname_notice" style="color:#FF0000"> *</span></label><div class="am-u-sm-4"><input type="tel" id="link_name" name="link_name" ></div><label class="am-u-sm-2 am-form-label">联系电话<span id="sname_notice" style="color:#FF0000"> *</span></label><div class="am-u-sm-4"><input type="tel" id="link_phone" name="link_phone" ></div></div><div class="am-form-group"><label class="am-u-sm-2 am-form-label">联系人地址</label><div class="am-u-sm-10"><input type="text" id="link_address" name="link_address" ></div></div>';
+    $('.contact').append(html);
+});
