@@ -8,7 +8,7 @@
 
 			//总记录数
 	 		$totalCount = M("xg_customer")->count();
-	 		$pageSize = 1;
+	 		$pageSize = 5;
 	 		//实例化分页类
 	 		$page = new \Think\Page($totalCount,$pageSize);
 	 		//获取起始位置
