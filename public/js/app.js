@@ -401,3 +401,19 @@ var pageData = {
         echartsA.setOption(option);
     }
 }
+
+// ===============================================
+// 添加客户信息页
+// ===============================================
+$("#add-contact").click(function(){
+    var i = $("input[name=select_num_hide]").val();
+    i++;
+    if(i<6){
+	    $("input[name=select_num_hide]").val(i);
+//	    alert($("input[name=select_num_hide]").val());
+	    var html = '<div class="am-form-group"><label class="am-u-sm-2 am-form-label">联系人姓名<span id="sname_notice" style="color:#FF0000"> *</span></label><div class="am-u-sm-4"><input type="tel" id="link_name'+i+'" name="link_name'+i+'" ></div><label class="am-u-sm-2 am-form-label">联系电话<span id="sname_notice" style="color:#FF0000"> *</span></label><div class="am-u-sm-4"><input type="tel" id="link_phone'+i+'" name="link_phone'+i+'" ></div></div><div class="am-form-group"><label class="am-u-sm-2 am-form-label">联系人地址</label><div class="am-u-sm-10"><input type="text" id="link_address'+i+'" name="link_address'+i+'" ></div></div>';
+	    $('.contact').append(html);
+    }else{
+    	alert ("抱歉，最多可以添加五个联系人！！");
+    }
+});

@@ -44,13 +44,13 @@
                                     <span id="sname_notice" style="color:#FF0000;font-size: 14px;"> (带 “*” 为必填项) </span>
                                 </h4>
                                 <div class="am-form-group">
-                                    <label for="user-name" class="am-u-sm-2 am-form-label">客户名称
+                                    <label for="cname" class="am-u-sm-2 am-form-label">客户名称
                                             <span id="sname_notice" style="color:#FF0000"> *</span>
                                     </label>
                                     <div class="am-u-sm-4">
                                         <input type="text" id="cname" name="cname">
                                     </div>
-                                    <label for="user-name" class="am-u-sm-2 am-form-label">客户类型</label>
+                                    <label class="am-u-sm-2 am-form-label">客户类型</label>
                                     <div class="am-u-sm-4">
                                         <select id="customer_type" name="customer_type">
                                             <option value="1">公司</option>
@@ -60,11 +60,11 @@
                                     </div>
                                 </div>
                                 <div class="am-form-group">
-                                    <label for="user-name" class="am-u-sm-2 am-form-label">邮编</label>
+                                    <label class="am-u-sm-2 am-form-label">邮编</label>
                                     <div class="am-u-sm-4">
                                         <input type="text" id="code" name="code">
                                     </div>
-                                    <label for="user-email" class="am-u-sm-2 am-form-label">客户等级</label>
+                                    <label class="am-u-sm-2 am-form-label">客户等级</label>
                                     <div class="am-u-sm-4">
                                         <select id="rank" name="rank" >
                                             <foreach name="rank" item="v">
@@ -74,7 +74,7 @@
                                     </div>
                                 </div>
                                 <div class="am-form-group">
-                                    <label for="user-email" class="am-u-sm-2 am-form-label">所在区域</label>
+                                    <label class="am-u-sm-2 am-form-label">所在区域</label>
                                     <div class="am-u-sm-2"> 
                                         <select id="porvinces2" name="province_name" onchange="getCityInfos2();">
                                             <option value="0" >请选择省</option>
@@ -99,10 +99,10 @@
                                             </foreach>
                                         </select> 
                                     </div>
-                                    <label for="user-email" class="am-u-sm-2 am-form-label"></label>
+                                    <label class="am-u-sm-2 am-form-label"></label>
                                 </div>
                                 <div class="am-form-group">
-                                    <label for="user-address" class="am-u-sm-2 am-form-label">公司详细地址
+                                    <label class="am-u-sm-2 am-form-label">公司详细地址
                                             <span id="sname_notice" style="color:#FF0000"> *</span>
                                     </label>
                                     <div class="am-u-sm-10">
@@ -110,66 +110,63 @@
                                     </div>
                                 </div>
                                 <div class="am-form-group">
-                                    <label for="user-address" class="am-u-sm-2 am-form-label">备注</label>
+                                    <label class="am-u-sm-2 am-form-label">备注</label>
                                     <div class="am-u-sm-10">
                                         <input type="text" id="remarks" name="remarks" >
                                     </div>
                                 </div>
                                 <hr/>
-                                
-                                <h4>联系人信息 
-                                   <!--  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <button id="add_linkman" type="button" class="">添加联系人</button> -->
-                                </h4>
-                                <div class="am-form-group">
-                                    <label for="contact-name" class="am-u-sm-2 am-form-label">联系人
-                                            <span id="sname_notice" style="color:#FF0000"> *</span>
-                                    </label>
-                                    <div class="am-u-sm-4">
-                                        <input type="tel" id="link_name" name="link_name" >
+                                <h4>联系人信息</h4>
+                                <div class="contact">
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">联系人姓名
+                                                <span id="sname_notice" style="color:#FF0000"> *</span>
+                                        </label>
+                                        <div class="am-u-sm-4">
+                                            <input type="tel" id="link_name0" name="link_name0" >
+                                        </div>
+                                        <label class="am-u-sm-2 am-form-label">联系电话
+                                                <span id="sname_notice" style="color:#FF0000"> *</span>
+                                        </label>
+                                        <div class="am-u-sm-4">
+                                            <input type="tel" id="link_phone0" name="link_phone0" >
+                                        </div>
                                     </div>
-                                    <label for="contact-phone" class="am-u-sm-2 am-form-label">联系电话
-                                            <span id="sname_notice" style="color:#FF0000"> *</span>
-                                    </label>
-                                    <div class="am-u-sm-4">
-                                        <input type="tel" id="link_phone" name="link_phone" >
-                                    </div>
-                                    <input type="hidden" name="hidden">
-                                </div>
-                                <div class="am-form-group" id="link_address_div">
-                                    <label for="contact-address" class="am-u-sm-2 am-form-label">联系人地址</label>
-                                    <div class="am-u-sm-10">
-                                        <input type="text" id="link_address" name="link_address" >
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">联系人地址</label>
+                                        <div class="am-u-sm-10">
+                                            <input type="text" id="link_address0" name="link_address0" >
+                                        </div>
                                     </div>
                                 </div>
-                                <!-- <input type="hidden" id="linkman_hidden" name="linkman_hidden" value="0"> -->
-                                
+                                <input type="hidden" value="0" name="select_num_hide">
+                                <input type="button" value="添加联系人" id="add-contact">
                                 <hr/>
                                 
                                 <h4>财务信息</h4>
                                 <div class="am-form-group">
-                                    <label for="invoice-id" class="am-u-sm-2 am-form-label">纳税人识别号</label>
+                                    <label class="am-u-sm-2 am-form-label">纳税人识别号</label>
                                     <div class="am-u-sm-4">
                                         <input type="tel" id="invoice_num" name="invoice_num">
                                     </div>
-                                    <label for="invoice-phone" class="am-u-sm-2 am-form-label">电话</label>
+                                    <label class="am-u-sm-2 am-form-label">电话</label>
                                     <div class="am-u-sm-4">
                                         <input type="tel" id="invoice_tel" name="invoice_tel" >
                                     </div>
                                 </div>
 
                                 <div class="am-form-group">
-                                    <label for="invoice-bank" class="am-u-sm-2 am-form-label">开户银行</label>
+                                    <label class="am-u-sm-2 am-form-label">开户银行</label>
                                     <div class="am-u-sm-4">
                                         <input type="tel" id="bank_name" name="bank_name">
                                     </div>
-                                    <label for="invoice-num" class="am-u-sm-2 am-form-label">银行账号</label>
+                                    <label class="am-u-sm-2 am-form-label">银行账号</label>
                                     <div class="am-u-sm-4">
                                         <input type="text" id="bank_num" name="bank_num" >
                                     </div>
                                 </div>
                                 <div class="am-form-group">
-                                    <label for="invoice-address" class="am-u-sm-2 am-form-label">开户地址</label>
+                                    <label class="am-u-sm-2 am-form-label">开户地址</label>
                                     <div class="am-u-sm-10">
                                         <input type="text" id="bank_address" name="bank_address" >
                                     </div>
