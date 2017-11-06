@@ -37,7 +37,7 @@
                 <div class="am-u-sm-12 am-u-md-6">
                     <div class="am-btn-toolbar">
                         <div class="am-btn-group am-btn-group-xs">
-                            <button type="button" onclick="window.open('add_supplier.html','main')" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增供应商</button>
+                            <button type="button" onclick="window.open('__APP__/Supplier/addSupplier','main')" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增供应商</button>
                             <!-- <div id="div1nnn" style="display:none;"><iframe src="add.html" width=100% height=100% id=""></iframe></div> -->
                             <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出数据</button>
                             <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除所选内容</button>
@@ -72,61 +72,39 @@
                             <thead>
                                 <tr>
                                     <th class="table-check"><input type="checkbox" class="tpl-table-fz-check"></th>
-                                    <th class="table-id">客户名称</th>
-                                    <th class="table-title">类型</th>
-                                    <th class="table-cus">所在地区</th>
-                                    <th class="table-sum">等级</th>
-                                    <th class="table-type">联系人</th>
-                                    <th class="table-status">联系电话</th>
-                                    <th class="table-status">微信</th>
-                                    <th class="table-author am-hide-sm-only">作者</th>
+                                    <th class="table-name">供应商名称</th>
+                                    <th class="table-region">所在地区</th>
+                                    <th class="table-product">可做产品</th>
+                                    <th class="table-tel">公司电话</th>
+                                    <th class="table-contact">联系人</th>
+                                    <th class="table-phone">联系电话</th>
+                                    <th class="table-author am-hide-sm-only">录入人</th>
                                     <th class="table-date am-hide-sm-only">修改日期</th>
                                     <th class="table-set">操作</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <foreach name="supplierInfo" item="v">
                                 <tr>
                                     <td><input type="checkbox"></td>
-                                    <td>福瑞科技</td>
-                                    <td>企业</td>
-                                    <td>北京-通州区</td>
-                                    <td>三级</td>
-                                    <td>FreakSix</td>
-                                    <td>150000000</td>
-                                    <td>451231321</td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
+                                    <td>{$v['supplier_name']}</td>
+                                    <td>{$v['local_name']}</td>
+                                    <td>画册|易拉宝</td>
+                                    <td>{$v['supplier_tel']}</td>
+                                    <td>刘东旭</td>
+                                    <td>1504689549</td>
+                                    <td class="am-hide-sm-only">Freak</td>
+                                    <td class="am-hide-sm-only">{$v['info_update_time']|date="Y-m-d H:i",###}</td>
                                     <td>
                                         <div class="am-btn-toolbar">
                                             <div class="am-btn-group am-btn-group-xs">
                                                 <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-copy"></span> 复制</button>
                                                 <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>2</td>
-                                    <td>个人</td>
-                                    <td>北京-朝阳区</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="am-hide-sm-only">测试1号</td>
-                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-copy"></span> 复制</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                </foreach>
                             </tbody>
                         </table>
                         <div class="am-cf">

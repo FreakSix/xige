@@ -3,22 +3,53 @@
 	
 	
 	class SupplierController extends BaseController{
-		
+		// 供应商信息展示
 		public function index(){
 
-			//
-			$province = $this->getProvince("110000");
-			var_dump($province);
-			// $time = time();
-			// var_dump($time);
-			// $a =  date('Y-m-d H:i:s',$time);
-			// var_dump($a);exit;
+			//总记录数
+	 		$totalCount = M("xg_supplier")->count();
+	 		$pageSize = 5;
+	 		//实例化分页类
+	 		$page = new \Think\Page($totalCount,$pageSize);
+	 		//获取起始位置
+	 		$firstRow = $page->firstRow;
+	 		//获取分页结果
+	 		$pageStr = $page->show();
+	 		//总页数
+	 		$totalPage = $page->totalPages;
+	 		//查询客户公司信息
+			$supplier = M("xg_supplier");
+			$supplierInfo = $supplier->order("supplier_id desc")->limit("$firstRow,$pageSize")->select();
+			
+			foreach ($supplierInfo as $k => $v) {
+				//得到省份名称
+				$provinceInfo = $this->getProvince($v["supplier_pro_id"]);
+				//得到城市名称
+				$cityInfo = $this->getCity($v["supplier_city_id"]);
+				//得到地区名称
+				$areaInfo = $this->getArea($v["supplier_area_id"]);
+				//拼接所在地区名
+				if ($provinceInfo["0"]["name"] == $cityInfo["0"]["name"]) {
+					$localName = $provinceInfo["0"]["name"]."-".$areaInfo["0"]["name"];
+				} else {
+					$localName = $provinceInfo["0"]["name"]."-".$cityInfo["0"]["name"];
+				}
+				$supplierInfo[$k]["local_name"] = $localName;
+				// //获得联系人信息
+				// $linkmanInfo = $linkman->where("c_id = ".$v["id"])->find();
+				// $customerInfo[$k]["link_name"] = $linkmanInfo["name"];
+				// $customerInfo[$k]["link_phone"] = $linkmanInfo["phone"];  
+
+			}
+			dump($supplierInfo);
+			$this->assign("supplierInfo",$supplierInfo);
+			$this->assign("pageStr",$pageStr);
 		
 			$this -> display();
 		}
 
 		//添加供应商信息
-		public function add_supplier(){
+		public function addSupplier(){
 			//获取省份信息
 			$province = $this->getProvince("0");
 			$this->assign("province",$province);
@@ -28,15 +59,27 @@
 			//获取地区信息
 			$area =M("xg_area")->select();
 			$this->assign("area",$area);
-
 			//接收post传值
 			$post = $_POST;
 
-			var_dump($_POST);
+			dump($_POST);
 			if(!empty($_POST)){
+				$supplier['supplier_name'] = $post['supplier_name'];
+				$supplier['supplier_tel'] = $post['supplier_tel'];
+				$supplier['supplier_pro_id'] = $post['supplier_pro'];
+				$supplier['supplier_city_id'] = $post['supplier_city'];
+				$supplier['supplier_area_id'] = $post['supplier_area'];
+				$supplier['supplier_street'] = $post['supplier_street'];
+				$supplier['spare_address'] = $post['spare_address'];
+				$supplier['info_create_time'] = time();
+				$supplier['info_update_time'] = time();
+				dump($supplier);
+				$supplierModel = D("XgSupplier");
+				$result = $supplierModel->addSupplierInfo($supplier);
+				dump($result);
 				$this -> display("index");	
 			}else{
-				$this -> display();
+				$this -> display("add_supplier");
 			}
 			
 		}
@@ -56,47 +99,7 @@
 	 			echo json_encode($res);
 		}
 
-		// //联动查询城市信息
-		// public function getCity(){
 		
-		// 	$procode = $_GET['procode'];
-		// 	//echo $proid;
-	 // 		$city = M("xg_city");
-	 // 		if($procode == 0){
-	 // 			$arr = $city->select();
-	 // 		}else{
-	 // 			$arr = $city->where("provincecode = $procode")->select();
-	 // 		}
-	 // 			echo json_encode($arr);
-		// }
-
-		
-		// //联动查询地区信息
-		// public function getArea(){
-		
-		// 	$citycode = $_GET['citycode'];
-	 // 		$area = M("xg_area");
-	 // 		if($citycode == 0){
-	 // 			$arr = $area->select();
-	 // 		}else{
-	 // 			$arr = $area->where("citycode = $citycode")->select();
-	 // 		}
-	 // 			echo json_encode($arr);
-		// }
-
-		// //查询省份信息
-		// public function getProvince($procode){
-	 // 		// $citycode = empty($_GET['procode'])?$procode:$_GET['procode'];
-	 // 		$province = M("xg_province");
-	 // 		// var_dump($procode);exit;
-
-	 // 		if($procode == 0){
-	 // 			$arr = $province->select();
-	 // 		}else{
-	 // 			$arr = $province->where("code = $procode")->select();
-	 // 		}
-	 // 		return $arr;
-		// }
 
 		
 	}

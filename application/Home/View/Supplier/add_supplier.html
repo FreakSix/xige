@@ -19,105 +19,7 @@
     <style>
     </style>
 
-    <!-- 所在地信息联动查询 -->
-    <script type="text/javascript">
 
-    //已有的地址信息修改
-    function getCityInfos(addrid){
-      //获取省名称的value的值
-      var addrid = addrid;
-      var province_pro = 'province_pro'+addrid;
-      var city_city = 'city_city'+addrid;
-      
-      //获取省份名称的value值
-      var province = $("[name='"+province_pro+"']").val();
-
-      if(province == '0'){
-        var proid = 0;
-      }else{
-        var proid = province;
-      }
-      
-      $.ajax({
-        url:'__APP__/Supplier/getCitys',
-        data:'procode='+proid,
-        dataType:'json',
-        success:function(re){
-          var cityid = '';
-          var cname = '';
-          $("[name='"+city_city+"']").empty();
-          
-          $("[name='"+city_city+"']").append("<option value='0'>请选择市</option>");
-          //省份改变之后地区也随之改变
-          var citys = $("[name='"+city_city+"']").val();
-          
-          if(re && citys == '0'){
-            $.ajax({
-                url:'__APP__/Supplier/getAreas',
-                data:'citycode='+citys,
-                dataType:'json',
-                success:function(res){
-                    var areaid = '';
-                    var areaname = '';
-                    $("#areas").empty();
-                    $("#areas").append("<option value='0'>请选择区</option>"); 
-                    for (var k in res){
-                        areaid = res[k].code;
-                        areaname = res[k].name;
-                        $("#areas").append("<option value='"+areaid+"'>"+areaname+"</option>");  
-                    }
-                }
-            });
-          }else{
-            $("#areas").empty();
-            $("#areas").append("<option value='0'>请选择区</option>"); 
-          }
-          //循环显示市区城市
-          for (var k in re){
-            cityid = re[k].code;
-            cname = re[k].name;
-            $("[name='"+city_city+"']").append("<option value='"+cityid+"'>"+cname+"</option>");  
-          }
-        }
-      });
-    }
-
-    function getAreaInfos(addrid){
-      //获取省名称的value的值
-      var addrid = addrid;
-
-      var city_city = 'city_city'+addrid;
-      var area_area = 'area_area'+addrid;
-
-      //
-      var cityid = $("[name='"+city_city+"']").val();
-
-      if(cityid == '0'){
-        var cityid = 0;
-      }else{
-        var cityid = cityid;
-      }
-      
-      $.ajax({
-        url:'__APP__/Supplier/getAreas',
-        data:'citycode='+cityid,
-        dataType:'json',
-        success:function(re){
-          var areaid = '';
-          var areaname = '';
-          $("[name='"+area_area+"']").empty();
-          $("[name='"+area_area+"']").append("<option value='0'>请选择区</option>"); 
-          for (var k in re){
-            areaid = re[k].code;
-            areaname = re[k].name;
-            $("[name='"+area_area+"']").append("<option value='"+areaid+"'>"+areaname+"</option>");  
-          }
-        }
-      })
-
-    }
-
-</script>
 
 </head>
 
@@ -129,7 +31,7 @@
     </ol>
     <div class="tpl-portlet-components">
         <div class="portlet-title">
-            <div class="caption font-green bold">新增供应商<span id="sname_notice" style="color:#FF0000;font-size: 14px;"> (带 “*” 为必填项) </span></div>
+            <div class="caption font-green bold">新增供应商<span id="notice" style="color:#FF0000;font-size: 14px;"> (带 “*” 为必填项) </span></div>
                 <div class="tpl-portlet-input tpl-fz-ml">
                 <div class="am-btn-group am-btn-group-xs">
                     <button type="button" onclick="javascript:history.back(-1);" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-angle-left"></span> 返回</button>
@@ -139,23 +41,23 @@
         <div class="tpl-block ">
             <div class="am-g tpl-amazeui-form">
                 <div class="am-u-sm-12 am-u-md-9">
-                    <form class="am-form am-form-horizontal" action="__APP__/Supplier/add_supplier" method="post" enctype="multipart/form-data">
+                    <form class="am-form am-form-horizontal" action="__APP__/Supplier/addSupplier" method="post" enctype="multipart/form-data">
                         <!-- 公司信息 -->
                         <h4>公司信息</h4>
                         <div class="am-form-group">
                             <label class="am-u-sm-2 am-form-label">供应商名称<span id="important" style="color:#FF0000">*</span></label>
                             <div class="am-u-sm-4">
-                                <input type="text" id="sname" name="sname" >
+                                <input type="text" id="supplier_name" name="supplier_name" >
                             </div>
                             <label class="am-u-sm-2 am-form-label">公司电话<span id="important" style="color:#FF0000">*</span></label>
                             <div class="am-u-sm-4">
-                                <input type="text" id="tell" name="tell">
+                                <input type="text" id="supplier_tel" name="supplier_tel">
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label class="am-u-sm-2 am-form-label">供应商地址<span id="important" style="color:#FF0000">*</span></label>
                             <div class="am-u-sm-3"> 
-                                <select id="porvinces" name="province_proundefined" onchange="getCityInfos();">
+                                <select id="supplier_pro" name="supplier_pro" onchange="getCityInfo();">
                                     <option value="0" >请选择省</option>
                                     <foreach name="province" item="v">
                                     <option value="{$v['code']}" >{$v['name']}</option>
@@ -163,7 +65,7 @@
                                 </select>
                             </div>
                             <div class="am-u-sm-3">
-                                <select id="citys" name="city_cityundefined" onchange="getAreaInfos();">
+                                <select id="supplier_city" name="supplier_city" onchange="getAreaInfo();">
                                     <option value="0" checked="checked">请选择市</option>
                                     <foreach name="city" item="v">
                                     <option value="{$v['code']}" >{$v['name']}</option>
@@ -171,7 +73,7 @@
                                 </select> 
                             </div>
                             <div class="am-u-sm-3"> 
-                                <select id="areas" name="area_areaundefined" >
+                                <select id="supplier_area" name="supplier_area" >
                                     <option value="0" checked="checked">请选择区</option>
                                     <foreach name="area" item="v">
                                     <option value="{$v['code']}" >{$v['name']}</option>
@@ -183,92 +85,39 @@
                         <div class="am-form-group">
                             <label class="am-u-sm-2 am-form-label">街道<span id="important" style="color:#FF0000">*</span></label>
                             <div class="am-u-sm-10">
-                                <input type="text" id="user_street" name="user_street" >
+                                <input type="text" id="supplier_street" name="supplier_street" >
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label class="am-u-sm-2 am-form-label">备用地址</label>
-                            <div class="am-u-sm-3"> 
-                                <select id="porvinces" name="province_proundefined" onchange="getCityInfos();">
-                                    <option value="0" >请选择省</option>
-                                    <foreach name="province" item="v">
-                                    <option value="{$v['code']}" >{$v['name']}</option>
-                                    </foreach>
-                                </select>
-                            </div>
-                            <div class="am-u-sm-3">
-                                <select id="citys" name="city_cityundefined" onchange="getAreaInfos();">
-                                    <option value="0" checked="checked">请选择市</option>
-                                    <foreach name="city" item="v">
-                                    <option value="{$v['code']}" >{$v['name']}</option>
-                                    </foreach>
-                                </select> 
-                            </div>
-                            <div class="am-u-sm-3"> 
-                                <select id="areas" name="area_areaundefined" >
-                                    <option value="0" checked="checked">请选择区</option>
-                                    <foreach name="area" item="v">
-                                    <option value="{$v['code']}" >{$v['name']}</option>
-                                    </foreach>
-                                </select> 
-                            </div>
-                            <label class="am-u-sm-3 am-form-label"></label>
-                        </div>
-                        <div class="am-form-group">
-                            <label class="am-u-sm-2 am-form-label">街道</label>
                             <div class="am-u-sm-10">
-                                <input type="text" id="user_street" name="user_street" >
+                                <input type="text" id="spare_address" name="spare_address" placeholder="如有备用地址，请填全省市区街道全部信息" >
                             </div>
                         </div>
+                        
+                        <hr/>
 
-
+                        <!-- 可做产品 -->
+                        <h4>可做产品</h4>
                         <div class="am-form-group">
-                            <label class="am-u-sm-2 am-form-label">所做产品</label>
+                            <label class="am-u-sm-2 am-form-label">印刷产品</label>
                             <div class="am-u-sm-10">
-                                <input type="checkbox" name="checkbox[]" value="复选一"> 复选一 &nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" name="checkbox[]" value="复选二"> 复选二 &nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" name="checkbox[]" value="复选三"> 复选三 &nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" name="checkbox[]" value="复选一"> 名片 &nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" name="checkbox[]" value="复选二"> 宣传册 &nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" name="checkbox[]" value="复选三"> 手提袋 &nbsp;&nbsp;&nbsp;
                                 <input type="checkbox" name="checkbox[]" value="复选四"> 复选四 &nbsp;&nbsp;&nbsp;
                                 <input type="checkbox" name="checkbox[]" value="复选五"> 复选五 &nbsp;&nbsp;&nbsp;
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label class="am-u-sm-2 am-form-label">所做产品</label>
+                            <label class="am-u-sm-2 am-form-label">制作产品</label>
                             <div class="am-u-sm-10">
-                                <input type="checkbox" name="checkbox2[]" value="复选一"> 复选一 &nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" name="checkbox2[]" value="复选二"> 复选二 &nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" name="checkbox2[]" value="复选一"> 展架 &nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" name="checkbox2[]" value="复选二"> 易拉宝 &nbsp;&nbsp;&nbsp;
                                 <input type="checkbox" name="checkbox2[]" value="复选三"> 复选三 &nbsp;&nbsp;&nbsp;
                                 <input type="checkbox" name="checkbox2[]" value="复选四"> 复选四 &nbsp;&nbsp;&nbsp;
                                 <input type="checkbox" name="checkbox2[]" value="复选五"> 复选五 &nbsp;&nbsp;&nbsp;
                             </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label class="am-u-sm-2 am-form-label">详细地址</label>
-                            <div class="am-u-sm-3"> 
-                                <select id="porvinces2" name="province_name" onchange="getCityInfos2();">
-                                    <option value="0" >请选择省</option>
-                                    <foreach name="province" item="v">
-                                    <option value="{$v['code']}" >{$v['name']}</option>
-                                    </foreach>
-                                </select>
-                            </div>
-                            <div class="am-u-sm-3">
-                                <select id="citys2" name="city_name" onchange="getAreaInfos2();">
-                                    <option value="0" checked="checked">请选择市</option>
-                                    <foreach name="city" item="v">
-                                    <option value="{$v['code']}" >{$v['name']}</option>
-                                    </foreach>
-                                </select> 
-                            </div>
-                            <div class="am-u-sm-3"> 
-                                <select id="areas2" name="area_name" >
-                                    <option value="0" checked="checked">请选择区</option>
-                                    <foreach name="area" item="v">
-                                    <option value="{$v['code']}" >{$v['name']}</option>
-                                    </foreach>
-                                </select> 
-                            </div>
-                            <label class="am-u-sm-2 am-form-label"></label>
                         </div>
                         
 
@@ -276,32 +125,20 @@
                         <!-- 联系人信息 -->
                         <h4>联系人</h4>
                         <div class="am-form-group">
-                            <label class="am-u-sm-2 am-form-label">联系人</label>
+                            <label class="am-u-sm-2 am-form-label">联系人姓名</label>
                             <div class="am-u-sm-4">
                                 <input type="tel" id="contact_name" name="contact_name">
                             </div>
-                            <label class="am-u-sm-2 am-form-label">联系电话</label>
+                            <label class="am-u-sm-2 am-form-label">联系人电话</label>
                             <div class="am-u-sm-4">
                                 <input type="tel" id="contact_phone" name="contact_phone">
                             </div>
                         </div>
-
                         <div class="am-form-group">
-                            <label class="am-u-sm-2 am-form-label">微信</label>
-                            <div class="am-u-sm-4">
-                                <input type="tel" id="contact_weixin" name="contact_weixin">
+                            <label class="am-u-sm-2 am-form-label">备注</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="contact_remark" name="contact_remark">
                             </div>
-                            <label class="am-u-sm-2 am-form-label">QQ</label>
-                            <div class="am-u-sm-4">
-                                <input type="text" id="contact_qq" name="contact_qq">
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label class="am-u-sm-2 am-form-label">邮箱</label>
-                            <div class="am-u-sm-4">
-                                <input type="email" id="contact_email" name="contact_email">
-                            </div>
-                            <label class="am-u-sm-2 am-form-label"></label>
                         </div>
                         <hr/>
                         
@@ -357,10 +194,10 @@
     <script type="text/javascript">
 
     //已有的地址信息修改
-    function getCityInfos2(){
+    function getCityInfo(){
       
       //获取省份名称的value值
-      var province = $("#porvinces2").val();
+      var province = $("#supplier_pro").val();
 
       if(province == '0'){
         var proid = 0;
@@ -375,11 +212,11 @@
         success:function(re){
           var cityid = '';
           var cname = '';
-          $("#citys2").empty();
+          $("#supplier_city").empty();
           
-          $("#citys2").append("<option value='0'>请选择市</option>");
+          $("#supplier_city").append("<option value='0'>请选择市</option>");
           //省份改变之后地区也随之改变
-          var citys = $("#citys2").val();
+          var citys = $("#supplier_city").val();
           
           if(re && citys == '0'){
             $.ajax({
@@ -389,31 +226,31 @@
                 success:function(res){
                     var areaid = '';
                     var areaname = '';
-                    $("#areas2").empty();
-                    $("#areas2").append("<option value='0'>请选择区</option>"); 
+                    $("#supplier_area").empty();
+                    $("#supplier_area").append("<option value='0'>请选择区</option>"); 
                     for (var k in res){
                         areaid = res[k].code;
                         areaname = res[k].name;
-                        $("#areas2").append("<option value='"+areaid+"'>"+areaname+"</option>");  
+                        $("#supplier_area").append("<option value='"+areaid+"'>"+areaname+"</option>");  
                     }
                 }
             });
           }else{
-            $("#areas2").empty();
-            $("#areas2").append("<option value='0'>请选择区</option>"); 
+            $("#supplier_area").empty();
+            $("#supplier_area").append("<option value='0'>请选择区</option>"); 
           }
           //循环显示市区城市
           for (var k in re){
             cityid = re[k].code;
             cname = re[k].name;
-            $("#citys2").append("<option value='"+cityid+"'>"+cname+"</option>");  
+            $("#supplier_city").append("<option value='"+cityid+"'>"+cname+"</option>");  
           }
         }
       });
     }
 
-    function getAreaInfos2(){
-      var cityid = $("#citys2").val();
+    function getAreaInfo(){
+      var cityid = $("#supplier_city").val();
 
       if(cityid == '0'){
         var cityid = 0;
@@ -428,12 +265,12 @@
         success:function(re){
           var areaid = '';
           var areaname = '';
-          $("#areas2").empty();
-          $("#areas2").append("<option value='0'>请选择区</option>"); 
+          $("#supplier_area").empty();
+          $("#supplier_area").append("<option value='0'>请选择区</option>"); 
           for (var k in re){
             areaid = re[k].code;
             areaname = re[k].name;
-            $("#areas2").append("<option value='"+areaid+"'>"+areaname+"</option>");  
+            $("#supplier_area").append("<option value='"+areaid+"'>"+areaname+"</option>");  
           }
         }
       })
