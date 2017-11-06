@@ -129,7 +129,7 @@
     </ol>
     <div class="tpl-portlet-components">
         <div class="portlet-title">
-            <div class="caption font-green bold">新增供应商</div>
+            <div class="caption font-green bold">新增供应商<span id="sname_notice" style="color:#FF0000;font-size: 14px;"> (带 “*” 为必填项) </span></div>
                 <div class="tpl-portlet-input tpl-fz-ml">
                 <div class="am-btn-group am-btn-group-xs">
                     <button type="button" onclick="javascript:history.back(-1);" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-angle-left"></span> 返回</button>
@@ -143,23 +143,17 @@
                         <!-- 公司信息 -->
                         <h4>公司信息</h4>
                         <div class="am-form-group">
-                            <label for="user-name" class="am-u-sm-2 am-form-label">供应商名称</label>
+                            <label class="am-u-sm-2 am-form-label">供应商名称<span id="important" style="color:#FF0000">*</span></label>
                             <div class="am-u-sm-4">
                                 <input type="text" id="sname" name="sname" >
                             </div>
-                            <div id="sname_notice_div">
-                                <span id="sname_notice" style="color:#FF0000"> *</span>
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="user-name" class="am-u-sm-2 am-form-label">公司电话</label>
+                            <label class="am-u-sm-2 am-form-label">公司电话<span id="important" style="color:#FF0000">*</span></label>
                             <div class="am-u-sm-4">
                                 <input type="text" id="tell" name="tell">
                             </div>
-                            <span id="tell_notice" style="color:#FF0000"> </span>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-email" class="am-u-sm-2 am-form-label">所在区域</label>
+                            <label class="am-u-sm-2 am-form-label">供应商地址<span id="important" style="color:#FF0000">*</span></label>
                             <div class="am-u-sm-3"> 
                                 <select id="porvinces" name="province_proundefined" onchange="getCityInfos();">
                                     <option value="0" >请选择省</option>
@@ -184,11 +178,52 @@
                                     </foreach>
                                 </select> 
                             </div>
-                            
-                            <label for="user-name" class="am-u-sm-2 am-form-label"></label>
+                            <label class="am-u-sm-3 am-form-label"></label>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-address" class="am-u-sm-2 am-form-label">所做产品</label>
+                            <label class="am-u-sm-2 am-form-label">街道<span id="important" style="color:#FF0000">*</span></label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="user_street" name="user_street" >
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-2 am-form-label">备用地址</label>
+                            <div class="am-u-sm-3"> 
+                                <select id="porvinces" name="province_proundefined" onchange="getCityInfos();">
+                                    <option value="0" >请选择省</option>
+                                    <foreach name="province" item="v">
+                                    <option value="{$v['code']}" >{$v['name']}</option>
+                                    </foreach>
+                                </select>
+                            </div>
+                            <div class="am-u-sm-3">
+                                <select id="citys" name="city_cityundefined" onchange="getAreaInfos();">
+                                    <option value="0" checked="checked">请选择市</option>
+                                    <foreach name="city" item="v">
+                                    <option value="{$v['code']}" >{$v['name']}</option>
+                                    </foreach>
+                                </select> 
+                            </div>
+                            <div class="am-u-sm-3"> 
+                                <select id="areas" name="area_areaundefined" >
+                                    <option value="0" checked="checked">请选择区</option>
+                                    <foreach name="area" item="v">
+                                    <option value="{$v['code']}" >{$v['name']}</option>
+                                    </foreach>
+                                </select> 
+                            </div>
+                            <label class="am-u-sm-3 am-form-label"></label>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-2 am-form-label">街道</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="user_street" name="user_street" >
+                            </div>
+                        </div>
+
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-2 am-form-label">所做产品</label>
                             <div class="am-u-sm-10">
                                 <input type="checkbox" name="checkbox[]" value="复选一"> 复选一 &nbsp;&nbsp;&nbsp;
                                 <input type="checkbox" name="checkbox[]" value="复选二"> 复选二 &nbsp;&nbsp;&nbsp;
@@ -198,7 +233,7 @@
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-address" class="am-u-sm-2 am-form-label">所做产品</label>
+                            <label class="am-u-sm-2 am-form-label">所做产品</label>
                             <div class="am-u-sm-10">
                                 <input type="checkbox" name="checkbox2[]" value="复选一"> 复选一 &nbsp;&nbsp;&nbsp;
                                 <input type="checkbox" name="checkbox2[]" value="复选二"> 复选二 &nbsp;&nbsp;&nbsp;
@@ -208,7 +243,7 @@
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="user-address" class="am-u-sm-2 am-form-label">详细地址</label>
+                            <label class="am-u-sm-2 am-form-label">详细地址</label>
                             <div class="am-u-sm-3"> 
                                 <select id="porvinces2" name="province_name" onchange="getCityInfos2();">
                                     <option value="0" >请选择省</option>
@@ -233,44 +268,40 @@
                                     </foreach>
                                 </select> 
                             </div>
-                            <label for="user-name" class="am-u-sm-2 am-form-label"></label>
+                            <label class="am-u-sm-2 am-form-label"></label>
                         </div>
-                        <div class="am-form-group">
-                            <label for="user-address" class="am-u-sm-2 am-form-label"></label>
-                            <div class="am-u-sm-10">
-                                <input type="text" id="user_street" name="user_street" >
-                            </div>
-                        </div>
+                        
+
                         <hr/>
                         <!-- 联系人信息 -->
                         <h4>联系人</h4>
                         <div class="am-form-group">
-                            <label for="contact-name" class="am-u-sm-2 am-form-label">联系人</label>
+                            <label class="am-u-sm-2 am-form-label">联系人</label>
                             <div class="am-u-sm-4">
                                 <input type="tel" id="contact_name" name="contact_name">
                             </div>
-                            <label for="contact-phone" class="am-u-sm-2 am-form-label">联系电话</label>
+                            <label class="am-u-sm-2 am-form-label">联系电话</label>
                             <div class="am-u-sm-4">
                                 <input type="tel" id="contact_phone" name="contact_phone">
                             </div>
                         </div>
 
                         <div class="am-form-group">
-                            <label for="contact-wechat" class="am-u-sm-2 am-form-label">微信</label>
+                            <label class="am-u-sm-2 am-form-label">微信</label>
                             <div class="am-u-sm-4">
                                 <input type="tel" id="contact_weixin" name="contact_weixin">
                             </div>
-                            <label for="contact-email" class="am-u-sm-2 am-form-label">QQ</label>
+                            <label class="am-u-sm-2 am-form-label">QQ</label>
                             <div class="am-u-sm-4">
                                 <input type="text" id="contact_qq" name="contact_qq">
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="contact-department" class="am-u-sm-2 am-form-label">邮箱</label>
+                            <label class="am-u-sm-2 am-form-label">邮箱</label>
                             <div class="am-u-sm-4">
                                 <input type="email" id="contact_email" name="contact_email">
                             </div>
-                            <label for="contact-department" class="am-u-sm-2 am-form-label"></label>
+                            <label class="am-u-sm-2 am-form-label"></label>
                         </div>
                         <hr/>
                         
