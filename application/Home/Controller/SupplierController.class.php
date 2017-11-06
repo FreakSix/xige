@@ -20,7 +20,7 @@
 		//添加供应商信息
 		public function add_supplier(){
 			//获取省份信息
-			$province = $this->getProvince();
+			$province = $this->getProvince("0");
 			$this->assign("province",$province);
 			//获取城市信息
 			$city =M("xg_city")->select();
@@ -56,47 +56,47 @@
 	 			echo json_encode($res);
 		}
 
-		//联动查询城市信息
-		public function getCity(){
+		// //联动查询城市信息
+		// public function getCity(){
 		
-			$procode = $_GET['procode'];
-			//echo $proid;
-	 		$city = M("xg_city");
-	 		if($procode == 0){
-	 			$arr = $city->select();
-	 		}else{
-	 			$arr = $city->where("provincecode = $procode")->select();
-	 		}
-	 			echo json_encode($arr);
-		}
+		// 	$procode = $_GET['procode'];
+		// 	//echo $proid;
+	 // 		$city = M("xg_city");
+	 // 		if($procode == 0){
+	 // 			$arr = $city->select();
+	 // 		}else{
+	 // 			$arr = $city->where("provincecode = $procode")->select();
+	 // 		}
+	 // 			echo json_encode($arr);
+		// }
 
 		
-		//联动查询地区信息
-		public function getArea(){
+		// //联动查询地区信息
+		// public function getArea(){
 		
-			$citycode = $_GET['citycode'];
-	 		$area = M("xg_area");
-	 		if($citycode == 0){
-	 			$arr = $area->select();
-	 		}else{
-	 			$arr = $area->where("citycode = $citycode")->select();
-	 		}
-	 			echo json_encode($arr);
-		}
+		// 	$citycode = $_GET['citycode'];
+	 // 		$area = M("xg_area");
+	 // 		if($citycode == 0){
+	 // 			$arr = $area->select();
+	 // 		}else{
+	 // 			$arr = $area->where("citycode = $citycode")->select();
+	 // 		}
+	 // 			echo json_encode($arr);
+		// }
 
-		//查询省份信息
-		public function getProvince($procode){
-	 		// $citycode = empty($_GET['procode'])?$procode:$_GET['procode'];
-	 		$province = M("xg_province");
-	 		// var_dump($procode);exit;
+		// //查询省份信息
+		// public function getProvince($procode){
+	 // 		// $citycode = empty($_GET['procode'])?$procode:$_GET['procode'];
+	 // 		$province = M("xg_province");
+	 // 		// var_dump($procode);exit;
 
-	 		if($procode == 0){
-	 			$arr = $province->select();
-	 		}else{
-	 			$arr = $province->where("code = $procode")->select();
-	 		}
-	 		return $arr;
-		}
+	 // 		if($procode == 0){
+	 // 			$arr = $province->select();
+	 // 		}else{
+	 // 			$arr = $province->where("code = $procode")->select();
+	 // 		}
+	 // 		return $arr;
+		// }
 
 		
 	}
