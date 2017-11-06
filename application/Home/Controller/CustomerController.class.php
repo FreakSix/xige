@@ -53,6 +53,42 @@
 			$this->display();
 		}
 
+		//客户详情页
+		public function details(){
+	 		//查询客户公司信息
+	 		var_dump($_GET);
+			$customer = M("xg_customer");
+			$customerInfo = $customer->where("id = ".$_GET['customer_id'])->find();
+			//得到客户等级名称
+			$levelInfo = M("xg_customer_level")->where("level = ".$customerInfo["rank"])->find();
+			$customerInfo["level_name"] = $levelInfo["name"];
+			//得到省份名称
+			$provinceInfo = $this->getProvince($customerInfo["local_procode"]);
+			//得到城市名称
+			$cityInfo = $this->getCity($customerInfo["local_citycode"]);
+			//得到地区名称
+			$areaInfo = $this->getArea($customerInfo["local_areacode"]);
+			//拼接所在地区名
+			if ($provinceInfo["0"]["name"] == $cityInfo["0"]["name"]) {
+				$localName = $provinceInfo["0"]["name"]."-".$areaInfo["0"]["name"];
+				$address = $provinceInfo["0"]["name"]." ".$areaInfo["0"]["name"]." ".$customerInfo["local_address"];
+			} else {
+				$localName = $provinceInfo["0"]["name"]."-".$cityInfo["0"]["name"];
+				$address = $provinceInfo["0"]["name"]." ".$cityInfo["0"]["name"]." ".$areaInfo["0"]["name"]." ".$customerInfo["local_address"];
+			}
+			$customerInfo["local_name"] = $localName;
+			$customerInfo["address"] = $address;
+			//获得联系人信息
+			$linkmanInfo = M("xg_customer_linkman")->where("c_id = ".$customerInfo["id"])->select();
+			var_dump($customerInfo);
+			var_dump($linkmanInfo);  
+
+			$this->assign("customerInfo",$customerInfo);
+			$this->assign("linkmanInfo",$linkmanInfo);
+
+			$this->display();
+		}
+
 		public function addCustomer(){
 
 			//客户等级信息

@@ -39,7 +39,7 @@
       }
       
       $.ajax({
-        url:'__APP__/Supplier/getCity',
+        url:'__APP__/Supplier/getCitys',
         data:'procode='+proid,
         dataType:'json',
         success:function(re){
@@ -53,7 +53,7 @@
           
           if(re && citys == '0'){
             $.ajax({
-                url:'__APP__/Supplier/getArea',
+                url:'__APP__/Supplier/getAreas',
                 data:'citycode='+citys,
                 dataType:'json',
                 success:function(res){
@@ -99,7 +99,7 @@
       }
       
       $.ajax({
-        url:'__APP__/Supplier/getArea',
+        url:'__APP__/Supplier/getAreas',
         data:'citycode='+cityid,
         dataType:'json',
         success:function(re){
@@ -353,49 +353,6 @@
     });
 </script>
 
-<script type="text/javascript" >
-
-    // $("#sname").blur(function(){
-    //     alert(99999999);
-    //     // alert($("#sname").attr("value"));
-    //     // var registed_callback = false;
-    //     var sname = $("#sname").val();
-    //     // $("#sname").css("font-size","50px");
-    //     alert(sname);
-      
-    //     if (sname == '')
-    //     {
-    //         alert(44444);
-    //         // document.getElementById('sname_notice').innerHTML = msg_sname_blank;
-    //         $("sname_notice")html("<strong>msg_sname_blank</strong>")
-    //         registed_callback = true;
-    //     }
-    // });
-
-//     function checkName(sname)
-//     {
-//       var registed_callback = false;
-      
-//       if (sname == '')
-//       {
-//         document.getElementById('sname_notice').innerHTML = msg_sname_blank;
-//         registed_callback = true;
-//       }
-//       else if (!Utils.isEmail(email))
-//       {
-//         document.getElementById('email_notice').innerHTML = msg_email_format;
-//         submit_disabled = true;
-//       }
-     
-//       if( submit_disabled )
-//       {
-//         document.forms['formUser'].elements['Submit'].disabled = 'disabled';
-//         return false;
-//       }
-//       Ajax.call('http://localhost/xige/xige/index.php/Supplier/checkusername', 'sname=' + sname, registed_callback , 'GET', 'TEXT', true, true );
-// }
-</script>
-
 <!-- 公司所在地址详细信息联动查询 -->
     <script type="text/javascript">
 
@@ -412,7 +369,7 @@
       }
       
       $.ajax({
-        url:'__APP__/Supplier/getCity',
+        url:'__APP__/Supplier/getCitys',
         data:'procode='+proid,
         dataType:'json',
         success:function(re){
@@ -426,7 +383,7 @@
           
           if(re && citys == '0'){
             $.ajax({
-                url:'__APP__/Supplier/getArea',
+                url:'__APP__/Supplier/getAreas',
                 data:'citycode='+citys,
                 dataType:'json',
                 success:function(res){
@@ -465,7 +422,7 @@
       }
       
       $.ajax({
-        url:'__APP__/Supplier/getArea',
+        url:'__APP__/Supplier/getAreas',
         data:'citycode='+cityid,
         dataType:'json',
         success:function(re){
@@ -484,12 +441,6 @@
     }
 
 </script>
-
-<script type="text/javascript">
-  //<![CDATA[
-        var msg_sname_blank = "* 供应商名称不能为空";
-  //]]>
-  </script>
 
 </body>
 
