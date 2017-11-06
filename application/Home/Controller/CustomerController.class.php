@@ -53,6 +53,42 @@
 			$this->display();
 		}
 
+		//客户详情页
+		public function details(){
+	 		//查询客户公司信息
+	 		var_dump($_GET);
+			$customer = M("xg_customer");
+			$customerInfo = $customer->where("id = ".$_GET['customer_id'])->find();
+			//得到客户等级名称
+			$levelInfo = M("xg_customer_level")->where("level = ".$customerInfo["rank"])->find();
+			$customerInfo["level_name"] = $levelInfo["name"];
+			//得到省份名称
+			$provinceInfo = $this->getProvince($customerInfo["local_procode"]);
+			//得到城市名称
+			$cityInfo = $this->getCity($customerInfo["local_citycode"]);
+			//得到地区名称
+			$areaInfo = $this->getArea($customerInfo["local_areacode"]);
+			//拼接所在地区名
+			if ($provinceInfo["0"]["name"] == $cityInfo["0"]["name"]) {
+				$localName = $provinceInfo["0"]["name"]."-".$areaInfo["0"]["name"];
+				$address = $provinceInfo["0"]["name"]." ".$areaInfo["0"]["name"]." ".$customerInfo["local_address"];
+			} else {
+				$localName = $provinceInfo["0"]["name"]."-".$cityInfo["0"]["name"];
+				$address = $provinceInfo["0"]["name"]." ".$cityInfo["0"]["name"]." ".$areaInfo["0"]["name"]." ".$customerInfo["local_address"];
+			}
+			$customerInfo["local_name"] = $localName;
+			$customerInfo["address"] = $address;
+			//获得联系人信息
+			$linkmanInfo = M("xg_customer_linkman")->where("c_id = ".$customerInfo["id"])->select();
+			var_dump($customerInfo);
+			var_dump($linkmanInfo);  
+
+			$this->assign("customerInfo",$customerInfo);
+			$this->assign("linkmanInfo",$linkmanInfo);
+
+			$this->display();
+		}
+
 		public function addCustomer(){
 
 			//客户等级信息
@@ -66,7 +102,7 @@
 
 			$post = $_POST;
 			if ($post) {
-				var_dump($post);
+// 				var_dump($post);exit;
 			
 				//将表单中提交过来的数据添加到 xg_customer 表中
 				$ob=M("xg_customer");
@@ -91,11 +127,20 @@
 				$res_1 = $ob->data($customer)->add();
 				// 将表单提交过来的数据添加到 xg_customer_linkman 表中
 				if($res_1 > 0){
-					$cus_link['c_id']=$res_1;
-					$cus_link['name']=$post['link_name'];
-					$cus_link['phone']=$post['link_phone'];
-					$cus_link['address']=$post['link_address'];
-					$res_2 = M("xg_customer_linkman")->data($cus_link)->add();
+					$select_num_hide = $post['select_num_hide'];
+					for($i=0;$i<=$select_num_hide;$i++){
+						$cus_link['c_id']=$res_1;    //公司的id
+						$cus_link['name']=$post['link_name'.$i];
+						$cus_link['phone']=$post['link_phone'.$i];
+						$cus_link['address']=$post['link_address'.$i];
+						print_r($cus_link);
+						$res_2 = M("xg_customer_linkman")->data($cus_link)->add();
+					}
+// 					$cus_link['c_id']=$res_1;
+// 					$cus_link['name']=$post['link_name'];
+// 					$cus_link['phone']=$post['link_phone'];
+// 					$cus_link['address']=$post['link_address'];
+// 					$res_2 = M("xg_customer_linkman")->data($cus_link)->add();
 				}
 
 				//根据数据添加的情况来判断页面跳转
