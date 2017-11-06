@@ -117,7 +117,10 @@
                                 </div>
                                 <hr/>
                                 
-                                <h4>联系人信息</h4>
+                                <h4>联系人信息 
+                                   <!--  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button id="add_linkman" type="button" class="">添加联系人</button> -->
+                                </h4>
                                 <div class="am-form-group">
                                     <label for="contact-name" class="am-u-sm-2 am-form-label">联系人
                                             <span id="sname_notice" style="color:#FF0000"> *</span>
@@ -131,13 +134,16 @@
                                     <div class="am-u-sm-4">
                                         <input type="tel" id="link_phone" name="link_phone" >
                                     </div>
+                                    <input type="hidden" name="hidden">
                                 </div>
-                                <div class="am-form-group">
+                                <div class="am-form-group" id="link_address_div">
                                     <label for="contact-address" class="am-u-sm-2 am-form-label">联系人地址</label>
                                     <div class="am-u-sm-10">
                                         <input type="text" id="link_address" name="link_address" >
                                     </div>
                                 </div>
+                                <!-- <input type="hidden" id="linkman_hidden" name="linkman_hidden" value="0"> -->
+                                
                                 <hr/>
                                 
                                 <h4>财务信息</h4>
@@ -269,7 +275,6 @@
           }
         }
       })
-
     }
 
 </script>
@@ -309,6 +314,32 @@
         
     });
 </script>
+
+// <script type="text/javascript">
+//     $(document).ready(function(){
+//         $("#add_linkman").click(function(){
+//             //客户名称验证
+//             var linkman_hidden = $("#linkman_hidden").val();
+//             alert(linkman_hidden);
+//             // <label for="contact-name" class="am-u-sm-2 am-form-label">联系人
+//             //                                 <span id="sname_notice" style="color:#FF0000"> *</span>
+//             //                         </label>
+//             //                         <div class="am-u-sm-4">
+//             //                             <input type="tel" id="link_name" name="link_name" >
+//             //                         </div>
+//             $("#link_address_div").after("<label for='contact-name' class='am-u-sm-2 am-form-label'>联系人
+//                                             <span id='sname_notice' style='color:#FF0000'> *</span>
+//                                     </label>");
+
+//             // if(cname == ''){
+//             //     alert("客户名称不能为空！");
+//             //     $("#cname").focus();
+//             //     return false;
+//             // }
+//         });
+        
+//     });
+// </script>
 
 </body>
 
