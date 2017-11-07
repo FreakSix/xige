@@ -17,6 +17,9 @@
     <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
     <link rel="stylesheet" href="__PUBLIC__/css/app.css">
     <script src="__PUBLIC__/js/echarts.min.js"></script>
+
+    <script src="__PUBLIC__/js/jquery.alerts.js" type="text/javascript"></script>
+    <link href="__PUBLIC__/css/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
 </head>
 
 <body data-type="chart">
@@ -86,11 +89,11 @@
                             </thead>
                             <tbody>
                                 <foreach name="customerInfo" item="v">
-                                    <option value="{$v['code']}" >{$v['name']}</option>
+                                    <!-- <option value="{$v['code']}" >{$v['name']}</option> -->
                                     
                                 <tr>
                                     <td><input type="checkbox"></td>
-                                    <td>{$v['cname']}</td>
+                                    <td><a href="__APP__/Customer/details/customer_id/{$v['id']}">{$v['cname']}</a></td>
                                     <if condition="$v['type_id'] eq 1">
                                         <td>企业</td>
                                     <elseif condition="$v['type_id'] eq 2" />
@@ -98,7 +101,6 @@
                                     <else/>
                                         <td>政府机构</td>
                                     </if>
-                                    
                                     <td>{$v['level_name']}</td>
                                     <td>{$v['local_name']}</td>
                                     <td>{$v['local_address']}</td>
@@ -107,10 +109,13 @@
                                     <!-- <td class="am-hide-sm-only">刘东旭</td> -->
                                     <!-- <td class="am-hide-sm-only">备注里边说点啥</td> -->
                                     <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                                        <div class="am-form-group">
+                                            <div class="am-btn-group am-btn-group-xs" >
+                                                <!-- <button class="am-btn am-btn-default am-btn-xs am-text-secondary"> -->
+                                                    <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">编辑</button>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <!-- <a href="__APP__/Customer/delete/customer_id/{$v['id']}" onclicks="delete({$v['id']});">删除</a> -->
+                                                    <button id="delete" value="{$v['id']}">删除</button>
                                             </div>
                                         </div>
                                     </td>
@@ -143,6 +148,19 @@
     <script src="__PUBLIC__/js/jquery.min.js"></script>
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
+
+    <script type="text/javascript">
+    // $(document).ready(function(){
+        $("#delete").click(function(){
+            //删除客户信息
+            var customer_id = $("#delete").val();
+            alert(customer_id);
+            
+
+        });
+        
+    // });
+    </script>
 </body>
 
 </html>

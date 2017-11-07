@@ -38,7 +38,7 @@
                 <div class="tpl-block ">
                     <div class="am-g tpl-amazeui-form">
                         <div class="am-u-sm-12 am-u-md-9">
-                            <form class="am-form am-form-horizontal" action="__APP__/Customer/addCustomer" method="post" enctype="multipart/form-data">
+                            <form class="am-form am-form-horizontal" action="__APP__/Customer/update" method="post" enctype="multipart/form-data">
                                 <!-- 公司信息 -->
                                 <h4>公司信息
                                     <span id="sname_notice" style="color:#FF0000;font-size: 14px;"> (带 “*” 为必填项) </span>
@@ -47,24 +47,24 @@
                                     <label for="cname" class="am-u-sm-2 am-form-label">客户名称
                                             <span id="sname_notice" style="color:#FF0000"> *</span>
                                     </label>
-                                    <div class="am-u-sm-4">
-                                        <input type="text" id="cname" name="cname" value="{$post['cname']}">
+                                    <div class="am-u-sm-4"> 
+                                        <input type="text" id="cname" name="cname" value="{$customerInfo['cname']}">
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">客户类型</label>
                                     <div class="am-u-sm-4">
                                         <select id="customer_type" name="customer_type">
-                                            <if condition="$post['customer_type'] == 3">
-                                                <option value="1">公司</option>
+                                            <if condition="$customerInfo['type_id'] == 1">
+                                                <option value="1" selected="selected">公司</option>
                                                 <option value="2">个人</option>
-                                                <option value="3" selected="selected">政府机构</option>
-                                            <elseif condition="$post['customer_type'] == 2" />
+                                                <option value="3">政府机构</option>
+                                            <elseif condition="$customerInfo['type_id'] == 2" />
                                                 <option value="1">公司</option>
                                                 <option value="2" selected="selected">个人</option>
                                                 <option value="3">政府机构</option>
                                             <else/>
-                                                <option value="1" selected="selected">公司</option>
+                                                <option value="1">公司</option>
                                                 <option value="2">个人</option>
-                                                <option value="3">政府机构</option>
+                                                <option value="3" selected="selected">政府机构</option>
                                             </if>
                                         </select>
                                     </div>
@@ -72,13 +72,17 @@
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">邮编</label>
                                     <div class="am-u-sm-4">
-                                        <input type="text" id="code" name="code" value="{$post['code']}">
+                                        <if condition="$customerInfo['code'] eq 0">
+                                           <input type="text" id="code" name="code" value="">
+                                        <else/>
+                                            <input type="text" id="code" name="code" value="{$customerInfo['code']}">
+                                        </if>
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">客户等级</label>
                                     <div class="am-u-sm-4">
                                         <select id="rank" name="rank" >
                                             <foreach name="rank" item="v">
-                                                <if condition="$post['rank'] == $v['level']">
+                                                <if condition="$customerInfo['rank'] == $v['level']">
                                                     <option value="{$v[level]}" selected="selected">{$v['name']}</option>
                                                 <else/>
                                                     <option value="{$v['level']}" >{$v['name']}</option>
@@ -89,11 +93,11 @@
                                 </div>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">所在区域</label>
-                                    <div class="am-u-sm-2"> 
+                                    <div class="am-u-sm-2">
                                         <select id="porvinces2" name="province_name" onchange="getCityInfos2();">
                                             <option value="0" >请选择省</option>
                                             <foreach name="province" item="v">
-                                            <if condition="$post['province_name'] == $v['code']">
+                                                <if condition="$customerInfo['local_procode'] == $v['code']">
                                                     <option value="{$v[code]}" selected="selected">{$v['name']}</option>
                                                 <else/>
                                                     <option value="{$v['code']}" >{$v['name']}</option>
@@ -105,7 +109,7 @@
                                         <select id="citys2" name="city_name" onchange="getAreaInfos2();">
                                             <option value="0" checked="checked">请选择市</option>
                                             <foreach name="city" item="v">
-                                            <if condition="$post['city_name'] == $v['code']">
+                                                <if condition="$customerInfo['local_citycode'] == $v['code']">
                                                     <option value="{$v[code]}" selected="selected">{$v['name']}</option>
                                                 <else/>
                                                     <option value="{$v['code']}" >{$v['name']}</option>
@@ -117,7 +121,7 @@
                                         <select id="areas2" name="area_name" >
                                             <option value="0" checked="checked">请选择区</option>
                                             <foreach name="area" item="v">
-                                            <if condition="$post['area_name'] == $v['code']">
+                                                <if condition="$customerInfo['local_areacode'] == $v['code']">
                                                     <option value="{$v[code]}" selected="selected">{$v['name']}</option>
                                                 <else/>
                                                     <option value="{$v['code']}" >{$v['name']}</option>
@@ -132,76 +136,92 @@
                                             <span id="sname_notice" style="color:#FF0000"> *</span>
                                     </label>
                                     <div class="am-u-sm-10">
-                                        <input type="text" id="local_address" name="local_address" >
+                                        <input type="text" id="local_address" name="local_address" value="{$customerInfo['local_address']}">
                                     </div>
                                 </div>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">备注</label>
                                     <div class="am-u-sm-10">
-                                        <input type="text" id="remarks" name="remarks" >
+                                        <input type="text" id="remarks" name="remarks" value="{$customerInfo['remarks']}" >
                                     </div>
                                 </div>
                                 <hr/>
                                 <h4>联系人信息</h4>
+                                <foreach name="linkmanInfo" item="v" key="k">
                                 <div class="contact">
                                     <div class="am-form-group">
                                         <label class="am-u-sm-2 am-form-label">联系人姓名
                                                 <span id="sname_notice" style="color:#FF0000"> *</span>
                                         </label>
                                         <div class="am-u-sm-4">
-                                            <input type="tel" id="link_name0" name="link_name0" >
+                                            <input type="tel" id="link_name0" name="link_man[{$k}][name]" value="{$v['name']}" >
                                         </div>
                                         <label class="am-u-sm-2 am-form-label">联系电话
                                                 <span id="sname_notice" style="color:#FF0000"> *</span>
                                         </label>
                                         <div class="am-u-sm-4">
-                                            <input type="tel" id="link_phone0" name="link_phone0" >
+                                            <input type="tel" id="link_phone0" name="link_man[{$k}][phone]" value="{$v['phone']}" >
                                         </div>
                                     </div>
                                     <div class="am-form-group">
                                         <label class="am-u-sm-2 am-form-label">联系人地址</label>
                                         <div class="am-u-sm-10">
-                                            <input type="text" id="link_address0" name="link_address0" >
+                                            <input type="text" id="link_address0" name="link_man[{$k}][address]" value="{$v['address']}" >
                                         </div>
                                     </div>
                                 </div>
-                                <input type="hidden" value="0" name="select_num_hide">
-                                <input type="button" value="添加联系人" id="add-contact">
+                                <input type="hidden" name="link_man[{$k}][link_id]" value="{$v['id']}">
                                 <hr/>
+                                </foreach>
                                 
                                 <h4>财务信息</h4>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">纳税人识别号</label>
                                     <div class="am-u-sm-4">
-                                        <input type="tel" id="invoice_num" name="invoice_num">
+                                        <if condition="$customerInfo['invoice_num'] eq 0">
+                                            <input type="tel" id="invoice_num" name="invoice_num" value="">
+                                        <else/>
+                                            <input type="tel" id="invoice_num" name="invoice_num" value="{$customerInfo['invoice_num']}">
+                                        </if>
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">电话</label>
                                     <div class="am-u-sm-4">
-                                        <input type="tel" id="invoice_tel" name="invoice_tel" >
+                                        <if condition="$customerInfo['invoice_tel'] eq 0">
+                                            <input type="tel" id="invoice_tel" name="invoice_tel" value="">
+                                        <else/>
+                                            <input type="tel" id="invoice_tel" name="invoice_tel" value="{$customerInfo['invoice_tel']}">
+                                        </if>
+                                        
                                     </div>
                                 </div>
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">开户银行</label>
                                     <div class="am-u-sm-4">
-                                        <input type="tel" id="bank_name" name="bank_name">
+                                        <input type="tel" id="bank_name" name="bank_name" value="{$customerInfo['bank_name']}" >
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">银行账号</label>
                                     <div class="am-u-sm-4">
-                                        <input type="text" id="bank_num" name="bank_num" >
+                                         <if condition="$customerInfo['bank_num'] eq 0">
+                                            <input type="text" id="bank_num" name="bank_num" value="" >
+                                        <else/>
+                                            <input type="text" id="bank_num" name="bank_num" value="{$customerInfo['bank_num']}" >
+                                        </if>
+                                        
                                     </div>
                                 </div>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">开户地址</label>
                                     <div class="am-u-sm-10">
-                                        <input type="text" id="bank_address" name="bank_address" >
+                                        <input type="text" id="bank_address" name="bank_address" value="{$customerInfo['bank_address']}" >
                                     </div>
                                 </div>
                                 <hr/>
+                                <input type="hidden" name="customer_id" value="{$customerInfo['id']}">
 
                                 <div class="am-form-group">
                                     <div class="am-u-sm-10 am-u-sm-push-2">
-                                        <button id="submit" type="submit" class="am-btn am-btn-primary">确认添加</button>
+                                        <button id="submit" type="submit" class="am-btn am-btn-primary">确认修改</button>
                                     </div>
                                 </div>
                             </form>
