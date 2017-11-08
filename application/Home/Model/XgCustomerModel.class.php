@@ -6,14 +6,31 @@
 		
 		public $trueTableName = "xg_customer";
 
-		//查询客户信息
+		//查询单条客户信息
 		public function getCustomerInfo($customer_id){
-			$customer = M("xg_customer");
-			if($customer_id){
-				$result = $customer->where("id = ".$customer_id)->find();
-			}else{
-				$result = $customer->select();
+			$result = M("xg_customer")->where("id = ".$customer_id)->find();
+			return $result;
+		}
+
+		//条件查询客户信息
+		public function getCustomerInfos($condition){
+			$query = M("xg_customer");
+			if($condition['field']){
+				$query = $query->field($condition['field']);
 			}
+			if($condition['where']){
+				var_dump($condition['where']);
+				$query = $query->where($condition['where']);
+			}
+			if($condition['order']){
+				$query = $query->order($condition['order']);
+			}
+			if($condition['limit']){
+				$query = $query->limit($condition['limit']['firstRow'],$condition['limit']['pageSize']);
+			}
+			// dump(D('xg_customer')->getLastSql());
+
+			$result = $query->select();
 			return $result;
 		}
 
