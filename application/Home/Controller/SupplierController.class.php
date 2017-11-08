@@ -3,7 +3,7 @@
 	
 	
 	class SupplierController extends BaseController{
-		// 供应商信息展示
+		// 供应商基本信息展示
 		public function index(){
 
 			//总记录数
@@ -35,13 +35,12 @@
 					$localName = $provinceInfo["0"]["name"]."-".$cityInfo["0"]["name"];
 				}
 				$supplierInfo[$k]["local_name"] = $localName;
-				// //获得联系人信息
-				// $linkmanInfo = $linkman->where("c_id = ".$v["id"])->find();
-				// $customerInfo[$k]["link_name"] = $linkmanInfo["name"];
-				// $customerInfo[$k]["link_phone"] = $linkmanInfo["phone"];  
-
+				//获得联系人信息
+				$supplierId = $supplierInfo[$k]['supplier_id'];
+				$linkmanInfo = D("XgSupplierLinkman")->findLinkman($supplierId);
+				$supplierInfo[$k]["linkman_name"] = $linkmanInfo["linkman_name"];
+				$supplierInfo[$k]["linkman_phone"] = $linkmanInfo["linkman_phone"];
 			}
-			dump($supplierInfo);
 			$this->assign("supplierInfo",$supplierInfo);
 			$this->assign("pageStr",$pageStr);
 		
@@ -61,8 +60,6 @@
 			$this->assign("area",$area);
 			//接收post传值
 			$post = $_POST;
-
-			dump($_POST);
 			if(!empty($_POST)){
 				$supplier['supplier_name'] = $post['supplier_name'];
 				$supplier['supplier_tel'] = $post['supplier_tel'];
@@ -73,14 +70,33 @@
 				$supplier['spare_address'] = $post['spare_address'];
 				$supplier['info_create_time'] = time();
 				$supplier['info_update_time'] = time();
-				dump($supplier);
 				$supplierModel = D("XgSupplier");
-				$result = $supplierModel->addSupplierInfo($supplier);
-				dump($result);
-				$this -> display("index");	
+				$res_1 = $supplierModel->addSupplierInfo($supplier);
+				if($res_1 > 0){
+					var_dump($post);
+					$select_num_hide = $post['select_num_hide'];
+					for($i=0;$i<=$select_num_hide;$i++){
+						$linkman['supplier_id']=$res_1;    //公司的id
+						$linkman['linkman_name']=$post['link_name'.$i];
+						$linkman['linkman_phone']=$post['link_phone'.$i];
+						$linkman['create_time'] = time();
+						$linkman['update_time'] = time();
+						$model = D("XgSupplierLinkman");
+						$res_2 = $model->addSupplierLinkman($linkman);
+						dump($res_2);
+					}
+				}
+
+				if($res_1&&$res_2){
+					$this->redirect("Supplier/index");
+				}else{
+					echo "<script>javascript:history.back(-1);</script>";
+				}
+					
 			}else{
 				$this -> display("add_supplier");
 			}
+			
 			
 		}
 
@@ -99,7 +115,50 @@
 	 			echo json_encode($res);
 		}
 
-		
+		// 供应商详细信息
+		public function detail(){
+			//查询客户公司信息
+			$supplierInfo = D("XgSupplier")->getSupplierInfo($_GET['supplier_id']);
+
+			if($supplierInfo["supplier_pro_id"] != 0){
+				//得到省份名称
+				$provinceInfo = $this->getProvince($supplierInfo["supplier_pro_id"]);
+				$proName = 	$provinceInfo["0"]["name"];
+			}else{
+				$proName = "";
+			}
+			if($supplierInfo["supplier_city_id"] != 0){
+				//得到城市名称
+				$cityInfo = $this->getCity($customerInfo["supplier_city_id"]);
+				$cityName = $cityInfo["0"]["name"];
+			}else{
+				$cityName = "";
+			}
+			if($supplierInfo["supplier_area_id"] != 0){
+				//得到地区名称
+				$areaInfo = $this->getArea($customerInfo["supplier_area_id"]);
+				$areaName = $areaInfo["0"]["name"];
+			}else{
+				$areaName = "";
+			}
+			//拼接所在地区名
+			if ($provinceInfo["0"]["name"] == $cityInfo["0"]["name"]) {
+				$localName = $proName.$areaName;
+				$address = $proName." ".$areaName." ".$supplierInfo["supplier_street"];
+			} else {
+				$localName = $proName." ".$cityName;
+				$address = $proName." ".$cityName." ".$areaName." ".$supplierInfo["supplier_street"];
+			}
+			$supplierInfo["local_name"] = $localName;
+			$supplierInfo["address"] = $address;
+			//获得联系人信息
+			$supplierId = $supplierInfo["supplier_id"];
+			$linkmanInfo = D("XgSupplierLinkman")->findAllLinkman($supplierId);
+			$this->assign("supplierInfo",$supplierInfo);
+			$this->assign("supplierLinkmanInfo",$linkmanInfo);
+
+			$this->display();
+		}
 
 		
 	}
