@@ -12,16 +12,20 @@
 	 		$page = new \Think\Page($totalCount,$pageSize);
 	 		//获取起始位置
 	 		$firstRow = $page->firstRow;
-	 		var_dump($firstRow);
 	 		//获取分页结果
 	 		$pageStr = $page->show();
 	 		//总页数
 	 		$totalPage = $page->totalPages;
 	 		//查询客户公司信息
-			$customer = M("xg_customer");
-			$customerInfo = $customer->order("id desc")->limit("$firstRow,$pageSize")->select();
+	 		$condition['order'] = "id desc";
+	 		$condition['limit']['firstRow'] = $firstRow;
+	 		$condition['limit']['pageSize'] = $pageSize;
+
+	 		$customerInfo = D("XgCustomer")->getCustomerInfos($condition);
 
 			$level = M("xg_customer_level");
+			//客户等级信息
+			$levelInfos = $level->order("level asc")->select();
 			$linkman = M("xg_customer_linkman");
 			foreach ($customerInfo as $k => $v) {
 				//得到客户等级名称
@@ -62,13 +66,19 @@
 			}
 			$this->assign("customerInfo",$customerInfo);
 			$this->assign("pageStr",$pageStr);
+			$this->assign("rank",$levelInfos);
 
 			$this->display();
 		}
 
+
+
 		//客户详情页
 		public function details(){
 	 		//查询客户公司信息
+	 		// $condition['where'] = "id = ".$_GET['customer_id']."";
+	 		// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+	 		// $customerInfo = $customerInfo['0'];
 			$customerInfo = D("XgCustomer")->getCustomerInfo($_GET['customer_id']);
 			//得到客户等级名称
 			$levelInfo = D("XgCustomer")->getCustomerLevelInfo($customerInfo["rank"]);
@@ -127,16 +137,15 @@
 			$post = $_POST;
 			if ($post) {
 				//将表单中提交过来的数据添加到 xg_customer 表中
-				// $res_1 = D("XgCustomer")->dellCustomerInfo($post,"add");
-				// // 将表单提交过来的数据添加到 xg_customer_linkman 表中
-				// if($res_1 > 0){
-				// 	$res_2 = D("XgCustomer")->addCustomerLinkInfo($post,$res_1);
-				// }
-				// //根据数据添加的情况来判断页面跳转
-				// if($res_1 ){
-				// 	$this->redirect("Customer/index");
-				// }else{
-				var_dump($post);
+				$res_1 = D("XgCustomer")->dellCustomerInfo($post,"add");
+				// 将表单提交过来的数据添加到 xg_customer_linkman 表中
+				if($res_1 > 0){
+					$res_2 = D("XgCustomer")->addCustomerLinkInfo($post,$res_1);
+				}
+				//根据数据添加的情况来判断页面跳转
+				if($res_1 ){
+					$this->redirect("Customer/index");
+				}else{
 					$this->assign("post",$post);
 					$this->assign("rank",$levelInfo);
 					$this->assign("province",$provinceInfo);
@@ -144,7 +153,7 @@
 					$this->assign("area",$areaInfo);
 
 					$this -> display("addCustomer");
-				// }
+				}
 			}
 			$this->assign("rank",$levelInfo);
 			$this->assign("province",$provinceInfo);
