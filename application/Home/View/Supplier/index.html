@@ -98,7 +98,7 @@
                                     <td>
                                         <div class="am-btn-toolbar">
                                             <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="window.open('__APP__/Supplier/update/supplier_id/{$v['supplier_id']}','main')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
                                                 <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
                                             </div>
                                         </div>
@@ -110,7 +110,10 @@
                         <div class="am-cf">
 
                             <div class="am-fr">
-                                {$pageStr}
+                                <!-- {$pageStr} -->
+                                <!-- <ul class="am-pagination am-pagination-right"> -->
+                                    {$pageStr}
+                                <!-- </ul> -->
                                 <!-- <ul class="am-pagination tpl-pagination">
                                     <li class="am-disabled"><a href="#">«</a></li>
                                     <li class="am-active"><a href="#">1</a></li>

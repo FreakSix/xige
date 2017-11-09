@@ -25,14 +25,14 @@ class Page{
 
 	// 分页显示定制
     private $config  = array(
-        'header' => '<span class="rows">共 %TOTAL_ROW% 条记录</span>',
-        'prev'   => '<<',
-        'next'   => '>>',
+        'header' => '<li class="rows">共 %TOTAL_ROW% 条记录 第<b>%NOW_PAGE%</b>页/共<b>%TOTAL_PAGE%</b>页</li>',
+        'prev'   => '&laquo;',
+        'next'   => '&raquo;',
         'first'  => '1...',
         'last'   => '...%TOTAL_PAGE%',
         'firstPage'=> '首页',
         'lastPage'=> '尾页',
-        'theme'  => '%FIRST_PAGE%  %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%  %LAST_PAGE%',
+        'theme'  => '<ul class="am-pagination tpl-pagination">%FIRST_PAGE%  %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%  %LAST_PAGE%  %HEADER%</ul>',
     );
 
     /**
@@ -94,31 +94,31 @@ class Page{
 
         //上一页
         $up_row  = $this->nowPage - 1;
-        $up_page = $up_row > 0 ? '<a class="prev" href="' . $this->url($up_row) . '">' . $this->config['prev'] . '</a>' : '';
+        $up_page = $up_row > 0 ? '<li><a class="prev" href="' . $this->url($up_row) . '">' . $this->config['prev'] . '</a></li>' : '';
 
         //下一页
         $down_row  = $this->nowPage + 1;
-        $down_page = ($down_row <= $this->totalPages) ? '<a class="next" href="' . $this->url($down_row) . '">' . $this->config['next'] . '</a>' : '';
+        $down_page = ($down_row <= $this->totalPages) ? '<li><a class="next" href="' . $this->url($down_row) . '">' . $this->config['next'] . '</a></li>' : '';
 
         //第一页
         $the_first = '';
         if($this->totalPages > $this->rollPage && ($this->nowPage - $now_cool_page) >= 1){
-            $the_first = '<a class="first" href="' . $this->url(1) . '">' . $this->config['first'] . '</a>';
+            $the_first = '<li><a class="first" href="' . $this->url(1) . '">' . $this->config['first'] . '</a></li>';
         }
 
         //最后一页
         $the_end = '';
         if($this->totalPages > $this->rollPage && ($this->nowPage + $now_cool_page) < $this->totalPages){
-            $the_end = '<a class="end" href="' . $this->url($this->totalPages) . '">' . $this->config['last'] . '</a>';
+            $the_end = '<li><a class="end" href="' . $this->url($this->totalPages) . '">' . $this->config['last'] . '</a></li>';
         }
 
         //首页
         $first_row  = 1;
-        $firstPage  = '<a class="firstPage" href="' . $this->url($first_row) . '">' . $this->config['firstPage'] . '</a>' ;
+        $firstPage  = '<li><a class="firstPage" href="' . $this->url($first_row) . '">' . $this->config['firstPage'] . '</a></li>' ;
 
         //尾页
         $last_row  = $this->totalPages;
-        $lastPage  = '<a class="lastPage" href="' . $this->url($last_row) . '">' . $this->config['lastPage'] . '</a>' ;
+        $lastPage  = '<li><a class="lastPage" href="' . $this->url($last_row) . '">' . $this->config['lastPage'] . '</a></li>' ;
 
         //数字连接
         $link_page = "";
@@ -133,7 +133,7 @@ class Page{
             if($page > 0 && $page != $this->nowPage){
 
                 if($page <= $this->totalPages){
-                    $link_page .= '<a class="num" href="' . $this->url($page) . '">' . $page . '</a>&nbsp;&nbsp;';
+                    $link_page .= '<li><a class="num" href="' . $this->url($page) . '">' . $page . '</a></li>&nbsp;&nbsp;';
                 }else{
                     break;
                 }

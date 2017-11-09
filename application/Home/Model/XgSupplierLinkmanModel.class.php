@@ -21,4 +21,10 @@
 			$linkmanInfo = $table->where("supplier_id = ".$supplierId)->select();
 			return $linkmanInfo;
 		}
+		// 按供应商ID修改联系人信息
+		public function updateSupplierLinkman($supplierId,$supplierLinkman){
+			$table = M("xg_supplier_linkman");
+			$result = $table->where("supplier_id = ".$supplierId)->save($supplierLinkman);
+			return $result;
+		}
 	}

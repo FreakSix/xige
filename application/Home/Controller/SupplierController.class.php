@@ -160,5 +160,77 @@
 			$this->display();
 		}
 
+		// 修改供应商信息页面
+		public function update(){
+			$supplierId = $_GET['supplier_id'];
+			//查询客户公司信息
+			$supplierInfo = D("XgSupplier")->getSupplierInfo($supplierId);
+			//客户公司联系人信息 
+			$linkmanInfo = D("XgSupplierLinkman")->findAllLinkman($supplierId);
+			//获取省份信息
+			$provinceInfo = $this->getProvince("0");
+			//得到城市名称
+			$cityInfo = $this->getCity("0");
+			//得到地区名称
+			$areaInfo = $this->getArea("0");
+			dump($supplierInfo);
+			dump($linkmanInfo);
+			$this->assign("supplierInfo",$supplierInfo);
+			$this->assign("linkmanInfo",$linkmanInfo);
+			$this->assign("province",$provinceInfo);
+			$this->assign("city",$cityInfo);
+			$this->assign("area",$areaInfo);
+	 		
+			$this->display();
+
+			
+			
+			
+		}
+		// 修改供应商信息处理
+		public function updateHandle(){
+			$supplierId = $_POST['supplier_id'];
+			dump($supplierId);
+			$post = $_POST;
+			dump($post);
+			if($post){
+				$supplier['supplier_name'] = $post['supplier_name'];
+				$supplier['supplier_tel'] = $post['supplier_tel'];
+				$supplier['supplier_pro_id'] = $post['supplier_pro'];
+				$supplier['supplier_city_id'] = $post['supplier_city'];
+				$supplier['supplier_area_id'] = $post['supplier_area'];
+				$supplier['supplier_street'] = $post['supplier_street'];
+				$supplier['spare_address'] = $post['spare_address'];
+				$supplier['info_update_time'] = time();
+				//更新供应商信息
+				$result_1 = D("XgSupplier")->updateSupplierInfo($supplierId,$supplier);
+
+				if($post['link_man']){
+					//修改客户联系人信息
+					foreach ($post['link_man'] as $k => $v) {
+						$supplierLinkman['supplier_id']=$supplierId;    //供应商id
+						$supplierLinkman['linkman_name']=$v['linkman_name'];
+						$supplierLinkman['linkman_phone']=$v['linkman_phone'];
+						dump($supplierLinkman);
+						$result_2 = D("XgSupplierLinkman")->updateSupplierLinkman($supplierId,$supplierLinkman);
+					}
+				}
+				dump($result_2);
+				// 根据数据添加的情况来判断页面跳转
+				if($result_1 && $result_2){
+					$this->redirect("Supplier/index");
+				}else{
+					$this->assign("customerInfo",$customerInfo);
+					$this->assign("linkmanInfo",$linkmanInfo);
+					$this->assign("rank",$levelInfo);
+					$this->assign("province",$provinceInfo);
+					$this->assign("city",$cityInfo);
+					$this->assign("area",$areaInfo);
+
+					$this -> display("update");
+				}
+			}
+		}
+
 		
 	}
