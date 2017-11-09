@@ -5,9 +5,137 @@
 	{
 		
 		public function index(){
-			//总记录数
-	 		$totalCount = M("xg_customer")->count();
-	 		$pageSize = 1;
+			$get = $_GET;
+			$post = $_POST;
+			var_dump($get);var_dump($post);
+			$result = $this->search($get,$post);
+			// var_dump($result);
+			$customerInfo = $result['customerInfo'];
+			$pageStr = $result['pageStr'];
+	 		
+			$level = M("xg_customer_level");
+			//客户等级信息
+			$levelInfos = $level->order("level asc")->select();
+			$linkman = M("xg_customer_linkman");
+			if(!empty($customerInfo)){
+				foreach ($customerInfo as $k => $v) {
+					//得到客户等级名称
+					$levelInfo = $level->where("level = ".$v["rank"])->find();
+					$customerInfo[$k]["level_name"] = $levelInfo["name"];
+					//得到省份名称
+					if($v["local_procode"] != 0){
+						$provinceInfo = $this->getProvince($v["local_procode"]);
+						$proName = 	$provinceInfo["0"]["name"];
+					}else{
+						$proName = "";
+					}
+					//得到城市名称
+					if($v["local_citycode"] != 0){
+						$cityInfo = $this->getCity($v["local_citycode"]);
+						$cityName = $cityInfo["0"]["name"];
+					}else{
+						$cityName = "";
+					}
+					//得到地区名称
+					if($v["local_areacode"] != 0){
+						$areaInfo = $this->getArea($v["local_areacode"]);
+						$areaName = $areaInfo["0"]["name"];
+					}else{
+						$areaName = "";
+					}
+					//拼接所在地区名
+					if ($provinceInfo["0"]["name"] == $cityInfo["0"]["name"]) {
+						$localName = $proName.$areaName;
+					} else {
+						$localName = $proName.$cityName;
+					}
+					$customerInfo[$k]["local_name"] = $localName;
+					//获得联系人信息
+					$linkmanInfo = D("XgCustomer")->getCustomerLinkInfo($v["id"]);
+					$customerInfo[$k]["link_name"] = $linkmanInfo["0"]["name"];
+					$customerInfo[$k]["link_phone"] = $linkmanInfo["0"]["phone"];  
+				}
+			}
+			$this->assign("customerInfo",$customerInfo);
+			$this->assign("pageStr",$pageStr);
+			$this->assign("rank",$levelInfos);
+			$this->assign("search",$result['search']);
+
+			$this->display();
+		}
+
+		public function search($get,$post){
+		
+	 		if($get['level']){
+	 			// var_dump($_GET);exit;
+	 			$condition['where'] = "rank = ".$get['level']."";
+	 			// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+
+	 			$search['rank'] = $get['level'];
+	 		}else{
+	 			if($post){
+		 			// var_dump($_POST);
+		 			// var_dump($condition);var_dump($_GET);exit;
+		 			if($post['search_content']){
+		 				if($post['customer_type'] == 1){
+		 					//有等级，进行客户名称查询
+			 				if($post['customer_level'] != 0){
+			 					$condition['where'] = "rank = ".$post['customer_level']." and cname like '%".$post['search_content']."%'";
+			 					// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+			 				}else{
+			 					$condition['where'] = "cname like '%".$post['search_content']."%' ";
+			 					// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+			 				}
+			 			}else{
+			 				if($post['customer_type'] == 2){
+				 				//查询联系人信息
+				 				$customer_linkman = M("xg_customer_linkman")->where("name = '".$post["search_content"]."'")->find();
+				 			}
+				 			if($post['customer_type'] == 3){
+				 				//查询联系人信息
+				 				$customer_linkman = M("xg_customer_linkman")->where("phone = '".$post["search_content"]."'")->find();
+				 			}
+				 			
+				 			if(!empty($customer_linkman)){
+				 				//联系人信息不为空，带客户等级的搜索
+				 				if($post['customer_level'] != 0){
+				 					$condition['where'] = "rank = ".$post['customer_level']." and id = ".$customer_linkman['c_id']."";
+				 					// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+				 				}else{
+				 					// 联系人信息不为空，不带客户等级的搜索
+				 					$condition['where'] = "id = ".$customer_linkman['c_id']."";
+				 					// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+				 				}
+				 			}else{
+				 				//搜索的联系人姓名或者电话为空值
+				 				// $customerInfo = array();
+				 				$condition['where'] = "id = ''";
+		 						// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+				 			}
+			 			}
+		 			}else{
+		 				//有等级，无查询内容
+		 				if($post['customer_level'] != 0){
+		 					$condition['where'] = "rank = ".$post['customer_level']."";
+		 					// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+		 				}else{
+		 					// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+		 				}
+		 			}
+
+		 			$search['rank'] = $post['customer_level'];
+		 			$search['type'] = $post['customer_type'];
+		 			$search['search_content'] = $post['search_content'];
+		 			$search['customer_id'] = $customer_linkman['c_id'];
+		 		}else{
+		 			// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+		 		}
+	 		}
+	 		// var_dump($condition);
+
+	 		//总记录数
+	 		$totalCount = M("xg_customer")->where($condition['where'])->count();
+	 		$pageSize = 3;
 	 		//实例化分页类
 	 		$page = new \Think\Page($totalCount,$pageSize);
 	 		//获取起始位置
@@ -16,6 +144,7 @@
 	 		$pageStr = $page->show();
 	 		//总页数
 	 		$totalPage = $page->totalPages;
+	 		
 	 		//查询客户公司信息
 	 		$condition['order'] = "id desc";
 	 		$condition['limit']['firstRow'] = $firstRow;
@@ -23,52 +152,12 @@
 
 	 		$customerInfo = D("XgCustomer")->getCustomerInfos($condition);
 
-			$level = M("xg_customer_level");
-			//客户等级信息
-			$levelInfos = $level->order("level asc")->select();
-			$linkman = M("xg_customer_linkman");
-			foreach ($customerInfo as $k => $v) {
-				//得到客户等级名称
-				$levelInfo = $level->where("level = ".$v["rank"])->find();
-				$customerInfo[$k]["level_name"] = $levelInfo["name"];
-				//得到省份名称
-				if($v["local_procode"] != 0){
-					$provinceInfo = $this->getProvince($v["local_procode"]);
-					$proName = 	$provinceInfo["0"]["name"];
-				}else{
-					$proName = "";
-				}
-				//得到城市名称
-				if($v["local_citycode"] != 0){
-					$cityInfo = $this->getCity($v["local_citycode"]);
-					$cityName = $cityInfo["0"]["name"];
-				}else{
-					$cityName = "";
-				}
-				//得到地区名称
-				if($v["local_areacode"] != 0){
-					$areaInfo = $this->getArea($v["local_areacode"]);
-					$areaName = $areaInfo["0"]["name"];
-				}else{
-					$areaName = "";
-				}
-				//拼接所在地区名
-				if ($provinceInfo["0"]["name"] == $cityInfo["0"]["name"]) {
-					$localName = $proName.$areaName;
-				} else {
-					$localName = $proName.$cityName;
-				}
-				$customerInfo[$k]["local_name"] = $localName;
-				//获得联系人信息
-				$linkmanInfo = D("XgCustomer")->getCustomerLinkInfo($v["id"]);
-				$customerInfo[$k]["link_name"] = $linkmanInfo["0"]["name"];
-				$customerInfo[$k]["link_phone"] = $linkmanInfo["0"]["phone"];  
-			}
-			$this->assign("customerInfo",$customerInfo);
-			$this->assign("pageStr",$pageStr);
-			$this->assign("rank",$levelInfos);
+	 		return $data = [
+	 					"customerInfo" => $customerInfo,
+	 					"pageStr"      => $pageStr,
+	 					"search"	   => $search,
+	 			];
 
-			$this->display();
 		}
 
 
