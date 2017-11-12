@@ -62,9 +62,9 @@ $('.tpl-header-nav-hover-ico').on('click', function() {
     // ==========================
     // 选中商品边框效果
     // ==========================
-$('.select-box').click(function(){
-    $(this).addClass('select-box-selected').siblings('li').removeClass('select-box-selected');
-    })
+//$('.select-box').click(function(){
+//    $(this).addClass('select-box-selected').siblings('li').removeClass('select-box-selected');
+//    })
 
 
 // 页面数据

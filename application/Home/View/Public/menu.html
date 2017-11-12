@@ -38,13 +38,15 @@
                                 </a>
                                 <ul class="tpl-left-nav-sub-menu-first">
                                     <li>
-                                        <a href="__APP__/Goods/index" target="main">
+                                    <foreach name="productMenu" key="key" item="item">
+                                        <a href="__APP__/Goods/index/type_id/{$item.id}" target="main">
                                             <i class="am-icon-credit-card"></i>
-                                            <span>名片</span>
+                                            <span>{$item.type_name}</span>
                                         </a>
-                                        <a href="table-images-list.html"  target="main">
+                                     </foreach>
+                                        <!-- <a href="table-images-list.html"  target="main">
                                             <span>画册</span>
-                                        </a>
+                                        </a> -->
                                     </li>
                                 </ul>
                                 <a href="javascript:;" class="tpl-left-nav-link-list-second">

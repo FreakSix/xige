@@ -5,6 +5,10 @@
 	class IndexController extends BaseController {
 		
 	    public function index(){
+	    	$productTypeModel = D("XgProductType");
+	    	$pid = 1;
+	    	$productMenu = $productTypeModel->getProductTypeByPid($pid);
+	    	$this->assign("productMenu",$productMenu);
 	        $this->display();    
 	    }
 
