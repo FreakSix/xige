@@ -46,11 +46,6 @@ $('.tpl-left-nav-link-list-first').on('click', function() {
             .end()
             .find('.am-icon-angle-right').toggleClass('tpl-left-nav-more-ico-rotate');
     })
-$('.tpl-left-nav-link-list-second').on('click', function() {
-        $(this).siblings('.tpl-left-nav-sub-menu-second').slideToggle(80)
-            .end()
-            .find('.am-icon-angle-right').toggleClass('tpl-left-nav-more-ico-rotate');
-    })
     // ==========================
     // 头部导航隐藏菜单
     // ==========================

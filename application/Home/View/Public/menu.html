@@ -31,40 +31,23 @@
                         </a>
                         <ul class="tpl-left-nav-sub-menu">
                             <li>
+                                <foreach name="productType" key="k" item="pt">
                                 <a href="javascript:;" class="tpl-left-nav-link-list-first">
                                     <i class="am-icon-angle-right"></i>
-                                    <span>印刷产品</span>
+                                    <span>{$pt.type_name}</span>
                                     <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                                 </a>
                                 <ul class="tpl-left-nav-sub-menu-first">
                                     <li>
-                                    <foreach name="productMenu" key="key" item="item">
+                                    <foreach name="productType[$k]['productMenu']" key="key" item="item">
                                         <a href="__APP__/Goods/index/type_id/{$item.id}" target="main">
                                             <i class="am-icon-credit-card"></i>
                                             <span>{$item.type_name}</span>
                                         </a>
-                                     </foreach>
-                                        <!-- <a href="table-images-list.html"  target="main">
-                                            <span>画册</span>
-                                        </a> -->
+                                    </foreach>
                                     </li>
                                 </ul>
-                                <a href="javascript:;" class="tpl-left-nav-link-list-second">
-                                    <i class="am-icon-angle-right"></i>
-                                    <span>制作产品</span>
-                                    <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
-                                </a>
-                                <ul class="tpl-left-nav-sub-menu-second">
-                                    <li>
-                                        <a href="table-font-list.html" target="main">
-                                            <i class="am-icon-credit-card"></i>
-                                            <span>展架</span>
-                                        </a>
-                                        <a href="table-images-list.html"  target="main">
-                                            <span>展板</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                                </foreach>
                                 
                             </li>
                         </ul>
