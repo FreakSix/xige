@@ -6,9 +6,16 @@
 		
 	    public function index(){
 	    	$productTypeModel = D("XgProductType");
-	    	$pid = 1;
-	    	$productMenu = $productTypeModel->getProductTypeByPid($pid);
-	    	$this->assign("productMenu",$productMenu);
+	    	// 获取商品分类
+	    	$productType = $productTypeModel->getProductType();
+	    	// 获取商品分类下对应的产品
+	    	foreach ($productType as $k => $v) {
+	    		$pid = $v["id"];
+	    		$productMenu = $productTypeModel->getProductTypeByPid($pid);
+	    		// dump($productMenu);
+	    		$productType[$k]["productMenu"] = $productMenu;
+	    	}
+	    	$this->assign("productType",$productType);
 	        $this->display();    
 	    }
 
