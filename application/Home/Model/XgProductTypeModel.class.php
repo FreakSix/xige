@@ -27,6 +27,18 @@
 			$result = M()->query($sql);
 			return $result;
 		}
+		// 查找Xg_product_type表中对应产品的供应商id所组成的字符串
+		public function getSupplierIdStr($id){
+			$sql = "select supplier_id_str from xg_product_type where id = {$id}";
+			$result = M()->query($sql);
+			return $result;
+		}
+		// 添加或修改Xg_product_type表中对应产品的供应商id所组成的字符串
+		public function updateSupplierIdStr($id,$supplierIdStr){
+			$sql = "update xg_product_type set supplier_id_str = '{$supplierIdStr}' where id = {$id}";
+			$result = M()->execute($sql);
+			return $result;
+		}
 
 	}
 	
