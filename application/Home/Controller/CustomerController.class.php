@@ -7,7 +7,7 @@
 		public function index(){
 			$get = $_GET;
 			$post = $_POST;
-			var_dump($get);var_dump($post);
+			// var_dump($get);var_dump($post);
 			$result = $this->search($get,$post);
 			// var_dump($result);
 			$customerInfo = $result['customerInfo'];
@@ -51,7 +51,7 @@
 					}
 					$customerInfo[$k]["local_name"] = $localName;
 					//获得联系人信息
-					$linkmanInfo = D("XgCustomer")->getCustomerLinkInfo($v["id"]);
+					$linkmanInfo = D("XgCustomerLinkman")->getCustomerLinkInfo($v["id"]);
 					$customerInfo[$k]["link_name"] = $linkmanInfo["0"]["name"];
 					$customerInfo[$k]["link_phone"] = $linkmanInfo["0"]["phone"];  
 				}
@@ -67,24 +67,18 @@
 		public function search($get,$post){
 		
 	 		if($get['level']){
-	 			// var_dump($_GET);exit;
 	 			$condition['where'] = "rank = ".$get['level']."";
-	 			// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
 
 	 			$search['rank'] = $get['level'];
 	 		}else{
 	 			if($post){
-		 			// var_dump($_POST);
-		 			// var_dump($condition);var_dump($_GET);exit;
 		 			if($post['search_content']){
 		 				if($post['customer_type'] == 1){
 		 					//有等级，进行客户名称查询
 			 				if($post['customer_level'] != 0){
 			 					$condition['where'] = "rank = ".$post['customer_level']." and cname like '%".$post['search_content']."%'";
-			 					// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
 			 				}else{
 			 					$condition['where'] = "cname like '%".$post['search_content']."%' ";
-			 					// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
 			 				}
 			 			}else{
 			 				if($post['customer_type'] == 2){
@@ -100,26 +94,19 @@
 				 				//联系人信息不为空，带客户等级的搜索
 				 				if($post['customer_level'] != 0){
 				 					$condition['where'] = "rank = ".$post['customer_level']." and id = ".$customer_linkman['c_id']."";
-				 					// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
 				 				}else{
 				 					// 联系人信息不为空，不带客户等级的搜索
 				 					$condition['where'] = "id = ".$customer_linkman['c_id']."";
-				 					// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
 				 				}
 				 			}else{
 				 				//搜索的联系人姓名或者电话为空值
-				 				// $customerInfo = array();
 				 				$condition['where'] = "id = ''";
-		 						// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
 				 			}
 			 			}
 		 			}else{
 		 				//有等级，无查询内容
 		 				if($post['customer_level'] != 0){
 		 					$condition['where'] = "rank = ".$post['customer_level']."";
-		 					// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
-		 				}else{
-		 					// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
 		 				}
 		 			}
 
@@ -127,11 +114,8 @@
 		 			$search['type'] = $post['customer_type'];
 		 			$search['search_content'] = $post['search_content'];
 		 			$search['customer_id'] = $customer_linkman['c_id'];
-		 		}else{
-		 			// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
 		 		}
 	 		}
-	 		// var_dump($condition);
 
 	 		//总记录数
 	 		$totalCount = M("xg_customer")->where($condition['where'])->count();
@@ -205,7 +189,7 @@
 			$customerInfo["local_name"] = $localName;
 			$customerInfo["address"] = $address;
 			//获得联系人信息
-			$linkmanInfo = D("XgCustomer")->getCustomerLinkInfo($customerInfo["id"]);
+			$linkmanInfo = D("XgCustomerLinkman")->getCustomerLinkInfo($customerInfo["id"]);
 
 			$this->assign("customerInfo",$customerInfo);
 			$this->assign("linkmanInfo",$linkmanInfo);
@@ -213,6 +197,18 @@
 			$this->display();
 		}
 
+		//联系人详细信息
+		public function detailsLinkman(){
+			//获得联系人信息
+			if($_GET['customer_id']){
+				$linkmanInfo = D("XgCustomerLinkman")->getCustomerLinkInfo($_GET["customer_id"]);
+			}
+			$this->assign("linkmanInfo",$linkmanInfo);
+
+			$this->display();
+		}
+
+		//添加客户信息
 		public function addCustomer(){
 			//客户等级信息
 			$levelInfo = M("xg_customer_level")->order("level asc")->select();
@@ -229,7 +225,7 @@
 				$res_1 = D("XgCustomer")->dellCustomerInfo($post,"add");
 				// 将表单提交过来的数据添加到 xg_customer_linkman 表中
 				if($res_1 > 0){
-					$res_2 = D("XgCustomer")->addCustomerLinkInfo($post,$res_1);
+					$res_2 = D("XgCustomerLinkman")->addCustomerLinkInfo($post,$res_1);
 				}
 				//根据数据添加的情况来判断页面跳转
 				if($res_1 ){
@@ -251,13 +247,34 @@
 	 		
 			$this->display();
 		}
+
+		//已知客户信息，添加联系人信息
+		public function addCustomerLinkman(){
+			//客户信息ID
+			$customer_id = $_GET['customer_id'];
+			
+			if ($_POST['customer_id'] && $_POST['link_name'] ) {
+				//添加联系人信息
+				$result = D("XgCustomerLinkman")->addCustomerLinkman($_POST);
+				if($result > 0){
+					$res = 1;
+				}else{
+					$res = 2;
+				}
+				echo $res;	
+			}else{
+				$this->assign("customer_id",$customer_id);
+	 		
+				$this->display();
+			}
+		}
 		
 		//修改客户信息
 		public function update(){
 			//查询客户公司信息
 			$customerInfo = D("XgCustomer")->getCustomerInfo($_GET['customer_id']);
 			//客户公司联系人信息 
-			$linkmanInfo = D("XgCustomer")->getCustomerLinkInfo($customerInfo['id']);
+			$linkmanInfo = D("XgCustomerLinkman")->getCustomerLinkInfo($customerInfo['id']);
 			//客户等级信息 
 			$levelInfo = D("XgCustomer")->getCustomerLevelInfo();
 			//获取省份信息
@@ -274,7 +291,7 @@
 
 				if($post['link_man']){
 					//修改客户联系人信息
-					$result_2 = D("XgCustomer")->updateCustomerLinkInfo($post);
+					$result_2 = D("XgCustomerLinkman")->updateCustomerLinkInfo($post);
 				}
 				//根据数据添加的情况来判断页面跳转
 				if($result_1 && $result_2){
@@ -300,6 +317,46 @@
 			$this->display();
 		}
 
+		//删除客户及联系人信息
+		public function deletes(){
+			$customer_id = $_GET['customer_id'];
+			//删除联系人信息
+			$result_1 = D("XgCustomerLinkman")->delete($customer_id);
+			//删除客户信息
+			$result_2 = D("XgCustomer")->delete($customer_id);
+			$res_str = " ";
+			if($result_1 && $result_2){
+				$res_str = "删除成功";
+			}else{
+				if($result_1){
+					$res_str = "联系人信息删除成功，客户信息删除不成功！";
+				}
+				if($result_2){
+					$res_str = "客户信息删除成功，联系人信息删除不成功！";
+				}else{
+					$res_str = "删除失败！";
+				}
+			}
+			// $res_str = "删除失败！";
+
+			echo json_encode($res_str);
+		}
+
+		//删除联系人信息
+		public function deletesLinkman(){
+			$linkman_id = $_GET['linkman_id'];
+			//删除联系人信息
+			$result = D("XgCustomerLinkman")->deletesByLinkmanId($linkman_id);
+			
+			$res_str = " ";
+			if($result > 0){
+				$res_str = "删除成功";
+			}else{
+				$res_str = "删除失败！";
+			}
+
+			echo json_encode($res_str);
+		}
 		
 		
 	}
