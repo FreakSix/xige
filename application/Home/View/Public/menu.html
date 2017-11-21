@@ -5,132 +5,150 @@
     
 
 </head>
+<style type="text/css">
+    .tpl-left-nav-list{
+        width:200px;
+        overflow: auto;
+        overflow-x: hidden;
+    }
+    .tpl-left-nav-list-son{
+        width:217px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height:600px;
+    }
+    .tpl-left-nav-menu{
+        width:200px;
+        overflow: hidden;
+    }
+</style>
 <body>
-<div class="b-box">
-            <div class="tpl-left-nav-title">菜单列表</div>
-            <div class="tpl-left-nav-list">
-                <ul class="tpl-left-nav-menu">
-                    <li class="tpl-left-nav-item">
-                        <a href="__APP__/Index/main" target="main" class="nav-link active">
-                            <i class="am-icon-home"></i>
-                            <span>首页</span>
+    <!-- <div id="menu_scroll"></div> -->
+    <div class="tpl-left-nav-title">菜单列表</div>
+    <div class="tpl-left-nav-list">
+         <div class="tpl-left-nav-list-son">
+            <ul class="tpl-left-nav-menu">
+            <li class="tpl-left-nav-item">
+                <a href="__APP__/Index/index" class="nav-link" nav="index">
+                    <i class="am-icon-home"></i>
+                    <span>首页</span>
+                </a>
+            </li>
+            <li class="tpl-left-nav-item">
+                <a href="__APP__/Order/index" class="nav-link tpl-left-nav-link-list" nav="order">
+                    <i class="am-icon-bar-chart"></i>
+                    <span>订单管理</span>
+                </a>
+            </li>
+
+            <li class="tpl-left-nav-item">
+                <a href="javascript:;" class="nav-link tpl-left-nav-link-list" nav="goods">
+                    <i class="am-icon-table"></i>
+                    <span>商品管理</span>
+                    <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                </a>
+                <ul class="tpl-left-nav-sub-menu">
+                    <li>
+                        <foreach name="productType" key="k" item="pt">
+                        <a href="javascript:;" class="tpl-left-nav-link-list-first">
+                            <i class="am-icon-angle-right"></i>
+                            <span>{$pt.type_name}</span>
+                            <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                         </a>
-                    </li>
-                    <li class="tpl-left-nav-item">
-                        <a href="__APP__/Order/index" target="main" class="nav-link tpl-left-nav-link-list">
-                            <i class="am-icon-bar-chart"></i>
-                            <span>订单管理</span>
-                        </a>
-                    </li>
-  
-                    <li class="tpl-left-nav-item">
-                        <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
-                            <i class="am-icon-table"></i>
-                            <span>商品管理</span>
-                            <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
-                        </a>
-                        <ul class="tpl-left-nav-sub-menu">
+                        <ul class="tpl-left-nav-sub-menu-first">
                             <li>
-                                <foreach name="productType" key="k" item="pt">
-                                <a href="javascript:;" class="tpl-left-nav-link-list-first">
-                                    <i class="am-icon-angle-right"></i>
-                                    <span>{$pt.type_name}</span>
-                                    <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                            <foreach name="productType[$k]['productMenu']" key="key" item="item">
+                                <a href="__APP__/Goods/index/type_id/{$item.id}" target="main">
+                                    <i class="am-icon-credit-card"></i>
+                                    <span>{$item.type_name}</span>
                                 </a>
-                                <ul class="tpl-left-nav-sub-menu-first">
-                                    <li>
-                                    <foreach name="productType[$k]['productMenu']" key="key" item="item">
-                                        <a href="__APP__/Goods/index/type_id/{$item.id}" target="main">
-                                            <i class="am-icon-credit-card"></i>
-                                            <span>{$item.type_name}</span>
-                                        </a>
-                                    </foreach>
-                                    </li>
-                                </ul>
-                                </foreach>
-                                
+                            </foreach>
                             </li>
                         </ul>
+                        </foreach>
+                        
                     </li>
-                    <li class="tpl-left-nav-item">
-                        <a href="__APP__/Customer/index" target="main" class="nav-link tpl-left-nav-link-list">
-                            <i class="am-icon-users"></i>
-                            <span>客户管理</span>
+                </ul>
+            </li>
+            <li class="tpl-left-nav-item">
+                <a href="__APP__/Customer/index" class="nav-link tpl-left-nav-link-list" nav="customer">
+                    <i class="am-icon-users"></i>
+                    <span>客户管理</span>
+                </a>
+            </li>
+            <li class="tpl-left-nav-item">
+                <a href="__APP__/Supplier/index" class="nav-link tpl-left-nav-link-list" nav="supplier">
+                    <i class="am-icon-truck"></i>
+                    <span>供应商管理</span>
+                </a>
+            </li>
+            <li class="tpl-left-nav-item">
+                <a href="javascript:;" class="nav-link tpl-left-nav-link-list" nav="Statistics">
+                    <i class="am-icon-line-chart"></i>
+                    <span>数据统计</span>
+                    <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                </a>
+                <ul class="tpl-left-nav-sub-menu">
+                    <li>
+                        <a href="__APP__/Statistics/index" target="main">
+                            <i class="am-icon-angle-right"></i>
+                            <span>基本信息统计</span>
+                            <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                         </a>
-                    </li>
-                    <li class="tpl-left-nav-item">
-                        <a href="__APP__/Supplier/index" target="main" class="nav-link tpl-left-nav-link-list">
-                            <i class="am-icon-truck"></i>
-                            <span>供应商管理</span>
+                        <a href="table-images-list.html"  target="main">
+                            <i class="am-icon-angle-right"></i>
+                            <span>产品统计</span>
                         </a>
-                    </li>
-                    <li class="tpl-left-nav-item">
-                        <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
-                            <i class="am-icon-line-chart"></i>
-                            <span>数据统计</span>
-                            <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                        <a href="form-news.html" target="main">
+                            <i class="am-icon-angle-right"></i>
+                            <span>客户统计</span>
                         </a>
-                        <ul class="tpl-left-nav-sub-menu">
-                            <li>
-                                <a href="__APP__/Statistics/index" target="main">
-                                    <i class="am-icon-angle-right"></i>
-                                    <span>基本信息统计</span>
-                                    <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
-                                </a>
-                                <a href="table-images-list.html"  target="main">
-                                    <i class="am-icon-angle-right"></i>
-                                    <span>产品统计</span>
-                                </a>
-                                <a href="form-news.html" target="main">
-                                    <i class="am-icon-angle-right"></i>
-                                    <span>客户统计</span>
-                                </a>
-                                <a href="form-news.html" target="main">
-                                    <i class="am-icon-angle-right"></i>
-                                    <span>供应商统计</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="tpl-left-nav-item">
-                        <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
-                            <i class="am-icon-table"></i>
-                            <span>用户与权限</span>
-                            <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
-                        </a>
-                        <ul class="tpl-left-nav-sub-menu">
-                            <li>
-                                <a href="table-font-list.html" target="main">
-                                    <i class="am-icon-angle-right"></i>
-                                    <span>部门管理</span>
-                                    <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
-                                </a>
-                                <a href="table-font-list.html" target="main">
-                                    <i class="am-icon-angle-right"></i>
-                                    <span>用户管理</span>
-                                    <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
-                                </a>
-                                <a href="table-images-list.html"  target="main">
-                                    <i class="am-icon-angle-right"></i>
-                                    <span>权限设定</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="tpl-left-nav-item">
-                        <a href="login.html" class="nav-link tpl-left-nav-link-list">
-                            <i class="am-icon-key"></i>
-                            <span>备忘录</span>
-                        </a>
-                    </li>
-                    <li class="tpl-left-nav-item">
-                        <a href="__APP__/Login/index" class="nav-link tpl-left-nav-link-list">
-                            <i class="am-icon-key"></i>
-                            <span>登录</span>
+                        <a href="form-news.html" target="main">
+                            <i class="am-icon-angle-right"></i>
+                            <span>供应商统计</span>
                         </a>
                     </li>
                 </ul>
-            </div>
-        </div>
+            </li>
+            <li class="tpl-left-nav-item">
+                <a href="javascript:;" class="nav-link tpl-left-nav-link-list" nav="access">
+                    <i class="am-icon-table"></i>
+                    <span>用户与权限</span>
+                    <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                </a>
+                <ul class="tpl-left-nav-sub-menu">
+                    <li>
+                        <a href="table-font-list.html" target="main">
+                            <i class="am-icon-angle-right"></i>
+                            <span>部门管理</span>
+                            <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                        </a>
+                        <a href="table-font-list.html" target="main">
+                            <i class="am-icon-angle-right"></i>
+                            <span>用户管理</span>
+                            <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                        </a>
+                        <a href="table-images-list.html"  target="main">
+                            <i class="am-icon-angle-right"></i>
+                            <span>权限设定</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="tpl-left-nav-item">
+                <a href="login.html" class="nav-link tpl-left-nav-link-list" nav="beifang">
+                    <i class="am-icon-key"></i>
+                    <span>备忘录</span>
+                </a>
+            </li>
+            <li class="tpl-left-nav-item">
+                <a href="__APP__/Login/index" class="nav-link tpl-left-nav-link-list" nav="login">
+                    <i class="am-icon-key"></i>
+                    <span>登录</span>
+                </a>
+            </li>
+            </ul>
+    </div>
+    </div>
 </body>
 </html>

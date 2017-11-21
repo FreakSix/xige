@@ -30,7 +30,18 @@
     };
 </script> -->
 
-<body data-type="generalComponents">
+<body data-type="generalComponents" class="abc">
+    <!-- 网站头部 -->
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <include file="Public:header"/>
+    </header>
+    <div class="tpl-page-container tpl-page-header-fixed">
+        <!-- 左侧菜单栏 -->
+        <div class="tpl-left-nav tpl-left-nav-hover">
+            <include file="Public:menu"/>
+        </div>
+        <!-- 右侧主要内容 -->
+        <div class="tpl-content-wrapper">
             <ol class="am-breadcrumb">
                 <li><a href="#" class="am-icon-home">首页</a></li>
                 <li><a href="#">订单管理</a></li>
@@ -83,8 +94,8 @@
                             <div class="am-input-group am-input-group-sm">
                                 <input type="text" class="am-form-field">
                                 <span class="am-input-group-btn">
-            <button class="am-btn  am-btn-default am-btn-success tpl-am-btn-success am-icon-search" type="button"></button>
-          </span>
+                                    <button class="am-btn  am-btn-default am-btn-success tpl-am-btn-success am-icon-search" type="button"></button>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -175,8 +186,11 @@
                 </div>
                 <div class="tpl-alert"></div>
             </div>
+        </div>
+    </div>
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
+    <script src="__PUBLIC__/js/plus.js"></script>
     <script type="text/javascript" src="__PUBLIC__/js/moment.js"></script>
 <script type="text/javascript" src="__PUBLIC__/js/daterangepicker.js"></script>
 <script type="text/javascript">

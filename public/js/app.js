@@ -426,3 +426,18 @@ $("#add_supplier_contact").click(function(){
         alert("如需添加更多联系人，请到供应商信息中进行添加");
     }
 });
+// ===============================================
+// 左侧菜单选中设置
+// ===============================================
+$(document).ready(function(){
+    //alert($(".tpl-left-nav-list-son ul li.tpl-left-nav-item").length);
+    for (var i = 0; i < $(".tpl-left-nav-list-son ul li.tpl-left-nav-item").length; i++) {
+        if($(".tpl-left-nav").attr("nav") == $(".tpl-left-nav-item").find(".nav-link").eq(i).attr("nav")){
+        $(".nav-link").eq(i).addClass("active");
+      }else{
+        $(".nav-link").eq(i).removeClass("active");
+      }
+    }
+});
+
+    

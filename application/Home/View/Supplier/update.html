@@ -20,156 +20,160 @@
     </style>
 </head>
 
-<body data-type="generalComponents">
-    <ol class="am-breadcrumb">
-        <li><a href="#" class="am-icon-home">首页</a></li>
-        <li><a href="#">供应商管理</a></li>
-        <li class="am-active">修改供应商信息</li>
-    </ol>
-    <div class="tpl-portlet-components">
-        <div class="portlet-title">
-            <div class="caption font-green bold">修改供应商信息<span id="notice" style="color:#FF0000;font-size: 14px;"> (带 “*” 为必填项) </span></div>
-                <div class="tpl-portlet-input tpl-fz-ml">
-                <div class="am-btn-group am-btn-group-xs">
-                    <button type="button" onclick="javascript:history.back(-1);" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-angle-left"></span> 返回</button>
-                    </div>
-                </div>
+<body data-type="generalComponents" class="abc">
+    <!-- 网站头部 -->
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <include file="Public:header"/>
+    </header>
+    <div class="tpl-page-container tpl-page-header-fixed">
+        <!-- 左侧菜单栏 -->
+        <div class="tpl-left-nav tpl-left-nav-hover" nav="supplier">
+            <include file="Public:menu"/>
         </div>
-        <div class="tpl-block ">
-            <div class="am-g tpl-amazeui-form">
-                <div class="am-u-sm-12 am-u-md-9">
-                    <form class="am-form am-form-horizontal" action="__APP__/Supplier/updateHandle" method="post" enctype="multipart/form-data">
-                        <!-- 公司信息 -->
-                        <h4>公司信息</h4>
-                        <div class="am-form-group">
-                            <input type="hidden" name="supplier_id" value="{$supplierInfo['supplier_id']}">
-                            <label class="am-u-sm-2 am-form-label">供应商名称<span id="important" style="color:#FF0000">*</span></label>
-                            <div class="am-u-sm-4">
-                                <input type="text" id="supplier_name" name="supplier_name" value="{$supplierInfo['supplier_name']}">
-                            </div>
-                            <label class="am-u-sm-2 am-form-label">公司电话<span id="important" style="color:#FF0000">*</span></label>
-                            <div class="am-u-sm-4">
-                                <input type="text" id="supplier_tel" name="supplier_tel" value="{$supplierInfo['supplier_tel']}">
+        <!-- 右侧主要内容 -->
+        <div class="tpl-content-wrapper">
+            <ol class="am-breadcrumb">
+                <li><a href="#" class="am-icon-home">首页</a></li>
+                <li><a href="#">供应商管理</a></li>
+                <li class="am-active">修改供应商信息</li>
+            </ol>
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption font-green bold">修改供应商信息<span id="notice" style="color:#FF0000;font-size: 14px;"> (带 “*” 为必填项) </span></div>
+                        <div class="tpl-portlet-input tpl-fz-ml">
+                        <div class="am-btn-group am-btn-group-xs">
+                            <button type="button" onclick="javascript:history.back(-1);" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-angle-left"></span> 返回</button>
                             </div>
                         </div>
-                        <div class="am-form-group">
-                            <label class="am-u-sm-2 am-form-label">供应商地址<span id="important" style="color:#FF0000">*</span></label>
-                            <div class="am-u-sm-3"> 
-                                <select id="supplier_pro" name="supplier_pro" onchange="getCityInfo();">
-                                    <option value="0" >请选择省</option>
-                                    <foreach name="province" item="v">
-                                        <if condition="$supplierInfo['supplier_pro_id'] == $v['code']">
-                                            <option value="{$v[code]}" selected="selected">{$v['name']}</option>
-                                        <else/>
-                                            <option value="{$v['code']}" >{$v['name']}</option>
-                                        </if>
-                                    </foreach>
-                                </select>
-                            </div>
-                            <div class="am-u-sm-3">
-                                <select id="supplier_city" name="supplier_city" onchange="getAreaInfo();">
-                                    <option value="0" checked="checked">请选择市</option>
-                                    <foreach name="city" item="v">
-                                        <if condition="$supplierInfo['supplier_city_id'] == $v['code']">
-                                            <option value="{$v[code]}" selected="selected">{$v['name']}</option>
-                                        <else/>
-                                            <option value="{$v['code']}" >{$v['name']}</option>
-                                        </if>
-                                    </foreach>
-                                </select> 
-                            </div>
-                            <div class="am-u-sm-3"> 
-                                <select id="supplier_area" name="supplier_area" >
-                                    <option value="0" checked="checked">请选择区</option>
-                                    <foreach name="area" item="v">
-                                        <if condition="$supplierInfo['supplier_area_id'] == $v['code']">
-                                            <option value="{$v[code]}" selected="selected">{$v['name']}</option>
-                                        <else/>
-                                            <option value="{$v['code']}" >{$v['name']}</option>
-                                        </if>
-                                    </foreach>
-                                </select> 
-                            </div>
-                            <label class="am-u-sm-3 am-form-label"></label>
-                        </div>
-                        <div class="am-form-group">
-                            <label class="am-u-sm-2 am-form-label">街道<span id="important" style="color:#FF0000">*</span></label>
-                            <div class="am-u-sm-10">
-                                <input type="text" id="supplier_street" name="supplier_street" value="{$supplierInfo['supplier_street']}">
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label class="am-u-sm-2 am-form-label">备用地址</label>
-                            <div class="am-u-sm-10">
-                                <input type="text" id="spare_address" name="spare_address" placeholder="如有备用地址，请填全省市区街道全部信息" value="{$supplierInfo['spare_address']}">
-                            </div>
-                        </div>
-                        
-                        <hr/>
-
-                        <!-- 可做产品 -->
-                        <h4>可做产品</h4>
-                        <div class="am-form-group">
-                            <label class="am-u-sm-2 am-form-label">印刷产品</label>
-                            <div class="am-u-sm-10">
-                                <input type="checkbox" name="checkbox[]" value="复选一"> 名片 &nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" name="checkbox[]" value="复选二"> 宣传册 &nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" name="checkbox[]" value="复选三"> 手提袋 &nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" name="checkbox[]" value="复选四"> 复选四 &nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" name="checkbox[]" value="复选五"> 复选五 &nbsp;&nbsp;&nbsp;
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label class="am-u-sm-2 am-form-label">制作产品</label>
-                            <div class="am-u-sm-10">
-                                <input type="checkbox" name="checkbox2[]" value="复选一"> 展架 &nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" name="checkbox2[]" value="复选二"> 易拉宝 &nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" name="checkbox2[]" value="复选三"> 复选三 &nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" name="checkbox2[]" value="复选四"> 复选四 &nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" name="checkbox2[]" value="复选五"> 复选五 &nbsp;&nbsp;&nbsp;
-                            </div>
-                        </div>
-                        
-
-                        <hr/>
-                        <!-- 联系人信息 -->
-                        <h4>联系人</h4>
-                        <foreach name="linkmanInfo" item="v" key="k">
-                        <div class="contact">
-                            <div class="am-form-group">
-                                <label class="am-u-sm-2 am-form-label">联系人姓名
-                                        <span id="sname_notice" style="color:#FF0000"> *</span>
-                                </label>
-                                <div class="am-u-sm-4">
-                                    <input type="tel" id="link_name0" name="link_man[{$k}][linkman_name]" value="{$v['linkman_name']}" >
+                </div>
+                <div class="tpl-block ">
+                    <div class="am-g tpl-amazeui-form">
+                        <div class="am-u-sm-12 am-u-md-9">
+                            <form class="am-form am-form-horizontal" action="__APP__/Supplier/updateHandle" method="post" enctype="multipart/form-data">
+                                <!-- 公司信息 -->
+                                <h4>公司信息</h4>
+                                <div class="am-form-group">
+                                    <input type="hidden" name="supplier_id" value="{$supplierInfo['supplier_id']}">
+                                    <label class="am-u-sm-2 am-form-label">供应商名称<span id="important" style="color:#FF0000">*</span></label>
+                                    <div class="am-u-sm-4">
+                                        <input type="text" id="supplier_name" name="supplier_name" value="{$supplierInfo['supplier_name']}">
+                                    </div>
+                                    <label class="am-u-sm-2 am-form-label">公司电话<span id="important" style="color:#FF0000">*</span></label>
+                                    <div class="am-u-sm-4">
+                                        <input type="text" id="supplier_tel" name="supplier_tel" value="{$supplierInfo['supplier_tel']}">
+                                    </div>
                                 </div>
-                                <label class="am-u-sm-2 am-form-label">联系电话
-                                        <span id="sname_notice" style="color:#FF0000"> *</span>
-                                </label>
-                                <div class="am-u-sm-4">
-                                    <input type="tel" id="link_phone0" name="link_man[{$k}][linkman_phone]" value="{$v['linkman_phone']}" >
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">供应商地址<span id="important" style="color:#FF0000">*</span></label>
+                                    <div class="am-u-sm-3"> 
+                                        <select id="supplier_pro" name="supplier_pro" onchange="getCityInfo();">
+                                            <option value="0" >请选择省</option>
+                                            <foreach name="province" item="v">
+                                                <if condition="$supplierInfo['supplier_pro_id'] == $v['code']">
+                                                    <option value="{$v[code]}" selected="selected">{$v['name']}</option>
+                                                <else/>
+                                                    <option value="{$v['code']}" >{$v['name']}</option>
+                                                </if>
+                                            </foreach>
+                                        </select>
+                                    </div>
+                                    <div class="am-u-sm-3">
+                                        <select id="supplier_city" name="supplier_city" onchange="getAreaInfo();">
+                                            <option value="0" checked="checked">请选择市</option>
+                                            <foreach name="city" item="v">
+                                                <if condition="$supplierInfo['supplier_city_id'] == $v['code']">
+                                                    <option value="{$v[code]}" selected="selected">{$v['name']}</option>
+                                                <else/>
+                                                    <option value="{$v['code']}" >{$v['name']}</option>
+                                                </if>
+                                            </foreach>
+                                        </select> 
+                                    </div>
+                                    <div class="am-u-sm-3"> 
+                                        <select id="supplier_area" name="supplier_area" >
+                                            <option value="0" checked="checked">请选择区</option>
+                                            <foreach name="area" item="v">
+                                                <if condition="$supplierInfo['supplier_area_id'] == $v['code']">
+                                                    <option value="{$v[code]}" selected="selected">{$v['name']}</option>
+                                                <else/>
+                                                    <option value="{$v['code']}" >{$v['name']}</option>
+                                                </if>
+                                            </foreach>
+                                        </select> 
+                                    </div>
+                                    <label class="am-u-sm-3 am-form-label"></label>
                                 </div>
-                            </div>
-                        </div>
-                        <input type="hidden" name="link_man[{$k}][link_id]" value="{$v['id']}">
-                        <hr/>
-                        </foreach>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">街道<span id="important" style="color:#FF0000">*</span></label>
+                                    <div class="am-u-sm-10">
+                                        <input type="text" id="supplier_street" name="supplier_street" value="{$supplierInfo['supplier_street']}">
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">备用地址</label>
+                                    <div class="am-u-sm-10">
+                                        <input type="text" id="spare_address" name="spare_address" placeholder="如有备用地址，请填全省市区街道全部信息" value="{$supplierInfo['spare_address']}">
+                                    </div>
+                                </div>
+                                
+                                <hr/>
 
-                        <div class="am-form-group">
-                            <div class="am-u-sm-10 am-u-sm-push-2">
-                                <button type="submit" class="am-btn am-btn-primary">确认添加</button>
-                            </div>
+                                <!-- 可做产品 -->
+                                <h4>可做产品</h4>
+                                <foreach name="productType" key="key" item="pt">
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">{$pt.type_name}</label>
+                                        <div class="am-u-sm-10">
+                                            <foreach name="productType[$key][productMenu]" key="ke" item="pm">
+                                                 <?php if(in_array($pm['id'],$productType[$key][productIdArr])){ ?>    
+                                                    <input type="checkbox" name="checkbox[]" value="{$pm.id}" checked="checked"> <?php echo $pm['id'].$pia; ?><?php echo $pm['type_name']; ?>
+                                                <?php }else{ ?>
+                                                    <input type="checkbox" name="checkbox[]" value="{$pm.id}"> <?php echo $pm['id'].$pia; ?><?php echo $pm['type_name']; ?>
+                                                <?php } ?>
+                                            </foreach>
+                                        </div>
+                                    </div>
+                                </foreach>
+                                <hr/>
+                                <!-- 联系人信息 -->
+                                <h4>联系人</h4>
+                                <foreach name="linkmanInfo" item="v" key="k">
+                                <div class="contact">
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">联系人姓名
+                                                <span id="sname_notice" style="color:#FF0000"> *</span>
+                                        </label>
+                                        <div class="am-u-sm-4">
+                                            <input type="tel" id="link_name0" name="link_man[{$k}][linkman_name]" value="{$v['linkman_name']}" >
+                                        </div>
+                                        <label class="am-u-sm-2 am-form-label">联系电话
+                                                <span id="sname_notice" style="color:#FF0000"> *</span>
+                                        </label>
+                                        <div class="am-u-sm-4">
+                                            <input type="tel" id="link_phone0" name="link_man[{$k}][linkman_phone]" value="{$v['linkman_phone']}" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="link_man[{$k}][link_id]" value="{$v['id']}">
+                                <hr/>
+                                </foreach>
+
+                                <div class="am-form-group">
+                                    <div class="am-u-sm-10 am-u-sm-push-2">
+                                        <button type="submit" class="am-btn am-btn-primary">确认添加</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
 <script src="__PUBLIC__/js/jquery.min.js"></script>
 <script src="__PUBLIC__/js/amazeui.min.js"></script>
 <script src="__PUBLIC__/js/app.js"></script>
-
+<script src="__PUBLIC__/js/plus.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#sname").blur(function(){

@@ -5,6 +5,20 @@
 	{
 		
 		public function index(){
+			// 左侧菜单
+			$productTypeModel = D("XgProductType");
+	    	// 获取商品分类
+	    	$productType = $productTypeModel->getProductType();
+	    	// 获取商品分类下对应的产品
+	    	foreach ($productType as $k => $v) {
+	    		$pid = $v["id"];
+	    		$productMenu = $productTypeModel->getProductTypeByPid($pid);
+	    		// dump($productMenu);
+	    		$productType[$k]["productMenu"] = $productMenu;
+	    	}
+	    	$this->assign("productType",$productType);
+
+
 			$get = $_GET;
 			$post = $_POST;
 			// var_dump($get);var_dump($post);
@@ -148,6 +162,21 @@
 
 		//客户详情页
 		public function details(){
+			// 左侧菜单
+			$productTypeModel = D("XgProductType");
+	    	// 获取商品分类
+	    	$productType = $productTypeModel->getProductType();
+	    	// 获取商品分类下对应的产品
+	    	foreach ($productType as $k => $v) {
+	    		$pid = $v["id"];
+	    		$productMenu = $productTypeModel->getProductTypeByPid($pid);
+	    		// dump($productMenu);
+	    		$productType[$k]["productMenu"] = $productMenu;
+	    	}
+	    	$this->assign("productType",$productType);
+
+
+
 	 		//查询客户公司信息
 	 		// $condition['where'] = "id = ".$_GET['customer_id']."";
 	 		// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
@@ -210,6 +239,20 @@
 
 		//添加客户信息
 		public function addCustomer(){
+			// 左侧菜单
+			$productTypeModel = D("XgProductType");
+	    	// 获取商品分类
+	    	$productType = $productTypeModel->getProductType();
+	    	// 获取商品分类下对应的产品
+	    	foreach ($productType as $k => $v) {
+	    		$pid = $v["id"];
+	    		$productMenu = $productTypeModel->getProductTypeByPid($pid);
+	    		// dump($productMenu);
+	    		$productType[$k]["productMenu"] = $productMenu;
+	    	}
+	    	$this->assign("productType",$productType);
+
+
 			//客户等级信息
 			$levelInfo = M("xg_customer_level")->order("level asc")->select();
 			//获取省份信息
@@ -271,6 +314,20 @@
 		
 		//修改客户信息
 		public function update(){
+			// 左侧菜单
+			$productTypeModel = D("XgProductType");
+	    	// 获取商品分类
+	    	$productType = $productTypeModel->getProductType();
+	    	// 获取商品分类下对应的产品
+	    	foreach ($productType as $k => $v) {
+	    		$pid = $v["id"];
+	    		$productMenu = $productTypeModel->getProductTypeByPid($pid);
+	    		// dump($productMenu);
+	    		$productType[$k]["productMenu"] = $productMenu;
+	    	}
+	    	$this->assign("productType",$productType);
+
+			
 			//查询客户公司信息
 			$customerInfo = D("XgCustomer")->getCustomerInfo($_GET['customer_id']);
 			//客户公司联系人信息 

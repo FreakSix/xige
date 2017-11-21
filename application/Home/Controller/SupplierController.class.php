@@ -5,6 +5,18 @@
 	class SupplierController extends BaseController{
 		// 供应商基本信息展示
 		public function index(){
+			// 左侧菜单
+			$productTypeModel = D("XgProductType");
+	    	// 获取商品分类
+	    	$productType = $productTypeModel->getProductType();
+	    	// 获取商品分类下对应的产品
+	    	foreach ($productType as $k => $v) {
+	    		$pid = $v["id"];
+	    		$productMenu = $productTypeModel->getProductTypeByPid($pid);
+	    		// dump($productMenu);
+	    		$productType[$k]["productMenu"] = $productMenu;
+	    	}
+	    	$this->assign("productType",$productType);
 
 			//总记录数
 	 		$totalCount = M("xg_supplier")->count();
@@ -20,7 +32,7 @@
 	 		//查询客户公司信息
 			$supplier = M("xg_supplier");
 			$supplierInfo = $supplier->order("supplier_id desc")->limit("$firstRow,$pageSize")->select();
-			
+			// dump($supplierInfo);
 			foreach ($supplierInfo as $k => $v) {
 				//得到省份名称
 				$provinceInfo = $this->getProvince($v["supplier_pro_id"]);
@@ -40,15 +52,38 @@
 				$linkmanInfo = D("XgSupplierLinkman")->findLinkman($supplierId);
 				$supplierInfo[$k]["linkman_name"] = $linkmanInfo["linkman_name"];
 				$supplierInfo[$k]["linkman_phone"] = $linkmanInfo["linkman_phone"];
+				// 获取可做产品
+				$productIdArr = explode(",", $v['product_id_str']);
+				// $product[] = "";
+				foreach ($productIdArr as $ke => $pi) {
+					$id = $pi;
+					$product = D("XgProductType")->getProductName($id);
+					$supplierInfo[$k]["type_name_arr"][] = $product[0];
+				}
+
 			}
 			$this->assign("supplierInfo",$supplierInfo);
 			$this->assign("pageStr",$pageStr);
-		
+			$this->assign("active","active");
 			$this -> display();
 		}
 
 		//添加供应商信息
 		public function addSupplier(){
+			// 左侧菜单
+			$productTypeModel = D("XgProductType");
+	    	// 获取商品分类
+	    	$productType = $productTypeModel->getProductType();
+	    	// 获取商品分类下对应的产品
+	    	foreach ($productType as $k => $v) {
+	    		$pid = $v["id"];
+	    		$productMenu = $productTypeModel->getProductTypeByPid($pid);
+	    		// dump($productMenu);
+	    		$productType[$k]["productMenu"] = $productMenu;
+	    	}
+	    	$this->assign("productType",$productType);
+
+
 			//获取省份信息
 			$province = $this->getProvince("0");
 			$this->assign("province",$province);
@@ -58,9 +93,25 @@
 			//获取地区信息
 			$area =M("xg_area")->select();
 			$this->assign("area",$area);
+			// 获取产品信息
+			$productTypeModel = D("XgProductType");
+			$productType = $productTypeModel->getProductType();
+			foreach ($productType as $k => $v) {
+	    		$pid = $v["id"];
+	    		$productMenu = $productTypeModel->getProductTypeByPid($pid);
+	    		// dump($productMenu);
+	    		$productType[$k]["productMenu"] = $productMenu;
+	    	}
+	    	// dump($productType);
+	    	$this->assign("productType",$productType);
 			//接收post传值
 			$post = $_POST;
 			if(!empty($_POST)){
+				// dump(sizeof($post["checkbox"]));
+				// dump($post);exit;
+
+				// dump($post['checkbox']);exit;
+				// 添加供应商基本信息
 				$supplier['supplier_name'] = $post['supplier_name'];
 				$supplier['supplier_tel'] = $post['supplier_tel'];
 				$supplier['supplier_pro_id'] = $post['supplier_pro'];
@@ -70,10 +121,36 @@
 				$supplier['spare_address'] = $post['spare_address'];
 				$supplier['info_create_time'] = time();
 				$supplier['info_update_time'] = time();
+				// 添加供应商可做产品
+				$productIdStr = implode(",", $post['checkbox']);   // 将数据转换为字符串
+				$supplier['product_id_str'] = $productIdStr;
+				// 执行添加供应商基本信息操作
 				$supplierModel = D("XgSupplier");
 				$res_1 = $supplierModel->addSupplierInfo($supplier);
-				if($res_1 > 0){
-					var_dump($post);
+				// 向产品表里添加供应商id
+				for ($i=0; $i < sizeof($post["checkbox"]); $i++) {
+					$id = $post["checkbox"][$i];
+					// echo $id;
+					$data = $res_1;
+					$supplierIdStr = D("XgProductType")->getSupplierIdStr($id);
+					if($supplierIdStr[0]["supplier_id_str"] == ""){
+						$supplierIdStr = $data;
+						$result = D("XgProductType")->updateSupplierIdStr($id,$supplierIdStr);
+						// dump($supplierIdStr);
+						// dump($result);
+						// if($result){
+						// 	echo "<script>alert('供应商ID添加成功');</script>";
+						// }else{
+						// 	echo "wtf";
+						// }
+					}else{
+						$supplierIdStr = $supplierIdStr[0]["supplier_id_str"].",".$data;
+						$result = D("XgProductType")->updateSupplierIdStr($id,$supplierIdStr);
+						// dump($supplierIdStr);
+					}
+				}
+				// 添加供应商联系人信息
+				if(!empty($post['link_name0'])){
 					$select_num_hide = $post['select_num_hide'];
 					for($i=0;$i<=$select_num_hide;$i++){
 						$linkman['supplier_id']=$res_1;    //公司的id
@@ -83,10 +160,10 @@
 						$linkman['update_time'] = time();
 						$model = D("XgSupplierLinkman");
 						$res_2 = $model->addSupplierLinkman($linkman);
-						dump($res_2);
+						// dump($res_2);
 					}
 				}
-
+				
 				if($res_1&&$res_2){
 					$this->redirect("Supplier/index");
 				}else{
@@ -117,7 +194,21 @@
 
 		// 供应商详细信息
 		public function detail(){
-			//查询客户公司信息
+			// 左侧菜单
+			$productTypeModel = D("XgProductType");
+	    	// 获取商品分类
+	    	$productType = $productTypeModel->getProductType();
+	    	// 获取商品分类下对应的产品
+	    	foreach ($productType as $k => $v) {
+	    		$pid = $v["id"];
+	    		$productMenu = $productTypeModel->getProductTypeByPid($pid);
+	    		// dump($productMenu);
+	    		$productType[$k]["productMenu"] = $productMenu;
+	    	}
+	    	$this->assign("productType",$productType);
+
+
+			//查询供应商公司信息
 			$supplierInfo = D("XgSupplier")->getSupplierInfo($_GET['supplier_id']);
 
 			if($supplierInfo["supplier_pro_id"] != 0){
@@ -149,6 +240,29 @@
 				$localName = $proName." ".$cityName;
 				$address = $proName." ".$cityName." ".$areaName." ".$supplierInfo["supplier_street"];
 			}
+			// 查询供应商可做产品
+			$productIdArr = explode(",", $supplierInfo["product_id_str"]);
+			// dump($productIdArr);
+			// $supplierProduct = array();
+			foreach ($productIdArr as $ke => $pi) {
+				$id = $pi;
+				$product = D("XgProductType")->getProduct($id);
+				// dump($product);exit;
+				$supplierProduct[$product['0']['pid']][] = $product['0'];
+				// dump($supplierProduct[$product['0']['pid']]);
+			}
+			// dump($supplierProduct);
+			foreach ($supplierProduct as $key => $sp) {
+				$id = $key;
+				// dump($id);
+				$productType = D("XgProductType")->getProduct($id);
+				$supplierProductInfo[$id]['productType'] = $productType['0'];
+				$supplierProductInfo[$id]['productType']['product'] = $sp;
+				// dump($productType);
+				// dump();exit;
+				
+			}
+
 			$supplierInfo["local_name"] = $localName;
 			$supplierInfo["address"] = $address;
 			//获得联系人信息
@@ -156,31 +270,76 @@
 			$linkmanInfo = D("XgSupplierLinkman")->findAllLinkman($supplierId);
 			$this->assign("supplierInfo",$supplierInfo);
 			$this->assign("supplierLinkmanInfo",$linkmanInfo);
+			$this->assign("supplierProductInfo",$supplierProductInfo);
 
 			$this->display();
 		}
 
 		// 修改供应商信息页面
 		public function update(){
+			// 左侧菜单
+			$productTypeModel = D("XgProductType");
+	    	// 获取商品分类
+	    	$productType = $productTypeModel->getProductType();
+	    	// 获取商品分类下对应的产品
+	    	foreach ($productType as $k => $v) {
+	    		$pid = $v["id"];
+	    		$productMenu = $productTypeModel->getProductTypeByPid($pid);
+	    		// dump($productMenu);
+	    		$productType[$k]["productMenu"] = $productMenu;
+	    	}
+	    	$this->assign("productType",$productType);
+
+			
 			$supplierId = $_GET['supplier_id'];
-			//查询客户公司信息
+			// 查询供应商公司信息
 			$supplierInfo = D("XgSupplier")->getSupplierInfo($supplierId);
-			//客户公司联系人信息 
+			// 客户公司联系人信息 
 			$linkmanInfo = D("XgSupplierLinkman")->findAllLinkman($supplierId);
-			//获取省份信息
+			// 获取省份信息
 			$provinceInfo = $this->getProvince("0");
-			//得到城市名称
+			// 得到城市名称
 			$cityInfo = $this->getCity("0");
-			//得到地区名称
+			// 得到地区名称
 			$areaInfo = $this->getArea("0");
-			dump($supplierInfo);
-			dump($linkmanInfo);
+			// 获取全部产品信息
+			$productTypeModel = D("XgProductType");
+			$productType = $productTypeModel->getProductType();
+			foreach ($productType as $k => $v) {
+	    		$pid = $v["id"];
+	    		$productMenu = $productTypeModel->getProductTypeByPid($pid);
+	    		// dump($productMenu);
+	    		$productType[$k]["productMenu"] = $productMenu;
+	    		// 获取供应商可做产品的ID
+				$productIdArr = explode(",", $supplierInfo["product_id_str"]);
+				// dump($productIdArr);
+				$productType[$k]["productIdArr"] = $productIdArr;
+				// dump($productType);
+	    	}
+	    	
+			// foreach ($productIdArr as $ke => $pi) {
+			// 	$id = $pi;
+			// 	$product = D("XgProductType")->getProduct($id);
+			// 	// dump($product);exit;
+			// 	$supplierProduct[$product['0']['pid']][] = $product['0'];
+			// 	// dump($supplierProduct[$product['0']['pid']]);
+			// }
+			// dump($supplierProduct);
+			// foreach ($supplierProduct as $key => $sp) {
+			// 	$id = $key;
+			// 	// dump($id);
+			// 	$productType = D("XgProductType")->getProduct($id);
+			// 	$supplierProductInfo[$id]['productType'] = $productType['0'];
+			// 	$supplierProductInfo[$id]['productType']['product'] = $sp;
+				
+			// }
 			$this->assign("supplierInfo",$supplierInfo);
 			$this->assign("linkmanInfo",$linkmanInfo);
 			$this->assign("province",$provinceInfo);
 			$this->assign("city",$cityInfo);
 			$this->assign("area",$areaInfo);
-	 		
+			$this->assign("productType",$productType);
+	 		$this->assign("productIdArr",$productIdArr);
 			$this->display();
 
 			
@@ -190,9 +349,9 @@
 		// 修改供应商信息处理
 		public function updateHandle(){
 			$supplierId = $_POST['supplier_id'];
-			dump($supplierId);
+			// dump($supplierId);
 			$post = $_POST;
-			dump($post);
+			// dump($post);
 			if($post){
 				$supplier['supplier_name'] = $post['supplier_name'];
 				$supplier['supplier_tel'] = $post['supplier_tel'];
@@ -202,9 +361,32 @@
 				$supplier['supplier_street'] = $post['supplier_street'];
 				$supplier['spare_address'] = $post['spare_address'];
 				$supplier['info_update_time'] = time();
+				// dump($post["checkbox"]);
+				$productIdStr = implode(",", $post["checkbox"]);
+				$supplier['product_id_str'] = $productIdStr;
+				// dump($productIdStr);
 				//更新供应商信息
 				$result_1 = D("XgSupplier")->updateSupplierInfo($supplierId,$supplier);
-
+				// 向产品分类表中添加供应商id
+				foreach ($post['checkbox'] as $key => $v) {
+					$supplierId = $post['supplier_id'];
+					echo $supplierId;
+					$id = $v;;
+					echo $id;
+					$supplierIdInfo = D("XgProductType")->getSupplierIdStr($id);
+					// dump($supplierIdInfo[0]['supplier_id_str']);
+					if($supplierIdArr == ""){
+						$supplierIdStr = $supplierId.",";
+					}else if(in_array($supplierId, $supplierIdArr) == FALSE){
+						$supplierIdStr = $supplierIdInfo[0]['supplier_id_str'].$supplierId.",";
+						echo $supplierIdStr;
+					}
+					$result_3 = D("XgProductType")->updateSupplierIdStr($id,$supplierIdStr);
+					if($result_3){
+						echo "<script>alert('厉害了')</script>";
+					}
+				}
+				
 				if($post['link_man']){
 					//修改客户联系人信息
 					foreach ($post['link_man'] as $k => $v) {
@@ -215,9 +397,9 @@
 						$result_2 = D("XgSupplierLinkman")->updateSupplierLinkman($supplierId,$supplierLinkman);
 					}
 				}
-				dump($result_2);
+				// dump($result_2);
 				// 根据数据添加的情况来判断页面跳转
-				if($result_1 && $result_2){
+				if($result_1){
 					$this->redirect("Supplier/index");
 				}else{
 					$this->assign("customerInfo",$customerInfo);
@@ -231,6 +413,8 @@
 				}
 			}
 		}
+		// 删除供应商信息
+		
 
 		
 	}

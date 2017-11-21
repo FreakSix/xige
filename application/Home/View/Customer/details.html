@@ -20,7 +20,18 @@
     </style>
 </head>
 
-<body data-type="generalComponents">
+<body data-type="generalComponents" class="abc">
+    <!-- 网站头部 -->
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <include file="Public:header"/>
+    </header>
+    <div class="tpl-page-container tpl-page-header-fixed">
+        <!-- 左侧菜单栏 -->
+        <div class="tpl-left-nav tpl-left-nav-hover" nav="customer">
+            <include file="Public:menu"/>
+        </div>
+        <!-- 右侧主要内容 -->
+        <div class="tpl-content-wrapper">
             <ol class="am-breadcrumb">
                 <li><a href="#" class="am-icon-home">首页</a></li>
                 <li><a href="#">客户管理</a></li>
@@ -160,12 +171,13 @@
                         </div>
                     </div>
                 </div>
-
             </div>
+        </div>
+    </div>
     <script src="__PUBLIC__/js/jquery.min.js"></script>
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
-
+    <script src="__PUBLIC__/js/plus.js"></script>
 </body>
 
 </html>
