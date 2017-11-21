@@ -42,12 +42,52 @@
             </li>
 
             <li class="tpl-left-nav-item">
-                <a href="javascript:;" class="nav-link tpl-left-nav-link-list" nav="goods">
+                <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
                     <i class="am-icon-table"></i>
                     <span>商品管理</span>
                     <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
                 </a>
                 <ul class="tpl-left-nav-sub-menu">
+                    <li>
+                        <a href="javascript:;" class="tpl-left-nav-link-list-first">
+                            <i class="am-icon-angle-right"></i>
+                            <span>商品信息</span>
+                            <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                        </a>
+                        <ul class="tpl-left-nav-sub-menu-first">
+                            <li>
+                                <a href="__APP__/Goods/productType" target="main">
+                                    <i class="am-icon-credit-card"></i>
+                                    <span>服务类型</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="__APP__/Goods/productParameter" target="main">
+                                    <i class="am-icon-credit-card"></i>
+                                    <span>商品参数</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="__APP__/Goods/productName" target="main">
+                                    <i class="am-icon-credit-card"></i>
+                                    <span>商品名称</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="__APP__/Goods/productModel" target="main">
+                                    <i class="am-icon-credit-card"></i>
+                                    <span>商品型号</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="__APP__/Goods/productSpec" target="main">
+                                    <i class="am-icon-credit-card"></i>
+                                    <span>商品规格</span>
+                                </a>
+                            </li>
+                        </ul>
+                        
+                    </li>
                     <li>
                         <foreach name="productType" key="k" item="pt">
                         <a href="javascript:;" class="tpl-left-nav-link-list-first">

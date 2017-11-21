@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="__PUBLIC__/css/layui/css/layui.css"  media="all">
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+  <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
+</head>
+<body>
+ 
+<div class="layui-tab layui-tab-card">
+    <div class="layui-tab-content" style="height: 100px;">
+        <!-- 服务类型管理 -->
+            <button type="button" class="layui-btn layui-btn-warm" style="margin-top: 10px;margin-left: 5px;" onClick='addProductType()'>添加规格类型</button>
+            <table class="layui-table" >
+              
+                <thead>
+                    <tr>
+                        <th class="table-check"><input type="checkbox" class="tpl-table-fz-check"></th>
+                        <th>规格名称</th>
+                        <th>规格名称拼音</th>
+                        <th>操作</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                <foreach name="productParameterInfo" item="v">
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>{$v['name']}</td>
+                        <td>{$v['name_pinyin']}</td>
+                        <td>
+                            <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">编辑</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">删除</button>
+                        </td>
+                    </tr>
+                </foreach>
+                
+                </tbody>
+            </table>
+
+        
+    </div>
+</div>
+            
+          
+<script src="__PUBLIC__/css/layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script type="text/javascript">
+    function addProductType(){
+        layui.use('layer', function(){
+          var layer = layui.layer;
+          
+          layer.open({
+                type: 2,
+                offset: '20px',
+                title: '添加商品规格类型',
+                area: ['700px', '400px'],
+                // fixed: false, //不固定
+                maxmin: true,
+                content: '__APP__/Goods/addProductParameter',
+            });
+        }); 
+        
+    }
+</script>
+
+
+
+</body>
+</html>

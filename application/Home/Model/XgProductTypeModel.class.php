@@ -39,6 +39,39 @@
 			$result = M()->execute($sql);
 			return $result;
 		}
+		//查出商品名称
+		public function getProductInfo($condition){
+			$query = M("xg_product_type");
+			if($condition['where']){
+				// var_dump($condition['where']);
+				$query = $query->where($condition['where']);
+			}
+			if($condition['order']){
+				$query = $query->order($condition['order']);
+			}
+			if($condition['limit']){
+				$query = $query->limit($condition['limit']['firstRow'],$condition['limit']['pageSize']);
+			}
+
+			$result = $query->select();
+			return $result;
+		}
+		//符合条件的商品名称总数
+		public function getProductCount($condition){
+			$totalCount = M("xg_product_type")->where($condition)->count();
+			return $totalCount;
+		}
+		//添加商品分类信息
+		public function addProductTypeInfo($data){
+			$res = M("xg_product_type")->data($data)->add();
+			return $res;
+		}
+		//修改商品分类信息
+		public function updateProductTypeInfo($data,$id){
+			$res = M("xg_product_type")->where("id = ".$id)->save($data);
+			return $res;
+		}
+
 
 	}
 	
