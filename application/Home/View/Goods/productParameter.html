@@ -9,48 +9,62 @@
   <link rel="stylesheet" href="__PUBLIC__/css/layui/css/layui.css"  media="all">
   <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
   <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
+  <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
+  <link rel="stylesheet" href="__PUBLIC__/css/app.css" />
 </head>
-<body>
- 
-<div class="layui-tab layui-tab-card">
-    <div class="layui-tab-content" style="height: 100px;">
-        <!-- 服务类型管理 -->
-            <button type="button" class="layui-btn layui-btn-warm" style="margin-top: 10px;margin-left: 5px;" onClick='addProductType()'>添加规格类型</button>
-            <table class="layui-table" >
-              
-                <thead>
-                    <tr>
-                        <th class="table-check"><input type="checkbox" class="tpl-table-fz-check"></th>
-                        <th>规格名称</th>
-                        <th>规格名称拼音</th>
-                        <th>操作</th>
-                    </tr> 
-                </thead>
-                <tbody>
-                <foreach name="productParameterInfo" item="v">
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>{$v['name']}</td>
-                        <td>{$v['name_pinyin']}</td>
-                        <td>
-                            <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">编辑</button>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">删除</button>
-                        </td>
-                    </tr>
-                </foreach>
-                
-                </tbody>
-            </table>
-
-        
+<body class="abc">
+    <!-- 网站头部 -->
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <include file="Public:header"/>
+    </header>
+    <div class="tpl-page-container tpl-page-header-fixed">
+        <!-- 左侧菜单栏 -->
+        <div class="tpl-left-nav tpl-left-nav-hover" nav="">
+            <include file="Public:menu"/>
+        </div>
+        <!-- 右侧主要内容 -->
+        <div class="tpl-content-wrapper">
+            <div class="layui-tab layui-tab-card">
+                <div class="layui-tab-content" style="height: 100px;">
+                    <!-- 服务类型管理 -->
+                        <button type="button" class="layui-btn layui-btn-warm" style="margin-top: 10px;margin-left: 5px;" onClick='addProductType()'>添加规格类型</button>
+                        <table class="layui-table" >
+                          
+                            <thead>
+                                <tr>
+                                    <th class="table-check"><input type="checkbox" class="tpl-table-fz-check"></th>
+                                    <th>规格名称</th>
+                                    <th>规格名称拼音</th>
+                                    <th>操作</th>
+                                </tr> 
+                            </thead>
+                            <tbody>
+                            <foreach name="productParameterInfo" item="v">
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>{$v['name']}</td>
+                                    <td>{$v['name_pinyin']}</td>
+                                    <td>
+                                        <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">编辑</button>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">删除</button>
+                                    </td>
+                                </tr>
+                            </foreach>
+                            
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-            
           
 <script src="__PUBLIC__/css/layui/layui.js" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
-
+<script src="__PUBLIC__/js/jquery.min.js"></script>
+<script src="__PUBLIC__/js/amazeui.min.js"></script>
+<script src="__PUBLIC__/js/app.js"></script>
+<script src="__PUBLIC__/js/plus.js"></script>
 <script type="text/javascript">
     function addProductType(){
         layui.use('layer', function(){

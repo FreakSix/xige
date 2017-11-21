@@ -9,74 +9,88 @@
   <link rel="stylesheet" href="__PUBLIC__/css/layui/css/layui.css"  media="all">
   <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
   <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
+  <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
+  <link rel="stylesheet" href="__PUBLIC__/css/app.css" />
 </head>
-<body>
- 
-<div class="layui-tab layui-tab-card">
-    <div class="layui-tab-content" style="height: 100px;">
-        <div class="layui-row layui-col-space30">
-            <div class="layui-col-md7">
-                <div class="grid-demo grid-demo-bg1">
-                     <button type="button" class="layui-btn layui-btn-warm" style="margin-top: 10px;margin-left: 5px;" onClick='addProductType()'>添加商品名称</button> 
-                </div>
-            </div>
-            <div class="layui-col-md5">
-                <div class="grid-demo">
-                    <div style="margin-top:15px;">商品分类：
-                        <select id="product_type" name="product_type" onchange="changeProductTypeInfo();">
-                            <option value="0" checked="checked">全部分类</option>
-                            <foreach name="productType" item="v">
-                            <if condition="$product_type_id == $v['id']">
-                               <option value="{$v[id]}" selected="selected">{$v['type_name']}</option>
-                            <else/>
-                               <option value="{$v['id']}" >{$v['type_name']}</option>
-                            </if>
-                            </foreach>
-                        </select>
+<body class="abc">
+    <!-- 网站头部 -->
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <include file="Public:header"/>
+    </header>
+    <div class="tpl-page-container tpl-page-header-fixed">
+        <!-- 左侧菜单栏 -->
+        <div class="tpl-left-nav tpl-left-nav-hover" nav="">
+            <include file="Public:menu"/>
+        </div>
+        <!-- 右侧主要内容 -->
+        <div class="tpl-content-wrapper">
+            <div class="layui-tab layui-tab-card">
+                <div class="layui-tab-content" style="height: 100px;">
+                    <div class="layui-row layui-col-space30">
+                        <div class="layui-col-md7">
+                            <div class="grid-demo grid-demo-bg1">
+                                 <button type="button" class="layui-btn layui-btn-warm" style="margin-top: 10px;margin-left: 5px;" onClick='addProductType()'>添加商品名称</button> 
+                            </div>
+                        </div>
+                        <div class="layui-col-md5">
+                            <div class="grid-demo">
+                                <div style="margin-top:15px;">商品分类：
+                                    <select id="product_type" name="product_type" onchange="changeProductTypeInfo();">
+                                        <option value="0" checked="checked">全部分类</option>
+                                        <foreach name="productType" item="v">
+                                        <if condition="$product_type_id == $v['id']">
+                                           <option value="{$v[id]}" selected="selected">{$v['type_name']}</option>
+                                        <else/>
+                                           <option value="{$v['id']}" >{$v['type_name']}</option>
+                                        </if>
+                                        </foreach>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <table class="layui-table" >
+                        <thead>
+                            <tr>
+                                <th class="table-check"><input type="checkbox" class="tpl-table-fz-check"></th>
+                                <th>商品名称</th>
+                                <th>商品所属分类</th>
+                                <th>商品规格</th>
+                                <th>操作</th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                        <foreach name="productInfo" item="v">
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>{$v['type_name']}</td>
+                                <td>{$v['type']}</td>
+                                <td>{$v['parameter']}</td>
+                                <td>
+                                    <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">编辑</button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">删除</button>
+                                </td>
+                            </tr>
+                        </foreach>
+                        
+                        </tbody>
+                    </table>
+                    <div class="am-fr">
+                        {$pageStr}  
+                    </div>
+                    
                 </div>
             </div>
         </div>
-
-        <table class="layui-table" >
-            <thead>
-                <tr>
-                    <th class="table-check"><input type="checkbox" class="tpl-table-fz-check"></th>
-                    <th>商品名称</th>
-                    <th>商品所属分类</th>
-                    <th>商品规格</th>
-                    <th>操作</th>
-                </tr> 
-            </thead>
-            <tbody>
-            <foreach name="productInfo" item="v">
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td>{$v['type_name']}</td>
-                    <td>{$v['type']}</td>
-                    <td>{$v['parameter']}</td>
-                    <td>
-                        <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">编辑</button>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">删除</button>
-                    </td>
-                </tr>
-            </foreach>
-            
-            </tbody>
-        </table>
-        <div class="am-fr">
-            {$pageStr}  
-        </div>
-        
     </div>
-</div>
-            
-          
 <script src="__PUBLIC__/css/layui/layui.js" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script src="__PUBLIC__/js/jquery.min.js"></script>
-
+<script src="__PUBLIC__/js/amazeui.min.js"></script>
+<script src="__PUBLIC__/js/app.js"></script>
+<script src="__PUBLIC__/js/plus.js"></script>
 <script type="text/javascript">
     function addProductType(){
         layui.use('layer', function(){

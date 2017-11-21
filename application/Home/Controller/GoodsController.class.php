@@ -3,8 +3,10 @@
 	
 	
 	class GoodsController extends BaseController{
-		
+		// 商品信息页面
 		public function index(){
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
 			$pid = $_GET['type_id'];
 			$productModel = D("XgProduct");
 			$productArr = $productModel->getProductByPid($pid);
@@ -126,6 +128,8 @@
 
 		/*商品类型*/
 		public function productType(){
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
 			$productTypeInfo = D("XgProductType")->getProductType();
 			
 			$this->assign("productTypeInfo",$productTypeInfo);
@@ -134,6 +138,8 @@
 		}
 		/*商品参数*/
 		public function productParameter(){
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
 			$productParameterInfo = D("XgProductParameter")->getProductParameter();
 			
 			$this->assign("productParameterInfo",$productParameterInfo);
@@ -142,6 +148,8 @@
 		}
 		/*商品名称*/
 		public function productName(){
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
 			$get = $_GET;
 			//获取商品的分类
 			$productType = D("XgProductType")->getProductType();
@@ -197,6 +205,8 @@
 
 		/*商品型号*/
 		public function productModel(){
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
 			$get = $_GET;
 			//获取商品的分类
 			$productTypeInfo = D("XgProductType")->getProductType();
@@ -273,6 +283,8 @@
 
 		/*商品型号*/
 		public function productSpec(){
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
 			$get = $_GET;
 			//获取商品的分类
 			$productTypeInfo = D("XgProductType")->getProductType();
