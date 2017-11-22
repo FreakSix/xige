@@ -48,6 +48,21 @@
 			$res = M("xg_product")->data($data)->add();
 			return $res;
 		}
+		//修改商品型号信息
+		public function updateProductModelInfo($data,$id){
+			$res = M("xg_product")->where("id = ".$id)->save($data);
+			return $res;
+		}
+		//通过 id 删除商品型号信息
+		public function deleteProductModelById($id){
+			$res = M("xg_product")->where("id = ".$id)->delete();
+			return $res;
+		}
+		//通过 pid 删除商品型号信息
+		public function deleteProductModelByPid($pid){
+			$res = M("xg_product")->where("pid = ".$pid)->delete();
+			return $res;
+		}
 		
 	}
 	

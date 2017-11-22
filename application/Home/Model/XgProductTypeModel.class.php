@@ -71,6 +71,16 @@
 			$res = M("xg_product_type")->where("id = ".$id)->save($data);
 			return $res;
 		}
+		//通过 id 删除商品信息
+		public function deleteProductById($id){
+			$res = M("xg_product_type")->where("id = ".$id)->delete();
+			return $res;
+		}
+		//通过 pid 删除商品信息
+		public function deleteProductByPid($pid){
+			$res = M("xg_product_type")->where("pid = ".$pid)->delete();
+			return $res;
+		}
 
 
 	}

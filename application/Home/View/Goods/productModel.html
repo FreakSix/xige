@@ -92,9 +92,9 @@
                                 <td>{$v['product']['type_name']}</td>
                                 <td>{$v['product_type']['type_name']}</td>
                                 <td>
-                                    <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">编辑</button>
+                                    <button type="button" onClick='updateProductModel({$v['id']})'>编辑</button>
                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">删除</button>
+                                    <button type="button" onClick='deleteProductModel({$v['id']})'>删除</button>
                                 </td>
                             </tr>
                         </foreach>
@@ -121,9 +121,9 @@
         layui.use('layer', function(){
           var layer = layui.layer;
           
-          layer.open({
+            layer.open({
                 type: 2,
-                offset: '20px',
+                offset: '80px',
                 title: '添加商品型号',
                 area: ['700px', '450px'],
                 // fixed: false, //不固定
@@ -131,7 +131,65 @@
                 content: '__APP__/Goods/addProductModel',
             });
         }); 
-        
+    }
+
+    function updateProductModel(model_id){
+        layui.use('layer', function(){
+          var layer = layui.layer;
+          
+            layer.open({
+                type: 2,
+                offset: '80px',
+                title: '修改商品型号',
+                area: ['700px', '450px'],
+                // fixed: false, //不固定
+                maxmin: true,
+                content: '__APP__/Goods/updateProductModel/model_id/'+model_id,
+            });
+        }); 
+    }
+
+    function deleteProductModel(model_id){
+        layui.use('layer', function(){
+          var layer = layui.layer;
+
+            layer.confirm('您确定要删除该条信息？', {
+                icon: 3,
+                anim:5,
+                offset: '200px',
+                title:'提示',
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                if(model_id){
+                    $.ajax({
+                        url:'__APP__/Goods/deleteProductModel',
+                        data:'model_id='+model_id,
+                        type:'post',
+                        dataType:'json',
+                        success:function(res){
+                            layer.confirm(res, {
+                                icon: 1,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定'] //按钮
+                            }, function(){
+                                window.location.reload();       
+                            });
+                        }
+                    });
+
+                }else{
+                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                }          
+            }, function(){
+                layer.msg('删除已取消！', {
+                time: 2000, //20s后自动关闭
+                offset: '200px',
+                // title:'提示'
+                });
+            });
+        }); 
     }
 </script>
 

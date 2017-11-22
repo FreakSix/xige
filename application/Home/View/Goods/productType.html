@@ -45,7 +45,7 @@
                                     <td>
                                         <button type="button" onClick='updateProductType({$v['id']})'>编辑</button>
                                         &nbsp;&nbsp;&nbsp;&nbsp;
-                                        <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">删除</button>
+                                        <button type="button" onClick='deleteProductType({$v['id']})'>删除</button>
                                     </td>
                                 </tr>
                             </foreach>
@@ -71,7 +71,7 @@
           
           layer.open({
                 type: 2,
-                offset: '20px',
+                offset: '25%',
                 title: '添加服务类型',
                 area: ['700px', '300px'],
                 // fixed: false, //不固定
@@ -88,16 +88,60 @@
           
           layer.open({
                 type: 2,
-                offset: '20px',
-                title: '添加服务类型',
+                offset: '25%',
+                title: '修改服务类型',
                 area: ['700px', '300px'],
                 // fixed: false, //不固定
                 maxmin: true,
                 content: '__APP__/Goods/updateProductType/type_id/'+type_id,
             });
-        }); 
-        
+        });
     }
+
+    function deleteProductType(type_id){
+        layui.use('layer', function(){
+          var layer = layui.layer;
+
+            layer.confirm('您确定要删除该条信息？', {
+                icon: 3,
+                anim:5,
+                offset: '200px',
+                title:'提示',
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                if(type_id){
+                    $.ajax({
+                        url:'__APP__/Goods/deleteProductType',
+                        data:'type_id='+type_id,
+                        type:'post',
+                        dataType:'json',
+                        success:function(res){
+                            layer.confirm(res, {
+                                icon: 1,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定'] //按钮
+                            }, function(){
+                                window.location.reload();       
+                            });
+                        }
+                    });
+
+                }else{
+                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                }          
+            }, function(){
+                layer.msg('删除已取消！', {
+                time: 2000, //20s后自动关闭
+                offset: '200px',
+                // title:'提示'
+                });
+            });
+
+        });
+    }
+
 </script>
 
 

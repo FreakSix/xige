@@ -26,6 +26,16 @@
 			$res = M("xg_product_parameter")->data($data)->add();
 			return $res;
 		}
+		//修改商品规格信息
+		public function updateProductParameterInfo($data,$id){
+			$res = M("xg_product_parameter")->where("id = ".$id)->save($data);
+			return $res;
+		}
+		//通过 id 删除商品规格信息
+		public function deleteProductParameterById($id){
+			$result = M("xg_product_parameter")->where("id = ".$id)->delete();
+			return $result;
+		}
 
 	}
 	

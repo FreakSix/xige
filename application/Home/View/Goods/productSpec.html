@@ -128,9 +128,9 @@
                                 <td>{$v['product']['type_name']}</td>
                                 <td>{$v['product_type']['type_name']}</td>
                                 <td>
-                                    <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">编辑</button>
+                                    <button type="button" onClick='updateProductSpec({$v['id']})'>编辑</button>
                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}','main')">删除</button>
+                                    <button type="button" onClick='deleteProductSpec({$v['id']})'>删除</button>
                                 </td>
                             </tr>
                         </foreach>
@@ -161,15 +161,73 @@
           
           layer.open({
                 type: 2,
-                offset: '20px',
+                offset: '40px',
                 title: '添加商品规格',
-                area: ['90%', '80%'],
+                area: ['900px', '550px'],
                 // fixed: false, //不固定
                 maxmin: true,
                 content: '__APP__/Goods/addProductSpec',
             });
         }); 
-        
+    }
+
+    function updateProductSpec(spec_id){
+        layui.use('layer', function(){
+          var layer = layui.layer;
+          
+          layer.open({
+                type: 2,
+                offset: '40px',
+                title: '修改商品规格',
+                area: ['900px', '550px'],
+                // fixed: false, //不固定
+                maxmin: true,
+                content: '__APP__/Goods/updateProductSpec/spec_id/'+spec_id,
+            });
+        }); 
+    }
+
+    function deleteProductSpec(spec_id){
+        layui.use('layer', function(){
+            var layer = layui.layer;
+          
+            layer.confirm('您确定要删除该条规格信息？', {
+                icon: 3,
+                anim:5,
+                offset: '200px',
+                title:'提示',
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                if(spec_id){
+                    $.ajax({
+                        url:'__APP__/Goods/deleteProductSpec',
+                        data:'spec_id='+spec_id,
+                        type:'post',
+                        dataType:'json',
+                        success:function(res){
+                            layer.confirm(res, {
+                                icon: 1,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定'] //按钮
+                            }, function(){
+                                window.location.reload();       
+                            });
+                        }
+                    });
+
+                }else{
+                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                }          
+            }, function(){
+                layer.msg('删除已取消！', {
+                time: 2000, //20s后自动关闭
+                offset: '200px',
+                // title:'提示'
+                });
+            });
+        }); 
     }
 </script>
 
