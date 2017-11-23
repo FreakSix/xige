@@ -28,6 +28,18 @@
                 <div class="layui-tab-content" style="height: 100px;">
                     <!-- 服务类型管理 -->
                         <button type="button" class="layui-btn layui-btn-warm" style="margin-top: 10px;margin-left: 5px;" onClick='addProductType()'>添加规格类型</button>
+                        
+                        <select id="product" name="product" lay-verify="required" lay-search="" lay-filter="changeProduct">
+                                            <option value="">直接选择或搜索选择</option>
+                                            <foreach name="productInfo" item="v">
+                                                <if condition="$search['product'] == $v['id']">
+                                                    <option value="{$v[id]}" selected="selected">{$v['type_name']}</option>
+                                                <else/>
+                                                    <option value="{$v['id']}" >{$v['type_name']}</option>
+                                                </if>
+                                            </foreach>
+                                        </select>
+
                         <table class="layui-table" >
                           
                             <thead>

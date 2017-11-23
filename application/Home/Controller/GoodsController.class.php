@@ -87,6 +87,105 @@
 			echo $gongyingshang;
 		}
 
+		//添加商品价格
+		public function productPrice(){
+
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+			$get = $_GET;
+			//获取商品的分类
+			$productTypeInfo = D("XgProductType")->getProductType();
+			//获取全部商品名称
+			$condition['product']['where'] = "pid > 0 ";
+			$productInfo = D("XgProductType")->getProductInfo($condition['product']);
+			//获取商品的型号
+			$productModelInfo = D("XgProduct")->getProductModelInfo();
+			// //获取商品的规格名
+			// $productParameterInfo = D("XgProductParameter")->getProductParameter();
+			// // 条件搜索产品型号信息
+			// if(!empty($get)){
+			// 	$search['product_type'] = $get['product_type'];
+			// 	$search['product'] = $get['product'];
+			// 	$search['product_model'] = $get['product_model'];
+			// 	$search['product_parameter'] = $get['product_parameter'];
+			// 	//如果有产品分类
+			// 	if($get['product_type']){
+			// 		$whereArr[] = "product_type_id = '".$get['product_type']."'";
+			// 		//根据所选商品分类来查询对应的商品分类信息
+			// 		$productInfo = D("XgProductType")->getProductTypeByPid($get['product_type']);
+			// 	}
+			// 	//如果有产品名称
+			// 	if($get['product']){
+			// 		$whereArr[] = "product_id = '".$get['product']."'";
+			// 		//根据产品名称来查询对应的商品型号信息
+			// 		$productModelInfo = D("XgProduct")->getProductByPid($get['product']);
+			// 		//根据产品名称来查询对应的商品规格信息
+			// 		$product = D("XgProductType")->getProduct($get['product']);
+			// 		// $parameter_id_str = rtrim($product['0']['parameter_id_str'], ',');
+			// 		// $parameter_id_arr = explode(",",$parameter_id_str);
+			// 		$productParameterInfo = D("XgProductParameter")->getProductParameterByIdWhereIn($product['0']['parameter_id_str']);
+			// 	}
+			// 	//如果有产品型号
+			// 	if($get['product_model']){
+			// 		$whereArr[] = "product_model_id = '".$get['product_model']."'";
+			// 	}
+			// 	//如果有产品规格
+			// 	if($get['product_parameter']){
+			// 		$whereArr[] = "parameter_id = '".$get['product_parameter']."'";
+			// 	}
+			// 	$where = implode(' and ',$whereArr);
+			// 	$condition['spec']['where'] = $where;
+				
+			// }
+			
+			// //表xg_product_type中符合条件的总记录数
+			// $count = D("XgProductSpec")->getProductSpecCount($condition['spec']['where']);
+	 	// 	$pageSize = 3;
+	 	// 	//实例化分页类
+	 	// 	$page = new \Think\Page($count,$pageSize);
+	 	// 	//获取起始位置
+	 	// 	$firstRow = $page->firstRow;
+	 	// 	//获取分页结果
+	 	// 	$pageStr = $page->show();
+	 	// 	//总页数
+	 	// 	$totalPage = $page->totalPages;
+	 		
+	 	// 	//查询商品名称
+	 	// 	$condition['spec']['order'] = "id desc";
+	 	// 	$condition['spec']['limit']['firstRow'] = $firstRow;
+	 	// 	$condition['spec']['limit']['pageSize'] = $pageSize;
+
+	 	// 	$productSpecInfo = D("XgProductSpec")->getProductSpecInfo($condition['spec']);
+	 		
+	 	// 	if(!empty($productSpecInfo)){
+	 	// 		foreach ($productSpecInfo as $k => $v) {
+		 // 			//获取商品名称
+		 // 			$product = D("XgProductType")->getProduct($v['product_id']);
+		 // 			$productSpecInfo[$k]["product"] = $product["0"];
+		 // 			//获取商品类型
+		 // 			$productType = D("XgProductType")->getProduct($v["product_type_id"]);
+		 // 			$productSpecInfo[$k]["product_type"] = $productType["0"];
+		 // 			//获取商品型号
+		 // 			$productModel = D("XgProduct")->getProductById($v["product_model_id"]);
+		 // 			$productSpecInfo[$k]["product_model"] = $productModel["0"];
+		 // 			//获取商品规格名
+		 // 			$productParameter = D("XgProductParameter")->getProductParameterById($v["parameter_id"]);
+		 // 			$productSpecInfo[$k]["product_parameter"] = $productParameter["0"];
+		 // 		}
+	 	// 	}
+	 	// 	// dump($productSpecInfo);
+	 		
+			$this->assign("productSpecInfo",$productSpecInfo);
+			$this->assign("pageStr",$pageStr);
+			$this->assign("productTypeInfo",$productTypeInfo);
+			$this->assign("productInfo",$productInfo);
+			$this->assign("productModelInfo",$productModelInfo);
+			$this->assign("productParameterInfo",$productParameterInfo);
+			$this->assign("search",$search);
+
+			$this->display();
+		}
+
 		// /*商品信息添加*/
 		// public function add(){
 		// 	$pageSize = 3;
@@ -744,6 +843,27 @@
 			// $parameter_id_str = rtrim($productInfo['0']['parameter_id_str'], ',');
 			$productParameterInfo = D("XgProductParameter")->getProductParameterByIdWhereIn($productInfo['0']['parameter_id_str']);
 			echo json_encode($productParameterInfo);
+		}
+		//Ajax获取对应商品型号的规格信息
+		public function getProductSpecInfos(){
+			$post = $_POST;
+			//获取商品型号对应的商品信息
+			$productNameInfo = D("XgProductType")->getProduct($post['product_id']);
+			//该商品拥有的规格名称ID字符串数组
+			$parameterIds = explode(",",$productNameInfo['0']['parameter_id_str']);
+			foreach ($parameterIds as $k => $v) {
+			 	//获取对应的商品规格名称信息
+				$productParameterInfo = D("XgProductParameter")->getProductParameterById($v);
+				//获取商品型号对应的规格数据
+				$condition['where'] = "parameter_id = ".$v." and product_model_id = ".$post['model_id']."";
+				$spec = D("XgProductSpec")->getProductSpecInfo($condition);
+				if(!empty($productParameterInfo)){
+					$productSpecInfo[$k] = $productParameterInfo['0'];
+					$productSpecInfo[$k]['spec'] = $spec;
+				}
+			}
+			// dump($productSpecInfo); 
+			echo json_encode($productSpecInfo);	
 		}
 
 		//获取全部的商品型号信息
