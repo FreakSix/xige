@@ -65,9 +65,12 @@
 				$specInfo['0']['spec']['0']['spec_value'] = "请先添加该商品的规格信息！";
 			}
 			//对供应商为空的数据进行提示处理
-			// dump($productSupplier);
 			if(empty($productSupplier)){
 				$productSupplier[]['supplier_name'] = "暂无供应商";
+			}
+			//对商品为空的数据进行提示处理
+			if(empty($productModel)){
+				$productModel[]['name'] = "请先添加商品信息";
 			}
 
 			$this->assign("productModel",$productModel);
