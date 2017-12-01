@@ -32,9 +32,11 @@
                             <label class="am-u-sm-2 am-form-label">客户名称：</label>
                             <div class="am-u-sm-5">
                                 <select id="doc-select">
-                                    <option value="option1">北京细格广告传媒公司</option>
-                                    <option value="option2">国美电器</option>
-                                    <option value="option3">一起印</option>
+                                <foreach name="customerList" item="item" key="key" >
+                                    <option value="option1">{$item.cname}</option>
+                                <foreach>
+                                    <!-- <option value="option2">国美电器</option>
+                                    <option value="option3">一起印</option> -->
                                 </select>
                             </div>
                             <label for="user-name" class="am-u-sm-2 am-form-label">交货日期：</label>
