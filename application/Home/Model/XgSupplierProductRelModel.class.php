@@ -20,6 +20,30 @@
 			$typeArr = M()->query($sql);
 			return $typeArr;
 		}
+		//添加商品报价信息
+		public function addProductPrice($data){
+			$res = M("xg_supplier_product_rel")->data($data)->add();
+			return $res;
+		}
+		//根据ID查询商品、联系人、价格信息
+		public function getProductSupplierPriceInfoById($id){
+			$sql = "select * from xg_supplier_product_rel where id = {$id}";
+			$res = M()->query($sql);
+			return $res;
+		}
+		//根据搜索信息查出商品的价格
+		public function getProductPriceInfo($condition){
+			$sql = "select * from xg_supplier_product_rel where {$condition}";
+			// echo $sql;exit; 
+			$res = M()->query($sql);
+			return $res;
+		}
+		//修改商品分类信息
+		public function updateProductPrice($data,$id){
+			$res = M("xg_supplier_product_rel")->where("id = ".$id)->save($data);
+			return $res;
+		}
+
 		
 	}
 	

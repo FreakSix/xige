@@ -28,6 +28,15 @@
 			$result = $table->where("supplier_id = ".$supplierId)->save($supplier);
 			return $result;
 		}
+		//
+		public function getProductSupplierInfo($condition){
+			$query = M("xg_supplier");
+			if($condition['where']){
+				$query = $query->where($condition['where']);
+			}
+			$result = $query->select();
+			return $result;
+		}
 
 		
 	}

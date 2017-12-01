@@ -65,19 +65,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="layui-form-item"> 
-                                <div class="layui-inline" style="margin-top:5px;margin-left:50px;">
-                                    <label class="layui-form-label" style="width:100px;">商品型号:</label>
-                                    <div class="layui-input-inline" style="width:500px;margin-left:50px;">
-                                        <select id="product_model" name="product_model" lay-verify="required" lay-search="" lay-filter="changeProductModel">
-                                            <option value="">直接选择或搜索选择</option>
-                                            <foreach name="productModelInfo" item="v">
-                                                <option value="{$v['id']}" >{$v['name']}</option>
-                                            </foreach>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div> -->
                             <div id="model" class="layui-form-item" style="margin-top:5px;margin-left:50px;">
                                 <label class="layui-form-label" style="width:100px;margin-right:50px;">商品型号:</label>
                                 <div class="layui-input-block" id="product_model">
@@ -88,17 +75,31 @@
                                     </foreach> -->
                                     <span id="sname_notice" style="color:#FF0000;font-size:16px;"> 请先选择商品分类和商品名称</span> 
                                 </div>
+
                             </div>
-                            <div id="product_parameter" class="layui-form-item" style="margin-top:5px;margin-left:50px;">
+                            
+
+                            <div id="product_parameter" class="layui-form-item product_parameter" style="margin-top:10px;margin-left:50px;">
                                 <label class="layui-form-label" style="width:100px;margin-right:50px;">商品规格:</label>
                                 <div class="layui-input-block" id="product_spec">
                                     <span id="sname_notice" style="color:#FF0000;font-size:16px;"> 请先选择商品名称和商品型号</span> 
                                 </div>
                             </div>
-                            <div id="product_price" lay-filter="product_price" class="layui-form-item" style="margin-top:5px;margin-left:50px;">
+                            <div id="supplier" class="layui-form-item" style="margin-top:40px;margin-left:50px;">
+                                <label class="layui-form-label" style="width:100px;margin-right:50px;">供应商:</label>
+                                <div class="layui-input-block" id="product_supplier">
+                                    <span id="sname_notice" style="color:#FF0000;font-size:16px;"> 请先选择商品</span> 
+                                </div>
+                            </div>
+                            <div id="product_price" lay-filter="product_price" class="layui-form-item" style="margin-top:20px;margin-left:50px;">
                                 <label class="layui-form-label" style="width:100px;margin-right:50px;">商品价格:</label>
                                 <div class="layui-input-block" >
-                                    <input type="text" id="price" lay-filter="price" name="price" autocomplete="off"  lay-verify="required" placeholder="请输入价格" class="layui-input" style="width:500px;margin-left:50px;">
+                                    <input type="text" id="price" lay-filter="price" name="price" autocomplete="off"  lay-verify="number" placeholder="请输入价格" class="layui-input" style="width:500px;margin-left:50px;">
+                                </div>
+                            </div>
+                            <div id="hidden" class="layui-form-item">
+                                <div class="layui-input-block" id="parameter_hidden">
+                                    <!-- <input type="hidden" id="parameter_id" name="parameter_id" value="" > -->
                                 </div>
                             </div>
                             <div class="layui-form-item">
@@ -172,6 +173,8 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     //选择产品名称时重新加载商品型号
     form.on('select(changeProduct)', function(data){
         var id = $("#product").val();
+        //重新渲染隐藏域中商品规格名称ID串的值
+        $("#parameter_hidden").empty();
         //重新渲染商品型号下拉选择框的内容
         $.ajax({
             url:'__APP__/Goods/getProductModel',
@@ -183,15 +186,57 @@ layui.use(['form', 'layedit', 'laydate'], function(){
                 var product_name = '';
 
                 $("#product_model").empty();
-                for (var k in re){
-                    product_id = re[k].id;
-                    product_name = re[k].name;
+                if(re){
+                    for (var k in re){
+                        product_id = re[k].id;
+                        product_name = re[k].name;
+                        
+                        var html = "<input type='radio' lay-filter='productModelRadio' name='product_model' value='"+product_id+"' title='"+product_name+"' >";
+                        
+                        $("#product_model").append(html);
+                    }
+                    layui.form.render('radio')
+
+                    $("#model~#product_parameter").remove();
+                    var null_html = "<div id='product_parameter' class='layui-form-item' style='margin-top:40px;margin-left:50px;'> <label class='layui-form-label' style='width:100px;margin-right:50px;'>商品规格:</label><div class='layui-input-block' id='product_spec' lay-filter='product_spec' > <span id='sname_notice' style='color:#FF0000;font-size:16px;'> 请先选择商品名称和商品型号！</span>  </div> </div> ";
+                    $("#model").after(null_html);
+
+                }else{
+                    $("#product_model").append("<span id='sname_notice' style='color:#FF0000;font-size:16px;'> 暂无商品型号！</span>");
+
+                    //重新加载商品规格信息
+                    $("#model~#product_parameter").remove();
+                    var null_html = "<div id='product_parameter' class='layui-form-item' style='margin-top:40px;margin-left:50px;'> <label class='layui-form-label' style='width:100px;margin-right:50px;'>商品规格:</label><div class='layui-input-block' id='product_spec' lay-filter='product_spec' > <span id='sname_notice' style='color:#FF0000;font-size:16px;'> 暂无商品规格信息！</span>  </div> </div> ";
                     
-                    var html = "<input type='radio' lay-filter='productModelRadio' name='product_model' value='"+product_id+"' title='"+product_name+"' >";
-                    
-                    $("#product_model").append(html);
+                    $("#model").after(null_html);
                 }
-                layui.form.render('radio')
+            }
+        });
+
+        //重新渲染商品对应的供应商
+        $.ajax({
+            url:'__APP__/Goods/getProductSupplier',
+            data:'id='+id,
+            type:'post',
+            dataType:'json',
+            success:function(re){
+                var supplier_id = '';
+                var supplier_name = '';
+
+                $("#product_supplier").empty();
+                if(re){
+                    for (var k in re){
+                        supplier_id = re[k].supplier_id;
+                        supplier_name = re[k].supplier_name;
+                        
+                        var html = "<input type='radio' lay-filter='productSupplierRadio' name='supplier' value='"+supplier_id+"' title='"+supplier_name+"' >";
+                        
+                        $("#product_supplier").append(html);
+                    }
+                    layui.form.render('radio')
+                }else{
+                    $("#product_supplier").append("<span id='sname_notice' style='color:#FF0000;font-size:16px;'> 暂无供应商！</span>");
+                }
             }
         });
     });
@@ -220,44 +265,68 @@ layui.use(['form', 'layedit', 'laydate'], function(){
             type:'post',
             dataType:'json',
             success:function(re){
-                var parameter_id = '';
-                var parameter_name = '';
-                var spec_id = '';
-                var spec_value = '';
-                // var re = json_decode(re);
-                // alert(jQuery.type(re));exit;
+                if(re){
+                    var parameter_id = '';
+                    var parameter_name = '';
+                    var spec_id = '';
+                    var spec_value = '';
+                    var parameter_id_str = '';
+                    // var re = json_decode(re);
+                    // alert(jQuery.type(re));exit;
 
-                $("#model~#product_parameter").remove(); 
-                for (var k in re){
-                    parameter_id = re[k].id;
-                    parameter_name = re[k].name;
-                    var spec = re[k].spec;
+                    $("#model~#product_parameter").remove(); 
+                    for (var k in re){
+                        parameter_id = re[k].id; 
+                        parameter_name = re[k].name;
+                        var spec = re[k].spec;
 
-                    var parameter_html = "<div id='product_parameter' class='layui-form-item' style='margin-top:5px;margin-left:50px;'> <label class='layui-form-label' style='width:100px;margin-right:50px;'>"+parameter_name+":</label>";
-                    
-                    var spec_html_one = ''; 
-                    if(spec){
-                        for ( key in spec){
-                            spec_id = spec[key].id;
-                            spec_value = spec[key].spec_value;
-                            
-                            if(spec_html_one){
-                                spec_html_one = spec_html_one+"<input type='radio' lay-filter='productSpecRadio' name='product_spec' value='"+spec_id+"' title='"+spec_value+"' > ";
-                            }else{
-                                spec_html_one ="<input type='radio' lay-filter='productSpecRadio' name='product_spec' value='"+spec_id+"' title='"+spec_value+"' > ";
-                            }
+                        if(parameter_id_str){
+                            parameter_id_str = parameter_id_str+","+parameter_id+"@"+parameter_name;
+                        }else{
+                            parameter_id_str = parameter_id+"@"+parameter_name;
                         }
-                    }
-                    if(spec_html_one){
-                        var spec_html = "<div class='layui-input-block' id='product_spec' lay-filter='product_spec' > "+spec_html_one+" </div> </div> ";
-                    }else{
-                        var spec_html = "<div class='layui-input-block' id='product_spec' lay-filter='product_spec' >  </div> </div> ";
-                    }
-                    var html = parameter_html + spec_html;
 
-                    $("#model").after(html);
+                        var parameter_html = "<div id='product_parameter' class='layui-form-item' style='margin-top:40px;margin-left:50px;'> <label class='layui-form-label' style='width:100px;margin-right:50px;'>"+parameter_name+":</label>";
+                        
+                        var spec_html_one = ''; 
+                        if(spec){
+                            for ( key in spec){
+                                spec_id = spec[key].id;
+                                spec_value = spec[key].spec_value;
+                                
+                                if(spec_html_one){
+                                    spec_html_one = spec_html_one+"<input type='radio' lay-filter='productSpecRadio' name='product_spec_"+parameter_id+"' value='"+spec_id+"' title='"+spec_value+"' > ";
+                                }else{
+                                    spec_html_one ="<input type='radio' lay-filter='productSpecRadio' name='product_spec_"+parameter_id+"' value='"+spec_id+"' title='"+spec_value+"' > ";
+                                }
+                            }
+                        }else{
+                            spec_html_one ="<span id='sname_notice' style='color:#FF0000;font-size:16px;'> 请先添加该商品的  "+parameter_name+"  规格数据！</span>";
+                        }
+
+                        if(spec_html_one){
+                            var spec_html = "<div class='layui-input-block' id='product_spec' lay-filter='product_spec' > "+spec_html_one+" </div> </div> ";
+                        }else{
+                            var spec_html = "<div class='layui-input-block' id='product_spec' lay-filter='product_spec' >  </div> </div> ";
+                        }
+                        var html = parameter_html + spec_html;
+
+                        $("#model").after(html);
+                    }
+                    layui.form.render('radio')
+
+                    //在隐藏域中追加商品规格名称id 组成的字符串
+                    var parameter_id_str_html = "<input type='hidden' id='parameter_id' name='parameter_id' value='"+parameter_id_str+"' >";
+                    $("#parameter_hidden").append(parameter_id_str_html);
+
+                }else{
+                    $("#model~#product_parameter").remove();
+
+                    var null_html = "<div id='product_parameter' class='layui-form-item' style='margin-top:40px;margin-left:50px;'> <label class='layui-form-label' style='width:100px;margin-right:50px;'>商品规格:</label><div class='layui-input-block' id='product_spec' lay-filter='product_spec' > <span id='sname_notice' style='color:#FF0000;font-size:16px;'> 暂无商品规格信息！</span>  </div> </div> ";
+                    
+                    $("#model").after(null_html);
                 }
-                layui.form.render('radio')
+                
 
             }
         });
@@ -269,7 +338,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     form.on('radio(productSpecRadio)', function(data){
         console.log(data.elem); //得到radio原始DOM对象
         console.log(data.value); //被点击的radio的value值
-        alert(data.value);
+        // alert(data.value);
 
     }); 
 
@@ -281,17 +350,173 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 <script type="text/javascript">
     function addProductPrice(){
         layui.use('layer', function(){
-          var layer = layui.layer;
+            var layer = layui.layer;
           
-          layer.open({
-                type: 2,
-                offset: '40px',
-                title: '添加商品规格',
-                area: ['800px', '550px'],
-                // fixed: false, //不固定
-                maxmin: true,
-                content: '__APP__/Goods/addProductPrice',
+            // <input type='hidden' id='parameter_id' name='parameter_id' value='"+parameter_id_str+"' >
+            //获取隐藏域中商品规格名称id字符串
+            var parameter_id = $("#parameter_id").val();
+            
+            //商品分类ID
+            var product_type = $("#product_type").val();
+            //商品名称ID
+            var product = $("#product").val();
+            if(product == ''){
+                layer.msg('请选择商品名称！', {icon: 5,offset: '200px',});
+                $("#product").focus();
+                return false;
+            }
+            
+            //商品型号ID
+            var product_model = '';
+            $('input[name=product_model]').each(function() {
+                if(this.checked) {
+                    product_model = $(this).val();
+                }
             });
+            if(product_model == ''){
+                layer.msg('请选择商品型号！', {icon: 5,offset: '200px',});
+                $("#product_model").focus();
+                return false;
+            }
+
+            //商品规格
+            var product_spec = [];
+
+            if(parameter_id){
+                var parameter_id_arr = parameter_id.split(',');
+                // alert(parameter_id_arr[1]);exit;
+                for (key in parameter_id_arr){
+                    // var spec_name = 'product_spec_'+parameter_id_arr[key];
+                    var parameter_info = parameter_id_arr[key].split('@');
+                    var spec = '';
+
+                    // alert(parameter_info[1]);exit;
+                    $("input[name=product_spec_"+parameter_info[0]+"]").each(function() {
+                        if(this.checked) {
+                            spec = parameter_info[0]+"@"+$(this).val();
+                        }
+                    });
+
+                    if(spec == ''){
+                        layer.msg("请选择"+parameter_info[1]+"！", {icon: 5,offset: '200px',});
+                        $("#product_model").focus();
+                        return false;
+                    }else{
+                        product_spec.push(spec);
+                    }
+                    
+                }
+
+                var product_spec_str = product_spec.join(','); 
+            }
+
+            //供应商
+            var product_supplier = '';
+            $('input[name=supplier]').each(function() {
+                if(this.checked) {
+                    product_supplier = $(this).val();
+                }
+            });
+            if(product_supplier == ''){
+                layer.msg('请选择供应商！', {icon: 5,offset: '200px',});
+                $("#supplier").focus();
+                return false;
+            }
+
+            //商品价格
+            var product_price = $("#price").val();
+            if(product_price == ''){
+                layer.msg('请填写商品价格！', {icon: 5,offset: '200px',});
+                $("#price").focus();
+                return false;
+            }
+
+            //验证该商品的价格是否已经添加
+            $.ajax({
+                url:'__APP__/Goods/getProductPrice',
+                type:'post',
+                data:'product='+product+'&product_model='+product_model+'&product_spec_str='+product_spec_str+'&product_supplier='+product_supplier+'&product_price='+product_price,
+                dataType:'json',
+                success:function(res){
+                    // alert(res[0].id);exit;
+                    // alert(res);
+                    if(res != ''){
+                        // alert(3333333333);
+                        for( k in res){
+                            var product_price_id = res[k].id;
+                            var product_price2 = res[k].price;
+
+                            layer.confirm("已有该商品的价格！报价为<span id='sname_notice' style='color:#FF0000;font-size:16px;'> ￥"+product_price2+" </span> 您要修改商品的报价吗？", {
+                                icon: 3,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定','取消'] //按钮
+                            }, function(){
+
+                                // parent.layer.close(index);
+
+                                layer.open({
+                                    type: 2,
+                                    offset: '40px',
+                                    title: '修改商品价格',
+                                    area: ['800px', '550px'],
+                                    // fixed: false, //不固定
+                                    maxmin: true,
+                                    // content:'__APP__/Goods/addProductPrice',
+                                    content:'__APP__/Goods/updateProductPrice/product_price_id/'+product_price_id+'/product_price/'+product_price,
+                                });
+
+                                // var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                // parent.layer.close(index);
+
+                            }, function(){
+
+                                // parent.location.href='__APP__/Goods/index';
+                                // parent.layer.close(index);
+                            });
+
+                            
+
+                        }
+                    }else{
+                        // alert(4444444);
+                        layer.open({
+                            type: 2,
+                            offset: '40px',
+                            title: '添加商品价格',
+                            area: ['800px', '550px'],
+                            // fixed: false, //不固定
+                            maxmin: true,
+                            // content:'__APP__/Goods/addProductPrice',
+                            content:'__APP__/Goods/addProductPrice/product/'+product+'/product_model/'+product_model+'/product_spec_str/'+product_spec_str+'/product_supplier/'+product_supplier+'/product_price/'+product_price,
+                        });
+                    }
+                    // if(res){
+                    //     parent.layer.alert('添加成功！', {
+                    //                                         icon: 1,
+                    //                                         offset: '200px',
+                    //                                         title:'提示',
+                    //                                     });
+                    //     parent.location.href='__APP__/Goods/productSpec';
+                    //     parent.layer.close(index);
+
+                    // }else{
+                    //     parent.layer.alert('添加失败！', {
+                    //                                         icon: 5,
+                    //                                         offset: '200px',
+                    //                                         title:'提示',
+                    //                                     });
+                    //     return false;
+                    // }
+                }
+            });
+            
+            // exit;
+            
+
+
+            
         }); 
     }
 
