@@ -21,6 +21,7 @@
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
     <script src="__PUBLIC__/js/plus.js"></script>
+    <script src="__PUBLIC__/js/layer.js"></script>
 </head>
 
 <body data-type="generalComponents" class="abc">
@@ -36,110 +37,75 @@
         <!-- 右侧主要内容 -->
         <div class="tpl-content-wrapper">
             <div class="tpl-content-page-title">
-                Amaze UI 表单
+                商品价格信息查询
             </div>
             <ol class="am-breadcrumb">
-                <li><a href="#" class="am-icon-home">首页</a></li>
+                <li><a href="__APP__/Index/index" class="am-icon-home">首页</a></li>
                 <li><a href="#">产品信息</a></li>
                 <li class="am-active">名片</li>
             </ol>
 
-            <div class="am-g">
-                <div class="am-u-sm-2">
-                    <div class="goods-title">商品</div>
-                </div>
-                <div class="am-u-sm-2">
-                    <div class="goods-title">规格</div>
-                </div>
-                <div class="am-u-sm-2">
-                    <div class="goods-title">尺寸</div>
-                </div>
-                <div class="am-u-sm-2">
-                    <div class="goods-title">印面</div>
-                </div>
-                <div class="am-u-sm-2">
-                    <!-- <div class="goods-title">数量</div> -->
-                    <div class="goods-title">供应商</div>
-                </div>
-                <div class="am-u-sm-2">
-                    <div class="goods-title">工艺</div>
-                </div>
-            </div>
 
             <div class="am-g">
                 <div class="goods-selection">
                     <div class="am-u-sm-2">
+                        
+                    </div>
+                    <div class="am-u-sm-2" id="product_model">
+                        <div class="goods-title">商品</div>
                         <div class="goods-name">
                             <ul class="goods-name-detail">
-                                <!-- <li class="select-box select-box-selected"><a href="javascript:;">合版名片</a></li>
-                                <li class="select-box"><a href="javascript:;">烫金名片</a></li> -->
-                                <foreach name="productArr" key="key" item="item">
-                                	<li class="select-box"><a href="javascript:void(0);" onclick="getNextTypename({$item.id})">{$item.name}</a></li>
+                                <foreach name="productModel" key="key" item="item">
+                                    <li class="select-box" id="product_model_{$item.id}" name="product_model" ><a href="javascript:void(0);" onclick="changeProductModel({$item.id})">{$item.name}</a></li>
                                 </foreach>
                             </ul>
                         </div>
                     </div>
+
+                    <!-- <div  id="product_spec"> -->
+                        <foreach name="specInfo" key="k" item="v">
+                            <div class="am-u-sm-2">
+                                <div class="goods-title">{$v['parameter']['name']}</div>
+                                <div class="goods-name">
+                                    <ul class="goods-name-detail zhizhang">
+                                        <if condition="$v['spec'] != '' ">
+                                             <foreach name="specInfo[$k]['spec']" item="vv" key="kk">
+                                                <li class="select-box" id="product_spec_{$vv['id']}" ><a href="javascript:void(0);" onclick="changeProductSpec({$vv['id']})">{$vv['spec_value']}</a></li>
+                                                <input type="hidden" value="{$v['parameter']['id']}-{$v['parameter']['name']}" id="hide_parameter_value_{$vv['id']}" />
+                                            </foreach>   
+                                        <else/>
+                                            <li class='select-box'><a href='javascript:;'>暂无</a></li>
+                                        </if>
+                                    </ul>
+                                </div>
+                            </div>
+                        </foreach>
+                    <!-- </div> -->
                     <div class="am-u-sm-2">
+                        <div class="goods-title">供应商</div>
                         <div class="goods-name">
                             <ul class="goods-name-detail zhizhang">
-                                <li class="select-box"><a href="javascript:;">铜版名片</a></li>
-                                <li class="select-box"><a href="javascript:;">铜版名片</a></li>
-                                <li class="select-box"><a href="javascript:;">铜版名片</a></li>
+                                <foreach name="productSupplier" item="v" key="k">
+                                    <li class="select-box" id="supplier_{$v['supplier_id']}"><a href="javascript:void(0);" onclick="changeSupplier({$v['supplier_id']})">{$v['supplier_name']}</a></li>
+                                </foreach>
                             </ul>
                         </div>
                     </div>
-                    <div class="am-u-sm-2">
-                        <div class="goods-name">
-                            <ul class="goods-name-detail size">
-                                <li class="select-box"><a href="javascript:;">92*52mm</a></li>
-                                <li class="select-box"><a href="javascript:;">92*52mm</a></li>
-                                <li class="select-box"><a href="javascript:;">92*52mm</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="am-u-sm-2">
-                        <div class="goods-name">
-                            <ul class="goods-name-detail yinmian">
-                                <li class="select-box"><a href="javascript:;">双面</a></li>
-                                <li class="select-box"><a href="javascript:;">双面</a></li>
-                                <li class="select-box"><a href="javascript:;">双面</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="am-u-sm-2">
-                        <div class="goods-name">
-                            <!-- <ul class="goods-name-detail">
-                                <li class="select-box"><a href="javascript:;">2盒</a></li>
-                                <li class="select-box"><a href="javascript:;">2盒</a></li>
-                                <li class="select-box"><a href="javascript:;">2盒</a></li>
-                            </ul> -->
-                            <ul class="goods-name-detail gongyingshang">
-                                <li class="select-box"><a href="javascript:;">A供应商</a></li>
-                                <li class="select-box"><a href="javascript:;">B供应商</a></li>
-                                <li class="select-box"><a href="javascript:;">C供应商</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="am-u-sm-2">
-                        <div class="goods-name">
-                            <ul class="goods-name-detail">
-                                <li class="select-box"><a href="javascript:;">打孔</a></li>
-                                <li class="select-box"><a href="javascript:;">打孔</a></li>
-                                <li class="select-box"><a href="javascript:;">打孔</a></li>
-                            </ul>
-                        </div>
-                    </div>
+
+                    <div id="limit"></div>
                 </div>
-                <input type="hidden" value="" name="hide_product_id"/>
-                <input type="hidden" value="" name="hide_zhizhang_id"/>
-                <input type="hidden" value="" name="hide_size_id"/>
-                <input type="hidden" value="" name="hide_yinmian_id"/>
-                <input type="hidden" value="" name="hide_gongyigshang_price"/>
+
+                <input type="hidden" value="{$spec_str}" id="spec_str" name="spec_str"/>
+                <input type="hidden" value="{$productModel['0']['pid']}" id="product_name_id" name="product_name_id"/>
+                <input type="hidden" value="" id="hide_product_model" name="hide_product_model" autocomplete="off"/>
+                <input type="hidden" value="" id="hide_product_supplier" name="hide_product_supplier" autocomplete="off"/>
+                <input type="hidden" value="" id="hide_product_spec" name="hide_product_spec" autocomplete="off"/>
+
             </div>
-        	<div>
-        		<input type="button" onclick="showGongyingshangPrice()" value="获取供应商价格" style="float:left;margin-left:500px;margin-top:100px;"/>
-        		<div style="display:none;float:left;margin-left:100px;margin-top:100px;" class="gongyingshangprice"></div>
-        	</div>
+            <div>
+                <input type="button" onclick="getSupplierPrice()" value="获取供应商价格" style="float:left;margin-left:500px;margin-top:100px;"/>
+                <!-- <div style="display:none;float:left;margin-left:100px;margin-top:100px;" class="gongyingshangprice"></div> -->
+            </div>
         </div>
     </div>
 </body>
@@ -147,122 +113,202 @@
 </html>
 
 <script>
-function getNextTypename(pid){
-	$(this).addClass('select-box-selected').siblings('li').removeClass('select-box-selected');
-	//将类型的id存放到隐藏域，根据这个类型的id(即`xg_supplier_product_rel`表中的product_id)来线过滤其他不相关的供应商
-	$("input[name=hide_product_id]").val(pid);
-	$.post("__APP__/Goods/getProductNextDefault",{"pid":pid},function(res){
-		var data = eval('(' + res + ')');
-		var zhizhang = data.zhizhang;
-		var size = data.size;
-		var yinmian = data.yinmian;
-		var caizhi =data.caizhi;
-		if(zhizhang != ''){
-			$(".zhizhang").html("");
-			$(".zhizhang").html(zhizhang);
-		}
-		if(size != ''){
-			$(".size").html("");
-			$(".size").html(size);
-		}
-		if(yinmian != ''){
-			$(".yinmian").html("");
-			$(".yinmian").html(yinmian);
-		}
-	})
+
+function changeProductModel(model_id){
+    //点击的时候控制边框样式
+    $("#product_model_"+model_id).css("border","1px solid red").siblings('li').css("border","0px");
+    //将该商品的型号放入影藏域中
+    $("#hide_product_model").val(model_id);
+    //重新渲染商品型号对应的规格和供应商信息
+    var product_name_id = $("#product_name_id").val();
+    $.post("__APP__/Goods/getProductSpec",
+        {'product_model_id':model_id,'product_name_id':product_name_id},
+        function(res){
+            $("#product_model~.am-u-sm-2").empty();
+            $("#product_model").after(res);
+            //重新对隐藏域中的值赋值
+            var new_hide_value = '';
+            // $("#hide_product_model").val(new_hide_value);
+            $("#hide_product_supplier").val(new_hide_value);
+            $("#hide_product_spec").val(new_hide_value);
+        }
+    )
+    // //重新渲染商品对应的供应商信息
+    // $.post("__APP__/Goods/getProductSupplierByModel",
+    //     {'model_id':model_id},
+    //     function(res){
+    //         $("#limit").before(res);
+    //     }
+    // )
+
 }
 
-function getGongyingshangByZhizhang(zhizhang_id){
-	//将纸张的id存入隐藏域，根据id获取供应商信息
-	$("input[name=hide_zhizhang_id]").val(zhizhang_id);
-	//鼠标选中纸张栏目的时候添加边框
-	$(".zhizhang_"+zhizhang_id).css("border","1px solid red").siblings('li').css("border","0px");
-	//分别获取分类，尺寸和印面的id
-	var product_id = $("input[name=hide_product_id]").val();
-	var size_id = $("input[name=hide_size_id]").val();
-	var yinmian_id = $("input[name=hide_yinmian_id]").val();
-	$.post("__APP__/Goods/getGongyingshangArr",
-		{'product_id':product_id,'zhizhang_id':zhizhang_id,'size_id':size_id,'yinmian_id':yinmian_id},
-		function(res){
-			$(".gongyingshang").html();
-			if(res !=''){
-				$(".gongyingshang").html(res);
-			}else{
-				var html = "<li class='select-box'><a href='javascript:;'>暂无</a></li>";
-				$(".gongyingshang").html(html);
-			}
-		}
-	)
+function changeSupplier(supplier_id){
+    //点击的时候控制边框样式
+    $("#supplier_"+supplier_id).css("border","1px solid red").siblings('li').css("border","0px");
+    $("#hide_product_supplier").val(supplier_id);
 }
-function getGongyingshangBySize(size_id){
-	//将尺寸的id存入隐藏域，根据id获取供应商信息
-	$("input[name=hide_size_id]").val(size_id);
-	//鼠标选中尺寸栏目的时候添加边框
-	$(".size_"+size_id).css("border","1px solid red").siblings('li').css("border","0px");
-	var product_id = $("input[name=hide_product_id]").val();
-	var zhizhang_id = $("input[name=hide_zhizhang_id]").val();
-	var yinmian_id = $("input[name=hide_yinmian_id]").val();
-	$.post("__APP__/Goods/getGongyingshangArr",
-			{'product_id':product_id,'zhizhang_id':zhizhang_id,'size_id':size_id,'yinmian_id':yinmian_id},
-			function(res){
-				$(".gongyingshang").html();
-				if(res !=''){
-					$(".gongyingshang").html(res);
-				}else{
-					var html = "<li class='select-box'><a href='javascript:;'>暂无</a></li>";
-					$(".gongyingshang").html(html);
-				}
-			}
-		)
+
+function changeProductSpec(spec_id){
+    //点击的时候控制边框样式
+    $("#product_spec_"+spec_id).css("border","1px solid red").siblings('li').css("border","0px");
+
+    var hide_parameter_spec = $("#hide_product_spec").val();
+    var hide_parameter_value = $("#hide_parameter_value_"+spec_id+"").val();
+
+    var hide_parameter_spec_arr = hide_parameter_spec.split(',');
+    if(hide_parameter_spec_arr != ''){
+        var new_hide_parameter_value = '';
+        for(var k in hide_parameter_spec_arr){
+            var hide_parameter_spec_arr_2 = hide_parameter_spec_arr[k].split('@');
+            if(hide_parameter_spec_arr_2[0] == hide_parameter_value){
+                var new_parameter_spec_1 = hide_parameter_spec_arr_2[0]+"@"+spec_id; 
+            }else{
+                var new_parameter_spec_2 = hide_parameter_spec_arr_2[0]+"@"+hide_parameter_spec_arr_2[1];
+                if(new_hide_parameter_value){
+                    new_hide_parameter_value = new_hide_parameter_value+","+new_parameter_spec_2;
+                }else{
+                    new_hide_parameter_value = new_parameter_spec_2;
+                }
+            }            
+        }
+        if(new_parameter_spec_1){
+            // alert(new_hide_parameter_value);
+            if(new_hide_parameter_value){
+                new_hide_parameter_value = new_hide_parameter_value+","+new_parameter_spec_1;
+            }else{
+                new_hide_parameter_value = new_parameter_spec_1;
+            }
+            // new_hide_parameter_value = new_hide_parameter_value+","+new_parameter_spec_2;
+        }else{
+            if(new_hide_parameter_value){
+                new_hide_parameter_value = new_hide_parameter_value+","+hide_parameter_value+"@"+spec_id;
+            }else{
+                new_hide_parameter_value = hide_parameter_value+"@"+spec_id;
+            }
+        }
+        
+    }else{
+        var new_hide_parameter_value = hide_parameter_value+"@"+spec_id;
+    }
+    $("#hide_product_spec").val(new_hide_parameter_value);
+    
+
 }
-function getGongyingshangByYinmian(yinmian_id){
-	//将印面的id存入隐藏域，根据id获取供应商信息
-	$("input[name=hide_yinmian_id]").val(yinmian_id);
-	//鼠标选中印面栏目的时候添加边框
-	$(".yinmian_"+yinmian_id).css("border","1px solid red").siblings('li').css("border","0px");
-	var product_id = $("input[name=hide_product_id]").val();
-	var zhizhang_id = $("input[name=hide_zhizhang_id]").val();
-	var size_id = $("input[name=hide_size_id]").val();
-	$.post("__APP__/Goods/getGongyingshangArr",
-		{'product_id':product_id,'zhizhang_id':zhizhang_id,'size_id':size_id,'yinmian_id':yinmian_id},
-		function(res){
-			$(".gongyingshang").html();
-			if(res !=''){
-				$(".gongyingshang").html(res);
-			}else{
-				var html = "<li class='select-box'><a href='javascript:;'>暂无</a></li>";
-				$(".gongyingshang").html(html);
-			}
-		}
-	)
+
+function getSupplierPrice(){
+    //验证商品是否被选取
+    var product_model_id = $("#hide_product_model").val();
+    // alert(product_model_id);
+    if(product_model_id == ''){
+        layer.msg("请选择商品！", {icon: 5,offset: '200px',});
+            return false;
+    }
+
+    //验证商品规格是否被选取
+    var product_parameter_spec = $("#hide_product_spec").val();
+    var assign_spec_str = $("#spec_str").val();
+
+    var parameter_spec_arr = product_parameter_spec.split(",");
+    var assign_parameter_spec_arr = assign_spec_str.split(",");
+    if(assign_parameter_spec_arr){
+        //循环商品原始有的规格信息
+        for(var ak in assign_parameter_spec_arr){
+            var select = "";
+            var assign_parameter_arr = assign_parameter_spec_arr[ak].split("@");
+            var assign_parameter = assign_parameter_arr[0];
+            //循环选择的规格信息值，和传递过来的规格值作对比
+            if(parameter_spec_arr){
+                for(var k in parameter_spec_arr){
+                    var parameter_arr = parameter_spec_arr[k].split("@");
+                    if(assign_parameter == parameter_arr[0]){
+                        select = "right";
+                    }
+                }
+            }
+            var assign_parameter_name = assign_parameter.split("-");
+            //判断该规格是否被选取
+            if(select != 'right'){
+                layer.msg("请选择"+assign_parameter_name[1]+"！", {icon: 5,offset: '200px',});
+                return false;
+            }
+
+        }
+    }
+    if(product_parameter_spec == ''){
+        layer.msg("请选择商品规格！", {icon: 5,offset: '200px',});
+            return false;
+    }
+
+
+    //验证供应商是否被选取
+    var product_supplier_id = $("#hide_product_supplier").val();
+    // alert(product_supplier_id);
+    if(product_supplier_id == ''){
+        layer.msg("请选择供应商！", {icon: 5,offset: '200px',});
+            return false;
+    }
+
+    //查询选取的商品信息的价格
+    $.ajax({
+            url:'__APP__/Goods/getProductPrice',
+            data:'product_supplier='+product_supplier_id+'&product_model='+product_model_id+'&product_spec_str='+product_parameter_spec,
+            type:'post',
+            dataType:'json',
+            success:function(res){
+                if(res != ''){
+                    // alert(3333333333);
+                    for( k in res){
+                        var product_price_id = res[k].id;
+                        var product_price2 = res[k].price;
+
+                        if(product_price2 != ''){
+                            layer.alert("该商品的报价为<span id='sname_notice' style='color:#FF0000;font-size:16px;'> ￥"+               product_price2+" </span> ", 
+                                                    {
+                                                        icon: 1,
+                                                        offset: '200px',
+                                                        title:'提示',
+                                                    });
+                        }else{
+                            layer.confirm("<span id='sname_notice' style='color:#FF0000;font-size:16px;'>该商品暂无报价，您要添加新报价吗？</span> ", {
+                                icon: 3,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定','取消'] //按钮
+                            }, function(){
+
+                                location.href='__APP__/Goods/productPrice';
+
+                            }, function(){
+
+
+                            });
+                        }                        
+
+                    }
+                }else{
+                    layer.confirm("<span id='sname_notice' style='color:#FF0000;font-size:16px;'>暂无报价，您要添加新报价吗？</span> ", {
+                                icon: 3,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定','取消'] //按钮
+                            }, function(){
+
+
+                            }, function(){
+
+                                
+                            });
+                }
+            }
+        });
+
+
+
+    
 }
-//用户点击供应商的时候将对应的供应商的价格写入一个隐藏域中，当用户点击提交的时候获取价格进行显示
-function getGongyingshangPrice(price){
-	$("input[name=hide_gongyigshang_price]").val(price);
-}
-//用户点击获取供应商价格，出发事件获取供应商的价格(实际上是讲一个已经赋值好的隐藏内容打开)
-function showGongyingshangPrice(){
-	var product = $("input[name=hide_product_id]").val();
-	var zhizhang = $("input[name=hide_zhizhang_id]").val();
-	var size = $("input[name=hide_size_id]").val();
-	var yinmian = $("input[name=hide_yinmian_id]").val();
-	var price = $("input[name=hide_gongyigshang_price]").val();
-	if(product === ''){
-		alert ("请选择产品类型");return;
-	}
-	if(zhizhang === ''){
-		alert ("请选择纸张类型");return;
-	}
-	if(size === ''){
-		alert ("请选择尺寸类型");return;
-	}
-	if(yinmian === ''){
-		alert ("请选择印面类型");return;
-	}
-	if(price === ''){
-		alert ("请选择供应商");return;
-	}
-	$(".gongyingshangprice").html(price);
-	$(".gongyingshangprice").css("display","block");
-}
+
+
 </script>
