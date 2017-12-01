@@ -2,10 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    
-
-</head>
-<style type="text/css">
+    <style type="text/css">
     .tpl-left-nav-list{
         width:200px;
         overflow: auto;
@@ -22,6 +19,8 @@
         overflow: hidden;
     }
 </style>
+</head>
+
 <body>
     <!-- <div id="menu_scroll"></div> -->
     <div class="tpl-left-nav-title">菜单列表</div>
@@ -29,16 +28,30 @@
          <div class="tpl-left-nav-list-son">
             <ul class="tpl-left-nav-menu">
             <li class="tpl-left-nav-item">
-                <a href="__APP__/Index/index" class="nav-link" nav="index">
+                <a href="__APP__/Index/index" class="nav-link tpl-left-nav-link-list" nav="index">
                     <i class="am-icon-home"></i>
                     <span>首页</span>
                 </a>
             </li>
             <li class="tpl-left-nav-item">
-                <a href="__APP__/Order/index" class="nav-link tpl-left-nav-link-list" nav="order">
+                <a href="javascript:;" class="nav-link tpl-left-nav-link-list" nav="order">
                     <i class="am-icon-bar-chart"></i>
                     <span>订单管理</span>
+                    <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
                 </a>
+                <ul class="tpl-left-nav-sub-menu">
+                    <li>
+                        <a href="__APP__/Order/index">
+                            <i class="am-icon-edit"></i>
+                            <span>订单列表</span>
+                            <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                        </a>
+                        <a href="__APP__/Order/quote">
+                            <i class="am-icon-tags"></i>
+                            <span>报价记录</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <li class="tpl-left-nav-item">
@@ -49,70 +62,68 @@
                 </a>
                 <ul class="tpl-left-nav-sub-menu">
                     <li>
-                        <a href="javascript:;" class="tpl-left-nav-link-list-first">
-                            <i class="am-icon-angle-right"></i>
-                            <span>商品信息</span>
-                            <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
-                        </a>
-                        <ul class="tpl-left-nav-sub-menu-first">
-                            <li>
-                                <a href="__APP__/Goods/productPrice" target="main">
-                                    <i class="am-icon-credit-card"></i>
-                                    <span>商品报价</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="__APP__/Goods/productType" target="main">
-                                    <i class="am-icon-credit-card"></i>
-                                    <span>服务类型</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="__APP__/Goods/productParameter" target="main">
-                                    <i class="am-icon-credit-card"></i>
-                                    <span>商品参数</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="__APP__/Goods/productName" target="main">
-                                    <i class="am-icon-credit-card"></i>
-                                    <span>商品名称</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="__APP__/Goods/productModel" target="main">
-                                    <i class="am-icon-credit-card"></i>
-                                    <span>商品型号</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="__APP__/Goods/productSpec" target="main">
-                                    <i class="am-icon-credit-card"></i>
-                                    <span>商品规格</span>
-                                </a>
-                            </li>
-                        </ul>
-                        
-                    </li>
-                    <li>
                         <foreach name="productType" key="k" item="pt">
-                        <a href="javascript:;" class="tpl-left-nav-link-list-first">
-                            <i class="am-icon-angle-right"></i>
+                        <a href="javascript:;" class="tpl-left-nav-link-list-first" rec="{$k}">
+                            <i class="am-icon-angle-right"></i>&nbsp;
                             <span>{$pt.type_name}</span>
                             <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                         </a>
-                        <ul class="tpl-left-nav-sub-menu-first">
+                        <ul class="tpl-left-nav-sub-menu-first-{$k}" style="display: none"> 
                             <li>
                             <foreach name="productType[$k]['productMenu']" key="key" item="item">
                                 <a href="__APP__/Goods/index/type_id/{$item.id}">
-                                    <i class="am-icon-credit-card"></i>
-                                    <span>{$item.type_name}</span>
+                                    <i class="am-icon-credit-card"></i> 
+                                    <span>{$item.type_name}11</span>
                                 </a>
                             </foreach>
                             </li>
                         </ul>
                         </foreach>
-                        
+                    </li>
+                    <li>
+                        <a href="javascript:;" class="tpl-left-nav-link-list-second">
+                            <i class="am-icon-angle-right"></i>&nbsp;
+                            <span>商品信息</span>
+                            <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                        </a>
+                        <ul class="tpl-left-nav-sub-menu-second">
+                            <li>
+                                <a href="__APP__/Goods/productPrice">
+                                    <i class="am-icon-credit-card"></i>
+                                    <span>商品报价</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="__APP__/Goods/productType">
+                                    <i class="am-icon-credit-card"></i>
+                                    <span>服务类型</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="__APP__/Goods/productParameter">
+                                    <i class="am-icon-credit-card"></i>
+                                    <span>商品参数</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="__APP__/Goods/productName">
+                                    <i class="am-icon-credit-card"></i>
+                                    <span>商品名称</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="__APP__/Goods/productModel">
+                                    <i class="am-icon-credit-card"></i>
+                                    <span>商品型号</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="__APP__/Goods/productSpec">
+                                    <i class="am-icon-credit-card"></i>
+                                    <span>商品规格</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </li>
@@ -141,15 +152,15 @@
                             <span>基本信息统计</span>
                             <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                         </a>
-                        <a href="table-images-list.html"  target="main">
+                        <a href="javascript:;"  target="main">
                             <i class="am-icon-angle-right"></i>
                             <span>产品统计</span>
                         </a>
-                        <a href="form-news.html" target="main">
+                        <a href="javascript:;" target="main">
                             <i class="am-icon-angle-right"></i>
                             <span>客户统计</span>
                         </a>
-                        <a href="form-news.html" target="main">
+                        <a href="javascript:;" target="main">
                             <i class="am-icon-angle-right"></i>
                             <span>供应商统计</span>
                         </a>
@@ -164,29 +175,29 @@
                 </a>
                 <ul class="tpl-left-nav-sub-menu">
                     <li>
-                        <a href="table-font-list.html" target="main">
+                        <a href="javascript:;" target="main">
                             <i class="am-icon-angle-right"></i>
                             <span>部门管理</span>
                             <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                         </a>
-                        <a href="table-font-list.html" target="main">
+                        <a href="javascript:;" target="main">
                             <i class="am-icon-angle-right"></i>
                             <span>用户管理</span>
                             <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                         </a>
-                        <a href="table-images-list.html"  target="main">
+                        <a href="javascript:;"  target="main">
                             <i class="am-icon-angle-right"></i>
                             <span>权限设定</span>
                         </a>
                     </li>
                 </ul>
             </li>
-            <li class="tpl-left-nav-item">
+            <!-- <li class="tpl-left-nav-item">
                 <a href="login.html" class="nav-link tpl-left-nav-link-list" nav="beifang">
                     <i class="am-icon-key"></i>
                     <span>备忘录</span>
                 </a>
-            </li>
+            </li> -->
             <li class="tpl-left-nav-item">
                 <a href="__APP__/Login/index" class="nav-link tpl-left-nav-link-list" nav="login">
                     <i class="am-icon-key"></i>

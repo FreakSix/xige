@@ -68,7 +68,7 @@
                         <div class="am-u-sm-12 am-u-md-6">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
-                                    <button type="button" onclick="window.open('add.html','main')" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增订单</button>
+                                    <button type="button" onclick="addOrder()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增订单</button>
                                     <!-- <div id="div1nnn" style="display:none;"><iframe src="add.html" width=100% height=100% id=""></iframe></div> -->
                                     <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出数据</button>
                                     <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除所选内容</button>
@@ -119,35 +119,35 @@
                                     <tbody>
                                         <tr>
                                             <td><input type="checkbox"></td>
-                                            <td>1</td>
-                                            <td><a href="#">Business management</a></td>
+                                            <td><a href="__APP__/Order/detail">1</a></td>
+                                            <td>Business management</td>
                                             <td>default</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                             <td class="am-hide-sm-only">测试1号</td>
-                                            <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
+                                            <td class="am-hide-sm-only">2014年9月4日 7:28</td>
                                             <td>
                                                 <div class="am-btn-toolbar">
                                                     <div class="am-btn-group am-btn-group-xs">
-                                                        <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="window.location.href='__APP__/Order/update'"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td><input type="checkbox"></td>
-                                            <td>2</td>
-                                            <td><a href="#">Business management</a></td>
+                                            <td><a href="#">2</a></td>
+                                            <td>Business management</td>
                                             <td>default</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                             <td class="am-hide-sm-only">测试1号</td>
-                                            <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
+                                            <td class="am-hide-sm-only">2014年9月4日 7:28</td>
                                             <td>
                                                 <div class="am-btn-toolbar">
                                                     <div class="am-btn-group am-btn-group-xs">
@@ -187,9 +187,11 @@
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
     <script src="__PUBLIC__/js/plus.js"></script>
+    <script src="__PUBLIC__/js/layer.js"></script>
     <script type="text/javascript" src="__PUBLIC__/js/moment.js"></script>
-<script type="text/javascript" src="__PUBLIC__/js/daterangepicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/daterangepicker.js"></script>
 <script type="text/javascript">
+    // 日期插件
     $('#daterange-btn').daterangepicker({
             ranges: {
                 '今天': [moment(), moment()],
@@ -210,6 +212,19 @@
     $('#datepicker').datepicker({
         autoclose: true
     });
+    // 新增订单
+    function addOrder(){
+        layer.open({
+            type: 2,
+            offset: '20px',
+            title: '新增订单',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['75%', '90%'],
+            btn: ['关闭'],
+            content: '__APP__/Order/addOrder' //iframe的url
+        });
+    }
 </script>
 </body>
 

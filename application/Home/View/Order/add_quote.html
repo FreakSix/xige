@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>新建订单-细格订单管理系统</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="__PUBLIC__/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="__PUBLIC__/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/app.css">
+    <style>
+    </style>
+</head>
+
+<body data-type="generalComponents">
+    <div class="tpl-portlet-components">
+        <div class="tpl-block ">
+            <div class="am-g tpl-amazeui-form">
+                <div class="am-u-sm-12 am-u-md-9">
+                    <form class="am-form am-form-horizontal">
+                        <!-- 公司信息 -->
+                        <h5>客户信息</h5>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-2 am-form-label">客户名称：</label>
+                            <div class="am-u-sm-5">
+                                <select id="doc-select">
+                                    <option value="option1">北京细格广告传媒公司</option>
+                                    <option value="option2">国美电器</option>
+                                    <option value="option3">一起印</option>
+                                </select>
+                            </div>
+                            <label for="user-name" class="am-u-sm-2 am-form-label">交货日期：</label>
+                            <div class="am-u-sm-3">
+                                <input type="text" class="am-form-field" placeholder="交货日期" data-am-datepicker readonly required />
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-2 am-form-label">联系人：</label>
+                            <div class="am-u-sm-4">
+                                <select id="doc-select-1">
+                                    <option value="option1">张三</option>
+                                    <option value="option2">李四</option>
+                                    <option value="option3">王五</option>
+                                </select>
+                            </div>
+                            <label class="am-u-sm-2 am-form-label">联系电话：</label>
+                            <div class="am-u-sm-4">
+                                <input type="text" value="15298765425">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-2 am-form-label">收货地址：</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="user-address" >
+                            </div>
+                        </div>
+                        <hr/>
+                        <!-- 联系人信息 -->
+                        <h5>商品信息</h5>
+                        <div class="am-form-group">
+                            <label for="contact-name" class="am-u-sm-2 am-form-label">产品分类：</label>
+                            <div class="am-u-sm-4">
+                                <select id="doc-select-1">
+                                    <option value="option1">印刷品</option>
+                                    <option value="option2">制作品</option>
+                                    <option value="option3">非标品</option>
+                                    <option value="option3">销售品</option>
+                                </select>
+                            </div>
+                            <label for="contact-name" class="am-u-sm-2 am-form-label">产品名称：</label>
+                            <div class="am-u-sm-4">
+                                <select id="doc-select-1">
+                                    <option value="option1">名片</option>
+                                    <option value="option2">单页</option>
+                                    <option value="option3">画册</option>
+                                    <option value="option3">PVC</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-wechat" class="am-u-sm-2 am-form-label">产品型号：</label>
+                            <div class="am-u-sm-10 am-u-end">
+                                <ul>
+                                    <li class="xg-product-btn xg-product-btn-selected" value="1">
+                                        <span>彩色名片</span>
+                                        <!-- <i class="am-icon-check"></i> -->
+                                    </li>
+                                    <li class="xg-product-btn" value="2">黑白名片</li>
+                                    <li class="xg-product-btn" value="3">其他名片</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">纸张：</label>
+                            <div class="am-u-sm-10">
+                                <ul>
+                                    <li class="xg-product-btn xg-product-btn-selected" value="1" >
+                                        <span>铜版纸白色300g</span>
+                                        <!-- <i class="am-icon-check"></i> -->
+                                    </li>
+                                    <li class="xg-product-btn" value="2">铜版纸白色300g</li>
+                                    <li class="xg-product-btn" value="3">铜版纸白色300g（双面覆哑膜）</li>
+                                    <li class="xg-product-btn" value="2">铜版纸白色300g（双面覆光膜）</li>
+                                    <li class="xg-product-btn" value="3">铜版纸白色300g（单面局部UV）</li>
+                                    <li class="xg-product-btn" value="2">铜版纸普白300g（双面覆哑膜）</li>
+                                    <li class="xg-product-btn" value="3">冰白250g</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">尺寸：</label>
+                            <div class="am-u-sm-10">
+                                <ul>
+                                    <li class="xg-product-btn xg-product-btn-selected" value="1">
+                                        <span>214*289</span>
+                                        <!-- <i class="am-icon-check"></i> -->
+                                    </li>
+                                    <li class="xg-product-btn" value="2">92*56</li>
+                                    <li class="xg-product-btn" value="3">92*56</li>
+                                    <li class="xg-product-btn" value="2">214*289</li>
+                                    <li class="xg-product-btn" value="3">214*289</li>
+                                    <li class="xg-product-btn" value="2">214*289</li>
+                                    <li class="xg-product-btn" value="3">214*289</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">供应商：</label>
+                            <div class="am-u-sm-10">
+                                <select id="doc-select-1">
+                                    <option value="option1">北京细格广告传媒有限公司</option>
+                                    <option value="option2">北京细格广告传媒有限公司</option>
+                                    <option value="option3">北京细格广告传媒有限公司</option>
+                                    <option value="option3">北京细格广告传媒有限公司</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">数量：</label>
+                            <div class="am-u-sm-2 am-u-end">
+                                <input type="text" name="" class="" value="1">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">成本单价：</label>
+                            <div class="am-u-sm-2 am-u-end">
+                                <b style="color: #f00;">1.1元</b>
+                            </div>
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">参考售价：</label>
+                            <div class="am-u-sm-2 am-u-end">
+                                <b style="color: #f00;">100元</b>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">最终报价：</label>
+                            <div class="am-u-sm-2 am-u-end">
+                                <input type="text" name="" class="" value="110">
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="am-form-group">
+                            <div class="am-u-sm-10 am-u-sm-push-2">
+                                <button type="button" class="am-btn am-btn-primary">记录报价</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="__PUBLIC__/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/js/amazeui.min.js"></script>
+    <script src="__PUBLIC__/js/app.js"></script>
+    <script src="__PUBLIC__/js/plus.js"></script>
+    <script src="__PUBLIC__/js/layer.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $(".xg-product-btn").click(function(){
+                $(this).addClass("xg-product-btn-selected")
+                .siblings()
+                .removeClass("xg-product-btn-selected");
+            })
+        })
+    </script>
+</body>
+
+</html>

@@ -10,7 +10,7 @@ $(function() {
         });
 
 
-        var dataType = $('body').attr('data-type');
+        var dataType = $('#eeeee').attr('data-type');
         for (key in pageData) {
             if (key == dataType) {
                 pageData[key]();
@@ -39,12 +39,18 @@ $('.tpl-left-nav-link-list').on('click', function() {
             .find('.tpl-left-nav-more-ico').toggleClass('tpl-left-nav-more-ico-rotate');
     })
     // ==========================
-    // 侧边导航二级下拉列表
+    // 侧边导航二级下拉列表 
     // ==========================
 $('.tpl-left-nav-link-list-first').on('click', function() {
-        $(this).siblings('.tpl-left-nav-sub-menu-first').slideToggle(80)
+    var rec = $(this).attr("rec");
+        $(this).siblings('.tpl-left-nav-sub-menu-first-'+rec).slideToggle(80)
             .end()
-            .find('.am-icon-angle-right').toggleClass('tpl-left-nav-more-ico-rotate');
+            .find('.am-icon-angle-right').toggleClass('tpl-left-nav-more-ico-rotate'); 
+    })
+$('.tpl-left-nav-link-list-second').on('click', function() {
+        $(this).siblings('.tpl-left-nav-sub-menu-second').slideToggle(80)
+            .end()
+            .find('.am-icon-angle-right').toggleClass('tpl-left-nav-more-ico-rotate'); 
     })
     // ==========================
     // 头部导航隐藏菜单
@@ -105,72 +111,72 @@ var pageData = {
         // 百度图表A http://echarts.baidu.com/
         // ==========================
 
-        var echartsA = echarts.init(document.getElementById('tpl-echarts-A'));
-        option = {
+        // var echartsA = echarts.init(document.getElementById('tpl-echarts-A'));
+        // option = {
 
-            tooltip: {
-                trigger: 'axis',
-            },
-            legend: {
-                data: ['邮件', '媒体', '资源']
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: [{
-                type: 'category',
-                boundaryGap: true,
-                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-            }],
+        //     tooltip: {
+        //         trigger: 'axis',
+        //     },
+        //     legend: {
+        //         data: ['邮件', '媒体', '资源']
+        //     },
+        //     grid: {
+        //         left: '3%',
+        //         right: '4%',
+        //         bottom: '3%',
+        //         containLabel: true
+        //     },
+        //     xAxis: [{
+        //         type: 'category',
+        //         boundaryGap: true,
+        //         data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        //     }],
 
-            yAxis: [{
-                type: 'value'
-            }],
-            series: [{
-                    name: '邮件',
-                    type: 'line',
-                    stack: '总量',
-                    areaStyle: { normal: {} },
-                    data: [120, 132, 101, 134, 90, 230, 210],
-                    itemStyle: {
-                        normal: {
-                            color: '#59aea2'
-                        },
-                        emphasis: {
+        //     yAxis: [{
+        //         type: 'value'
+        //     }],
+        //     series: [{
+        //             name: '邮件',
+        //             type: 'line',
+        //             stack: '总量',
+        //             areaStyle: { normal: {} },
+        //             data: [120, 132, 101, 134, 90, 230, 210],
+        //             itemStyle: {
+        //                 normal: {
+        //                     color: '#59aea2'
+        //                 },
+        //                 emphasis: {
 
-                        }
-                    }
-                },
-                {
-                    name: '媒体',
-                    type: 'line',
-                    stack: '总量',
-                    areaStyle: { normal: {} },
-                    data: [220, 182, 191, 234, 290, 330, 310],
-                    itemStyle: {
-                        normal: {
-                            color: '#e7505a'
-                        }
-                    }
-                },
-                {
-                    name: '资源',
-                    type: 'line',
-                    stack: '总量',
-                    areaStyle: { normal: {} },
-                    data: [150, 232, 201, 154, 190, 330, 410],
-                    itemStyle: {
-                        normal: {
-                            color: '#32c5d2'
-                        }
-                    }
-                }
-            ]
-        };
-        echartsA.setOption(option);
+        //                 }
+        //             }
+        //         },
+        //         {
+        //             name: '媒体',
+        //             type: 'line',
+        //             stack: '总量',
+        //             areaStyle: { normal: {} },
+        //             data: [220, 182, 191, 234, 290, 330, 310],
+        //             itemStyle: {
+        //                 normal: {
+        //                     color: '#e7505a'
+        //                 }
+        //             }
+        //         },
+        //         {
+        //             name: '资源',
+        //             type: 'line',
+        //             stack: '总量',
+        //             areaStyle: { normal: {} },
+        //             data: [150, 232, 201, 154, 190, 330, 410],
+        //             itemStyle: {
+        //                 normal: {
+        //                     color: '#32c5d2'
+        //                 }
+        //             }
+        //         }
+        //     ]
+        // };
+        // echartsA.setOption(option);
     },
     // ===============================================
     // 图表页
@@ -432,8 +438,11 @@ $("#add_supplier_contact").click(function(){
 $(document).ready(function(){
     //alert($(".tpl-left-nav-list-son ul li.tpl-left-nav-item").length);
     for (var i = 0; i < $(".tpl-left-nav-list-son ul li.tpl-left-nav-item").length; i++) {
+        // alert($(".tpl-left-nav").attr("nav"));
+        // alert($(".tpl-left-nav").attr("nav"));
+        // alert($(".tpl-content-wrapper").attr("value"));
         if($(".tpl-left-nav").attr("nav") == $(".tpl-left-nav-item").find(".nav-link").eq(i).attr("nav")){
-        $(".nav-link").eq(i).addClass("active");
+            $(".nav-link").eq(i).addClass("active");
       }else{
         $(".nav-link").eq(i).removeClass("active");
       }

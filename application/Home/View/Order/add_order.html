@@ -20,215 +20,177 @@
     </style>
 </head>
 
-<body data-type="generalComponents" class="abc">
-    <!-- 网站头部 -->
-    <header class="am-topbar am-topbar-inverse admin-header">
-        <include file="Public:header"/>
-    </header>
-    <div class="tpl-page-container tpl-page-header-fixed">
-        <div class="tpl-left-nav tpl-left-nav-hover">
-            <include file="Public:menu"/>
-        </div>
-        <div class="tpl-content-wrapper">
-            <ol class="am-breadcrumb">
-                <li><a href="#" class="am-icon-home">首页</a></li>
-                <li><a href="#">订单管理</a></li>
-                <li class="am-active">新建订单</li>
-            </ol>
-            <div class="tpl-portlet-components">
-                <div class="portlet-title">
-                    <div class="caption font-green bold">新建订单</div>
-                        <div class="tpl-portlet-input tpl-fz-ml">
-                        <div class="am-btn-group am-btn-group-xs">
-                            <button type="button" onclick="javascript:history.back(-1);" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-angle-left"></span> 返回</button>
+<body data-type="generalComponents">
+    <div class="tpl-portlet-components">
+        <div class="tpl-block ">
+            <div class="am-g tpl-amazeui-form">
+                <div class="am-u-sm-12 am-u-md-9">
+                    <form class="am-form am-form-horizontal">
+                        <!-- 公司信息 -->
+                        <h5>客户信息</h5>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-2 am-form-label">客户名称：</label>
+                            <div class="am-u-sm-5">
+                                <select id="doc-select">
+                                    <option value="option1">北京细格广告传媒公司</option>
+                                    <option value="option2">国美电器</option>
+                                    <option value="option3">一起印</option>
+                                </select>
+                            </div>
+                            <label for="user-name" class="am-u-sm-2 am-form-label">交货日期：</label>
+                            <div class="am-u-sm-3">
+                                <input type="text" class="am-form-field" placeholder="交货日期" data-am-datepicker readonly required />
                             </div>
                         </div>
-                </div>
-                <div class="tpl-block ">
-                    <div class="am-g tpl-amazeui-form">
-                        <div class="am-u-sm-12 am-u-md-9">
-                            <form class="am-form am-form-horizontal">
-                                <!-- 公司信息 -->
-                                <h4>公司信息</h4>
-                                <div class="am-form-group">
-                                    <label for="user-name" class="am-u-sm-2 am-form-label">客户名称</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="text" id="user-name" >
-                                    </div>
-                                    <label for="user-name" class="am-u-sm-2 am-form-label">客户类型</label>
-                                    <div class="am-u-sm-4">
-                                        <select id="doc-select-1">
-                                            <option value="option1">公司</option>
-                                            <option value="option2">个人</option>
-                                            <option value="option3">政府机构</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="am-form-group">
-                                    <label for="user-email" class="am-u-sm-2 am-form-label">所在区域</label>
-                                    <div class="am-u-sm-2">
-                                        <select id="doc-select-1">
-                                            <option value="option1">北京市</option>
-                                            <option value="option2">河北省</option>
-                                            <option value="option3">上海市</option>
-                                        </select>
-                                    </div>
-                                    <div class="am-u-sm-2">
-                                        <select id="doc-select-1">
-                                            <option value="option1">朝阳区</option>
-                                            <option value="option2">丰台区</option>
-                                            <option value="option3">通州区</option>
-                                        </select>
-                                    </div>
-                                    <div class="am-u-sm-2">
-                                        <select id="doc-select-1">
-                                            <option value="option1">朝阳区</option>
-                                            <option value="option2">丰台区</option>
-                                            <option value="option3">通州区</option>
-                                        </select>
-                                    </div>
-                                    <label for="user-email" class="am-u-sm-2 am-form-label">客户等级</label>
-                                    <div class="am-u-sm-2">
-                                        <select id="doc-select-1">
-                                            <option value="option1">一级客户</option>
-                                            <option value="option2">二级客户</option>
-                                            <option value="option3">三级客户</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="am-form-group">
-                                    <label for="user-address" class="am-u-sm-2 am-form-label">详细地址</label>
-                                    <div class="am-u-sm-10">
-                                        <input type="text" id="user-address" >
-                                    </div>
-                                </div>
-                                <hr/>
-                                <!-- 联系人信息 -->
-                                <h4>联系人1</h4>
-                                <div class="am-form-group">
-                                    <label for="contact-name" class="am-u-sm-2 am-form-label">联系人</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="tel" id="contact-name" >
-                                    </div>
-                                    <label for="contact-phone" class="am-u-sm-2 am-form-label">联系电话</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="tel" id="contact-phone" >
-                                    </div>
-                                </div>
-
-                                <div class="am-form-group">
-                                    <label for="contact-wechat" class="am-u-sm-2 am-form-label">微信</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="tel" id="contact-wechat" >
-                                    </div>
-                                    <label for="contact-email" class="am-u-sm-2 am-form-label">联系人邮箱</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="email" id="contact-email" >
-                                    </div>
-                                </div>
-                                <div class="am-form-group">
-                                    <label for="contact-department" class="am-u-sm-2 am-form-label">所属部门</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="text" id="contact-department" >
-                                    </div>
-                                    <label for="contact-position" class="am-u-sm-2 am-form-label">职位</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="text" id="contact-position" >
-                                    </div>
-                                </div>
-                                <h4>联系人2</h4>
-                                <div class="am-form-group">
-                                    <label for="contact-name2" class="am-u-sm-2 am-form-label">联系人</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="tel" id="contact-name2" >
-                                    </div>
-                                    <label for="contact-phone2" class="am-u-sm-2 am-form-label">联系电话</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="tel" id="contact-phone2" >
-                                    </div>
-                                </div>
-
-                                <div class="am-form-group">
-                                    <label for="contact-wechat2" class="am-u-sm-2 am-form-label">微信</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="tel" id="contact-wechat2" >
-                                    </div>
-                                    <label for="contact-email2" class="am-u-sm-2 am-form-label">联系人邮箱</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="email" id="contact-email2" ">
-                                    </div>
-                                </div>
-                                <div class="am-form-group">
-                                    <label for="contact-department2" class="am-u-sm-2 am-form-label">所属部门</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="text" id="contact-department2" >
-                                    </div>
-                                    <label for="contact-position2" class="am-u-sm-2 am-form-label">职位</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="text" id="contact-position2" >
-                                    </div>
-                                </div>
-                                <hr/>
-                                <!-- 财务信息 -->
-                                <h4>财务信息</h4>
-                                <div class="am-form-group">
-                                    <label for="invoice-title" class="am-u-sm-2 am-form-label">发票抬头</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="tel" id="invoice-title" >
-                                    </div>
-                                    <label for="invoice-id" class="am-u-sm-2 am-form-label">纳税人识别号</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="tel" id="invoice-id" >
-                                    </div>
-                                </div>
-
-                                <div class="am-form-group">
-                                    <label for="invoice-bank" class="am-u-sm-2 am-form-label">开户银行</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="tel" id="invoice-bank" >
-                                    </div>
-                                    <label for="invoice-phone" class="am-u-sm-2 am-form-label">电话</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="tel" id="invoice-phone" >
-                                    </div>
-                                </div>
-                                <div class="am-form-group">
-                                    <label for="invoice-name" class="am-u-sm-2 am-form-label">开户名称</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="text" id="invoice-name" >
-                                    </div>
-                                    <label for="invoice-num" class="am-u-sm-2 am-form-label">银行账号</label>
-                                    <div class="am-u-sm-4">
-                                        <input type="text" id="invoice-num" >
-                                    </div>
-                                </div>
-                                <div class="am-form-group">
-                                    <label for="invoice-address" class="am-u-sm-2 am-form-label">地址</label>
-                                    <div class="am-u-sm-10">
-                                        <input type="text" id="invoice-address" >
-                                    </div>
-                                </div>
-                                <hr/>
-
-
-
-
-                                <div class="am-form-group">
-                                    <div class="am-u-sm-10 am-u-sm-push-2">
-                                        <button type="button" class="am-btn am-btn-primary">确认添加</button>
-                                    </div>
-                                </div>
-                            </form>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-2 am-form-label">联系人：</label>
+                            <div class="am-u-sm-4">
+                                <select id="doc-select-1">
+                                    <option value="option1">张三</option>
+                                    <option value="option2">李四</option>
+                                    <option value="option3">王五</option>
+                                </select>
+                            </div>
+                            <label class="am-u-sm-2 am-form-label">联系电话：</label>
+                            <div class="am-u-sm-4">
+                                <input type="text" value="15298765425">
+                            </div>
                         </div>
-                    </div>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-2 am-form-label">收货地址：</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="user-address" >
+                            </div>
+                        </div>
+                        <hr/>
+                        <!-- 联系人信息 -->
+                        <h5>商品信息</h5>
+                        <div class="am-form-group">
+                            <label for="contact-name" class="am-u-sm-2 am-form-label">产品分类：</label>
+                            <div class="am-u-sm-4">
+                                <select id="doc-select-1">
+                                    <option value="option1">印刷品</option>
+                                    <option value="option2">制作品</option>
+                                    <option value="option3">非标品</option>
+                                    <option value="option3">销售品</option>
+                                </select>
+                            </div>
+                            <label for="contact-name" class="am-u-sm-2 am-form-label">产品名称：</label>
+                            <div class="am-u-sm-4">
+                                <select id="doc-select-1">
+                                    <option value="option1">名片</option>
+                                    <option value="option2">单页</option>
+                                    <option value="option3">画册</option>
+                                    <option value="option3">PVC</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-wechat" class="am-u-sm-2 am-form-label">产品型号：</label>
+                            <div class="am-u-sm-10 am-u-end">
+                                <ul>
+                                    <li class="xg-product-btn xg-product-btn-selected" value="1">
+                                        <span>彩色名片</span>
+                                        <!-- <i class="am-icon-check"></i> -->
+                                    </li>
+                                    <li class="xg-product-btn" value="2">黑白名片</li>
+                                    <li class="xg-product-btn" value="3">其他名片</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">纸张：</label>
+                            <div class="am-u-sm-10">
+                                <ul>
+                                    <li class="xg-product-btn xg-product-btn-selected" value="1" >
+                                        <span>铜版纸白色300g</span>
+                                        <!-- <i class="am-icon-check"></i> -->
+                                    </li>
+                                    <li class="xg-product-btn" value="2">铜版纸白色300g</li>
+                                    <li class="xg-product-btn" value="3">铜版纸白色300g（双面覆哑膜）</li>
+                                    <li class="xg-product-btn" value="2">铜版纸白色300g（双面覆光膜）</li>
+                                    <li class="xg-product-btn" value="3">铜版纸白色300g（单面局部UV）</li>
+                                    <li class="xg-product-btn" value="2">铜版纸普白300g（双面覆哑膜）</li>
+                                    <li class="xg-product-btn" value="3">冰白250g</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">尺寸：</label>
+                            <div class="am-u-sm-10">
+                                <ul>
+                                    <li class="xg-product-btn xg-product-btn-selected" value="1">
+                                        <span>214*289</span>
+                                        <!-- <i class="am-icon-check"></i> -->
+                                    </li>
+                                    <li class="xg-product-btn" value="2">92*56</li>
+                                    <li class="xg-product-btn" value="3">92*56</li>
+                                    <li class="xg-product-btn" value="2">214*289</li>
+                                    <li class="xg-product-btn" value="3">214*289</li>
+                                    <li class="xg-product-btn" value="2">214*289</li>
+                                    <li class="xg-product-btn" value="3">214*289</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">供应商：</label>
+                            <div class="am-u-sm-10">
+                                <select id="doc-select-1">
+                                    <option value="option1">北京细格广告传媒有限公司</option>
+                                    <option value="option2">北京细格广告传媒有限公司</option>
+                                    <option value="option3">北京细格广告传媒有限公司</option>
+                                    <option value="option3">北京细格广告传媒有限公司</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">数量：</label>
+                            <div class="am-u-sm-2 am-u-end">
+                                <input type="text" name="" class="" value="1">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">成本单价：</label>
+                            <div class="am-u-sm-2 am-u-end">
+                                <b style="color: #f00;">1.1元</b>
+                            </div>
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">参考售价：</label>
+                            <div class="am-u-sm-2 am-u-end">
+                                <b style="color: #f00;">100元</b>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">最终价格：</label>
+                            <div class="am-u-sm-2 am-u-end">
+                                <input type="text" name="" class="" value="110">
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="am-form-group">
+                            <div class="am-u-sm-10 am-u-sm-push-2">
+                                <button type="button" class="am-btn am-btn-primary">提交订单</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="__PUBLIC__/js/jquery.min.js"></script>
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
     <script src="__PUBLIC__/js/plus.js"></script>
+    <script src="__PUBLIC__/js/layer.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $(".xg-product-btn").click(function(){
+                $(this).addClass("xg-product-btn-selected")
+                .siblings()
+                .removeClass("xg-product-btn-selected");
+            })
+        })
+    </script>
 </body>
 
 </html>

@@ -11,21 +11,20 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
 
-    <link href="__PUBLIC__/css/amazeui.min.css" type="text/css" rel="stylesheet" />
-    <link href="__PUBLIC__/css/admin.css" type="text/css" rel="stylesheet" />
-    <link href="__PUBLIC__/css/app.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/app.css">
 
     <link rel="icon" type="image/png" href="__PUBLIC__/i/favicon.png">
     <link rel="apple-touch-icon-precomposed" href="__PUBLIC__/i/app-icon72x72@2x.png">
     <meta name="apple-mobile-web-app-title" content="Amaze UI" />
-
-    <script src="__PUBLIC__/js/echarts.min.js"></script>
     <script src="__PUBLIC__/js/jquery.min.js"></script>
     <script src="__PUBLIC__/js/plus.js"></script>
     
+    
 
 </head>
-<body data-type="index" class="abc">
+<body  class="abc">
     <!-- 网站头部 -->
     <header class="am-topbar am-topbar-inverse admin-header">
         <include file="Public:header"/>
@@ -51,7 +50,7 @@
                     </p>
                 </div>
             </div>
-            <div class="row">
+            <div class="row"  data-type="index" id="eeeee">
                 <div class="am-u-md-6 am-u-sm-12 row-mb">
 
                     <div class="tpl-portlet">
@@ -587,21 +586,13 @@
             </div>
         </div>
     </div>
+    <script src="__PUBLIC__/js/echarts.min.js"></script>
+    
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/iscroll.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
     <script type="text/javascript">
-        // $(function () {
-        //     $(window).scroll(function () {
-        //         var top = $(window).scrollTop() + 200;
-        //         var left = $(window).scrollLeft() + 320;
-        //         // $(".tpl-left-nav").animate({ "top": top }, 30); //方式一 效果比较理想
-        //         $(".tpl-left-nav").css({ left: left + "px", top: top + "px" }); 方式二 有阴影
-        //   });
-        // });
-
-        // var IScroll = $.AMUI.iScroll;
-        // var myScroll = new IScroll('.tpl-left-nav-list');
+        
     </script>
 </body>
 
