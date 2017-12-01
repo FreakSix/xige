@@ -150,32 +150,53 @@
                 $("#spec").focus();
                 return false;
             }
-
+            //验证添加的商品规格信息是否已经存在
             $.ajax({
-                url:'__APP__/Goods/addProductSpec',
+                url:'__APP__/Goods/addProductSpecVerify',
                 type:'post',
                 data:'type_id='+type_id+'&id='+id+'&model_id='+model_id+'&parameter_id='+parameter_id+'&spec_value='+spec_value,
                 dataType:'json',
                 success:function(res){
-                    if(res > 0 ){
-                        parent.layer.msg('添加成功！', {
-                                                            icon: 1,
-                                                            offset: '200px',
-                                                            title:'提示',
-                                                        });
-                        parent.location.href='__APP__/Goods/productSpec';
-                        parent.layer.close(index);
-
-                    }else{
-                        parent.layer.alert('添加失败！', {
+                    if(res == 1 ){
+                        parent.layer.alert('该商品的规格已经存在！', {
                                                             icon: 5,
                                                             offset: '200px',
                                                             title:'提示',
                                                         });
                         return false;
+
+                    }else{
+                        //添加商品规格信息
+                        $.ajax({
+                            url:'__APP__/Goods/addProductSpec',
+                            type:'post',
+                            data:'type_id='+type_id+'&id='+id+'&model_id='+model_id+'&parameter_id='+parameter_id+'&spec_value='+spec_value,
+                            dataType:'json',
+                            success:function(res){
+                                if(res > 0 ){
+                                    parent.layer.msg('添加成功！', {
+                                                                        icon: 1,
+                                                                        offset: '200px',
+                                                                        title:'提示',
+                                                                    });
+                                    parent.location.href='__APP__/Goods/productSpec';
+                                    parent.layer.close(index);
+
+                                }else{
+                                    parent.layer.alert('添加失败！', {
+                                                                        icon: 5,
+                                                                        offset: '200px',
+                                                                        title:'提示',
+                                                                    });
+                                    return false;
+                                }
+                            }
+                        });
                     }
                 }
             });
+
+            
         });
     });
 </script>
