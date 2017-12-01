@@ -96,7 +96,7 @@
 					$productSpec = D("XgProductSpec")->getProductSpecInfo($condition);
 					//拼接该商品下第一种商品型号对应的商品规格信息
 					if(!empty($productParameter['0'])){
-						$specInfo[$k]['parameter'] = $productParameter['0'];
+						// $specInfo[$k]['parameter'] = $productParameter['0'];
 						$parameterSpec .= "<div class='am-u-sm-2'> <div class='goods-title'>".$productParameter['0']['name']."</div> 
 								<div class='goods-name'> <ul class='goods-name-detail'> ";
 						$specStr = "";
@@ -110,11 +110,12 @@
 						}
 						$parameterSpec = $parameterSpec.$specStr."</ul> </div> </div> ";
 
-					}else{
-						$parameterSpec .= "<div class='am-u-sm-2'> <div class='goods-title'>商品规格</div> 
-								<div class='goods-name'> <ul class='goods-name-detail'> <li class='select-box'><a href='javascript:;'>请先添加该商品的规格信息！</a></li> </ul> </div> </div> ";
 					}
 				}
+			}
+			if($parameterSpec == ''){
+				$parameterSpec = "<div class='am-u-sm-2'> <div class='goods-title'>商品规格</div> 
+								<div class='goods-name'> <ul class='goods-name-detail'> <li class='select-box'><a href='javascript:;'>请先添加该商品的规格信息！</a></li> </ul> </div> </div> ";
 			}
 
 			//拼接供应商信息
@@ -535,6 +536,25 @@
 				$this->assign("productParameterInfo",$productParameterInfo);
 
 				$this->display();
+			}
+		}
+		/*添加商品规格*/
+		public function addProductSpecVerify(){
+			$post = $_POST;
+			if(!empty($post)){
+
+				$condition = "`spec_value` =  '".$post['spec_value']."' AND  `parameter_id` =".$post['parameter_id']." 
+								AND  `product_type_id` =".$post['type_id']." AND  `product_id` =".$post['id']."
+								AND  `product_model_id` =".$post['model_id']."";
+				
+				$res = D("XgProductSpec")->getProductSpecInfoByWhere($condition);
+				if(!empty($res)){
+					$resualt = 1;
+				}else{ 
+					$resualt = 2;
+				}
+
+				echo json_encode($resualt);
 			}
 		}
 

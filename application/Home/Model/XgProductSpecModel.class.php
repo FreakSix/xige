@@ -60,5 +60,12 @@
 			$result = M("xg_product_spec")->where("parameter_id = ".$parameter_id)->delete();
 			return $result;
 		}
+		//根据输入信息查出商品的规格信息
+		public function getProductSpecInfoByWhere($condition){
+			$sql = "select * from xg_product_spec where {$condition}";
+			// echo $sql;exit; 
+			$res = M()->query($sql);
+			return $res;
+		}
 		
 	}
