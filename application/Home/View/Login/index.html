@@ -39,13 +39,13 @@
 			<i>Log In </i>   <span> 登录系统</span>
 		</div>
 		<div class="am-u-sm-10 login-am-center">
-			<form class="am-form">
+			<form class="am-form form_login" action="__APP__/Login/checkedUser" method="post">
 				<fieldset>
 					<div class="am-form-group">
-						<input type="email" class="user" id="doc-ipt-email-1" placeholder="输入用户名">
+						<input type="email" class="user" name="user" id="doc-ipt-email-1" placeholder="输入用户名">
 					</div>
 					<div class="am-form-group">
-						<input type="password" class="pass" id="doc-ipt-pwd-1" placeholder="输入密码吧">
+						<input type="password" class="pass" name="pass" id="doc-ipt-pwd-1" placeholder="输入密码吧">
 					</div>
 					<div class="am-form-group codes">
 						<input type="text" class="code" id="doc-ipt-code-1" placeholder="验证码">
@@ -53,7 +53,7 @@
 							<div><img src="__PUBLIC__/img/passcode.jpg"/><div class="code-tip">点击刷新验证码</div></div>
 						</div>
 					</div>
-					<p><button type="submit" class="am-btn am-btn-default">登录</button></p>
+					<p><button type="submit" class="am-btn am-btn-default" onclick="submitLogin()">登录</button></p>
 				</fieldset>
 			</form>
 		</div>
@@ -65,3 +65,17 @@
 </body>
 
 </html>
+
+<script>
+	function submitLogin(){
+		var user = $("input[name=user]").val();
+		var pass = $("input[name=pass]").val();
+		if(user == ''){
+			alert ("请输入应户名！");return;
+		}
+		if(pass == ""){
+			alert("请输入登录面！");return;
+		}
+		$(".form_login").submit()
+	}
+</script>
