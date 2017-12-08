@@ -677,7 +677,7 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 .tpl-left-nav-content-ico {
     font-size: 14px!important;
     position: relative;
-    top: 8px!important;
+    top: 5px!important;
     color: #ffbe40!important;
 }
 
@@ -2074,7 +2074,36 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 .xg-product-btn-selected { 
     border: 1px solid #f00;
 }
-.xg-product-btn:hover{ border: 1px solid #f00; }
+.xg-product-btn:hover{
+    border: 1px solid #f00;
+}
+.xg-personal-content {
+    margin-left: 10px;
+    width: 60%;
+}
+.xg-personal-table {
+    border-top: none;
+}
+.xg-personal-table tbody tr td {
+    font-size: 1.6rem;
+    vertical-align: inherit;
+}
+.xg-personal-table tbody tr td img {
+    width: 100px;
+    height: 100px;
+    background: #ccc;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+.xg-user-img {
+    margin-top: 10px;
+    width: 100px;
+    height: 100px;
+    background: #ccc;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: inline-block;
+}
 
 @media screen and (min-width: 1400px) {
     .tpl-content-wrapper {
