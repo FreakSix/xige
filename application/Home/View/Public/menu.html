@@ -41,7 +41,7 @@
                 </a>
                 <ul class="tpl-left-nav-sub-menu">
                     <li>
-                        <a href="__APP__/Order/index">
+                        <a href="__APP__/Order/index" class="nav-link-children">
                             <i class="am-icon-edit"></i>
                             <span>订单列表</span>
                             <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
@@ -68,12 +68,12 @@
                             <span>{$pt.type_name}</span>
                             <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                         </a>
-                        <ul class="tpl-left-nav-sub-menu-first-{$k}" style="display: none"> 
+                        <ul class="tpl-left-nav-sub-menu-first-{$k}" style="display: none;margin-top: 0;"> 
                             <li>
                             <foreach name="productType[$k]['productMenu']" key="key" item="item">
                                 <a href="__APP__/Goods/index/type_id/{$item.id}">
                                     <i class="am-icon-credit-card"></i> 
-                                    <span>{$item.type_name}11</span>
+                                    <span>{$item.type_name}</span>
                                 </a>
                             </foreach>
                             </li>
