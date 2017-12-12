@@ -4,11 +4,13 @@
 	
 	class BaseController extends Controller
 	{
-		function _initialize(){
-			
-			
+		//判断用户是否登录
+		public function _initialize()
+		{
+			if($_SESSION['userInfo'] == NULL) {
+				$this->success("你还没有登录，暂无权限浏览此页面，请登录！",__APP__.'/Login/index');
+			}
 		}
-
 		//查询省份信息
 		public function getProvince($procode){
 	 		$province = M("xg_province");
@@ -16,7 +18,7 @@
 	 		if($procode == 0){
 	 			$arr = $province->select();
 	 		}else{
-	 			$arr = $province->where("code = $procode")->select();
+	 			$arr = $province->where("code = $procode")->select(); 
 	 		}
 	 		return $arr;
 		}
