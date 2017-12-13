@@ -2059,6 +2059,14 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 /**
 **自定义CSS样式
 **/
+.xg-table-tr {
+    /*height: 30px !important;*/
+}
+.xg-table-tr td {
+    font-size: 1.3rem !important;
+    line-height: 2rem !important;
+    vertical-align: middle !important;
+}
 .xg-product-btn { 
     font-size: 1.4rem;
     display: inline-block;
@@ -2087,6 +2095,7 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 .xg-personal-table tbody tr td {
     font-size: 1.6rem;
     vertical-align: inherit;
+
 }
 .xg-personal-table tbody tr td img {
     width: 100px;
@@ -2104,7 +2113,19 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     border-radius: 10px;
     display: inline-block;
 }
-
+.xg-loginlog-label {
+    text-align: right;
+    font-weight: 600;
+    font-size: 1.6rem;
+    line-height: 35px;
+}
+.xg-staff-img {
+    width: 30px;
+    height: 30px;
+    background: #ccc;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
 @media screen and (min-width: 1400px) {
     .tpl-content-wrapper {
         

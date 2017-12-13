@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Amaze UI Admin index Examples</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="__PUBLIC__/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="__PUBLIC__/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/app.css">
+    
+</head>
+<body class="abc">
+    <!-- 网站头部 -->
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <include file="Public:header"/>
+    </header>
+    <div class="tpl-page-container tpl-page-header-fixed">
+        <!-- 左侧菜单栏 -->
+        <div class="tpl-left-nav tpl-left-nav-hover" nav="depart">
+            <include file="personal_menu"/>
+        </div>
+        <!-- 右侧主要内容 -->
+        <div class="tpl-content-wrapper">
+            <ol class="am-breadcrumb">
+                <li><a href="__APP__/Index" class="am-icon-home">首页</a></li>
+                <li><a href="__APP__/PersonalCenter">个人中心</a></li>
+                <li class="am-active">员工管理</li>
+            </ol>
+            <!-- 部门信息 -->
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption font-green bold">员工信息</div>
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-2">
+                            <div class="am-btn-toolbar">
+                                <div class="am-btn-group am-btn-group-xs">
+                                    <button type="button" onclick="addStaff()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增员工信息</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                            <form class="am-form">
+                                <table class="am-table am-table-striped am-table-hover table-main">
+                                    <thead>
+                                        <tr>
+                                            <th class="">头像</th>
+                                            <th class="">用户名</th>
+                                            <th class="">姓名</th>
+                                            <th class="">职位</th>
+                                            <th class="">所在部门</th>
+                                            <th class="">手机号</th>
+                                            <th class="">是否分配帐号</th>
+                                            <th class="">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        <tr class="xg-table-tr">
+                                            <td><img class="xg-staff-img" src="__PUBLIC__/images/user_default.png"></td>
+                                            <td>cigo</td>
+                                            <td>张三</td>
+                                            <td>客服专员</td>
+                                            <td>客服部</td>
+                                            <td>18614851235</td>
+                                            <td>是 <a href="javascript:;" onclick="deleteAccount()">[注销帐号]</a></td>
+                                            <td>
+                                                <div class="am-btn-toolbar">
+                                                    <div class="am-btn-group am-btn-group-xs">
+                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateStaff()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteStaff()"><span class="am-icon-trash-o"></span> 删除</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="xg-table-tr">
+                                            <td><img class="xg-staff-img" src="__PUBLIC__/images/user_default.png"></td>
+                                            <td>media</td>
+                                            <td>李四</td>
+                                            <td>销售专员</td>
+                                            <td>销售部</td>
+                                            <td>15862355126</td>
+                                            <td>否 <a href="javascript:;" onclick="createAccount()">[分配账号]</a></td>
+                                            <td>
+                                                <div class="am-btn-toolbar">
+                                                    <div class="am-btn-group am-btn-group-xs">
+                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateStaff()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteStaff()"><span class="am-icon-trash-o"></span> 删除</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                                <div class="am-cf">
+
+                                    <div class="am-fr">
+                                        <!-- {$pageStr} -->
+                                        <!-- <ul class="am-pagination am-pagination-right"> -->
+                                            {$pageStr}
+                                        <!-- </ul> -->
+                                        <!-- <ul class="am-pagination tpl-pagination">
+                                            <li class="am-disabled"><a href="#">«</a></li>
+                                            <li class="am-active"><a href="#">1</a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                            <li><a href="#">4</a></li>
+                                            <li><a href="#">5</a></li>
+                                            <li><a href="#">»</a></li>
+                                        </ul> -->
+                                    </div>
+                                </div>
+                                <hr>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/js/amazeui.min.js"></script>
+    <script src="__PUBLIC__/js/app.js"></script>
+    <script src="__PUBLIC__/js/plus.js"></script>
+    <script src="__PUBLIC__/js/echarts.min.js"></script>
+    <script src="__PUBLIC__/layer/layer.js"></script>
+    <script type="text/javascript">
+        // 添加员工信息页面
+        function addStaff(){
+            layer.open({
+                type: 2,
+                offset: '50px',
+                title: '添加员工信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['40%', '80%'],
+                btn: ['关闭'],
+                content: '__APP__/PersonalCenter/addStaff' //iframe的url
+            });
+        }
+        // 修改员工信息页面
+        function updateStaff(){
+            layer.open({
+                type: 2,
+                offset: '50px',
+                title: '修改员工信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['40%', '80%'],
+                btn: ['关闭'],
+                content: '__APP__/PersonalCenter/updateStaff' //iframe的url
+            });
+        }
+        // 删除员工信息提示
+        function deleteStaff(){
+            layer.confirm('您确定要删除该条员工信息吗？', {
+                icon: 3,
+                anim:5,
+                offset: '200px',
+                title:'提示',
+                btn: ['确定','取消'] //按钮
+            });
+        }
+        // 分配帐号页面
+        function createAccount(){
+            layer.open({
+                type: 2,
+                offset: '100px',
+                title: '修改职位信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['40%', '70%'],
+                btn: ['关闭'],
+                content: '__APP__/PersonalCenter/createAccount' //iframe的url
+            });
+        }
+        // 注销帐号提示
+        function deleteAccount(){
+            layer.confirm('您确定要注销该员工的帐号吗？', {
+                icon: 3,
+                anim:5,
+                offset: '200px',
+                title:'提示',
+                btn: ['确定','取消'] //按钮
+            });
+        }
+    </script>
+</body>
+
+</html>

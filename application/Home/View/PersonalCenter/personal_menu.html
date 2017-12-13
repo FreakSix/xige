@@ -21,6 +21,10 @@
         width:200px;
         overflow: hidden;
     }
+    i {
+        width: 20px;
+        text-align: right;
+    }
 </style>
 <body>
     <!-- <div id="menu_scroll"></div> -->
@@ -30,19 +34,25 @@
             <ul class="tpl-left-nav-menu">
             <li class="tpl-left-nav-item">
                 <a href="__APP__/PersonalCenter/index" class="nav-link tpl-left-nav-link-list" nav="personal">
-                    <i class="am-icon-home"></i>
+                    <i class="am-icon-user"></i>
                     <span>个人资料</span>
                 </a>
             </li>
             <li class="tpl-left-nav-item">
                 <a href="__APP__/PersonalCenter/updateUserPwd" class="nav-link tpl-left-nav-link-list" nav="updatePwd">
-                    <i class="am-icon-bar-chart"></i>
+                    <i class="am-icon-lock"></i>
                     <span>修改密码</span>
                 </a>
             </li>
             <li class="tpl-left-nav-item">
+                <a href="__APP__/PersonalCenter/customerRank" class="nav-link tpl-left-nav-link-list" nav="customerRank">
+                    <i class="am-icon-signal"></i>
+                    <span>客户等级管理</span>
+                </a>
+            </li>
+            <li class="tpl-left-nav-item">
                 <a href="__APP__/PersonalCenter/loginLog" class="nav-link tpl-left-nav-link-list" nav="loginLog">
-                    <i class="am-icon-bar-chart"></i>
+                    <i class="am-icon-map-marker"></i>
                     <span>登录日志</span>
                 </a>
             </li>
@@ -60,14 +70,14 @@
                 </a>
                 <ul class="tpl-left-nav-sub-menu">
                     <li>
-                        <a href="javascript:;">
+                        <a href="__APP__/PersonalCenter/department">
                             <i class="am-icon-angle-right"></i>
-                            <span>部门管理</span>
+                            <span>部门与职位管理</span>
                             <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                         </a>
-                        <a href="javascript:;">
+                        <a href="__APP__/PersonalCenter/staff">
                             <i class="am-icon-angle-right"></i>
-                            <span>用户管理</span>
+                            <span>员工管理</span>
                             <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                         </a>
                     </li>
