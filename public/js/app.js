@@ -407,13 +407,13 @@ $(document).ready(function(){
     // 左侧二级菜单选中设置及下拉菜单打开状态设置
     // ==========================
 $(document).ready(function(){
-    alert($(".xg-second-level-nav").length);
+    // alert($(".xg-second-level-nav").length);
     for(var i = 0; i < $(".xg-second-level-nav").length; i++){
         // alert($(".xg-second-level-nav").eq(i).find(".xg-second-level-nav-a").attr("nav"));
         // alert($(".xg-left-nav").attr("nav"));
         if($(".xg-left-nav").attr("nav") == $(".xg-second-level-nav").eq(i).find(".xg-second-level-nav-a").attr("nav")){
             alert($(".xg-second-level-nav").eq(i).find(".xg-second-level-nav-a").attr("nav"));
-            alert(i);
+            // alert(i);
             $(".xg-second-level-nav").eq(i).parent().show();
             $(".xg-second-level-nav").eq(i).find(".xg-second-level-nav-a").addClass("active");
             $(".xg-second-level-nav").eq(i).parent().parent()
