@@ -1,0 +1,21 @@
+<!-- <div class="am-form-group" id="product_special_technology_div"> -->
+    <label for="contact-wechat" class="am-u-sm-2 am-form-label">特殊工艺：</label>
+    <div class="am-u-sm-10 am-u-end">
+
+         <!-- <foreach name="specialTechnologyInfo" item="item" key="key">
+            <label class="am-checkbox-inline">
+                <input type="checkbox" name="special_techmology_checkbox" id="special_techmology_checkbox" value="{$item.id}" data-am-ucheck><span style="font-size:20px;color: #f00;">  {$item.name}</span> 
+            </label>
+        </foreach> -->
+
+        <ul class="product_special_technology">
+            <foreach name="specialTechnologyInfo" item="item" key="key">
+                <li class="xg-product-btn" id="product_special_technology_{$item.id}" name="product_special_technology" style="margin-right:10px;" value="{$item.id}" onclick="clickProductSpecialTechnology({$item.id})">{$item.name}</li>
+                 <input type="hidden" value="" id="hide_special_technology_selected_{$item.id}" name="hide_special_technology_selected" /> 
+            </foreach>
+        </ul>  
+
+    </div>
+    <input type="hidden" value="1" id="hide_have_special_technology" /> 
+<!-- </div>  -->
+

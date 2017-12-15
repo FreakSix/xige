@@ -45,7 +45,7 @@
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">客户名称：</label>
                                     <div class="am-u-sm-5">
-                                        北京细格广告传媒公司
+                                        {$orderInfo['customer_name']}
                                     </div>
                                     <label for="user-name" class="am-u-sm-2 am-form-label">交货日期：</label>
                                     <div class="am-u-sm-3">
@@ -54,18 +54,18 @@
                                 </div>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">联系人：</label>
-                                    <div class="am-u-sm-4">
-                                        张三
+                                    <div class="am-u-sm-5">
+                                        {$orderInfo['linkman_name']}
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">联系电话：</label>
-                                    <div class="am-u-sm-4">
-                                        15298765425
+                                    <div class="am-u-sm-3">
+                                        {$orderInfo['linkman_tel']}
                                     </div>
                                 </div>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">收货地址：</label>
                                     <div class="am-u-sm-10">
-                                        北京市朝阳区定福庄北街十五号院瑞和国际1904
+                                        {$orderInfo['link_address']}
                                     </div>
                                 </div>
                                 <hr/>
@@ -74,15 +74,15 @@
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">产品分类：</label>
                                     <div class="am-u-sm-2">
-                                        印刷品
+                                        {$orderInfo['product_type']}
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">产品名称：</label>
                                     <div class="am-u-sm-2">
-                                        名片
+                                        {$orderInfo['product_name']}
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">产品型号：</label>
                                     <div class="am-u-sm-2">
-                                        黑白名片
+                                        {$orderInfo['product_model']}
                                     </div>
                                 </div>
                                 <div class="am-form-group">
@@ -105,13 +105,13 @@
                                 <div class="am-form-group">
                                     <label for="contact-department" class="am-u-sm-2 am-form-label">供应商：</label>
                                     <div class="am-u-sm-10">
-                                        北京细格广告传媒有限公司
+                                        {$orderInfo['supplier_name']}
                                     </div>
                                 </div>
                                 <div class="am-form-group">
                                     <label for="contact-department" class="am-u-sm-2 am-form-label">最终价格：</label>
                                     <div class="am-u-sm-2 am-u-end">
-                                        200
+                                        {$orderInfo['end_money']}
                                     </div>
                                 </div>
                                 <hr/>

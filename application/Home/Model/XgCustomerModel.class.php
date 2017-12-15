@@ -81,5 +81,11 @@
 			return $result;
 		}
 
+		public function getLevelInfoByLevel($leve){
+			$table = M("xg_customer_level");
+			$result = $table->where('level ='.$leve)->find();
+			return $result;
+		}
+
 		
 	}

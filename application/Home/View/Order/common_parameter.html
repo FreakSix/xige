@@ -1,8 +1,8 @@
- <foreach name="xinghaoArr" item="item" key="key">
- <div class="am-form-group">
-	  <label for="contact-department" class="am-u-sm-2 am-form-label">{$item[0]['name']}：</label>
-	  <div class="am-u-sm-10">
-	      <ul>
+ <!-- <foreach name="xinghaoArr" item="item" key="key">
+ 	<div class="am-form-group">
+	  	<label for="contact-department" class="am-u-sm-2 am-form-label">{$item[0]['name']}：</label>
+	  	<div class="am-u-sm-10">
+	      	<ul>
 	          	<li class="xg-product-btn xg-product-btn-selected" value="1" ><span>铜版纸白色300g</span></li>
 	            <li class="xg-product-btn" value="2">铜版纸白色300g</li>
 	            <li class="xg-product-btn" value="3">铜版纸白色300g（双面覆哑膜）</li>
@@ -10,7 +10,56 @@
 	            <li class="xg-product-btn" value="3">铜版纸白色300g（单面局部UV）</li>
 	            <li class="xg-product-btn" value="2">铜版纸普白300g（双面覆哑膜）</li>
 	            <li class="xg-product-btn" value="3">冰白250g</li>
-	        </ul>
-	    </div>
-	</div>
-	</foreach>
+        	</ul>
+    	</div>
+	</div> 
+</foreach> -->
+
+<if condition="$parameterSpec != null ">
+    <foreach name="parameterSpec" item="item" key="key">
+        <div class="am-form-group">
+            <label for="contact-department" class="am-u-sm-2 am-form-label">{$item['parameter']['name']}：</label>
+            <div class="am-u-sm-10">
+                <ul>
+                    <if condition="$item['spec'] != '' ">
+                        <foreach name="parameterSpec[$key]['spec']" item="vv" key="kk">
+                            <li class="xg-product-btn" name="product_spec" id="product_spec_{$vv['id']}" style="margin-right:10px;" value="{$vv['id']}" onclick="selectProductSpec({$vv['id']},{$item['parameter']['id']})">{$vv['spec_value']}</li>
+                        </foreach> 
+                    <else/>
+                        <li class="" style="font-size:18px;color:red;" value="">暂无，请先添加该规格信息</li>
+                    </if>
+                </ul>
+            </div>
+        </div>
+        <input type="hidden" value="" id="hide_parameter_spec_value_{$item['parameter']['id']}" />
+    </foreach>
+<else/>
+    <div class="am-form-group">
+        <label for="contact-department" class="am-u-sm-2 am-form-label">产品规格：</label>
+        <div class="am-u-sm-10">
+            <ul>
+                <li  value="">
+                    <span style="font-size:18px;color:red;">请先添加该产品型号的规格信息！</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</if>
+
+<input type="hidden" value="{$parameterStr}" id="post_parameter_spec_value" />
+
+
+<!-- var customer_id = $(".customer_name").val();
+var trade_time_value = $("#trade_time").val();
+var lxr_name_value = $(".lxr_select").val();
+var lxr_phone_value = $("#lxr_phone").val();
+var lxr_address_value = $("#lxr_address").val();
+
+var product_type = $(".product_type").val();
+var product_name = $(".product_name").val();
+var product_model = $("#hide_product_model_value").val();
+
+var product_supplier = $("#select_supplier_id").val();
+
+
+var product_cost_money_value = $("#product_cost_money").val(); -->

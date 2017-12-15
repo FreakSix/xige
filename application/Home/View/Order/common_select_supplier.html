@@ -1,0 +1,70 @@
+<label for="contact-department" class="am-u-sm-2 am-form-label"></label>
+<div class="am-u-sm-10" id="show_supplier">
+    <div class="tpl-block">
+        <div class="am-g">
+            <input type="hidden" value="{$post['product_type_id']}" id="get_product_type_id" />
+            <input type="hidden" value="{$post['product_name_id']}" id="get_product_name_id" />
+            <input type="hidden" value="{$post['product_model_id']}" id="get_product_model_id" />
+            <input type="hidden" value="{$post['product_spec_str']}" id="get_product_spec_str" />
+            <input type="hidden" value="{$post['have_price']}" id="get_have_price" />
+
+            <input type="hidden" value="{$conditionType}" id="condition_type" />
+            <div class="am-u-sm-12 am-u-md-2">
+                <!-- <label for="contact-department" class="am-u-sm-1 am-form-label">排序：</label> -->
+                <span>排序：</span>
+            </div>
+            <div class="am-u-sm-12 am-u-md-10">
+                <div class="am-btn-toolbar"> 
+                    <div class="am-btn-group am-btn-group-xs">
+                        <button type="button" onclick="conditionSelect('nosc')" id="condition_nosc" class="am-btn am-btn-default" style="margin-right:15px;">默认排序</button>
+
+                        <button type="button" onclick="conditionSelect('asc')" id="condition_asc" class="am-btn am-btn-default" style="margin-right:15px;" >价格<span class="am-icon-arrow-up"></span> </button>
+
+                        <button type="button" onclick="conditionSelect('desc')" id="condition_desc" class="am-btn am-btn-default" style="margin-right:15px;">价格<span class="am-icon-arrow-down"></span> </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="tpl-block">
+        <div class="am-g">
+            <div class="am-u-sm-12 am-u-md-12">
+                <!-- <label for="contact-department" class="am-u-sm-1 am-form-label">排序：</label> -->
+                <!-- <span>排序：</span> -->
+                
+                    <if condition="$selectSupplierInfo != '' ">
+                        <foreach name="selectSupplierInfo" item="v" key="k">
+                            <ul>
+                                <!-- <li class="xg-product-btn" id="product_spec_{$vv['id']}" style="margin-right:10px;" value="{$vv['id']}" onclick="selectProductSpec({$vv['id']},{$item['parameter']['id']})">{$vv['spec_value']}</li> -->
+                                <li class="xg-product-btn" value="{$v.supplier_id}" onclick="clickSupplierInfo({$v.supplier_id},'{$v.supplier_name}',{$v.price})">{$v.supplier_name}&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <if condition="$post['have_price'] == '1' ">
+                                        <if condition="$v.price != '' ">
+                                            <span style="font-size:18px;color: #f00;"> {$v.price}元</span> 
+                                        <else/>
+                                            <span style="font-size:18px;color: #f00;"> 暂无价格</span> 
+                                        </if>
+                                    </if>
+                                    
+                                </li>
+                            </ul>
+                        </foreach> 
+                    <else/>
+                        <ul>
+                            <li class="" value="">暂无，请先添加该规格信息</li>
+                        </ul>
+                    </if>
+                
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
+<!-- <div class="am-u-sm-7"  id="product_supplier_select">
+    <span style="color: #f00;">请先选择产品信息！</span>
+    <input type='hidden' value='' id='select_supplier_id' /> 
+    <input type='hidden' value='' id='product_cost_price' /> 
+</div> -->
