@@ -412,7 +412,7 @@ $(document).ready(function(){
         // alert($(".xg-second-level-nav").eq(i).find(".xg-second-level-nav-a").attr("nav"));
         // alert($(".xg-left-nav").attr("nav"));
         if($(".xg-left-nav").attr("nav") == $(".xg-second-level-nav").eq(i).find(".xg-second-level-nav-a").attr("nav")){
-            alert($(".xg-second-level-nav").eq(i).find(".xg-second-level-nav-a").attr("nav"));
+            // alert($(".xg-second-level-nav").eq(i).find(".xg-second-level-nav-a").attr("nav"));
             // alert(i);
             $(".xg-second-level-nav").eq(i).parent().show();
             $(".xg-second-level-nav").eq(i).find(".xg-second-level-nav-a").addClass("active");
