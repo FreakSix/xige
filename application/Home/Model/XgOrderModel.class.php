@@ -41,6 +41,16 @@
 			$orderInfo = M("xg_order")->where("id = ".$id)->find();
 			return $orderInfo; 
 		}
+		//修改订单信息
+		public function updateOrderInfo($data,$id){
+			$res = M("xg_order")->where("id = ".$id)->save($data);
+			return $res;
+		}
+		//通过订单ID删除订单信息
+		public function deleteOrderInfoById($id){
+			$result = M("xg_order")->where("id = ".$id)->delete();
+			return $result;
+		}
 
 		
 	}

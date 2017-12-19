@@ -37,8 +37,6 @@
                                     <option value="{$item['id']}" class="customer_each">{$item['cname']}</option>
                                 </if>
                                 </foreach>
-                                    <!-- <option value="option2">国美电器</option>
-                                    <option value="option3">一起印</option> -->
                                 </select>
                             </div>
                             <label for="user-name" class="am-u-sm-2 am-form-label">交货日期：</label>
@@ -52,9 +50,6 @@
 
                                 <select id="doc-select-1" class="lxr_select">
                                     <option value="">请选择联系人</option>
-                                    <!-- <option value="option1">张三</option>
-                                    <option value="option2">李四</option>
-                                    <option value="option3">王五</option> -->
                                 </select>
                             </div>
                             <label class="am-u-sm-2 am-form-label">联系电话：</label>
@@ -81,9 +76,6 @@
 		                                    <option value="{$item.id}" onclick="getProductName({$item.id},{$item.have_price})">{$item.type_name}</option>
 		                                </foreach>
 	                                </if>
-                                    <!-- <option value="option2">制作品</option>
-                                    <option value="option3">非标品</option>
-                                    <option value="option3">销售品</option> -->
                                 </select>
 
                                 <input type="hidden" value="" id="hide_have_price_value" /> 
@@ -97,10 +89,6 @@
                                             <option value="{$item.id}" onclick="getProductModel({$item.id})">{$item.type_name}</option>
                                         </foreach>
                                     </if>
-                                    <!-- <option value="option1">名片</option>
-                                    <option value="option2">单页</option>
-                                    <option value="option3">画册</option>
-                                    <option value="option3">PVC</option> -->
                                 </select>
                             </div>
                             <input type="hidden" value="{$productNameFirst['0'][pid]}" id="hide_product_type_value" />
@@ -165,12 +153,6 @@
                                 <button type="button" class="am-btn am-btn-default" id="selectSupplier" onclick="selectSupplier()">选择供应商</button>
                             </div>
                             <div class="am-u-sm-8"  id="product_supplier_select" >
-                                <!-- <select id="doc-select-1" class="product_supplier">
-                                    <option value="">请选择供应商</option>
-                                    <foreach name="productSupplierFirst" item="item" key="key">
-                                        <option value="{$item.supplier_id}" onclick="getProductPrice()">{$item.supplier_name}</option>
-                                    </foreach>
-                                </select> -->
                                 <span style="color: #f00;">请先选择产品信息！</span>
                                 <input type='hidden' value='' id='select_supplier_id' />
                                 <input type='hidden' value='' id='select_supplier_name' /> 
@@ -183,6 +165,12 @@
                         </div>
                         <div class="am-form-group" id="select_supplier_group">
 
+                        </div>
+                        <div class="am-form-group">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">素材地址：</label>
+                            <div class="am-u-sm-10 am-u-end" id="product_material_link_div">
+                                <input type="text" id="product_material_link" value="">
+                            </div>
                         </div>
                         <div class="am-form-group">
                             <label for="contact-department" class="am-u-sm-2 am-form-label">数量：</label>
@@ -205,56 +193,8 @@
                             </div>
 
                         </div>
-                        <!-- <div class="am-form-group">
-                            <label for="contact-department" class="am-u-sm-2 am-form-label">历史订单：</label>
-                            <div  id="history_order">
-                                <div class="am-u-sm-10">
-                                    <b style='color: #f00;'>请选择产品信息！</b>
-                                </div>
-                                <div class="am-u-sm-10">
-                                    供应商：<span>国美电器</span>&nbsp;&nbsp;
-                                    客户：<span>国美电器</span>&nbsp;&nbsp;
-                                    数量：<b style="color: #f00;">10盒</b>&nbsp;&nbsp;
-                                    成本单价：<b style="color: #f00;">100元</b>&nbsp;&nbsp;
-                                    成交单价：<b style="color: #f00;">100元</b>
-                                </div>
-                                <div class="am-u-sm-10">
-                                    供应商：<span>国美电器</span>&nbsp;&nbsp;
-                                    客户：<span>国美电器</span>&nbsp;&nbsp;
-                                    数量：<b style="color: #f00;">10盒</b>&nbsp;&nbsp;
-                                    成本单价：<b style="color: #f00;">100元</b>&nbsp;&nbsp;
-                                    成交单价：<b style="color: #f00;">100元</b>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <div class="am-form-group">
-                            <label for="contact-department" class="am-u-sm-2 am-form-label">历史报价：</label>
-                            <div class="am-u-sm-10">
-                                供应商：<span>国美电器</span>&nbsp;&nbsp;
-                                客户：<span>国美电器</span>&nbsp;&nbsp;
-                                数量：<b style="color: #f00;">10盒</b>&nbsp;&nbsp;
-                                成本单价：<b style="color: #f00;">100元</b>&nbsp;&nbsp;
-                                成交单价：<b style="color: #f00;">100元</b>
-                            </div>
-                        </div>
-                        <div class="am-form-group">
-                            <label for="contact-department" class="am-u-sm-2 am-form-label">客户参考价：</label>
-                            <div class="am-u-sm-4 am-u-end" id="product_discount_money_div">
-                                <span style="color: #f00;">请选选择产品信息和数量！</span>
-                            </div>
-                        </div> -->
                         <div class="am-form-group" id="end_price_div">
                             
-                            <!-- <div class="am-u-sm-2">
-                                <button type="button"  onclick="getDiscountMoney()" class="am-btn am-btn-default">查看客户参考价</button>
-                            </div>
-                            <div class="am-u-sm-4">
-                                <span style="color: #f00;">请选选择产品信息和数量！</span>
-                            </div> -->
-                            <!-- <div class="am-u-sm-2">
-
-                            </div> -->
                             <label for="contact-department" class="am-u-sm-2 am-form-label">最终价格：</label>
                             <div class="am-u-sm-2 am-u-end" id="end_price_div">
                                 <input type="text" name="end_price" id="end_price" class="end_price" value=''   >
@@ -311,6 +251,7 @@
             var product_supplier_id = $("#select_supplier_id").val();
             var product_supplier_name = $("#select_supplier_name").val();
             var product_num = $(".product_num").val();
+            var product_material_link = $("#product_material_link").val();
             var product_spec_str = '';
 
             var post_parameter_value = $("#post_parameter_spec_value").val();
@@ -354,17 +295,17 @@
                 $("#end_price").focus();
                 exit;
             }
-            // alert(product_end_price_2);
+            // alert(product_end_price_2); 
 
             //添加订单信息
-            $.post("__APP__/Order/addOrderInfo",{"customer_id":customer_id,"trade_time":trade_time,"linkman_name":lxr_name,"linkman_tel":lxr_phone,"link_address":lxr_address,"product_type":product_type_id,"product_name":product_name_id,"product_model":product_model_id,"product_spec_id_str":product_spec_str,"special_technologyh_id_str":special_techmology_str,"supplier_id":product_supplier_id,"supplier_name":product_supplier_name,"num":product_num,"cost_money":product_cost_money,"discount_money":product_discount_money,"end_money":product_end_price,"cost_price":product_cost_price},function(res){
+            $.post("__APP__/Order/addOrderInfo",{"customer_id":customer_id,"trade_time":trade_time,"linkman_name":lxr_name,"linkman_tel":lxr_phone,"link_address":lxr_address,"product_type":product_type_id,"product_name":product_name_id,"product_model":product_model_id,"product_spec_id_str":product_spec_str,"special_technologyh_id_str":special_techmology_str,"supplier_id":product_supplier_id,"supplier_name":product_supplier_name,"num":product_num,"product_material_link":product_material_link,"cost_money":product_cost_money,"discount_money":product_discount_money,"end_money":product_end_price,"cost_price":product_cost_price},function(res){
                     if(res > 0 ){
                         parent.layer.alert('订单添加成功！', {
                                                             icon: 1,
                                                             offset: '200px',
                                                             title:'提示',
                                                         });
-                        // parent.location.href='__APP__/Order/productParameter';
+                        parent.location.href='__APP__/Order/index';
                         var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                         parent.layer.close(index);
 
@@ -378,18 +319,9 @@
                     }
             });
             
-
-            
-            // alert(trade_time);
         }
         
-        $(function(){
-            // $(".xg-product-btn").click(function(){
-            //     $(this).addClass("xg-product-btn-selected")
-            //     .siblings()
-            //     .removeClass("xg-product-btn-selected");
-            // })
-        })
+
         $(".customer_each").click(function(){
         	var customer_id = $(this).val();
         	$.post("__APP__/Order/getLxrByCustomerId",{"customer_id":customer_id},function(res){
@@ -412,10 +344,6 @@
         }
         function getProductName(id,have_price){
             //重新渲染与价格有关的信息
-            // $("#product_supplier_select").html(' ');
-            // $("#product_supplier_select").html(supplier_price_html);
-            // $('#product_cost_money_div').html(' ');
-            // $('#product_cost_money_div').html(supplier_cost_price_money_html);
             rand_info();
             //把判断该分类商品是否有报价的判断数据存入隐藏域中
             $("#hide_have_price_value").val(have_price);
@@ -446,10 +374,6 @@
             $("#hide_product_model_value").val(model_id);  
 
             //重新渲染与价格有关的信息
-            // $("#product_supplier_select").html(' ');
-            // $("#product_supplier_select").html(supplier_price_html);
-            // $('#product_cost_money_div').html(' ');
-            // $('#product_cost_money_div').html(supplier_cost_price_money_html);
             rand_info();
             
             //渲染产品型号信息
@@ -482,10 +406,6 @@
             $("#hide_product_model_value").val(id);
 
             //重新渲染与价格有关的信息
-            // $("#product_supplier_select").html(' ');
-            // $("#product_supplier_select").html(supplier_price_html);
-            // $('#product_cost_money_div').html(' ');
-            // $('#product_cost_money_div').html(supplier_cost_price_money_html);
             rand_info();
 
             $.post("__APP__/Order/getProductSpecByProductModel",{"id":id},function(res){
@@ -506,8 +426,6 @@
         }
         //对显示或者选中的商品规格信息进行处理
         function selectProductSpec(spec_id,parameter_id){
-            // alert(spec_id);
-            // alert(parameter_id);
             //验证是否选择了
             product_type();
             product_name();
@@ -518,10 +436,6 @@
             $("#hide_parameter_spec_value_"+parameter_id).val(spec_id);
 
             //重新渲染与价格有关的信息
-            // $("#product_supplier_select").html(' ');
-            // $("#product_supplier_select").html(supplier_price_html);
-            // $('#product_cost_money_div').html(' ');
-            // $('#product_cost_money_div').html(supplier_cost_price_money_html);
             
             //若该分类没有价格，则重新渲染特殊工艺选项
             var hide_have_price_value = $("#hide_have_price_value").val();
@@ -560,17 +474,11 @@
         }
 
         $('#selectSupplier').on('click', function(){
-            // alert(999999);
             // 对选项内容进行验证
             product_type();
             product_name();
             product_model();
             product_spec();
-
-            // var hide_have_special_technology = $("#hide_have_special_technology").val();
-            // if(hide_have_special_technology == 1){
-            //     product_technology();
-            // }
 
             var product_type_id = $(".product_type").val();
             var product_name_id = $(".product_name").val();
@@ -670,49 +578,7 @@
 
         }
 
-        // $('#selectSupplier').on('click', function(){
-        //     // 对选项内容进行验证
-        //     product_type();
-        //     product_name();
-        //     product_model();
-        //     product_spec();
-
-        //     var product_type_id = $(".product_type").val();
-        //     var product_name_id = $(".product_name").val();
-        //     var product_model_id = $("#hide_product_model_value").val();
-        //     // var product_supplier_id = $(".product_supplier").val();
-        //     // var product_num = $(".product_num").val();
-        //     var product_spec_str = '';
-
-        //     var post_parameter_value = $("#post_parameter_spec_value").val();
-        //     var post_parameter_value_arr = post_parameter_value.split(",");
-        //     if(post_parameter_value_arr != ''){
-        //         for(var k in post_parameter_value_arr){
-        //             var post_parameter_arr = post_parameter_value_arr[k].split("-");
-
-        //             var product_spec_id = $("#hide_parameter_spec_value_"+post_parameter_arr[0]+"").val();
-        //             if(product_spec_id != ''){
-        //                 product_spec_str = product_spec_str+product_spec_id+",";
-        //             }
-        //         }
-        //     }
-        //     alert(product_spec_str);
-
-        //     parent.layerIndexObject['B'] = parent.layer.open({
-        //         type: 2,
-        //         offset: '30px',
-        //         shadeClose : false,
-        //         title: '选择供应商',
-        //         shade: 0.8,
-        //         area: ['60%', '70%'],
-        //         btn: ['关闭'],
-        //         content:'__APP__/Order/selectSupplier/product_type_id/'+product_type_id+'/product_name_id/'+product_name_id+'/product_model_id/'+product_model_id+'/product_spec_str/'+product_spec_str,
-        //     });
-
-        //     // $("#product_supplier_select").html(' ');
-        //     // $("#product_supplier_select").html(' gaibianle ');
-        // });
-        // $(".product_num").blur(alert(66666666));
+        
         function inputProductNum(){
             //对选项内容进行验证
             product_type();
@@ -734,38 +600,6 @@
 
             //移除原来的参考信息
             removeRrferInfo();
-
-            
-            // var product_type_id = $(".product_type").val();
-            // var product_name_id = $(".product_name").val();
-            // var product_model_id = $("#hide_product_model_value").val();
-            // var product_supplier_id = $(".product_supplier").val();
-            // var product_spec_str = '';
-
-            // var post_parameter_value = $("#post_parameter_spec_value").val();
-            // var post_parameter_value_arr = post_parameter_value.split(",");
-            // if(post_parameter_value_arr != ''){
-            //     for(var k in post_parameter_value_arr){
-            //         var post_parameter_arr = post_parameter_value_arr[k].split("-");
-
-            //         var product_spec_id = $("#hide_parameter_spec_value_"+post_parameter_arr[0]+"").val();
-            //         if(product_spec_id != ''){
-            //             product_spec_str = product_spec_str+product_spec_id+",";
-            //         }
-            //     }
-            // }
-            // alert(product_spec_str);
-            // //获取成本单价
-            // $.post("__APP__/Order/getProductCostPrice",{"product_type_id":product_type_id,"product_name_id":product_name_id,"product_model_id":product_model_id,"product_spec_str":product_spec_str,"product_supplier_id":product_supplier_id},function(res){
-            //         $("#product_cost_price_div").html('');
-            //         $("#product_cost_price_div").html(res);
-            // })
-
-            // //获取历史订单
-            // $.post("__APP__/Order/getProductHistoryOrder",{"product_type_id":product_type_id,"product_name_id":product_name_id,"product_model_id":product_model_id,"product_spec_str":product_spec_str,"product_supplier_id":product_supplier_id},function(res){
-            //         $("#history_order").html('');
-            //         $("#history_order").html(res);
-            // })
         }
 
         function getOrderReferInfo(){
@@ -821,17 +655,6 @@
                     $("#order_refer_info_button").after(res);
                     // $("#history_order").html(res); 
             })
-            //获取历史报价
-
-            // //计算客户折扣价格（参考价格）
-            // var customer_id = $(".customer_name").val();
-            // // alert(customer_id);
-            // if(product_cost_money != 0){
-            //     $.post("__APP__/Order/getProductMemberMoney",{"customer_id":customer_id,"product_cost_money":product_cost_money},function(res){
-            //             $("#product_discount_money_div").html('');
-            //             $("#product_discount_money_div").html(res);
-            //     })
-            // }
 
 
         }
@@ -842,9 +665,6 @@
             $('div[name=refer_history_quote_div]').remove();
             $('div[name=refer_product_discount_money_div]').remove();
 
-            // $("#refer_history_order_div").remove();
-            // $("#refer_history_quote_div").remove();
-            // $("#refer_product_discount_money_div").remove();
         }
 
 
@@ -896,13 +716,7 @@
                 exit;
             }
         }
-        // function product_cost_money_yz(){
-        //     var product_cost_money_value = $("#product_cost_money").val();
-        //     if(product_cost_money_value == ''){
-        //         layer.alert("请输入产品成本总价！", {icon: 5,offset: '200px',});
-        //         exit;
-        //     }
-        // }
+
         //对选项内容进行验证
         function product_type(){
             var product_type = $(".product_type").val();
@@ -915,12 +729,6 @@
                     $(".product_name").html('');
                     $(".product_name").html(res);
                 })
-                // //重新对供应商信息进行渲染
-                // var hide_product_name_id = $("#hide_product_name_id").val();
-                // $.post("__APP__/Order/getProductSupplierByProductName",{"id":hide_product_name_id},function(res){
-                //     $(".product_supplier").html('');
-                //     $(".product_supplier").html(res);
-                // })
                 exit;
             }
         }
@@ -929,12 +737,6 @@
             if(product_name == ''){
                 layer.alert("请选择产品名称！", {icon: 5,offset: '200px',});
                 $(".product_name").focus();
-                // //重新对供应商信息进行渲染
-                // var hide_product_name_id = $("#hide_product_name_id").val();
-                // $.post("__APP__/Order/getProductSupplierByProductName",{"id":hide_product_name_id},function(res){
-                //     $(".product_supplier").html('');
-                //     $(".product_supplier").html(res);
-                // })
                 exit;
             }
         }
@@ -943,12 +745,6 @@
             if(product_model == ''){
                 layer.alert("请选择产品型号！", {icon: 5,offset: '200px',});
                 $(".product_model").focus();
-                // //重新对供应商信息进行渲染
-                // var hide_product_name_id = $("#hide_product_name_id").val();
-                // $.post("__APP__/Order/getProductSupplierByProductName",{"id":hide_product_name_id},function(res){
-                //     $(".product_supplier").html('');
-                //     $(".product_supplier").html(res);
-                // })
                 exit;
             }
         }
@@ -964,24 +760,13 @@
                     var product_paramerter_name = post_parameter_arr[1];
                     if(product_spec == ''){
                         layer.alert("请选择"+product_paramerter_name+"！", {icon: 5,offset: '200px',});
-                        // $(".product_model").focus();
-                        // //重新对供应商信息进行渲染
-                        // var hide_product_name_id = $("#hide_product_name_id").val();
-                        // $.post("__APP__/Order/getProductSupplierByProductName",{"id":hide_product_name_id},function(res){
-                        //     $(".product_supplier").html('');
-                        //     $(".product_supplier").html(res);
-                        // })
+                        
                         exit;
                     }
                 }
             }else{
                 layer.alert("请添加产品规格信息！", {icon: 5,offset: '200px',});
-                // //重新对供应商信息进行渲染
-                // var hide_product_name_id = $("#hide_product_name_id").val();
-                // $.post("__APP__/Order/getProductSupplierByProductName",{"id":hide_product_name_id},function(res){
-                //     $(".product_supplier").html('');
-                //     $(".product_supplier").html(res);
-                // })
+                
                 exit;
             }
         }
@@ -1011,9 +796,6 @@
         }
         //重新对交货日期进行渲染
         function rand_customer_info(){
-            // var trade_time_html = "<input type='text' id='trade_time' class='am-form-field' placeholder='交货日期' data-am-datepicker readonly required />";
-            // $("#trade_time_div").html(' ');
-            // $("#trade_time_div").html(trade_time_html);
             //联系电话
             $("#lxr_phone").val('');
             //联系人地址
@@ -1031,9 +813,6 @@
             $("#select_supplier_group").html('');
 
             //数量
-            // var product_num_html = "<input type='text' name='product_num' class='product_num' onclick='inputProductNum()'' value='1'> ";
-            // $("#product_num_div").html(' ');
-            // $("#product_num_div").html(product_num_html);
             $(".product_num").val('1');
             //成本总价
             var  supplier_cost_price_money_html = "<span style='color: #f00;'>请选选择产品信息和数量！</span>";
@@ -1050,9 +829,6 @@
             $('#product_discount_money_div').html(' ');
             $('#product_discount_money_div').html(customer_discount_money_html); 
             //最终输入价格
-            // var end_price_html = "<input type='text' name='end_price' class='' value='' >";
-            // $('#end_price_div').html(' ');
-            // $('#end_price_div').html(end_price_html);
             $(".end_price").val(' '); 
 
             
@@ -1064,9 +840,6 @@
            
         $(function(){
 
-            // $(".product_num").focus(function(){
-            //     alert(3333);
-            // });
             $(".product_num").blur(function(){
                 var product_type_id = $(".product_type").val();
                 var product_name_id = $(".product_name").val();
@@ -1089,12 +862,6 @@
                         }
                     }
                 }
-                // alert(product_spec_str);
-                // //获取成本单价
-                // // $.post("__APP__/Order/getProductCostPrice",{"product_type_id":product_type_id,"product_name_id":product_name_id,"product_model_id":product_model_id,"product_spec_str":product_spec_str,"product_supplier_id":product_supplier_id},function(res){
-                // //         $("#product_cost_price_div").html('');
-                // //         $("#product_cost_price_div").html(res);
-                // // })
 
                 var product_cost_price = $("#product_cost_price").val();
                 var product_cost_money = 0;
@@ -1106,10 +873,6 @@
                     
 
                     product_cost_money =  product_cost_price*product_num;
-                    // alert(product_num);
-                    // alert(product_cost_price);
-                    // alert(product_cost_money);
-                    // var product_cost_money_html = "<input type='text' name='product_cost_money' class='product_cost_money' id='product_cost_money' value='"+product_cost_money+"'>";
                     
                 }else{
                     var product_cost_money = '';
@@ -1118,26 +881,6 @@
                 
                 $("#product_cost_money_div").html(' ');
                 $("#product_cost_money_div").html(product_cost_money_html);
-
-                // //获取历史订单
-                // $.post("__APP__/Order/getProductHistoryOrder",{"product_type_id":product_type_id,"product_name_id":product_name_id,"product_model_id":product_model_id,"product_spec_str":product_spec_str,"product_supplier_id":product_supplier_id},function(res){
-                //         $("#history_order").html('');
-                //         $("#history_order").html(res); 
-                // })
-                // //获取历史报价
-
-                // //计算客户折扣价格（参考价格）
-                // var customer_id = $(".customer_name").val();
-                // // alert(customer_id);
-                // if(product_cost_money != 0){
-                //     $.post("__APP__/Order/getProductMemberMoney",{"customer_id":customer_id,"product_cost_money":product_cost_money},function(res){
-                //             $("#product_discount_money_div").html('');
-                //             $("#product_discount_money_div").html(res);
-                //     })
-                // }
-                
-
-
                 
             });
 
@@ -1145,13 +888,6 @@
         })
      </script>
 
-     <script type="text/javascript">
-        $(".product_cost_money").blur(function(){
-            alert(66666666);
-            // var product_cost_money_val = $("#product_cost_money"),val();
-            // alert(product_cost_money_val);
-        });
-     </script>
 
 </body>
 

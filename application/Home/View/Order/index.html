@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>订单列表</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,13 +22,6 @@
     <script src="__PUBLIC__/js/jquery.min.js"></script>
 
 </head>
-<!-- <script>
-    
-    function a(){
-        var oDiv = document.getElementById('div1nnn');
-        oDiv.style.cssText = 'position:absolute; top:20px; float:right;min-width:1000px;width:100%; min-height:700px;height:100%; z-index:1000; display:block;border:1px solid #ccc';
-    };
-</script> -->
 
 <body data-type="generalComponents" class="abc">
     <!-- 网站头部 -->
@@ -118,14 +111,22 @@
                                 <select data-am-selected="{btnSize: 'sm'}" id="input_type_value">
                                     <if condition="$get['input_type_value'] == supplier ">
                                         <option value="0" >全部信息</option>
+                                        <option value="product">商品名称</option>
                                         <option value="customer">客户</option>
                                         <option value="supplier" selected="selected">供应商</option>
                                     <elseif condition="$get['input_type_value'] == customer " />
                                         <option value="0" >全部信息</option>
+                                        <option value="product">商品名称</option>
                                         <option value="customer" selected="selected">客户</option>
+                                        <option value="supplier">供应商</option>
+                                    <elseif condition="$get['input_type_value'] == product " />
+                                        <option value="0" >全部信息</option>
+                                        <option value="product" selected="selected">商品名称</option>
+                                        <option value="customer">客户</option>
                                         <option value="supplier">供应商</option>
                                     <else/>
                                         <option value="0" selected="selected">全部信息</option>
+                                        <option value="product">商品名称</option>
                                         <option value="customer">客户</option>
                                         <option value="supplier">供应商</option>
                                     </if>
@@ -171,8 +172,8 @@
                                                 <td>{$v['customer_name']}</td>
                                                 <td>{$v['cost_money']}</td>
                                                 <td>{$v['end_money']}</td>
-                                                <td></td>
-                                                <td></td>
+                                                <td>{$v['supplier_money']}</td>
+                                                <td>{$v['customer_money']}</td>
                                                 <td>{$v['order_status_value']}</td>
                                                 <td>{$v['money_status_value']}</td>
                                                 <!-- <td class="am-hide-sm-only">{$v['manager_id']}</td> -->
@@ -180,8 +181,9 @@
                                                 <td>
                                                     <div class="am-btn-toolbar">
                                                         <div class="am-btn-group am-btn-group-xs">
-                                                            <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="window.location.href='__APP__/Order/update'"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                            <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                                                            <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateOrder({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                            
+                                                            <button type="button" class="am-btn am-btn-xs am-text-danger am-hide-sm-only" onclick="deleteOrder({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -228,7 +230,7 @@
             $('#daterange-btn span').html(start.format('YYYY年MMMD日') + ' - ' + end.format('YYYY年MMMD日'));
 
             $("#hide_search_date").val(start.format('YYYY年MMMD日') + "-" + end.format('YYYY年MMMD日'));
-            alert(start.format('YYYYMMDD') + " " + end.format('YYYYMMDD'));
+            // alert(start.format('YYYYMMDD') + " " + end.format('YYYYMMDD'));
 
 
         }
@@ -281,78 +283,6 @@
 
         location.href='__APP__/Order/index/order_status/'+order_status+'/money_status/'+money_status+'/input_type_value/'+input_type_value+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
     }
-    // //确定时间后搜索
-    // function searchSubmit(){
-    //     var search_date_value = $("#hide_search_date").val();
-    //     // alert(search_date_value);
-    //     if(search_date_value == ''){
-    //         layer.alert("请选择日期！", {icon: 5,offset: '200px',});
-    //         return false;
-    //     }
-    //     var order_status = $("#order_status").val();
-    //     var money_status = $("#money_status").val();
-    //     var input_type_value = $("#input_type_value").val();
-    //     var search_value = $.trim($("#search_value").val());
-    //     if(search_value == ''){
-    //         search_value = 0;
-    //     }
-
-    //     location.href='__APP__/Order/index/order_status/'+order_status+'/money_status/'+money_status+'/input_type_value/'+input_type_value+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
-    // }
-
-    //订单状态搜索
-    function changeOrderStatusInfo(){
-        var search_date_value = $("#hide_search_date").val();
-        // alert(search_date_value);
-        if(search_date_value == ''){
-            search_date_value = 0;
-        }
-        var order_status = $("#order_status").val();
-        var money_status = $("#money_status").val();
-        var input_type_value = $("#input_type_value").val();
-        var search_value = $.trim($("#search_value").val());
-        if(search_value == ''){
-            search_value = 0;
-        }
-        // alert(order_status);
-
-        location.href='__APP__/Order/index/order_status/'+order_status+'/money_status/'+money_status+'/input_type_value/'+input_type_value+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
-    }
-    //客户付款状态搜索
-    function changeMoneyStatusInfo(){
-        var search_date_value = $("#hide_search_date").val();
-        var order_status = $("#order_status").val();
-        var money_status = $("#money_status").val();
-        var input_type_value = $("#input_type_value").val();
-        var search_value = $.trim($("#search_value").val());
-        if(search_value == ''){
-            search_value = 0;
-        }
-
-        location.href='__APP__/Order/index/order_status/'+order_status+'/money_status/'+money_status+'/input_type_value/'+input_type_value+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
-    }
-    //客户名称或者供应商名称搜索
-    function searchOrderInfo(){
-        // alert(66666666);
-        var order_status = $("#order_status").val();
-        var money_status = $("#money_status").val();
-        var input_type_value = $("#input_type_value").val();
-        var search_value = $.trim($("#search_value").val());
-        if(input_type_value == 0){
-            // layer.alert("请选择搜索类型！", {icon: 5,offset: '200px',});
-            // $("#input_type_value").focus();
-            // return false;
-            search_value = 0;
-        }
-        // var search_value = $.trim($("#search_value").val());
-        // if(search_value == ''){
-        //     layer.alert("搜索内容不能为空！", {icon: 5,offset: '200px',});
-        //     $("#search_value").focus();
-        //     return false;
-        // }
-
-        location.href='__APP__/Order/index/order_status/'+order_status+'/money_status/'+money_status+'/input_type_value/'+input_type_value+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
-    }
 
 
 
@@ -371,6 +301,61 @@
                                     content: '__APP__/Order/addOrder' //iframe的url
                                 });
         
+    }
+
+    //修改订单信息
+    function updateOrder(id){
+        layer.open({
+                    type: 2,
+                    offset: '20px',
+                    shadeClose : false,
+                    title: '修改订单', 
+                    shade: 0.8,
+                    area: ['75%', '90%'],
+                    btn: ['关闭'],
+                    content: '__APP__/Order/update/id/'+id, //iframe的url
+
+                });
+    }
+
+    //删除订单信息
+    function deleteOrder(id){
+        layer.confirm('您确定要删除该订单信息？', {
+                icon: 3,
+                anim:5,
+                offset: '200px',
+                title:'提示',
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                if(id){
+                    $.ajax({
+                        url:'__APP__/Order/deleteOrderInfo',
+                        data:'id='+id,
+                        type:'post',
+                        dataType:'json',
+                        success:function(res){
+                            layer.confirm(res, {
+                                icon: 1,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定'] //按钮
+                            }, function(){
+                                window.location.reload();       
+                            });
+                        }
+                    });
+
+                }else{
+                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                }          
+            }, function(){
+                layer.msg('删除已取消！', {
+                time: 2000, //20s后自动关闭
+                offset: '200px',
+                // title:'提示'
+                });
+            });
     }
 
 </script>

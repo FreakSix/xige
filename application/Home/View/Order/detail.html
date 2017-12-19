@@ -36,6 +36,13 @@
             <li class="am-active">订单详情</li>
             </ol>
             <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                        <div class="tpl-portlet-input tpl-fz-ml">
+                        <div class="am-btn-group am-btn-group-xs">
+                            <button type="button" onclick="javascript:history.back(-1);" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-angle-left"></span> 返回</button>
+                            </div>
+                        </div>
+                </div>
                 <div class="tpl-block ">
                     <div class="am-g tpl-amazeui-form">
                         <div class="am-u-sm-12 am-u-md-9">
@@ -49,7 +56,7 @@
                                     </div>
                                     <label for="user-name" class="am-u-sm-2 am-form-label">交货日期：</label>
                                     <div class="am-u-sm-3">
-                                        2017-12-24
+                                        {$orderInfo['trade_time_value']}
                                     </div>
                                 </div>
                                 <div class="am-form-group">
@@ -85,20 +92,33 @@
                                         {$orderInfo['product_model']}
                                     </div>
                                 </div>
-                                <div class="am-form-group">
-                                    <label class="am-u-sm-2 am-form-label">纸张：</label>
-                                    <div class="am-u-sm-3">
-                                        铜版纸白色300g
+                                <if condition="$orderInfo['parameter_spec_value'] != '' ">
+                                    <foreach name="orderInfo['parameter_spec_value']" item="v" key="k">
+                                        <div class="am-form-group">
+                                            <label class="am-u-sm-2 am-form-label">{$v['parameter_name']}：</label>
+                                            <div class="am-u-sm-10">
+                                                {$v['spec_value']}
+                                            </div>
+                                        </div>
+                                    </foreach> 
+                                <else/>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">产品规格：</label>
+                                        <div class="am-u-sm-10">
+                                            该订单中无产品规格信息！
+                                        </div>
                                     </div>
-                                    <label for="contact-department" class="am-u-sm-2 am-form-label">尺寸：</label>
-                                    <div class="am-u-sm-2">
-                                        92*56
+                                </if>
+
+                                <if condition="$orderInfo['special_technology_value'] != '' ">
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">特殊工艺：</label>
+                                        <div class="am-u-sm-10">
+                                            {$orderInfo['special_technology_value']}
+                                        </div>
                                     </div>
-                                    <label for="contact-department" class="am-u-sm-2 am-form-label">数量：</label>
-                                    <div class="am-u-sm-1">
-                                        10000
-                                    </div>
-                                </div>
+                                </if>
+                                
                                 <div class="am-form-group">
                                     
                                 </div>
@@ -109,9 +129,42 @@
                                     </div>
                                 </div>
                                 <div class="am-form-group">
+                                    <label for="contact-department" class="am-u-sm-2 am-form-label">数量：</label>
+                                    <div class="am-u-sm-10">
+                                        {$orderInfo['num']}
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="contact-department" class="am-u-sm-2 am-form-label">成本单价：</label>
+                                    <div class="am-u-sm-4">
+                                        {$orderInfo['cost_price']} 元
+                                    </div>
+                                    <label for="contact-department" class="am-u-sm-2 am-form-label">成本总价：</label>
+                                    <div class="am-u-sm-4">
+                                        {$orderInfo['cost_money']} 元
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="contact-department" class="am-u-sm-2 am-form-label">参考价格：</label>
+                                    <div class="am-u-sm-2 am-u-end">
+                                        {$orderInfo['discount_money']} 元
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
                                     <label for="contact-department" class="am-u-sm-2 am-form-label">最终价格：</label>
                                     <div class="am-u-sm-2 am-u-end">
-                                        {$orderInfo['end_money']}
+                                        {$orderInfo['end_money']} 元
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="contact-department" class="am-u-sm-2 am-form-label">素材链接：</label>
+                                    <div class="am-u-sm-10">
+                                        <if condition="$orderInfo['material_link'] != '' ">
+                                            <a href="{$orderInfo['material_link']}" target="_blank">查看素材</a>
+                                        <else/>
+                                            <a href="" onclick="clickMaterial()" >查看素材</a>
+                                        </if>
+                                        
                                     </div>
                                 </div>
                                 <hr/>
@@ -119,27 +172,37 @@
                                 <h6>其他信息</h6>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">订单状态：</label>
-                                    <div class="am-u-sm-2">
-                                        已发货
+                                    <div class="am-u-sm-4">
+                                        {$orderInfo['order_status_value']}
                                     </div>
-                                    <label class="am-u-sm-2 am-form-label">回款状态：</label>
-                                    <div class="am-u-sm-2 am-u-end">
-                                        部分回款
-                                    </div>
-                                    <label class="am-u-sm-2 am-form-label">录入人：</label>
-                                    <div class="am-u-sm-2">
-                                        王五
+                                    <label class="am-u-sm-2 am-form-label">客户付款状态：</label>
+                                    <div class="am-u-sm-4 am-u-end">
+                                        {$orderInfo['money_status_value']}
                                     </div>
                                 </div>
                                 <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">客户付款总额：</label>
+                                    <div class="am-u-sm-4">
+                                        {$orderInfo['customer_money']}  元
+                                    </div>
+                                    <label class="am-u-sm-2 am-form-label">向供应商付款总额：</label>
+                                    <div class="am-u-sm-4 am-u-end">
+                                        {$orderInfo['supplier_money']}  元
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">录入人：</label>
+                                    <div class="am-u-sm-4">
+                                        王五
+                                    </div>
                                     <label class="am-u-sm-2 am-form-label">录入时间：</label>
+                                    <div class="am-u-sm-4"> 
+                                        {$orderInfo['insert_time']}
+                                    </div>
+                                    <!-- <label class="am-u-sm-2 am-form-label">编辑时间：</label>
                                     <div class="am-u-sm-4">
                                         2017-10-24 11：23
-                                    </div>
-                                    <label class="am-u-sm-2 am-form-label">编辑时间：</label>
-                                    <div class="am-u-sm-4">
-                                        2017-10-24 11：23
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <hr/>
                                 <div class="am-form-group">
@@ -162,7 +225,11 @@
     <script src="__PUBLIC__/js/plus.js"></script>
     <script src="__PUBLIC__/js/layer.js"></script>
     <script type="text/javascript">
-        
+        function clickMaterial(){
+            // alert(66666);
+            layer.alert("请在订单修改中添加素材链接！", {icon: 5,offset: '200px',});
+            return false;
+        }
     </script>
 </body>
 
