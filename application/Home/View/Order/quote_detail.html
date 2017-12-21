@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>新建订单-细格订单管理系统</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="__PUBLIC__/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="__PUBLIC__/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/app.css">
+    <style>
+    </style>
+</head>
+
+<body data-type="generalComponents" class="abc">
+    <!-- 网站头部 -->
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <include file="Public:header"/>
+    </header>
+    <div class="tpl-page-container tpl-page-header-fixed">
+        <div class="tpl-left-nav tpl-left-nav-hover"  nav="order">
+            <include file="Public:menu"/>
+        </div>
+        <div class="tpl-content-wrapper">
+            <ol class="am-breadcrumb">
+            <li><a href="#" class="am-icon-home">首页</a></li>
+            <li><a href="#">订单列表</a></li>
+            <li class="am-active">报价记录详情</li>
+            </ol>
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                        <div class="tpl-portlet-input tpl-fz-ml">
+                        <div class="am-btn-group am-btn-group-xs">
+                            <button type="button" onclick="javascript:history.back(-1);" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-angle-left"></span> 返回</button>
+                            </div>
+                        </div>
+                </div>
+                <div class="tpl-block ">
+                    <div class="am-g tpl-amazeui-form">
+                        <div class="am-u-sm-12 am-u-md-9">
+                            <form class="am-form am-form-horizontal">
+                                <!-- 公司信息 -->
+                                <h6>客户信息</h6>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">客户名称：</label>
+                                    <div class="am-u-sm-5">
+                                        {$quoteInfo['customer_name']}
+                                    </div>
+                                    <label for="user-name" class="am-u-sm-2 am-form-label">客户等级：</label>
+                                    <div class="am-u-sm-3">
+                                        {$quoteInfo['customer_level_name']}
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">联系人：</label>
+                                    <div class="am-u-sm-5">
+                                        {$quoteInfo['linkman_name']}
+                                    </div>
+                                    <label class="am-u-sm-2 am-form-label">联系电话：</label>
+                                    <div class="am-u-sm-3">
+                                        {$quoteInfo['linkman_tel']}
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">备注：</label>
+                                    <div class="am-u-sm-10">
+                                        {$quoteInfo['remark']}
+                                    </div>
+                                </div>
+                                <hr/>
+                                <!-- 商品信息 -->
+                                <h6>商品信息</h6>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">产品分类：</label>
+                                    <div class="am-u-sm-2">
+                                        {$quoteInfo['product_type']}
+                                    </div>
+                                    <label class="am-u-sm-2 am-form-label">产品名称：</label>
+                                    <div class="am-u-sm-2">
+                                        {$quoteInfo['product_name']}
+                                    </div>
+                                    <label class="am-u-sm-2 am-form-label">产品型号：</label>
+                                    <div class="am-u-sm-2">
+                                        {$quoteInfo['product_model']}
+                                    </div>
+                                </div>
+                                <if condition="$quoteInfo['parameter_spec_value'] != '' ">
+                                    <foreach name="quoteInfo['parameter_spec_value']" item="v" key="k">
+                                        <div class="am-form-group">
+                                            <label class="am-u-sm-2 am-form-label">{$v['parameter_name']}：</label>
+                                            <div class="am-u-sm-10">
+                                                {$v['spec_value']}
+                                            </div>
+                                        </div>
+                                    </foreach> 
+                                <else/>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">产品规格：</label>
+                                        <div class="am-u-sm-10">
+                                            该报价记录中无产品规格信息！
+                                        </div>
+                                    </div>
+                                </if>
+
+                                <if condition="$quoteInfo['special_technology_value'] != '' ">
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">特殊工艺：</label>
+                                        <div class="am-u-sm-10">
+                                            {$quoteInfo['special_technology_value']}
+                                        </div>
+                                    </div>
+                                </if>
+                                
+                                <div class="am-form-group">
+                                    
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="contact-department" class="am-u-sm-2 am-form-label">供应商：</label>
+                                    <div class="am-u-sm-10">
+                                        {$quoteInfo['supplier_name']}
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="contact-department" class="am-u-sm-2 am-form-label">数量：</label>
+                                    <div class="am-u-sm-10">
+                                        {$quoteInfo['num']}
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="contact-department" class="am-u-sm-2 am-form-label">成本单价：</label>
+                                    <div class="am-u-sm-2 am-u-end">
+                                        {$quoteInfo['cost_price']} 元
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="contact-department" class="am-u-sm-2 am-form-label">参考价格：</label>
+                                    <div class="am-u-sm-2 am-u-end">
+                                        {$quoteInfo['discount_money']} 元
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="contact-department" class="am-u-sm-2 am-form-label">最终价格：</label>
+                                    <div class="am-u-sm-2 am-u-end">
+                                        {$quoteInfo['end_money']} 元
+                                    </div>
+                                </div>
+                                <hr/>
+                                <!-- 其他信息 -->
+                                <h6>其他信息</h6>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">录入人：</label>
+                                    <div class="am-u-sm-4">
+                                        王五
+                                    </div>
+                                    <label class="am-u-sm-2 am-form-label">录入时间：</label>
+                                    <div class="am-u-sm-4"> 
+                                        {$quoteInfo['insert_time']}
+                                    </div>
+                                </div>
+                                <hr/>
+                                <div class="am-form-group">
+                                    <div class="am-u-sm-10 am-u-sm-push-2">
+                                        <button type="button" class="am-btn am-btn-primary">修改订单</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="__PUBLIC__/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/js/amazeui.min.js"></script>
+    <script src="__PUBLIC__/js/app.js"></script>
+    <script src="__PUBLIC__/js/plus.js"></script>
+    <script src="__PUBLIC__/js/layer.js"></script>
+    <script type="text/javascript">
+        
+    </script>
+</body>
+
+</html>

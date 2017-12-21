@@ -33,22 +33,25 @@
                     </a>
                 </li>
                 <li class="tpl-left-nav-item">
-                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list xg-first-level-nav">
                         <i class="am-icon-bar-chart"></i>
                         <span>订单管理</span>
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
                     </a>
                     <ul class="tpl-left-nav-sub-menu">
-                        <li>
-                            <a href="__APP__/Order/index" class="nav-link-children"  nav="order">
+                        <li class="xg-second-level-nav">
+                            <a href="__APP__/Order/index" class="xg-second-level-nav-a"  nav="order">
                                 <i class="am-icon-edit"></i>
                                 <span>订单列表</span>
                                 <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                             </a>
-                            <a href="__APP__/Order/quote">
+                        <li class="xg-second-level-nav">
+                            <a href="__APP__/Order/quote" class="xg-second-level-nav-a"  nav="quote">
                                 <i class="am-icon-tags"></i>
                                 <span>报价记录</span>
                             </a>
+                        </li>
+                            
                         </li>
                     </ul>
                 </li>
@@ -60,27 +63,27 @@
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
                     </a>
                     <ul class="tpl-left-nav-sub-menu">
+                        <foreach name="productType" key="k" item="pt">
+                            <li>
+                                <a href="javascript:;" class="tpl-left-nav-link-list-first" rec="{$k}">
+                                    <i class="am-icon-angle-right"></i>&nbsp;
+                                    <span>{$pt.type_name}</span>
+                                    <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                                </a>
+                                <ul class="tpl-left-nav-sub-menu-first-{$k}" style="display: none;margin-top: 0;">
+                                    <foreach name="productType[$k]['productMenu']" key="key" item="item"> 
+                                        <li>
+                                            <a href="__APP__/Goods/index/type_id/{$item.id}">
+                                                <i class="am-icon-credit-card"></i> 
+                                                <span>{$item.type_name}</span>
+                                            </a>
+                                        </li>
+                                    </foreach>
+                                </ul>
+                            </li>
+                        </foreach>
                         <li>
-                            <foreach name="productType" key="k" item="pt">
-                            <a href="javascript:;" class="tpl-left-nav-link-list-first" rec="{$k}">
-                                <i class="am-icon-angle-right"></i>&nbsp;
-                                <span>{$pt.type_name}</span>
-                                <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
-                            </a>
-                            <ul class="tpl-left-nav-sub-menu-first-{$k}" style="display: none;margin-top: 0;"> 
-                                <li>
-                                <foreach name="productType[$k]['productMenu']" key="key" item="item">
-                                    <a href="__APP__/Goods/index/type_id/{$item.id}">
-                                        <i class="am-icon-credit-card"></i> 
-                                        <span>{$item.type_name}</span>
-                                    </a>
-                                </foreach>
-                                </li>
-                            </ul>
-                            </foreach>
-                        </li>
-                        <li>
-                            <a href="javascript:;" class="tpl-left-nav-link-list-second">
+                            <a href="javascript:;" class="tpl-left-nav-link-list-second" nav="goodsInfo">
                                 <i class="am-icon-angle-right"></i>&nbsp;
                                 <span>商品信息</span>
                                 <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
@@ -145,25 +148,45 @@
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
                     </a>
                     <ul class="tpl-left-nav-sub-menu">
-                        <li>
-                            <a href="__APP__/Statistics/index" target="main">
-                                <i class="am-icon-angle-right"></i>
+                        <li class="xg-second-level-nav">
+                            <a href="__APP__/Statistics/index" class="xg-second-level-nav-a" nav="aaa">
+                                <i class="am-icon-calculator"></i>
                                 <span>基本信息统计</span>
                                 <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                             </a>
-                            <a href="javascript:;"  target="main">
-                                <i class="am-icon-angle-right"></i>
-                                <span>产品统计</span>
-                            </a>
-                            <a href="javascript:;" target="main">
-                                <i class="am-icon-angle-right"></i>
-                                <span>客户统计</span>
-                            </a>
-                            <a href="javascript:;" target="main">
-                                <i class="am-icon-angle-right"></i>
-                                <span>供应商统计</span>
+                        </li>
+                        <li class="xg-second-level-nav">
+                            <a href="__APP__/Count/orderCount" class="xg-second-level-nav-a" nav="orderStat">
+                                <i class="am-icon-tasks"></i>
+                                <span>成交单数统计</span>
                             </a>
                         </li>
+                        <li class="xg-second-level-nav">
+                            <a href="__APP__/Count/productCount" class="xg-second-level-nav-a" nav="orderStat">
+                                <i class="am-icon-tasks"></i>
+                                <span>成交产品总数统计</span>
+                            </a>
+                        </li>
+                        <li class="xg-second-level-nav">
+                            <a href="__APP__/Count/customerMoneyCount" class="xg-second-level-nav-a" nav="orderStat">
+                                <i class="am-icon-tasks"></i>
+                                <span>客户欠款与回款统计</span>
+                            </a>
+                        </li>
+                        <li class="xg-second-level-nav">
+                            <a href="__APP__/Count/costCount" class="xg-second-level-nav-a" nav="capitalStat">
+                                <i class="am-icon-rmb"></i>
+                                <span>成本利润销售额统计</span>
+                            </a>
+                        </li>
+                        <li class="xg-second-level-nav">
+                            <a href="__APP__/Count/customerCount" class="xg-second-level-nav-a" nav="customerStat">
+                                <i class="am-icon-user-plus"></i>
+                                <span>新增客户数</span>
+                            </a>
+                        </li>
+                            
+                        
                     </ul>
                 </li>
             </ul>

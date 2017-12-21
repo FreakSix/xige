@@ -1,0 +1,57 @@
+<div class="am-form-group" id="refer_history_order_div" name="refer_history_order_div">
+    <label for="contact-department" class="am-u-sm-2 am-form-label">历史订单：</label>
+    <div class="am-u-sm-10" style="margin-bottom:10px;">
+
+        <if condition="$productHistoryOrderInfo != null ">
+            <foreach name="productHistoryOrderInfo" item="v" key="k">
+                <div class="am-u-sm-12">
+                    <div class="am-u-sm-12" style="margin-bottom:20px;">
+                        供应商：<span>{$v['supplier_name']}</span>&nbsp;&nbsp;
+                        客户：<span>{$v['customer_name']}</span>&nbsp;&nbsp;
+                        数量：<b style="color: #f00;">{$v['num']}</b>&nbsp;&nbsp;
+                        成本总价：<b style="color: #f00;">{$v['cost_money']}元</b>&nbsp;&nbsp;
+                        成交总价：<b style="color: #f00;">{$v['end_money']}元</b>
+                    </div>
+                </div>
+            </foreach>
+        <else/>
+            <div class="am-u-sm-10">
+                <!-- <b style='color: #f00;'>该产品暂无历史订单！</b> -->
+                <span style="color: #f00;">该产品暂无历史订单！</span>
+            </div> 
+        </if>
+    </div>
+    
+</div>
+<div class="am-form-group" id="refer_history_quote_div" name="refer_history_quote_div">
+    <label for="contact-department" class="am-u-sm-2 am-form-label">历史报价：</label>
+    <div class="am-u-sm-10" style="margin-bottom:10px;">
+
+        <if condition="$productHistoryQuoteInfo != null ">
+            <foreach name="productHistoryQuoteInfo" item="v" key="k">
+                <div class="am-u-sm-12">
+                    <div class="am-u-sm-12" style="margin-bottom:20px;">
+                        客户：<span>{$v['customer_name']}</span>&nbsp;&nbsp;
+                        供应商：<span>{$v['supplier_name']}</span>&nbsp;&nbsp;
+                        数量：<b style="color: #f00;">{$v['num']}</b>&nbsp;&nbsp;
+                        成本单价：<b style="color: #f00;">{$v['cost_price']}元</b>&nbsp;&nbsp;
+                        报价：<b style="color: #f00;">{$v['end_money']}元</b>
+                    </div>
+                </div>
+            </foreach>
+        <else/>
+            <div class="am-u-sm-10">
+                <!-- <b style='color: #f00;'>该产品暂无历史订单！</b> -->
+                <span style="color: #f00;">该产品暂无历史报价记录！</span> 
+            </div> 
+        </if>
+
+    </div>
+</div>
+<div class="am-form-group" id="refer_product_discount_money_div" name="refer_product_discount_money_div">
+    <label for="contact-department" class="am-u-sm-2 am-form-label">客户参考价：</label>
+    <div class="am-u-sm-4 am-u-end" id="product_discount_money_div">
+        <span style="color: #f00;">{$discountMoney['money_1']}{$discountMoney['money']}{$discountMoney['money_2']}</span>
+        <input type="hidden" value="{$discountMoney['money']}" id="hide_product_discount_money" />
+    </div>
+</div>

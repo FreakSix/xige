@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>报价记录列表</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,13 +22,6 @@
     <script src="__PUBLIC__/js/jquery.min.js"></script>
 
 </head>
-<!-- <script>
-    
-    function a(){
-        var oDiv = document.getElementById('div1nnn');
-        oDiv.style.cssText = 'position:absolute; top:20px; float:right;min-width:1000px;width:100%; min-height:700px;height:100%; z-index:1000; display:block;border:1px solid #ccc';
-    };
-</script> -->
 
 <body data-type="generalComponents" class="abc">
     <!-- 网站头部 -->
@@ -36,7 +29,7 @@
         <include file="Public:header"/>
     </header>
     <div class="tpl-page-container tpl-page-header-fixed">
-        <div class="tpl-left-nav tpl-left-nav-hover"  nav="order">
+        <div class="tpl-left-nav tpl-left-nav-hover xg-left-nav"  nav="quote">
             <include file="Public:menu"/>
         </div>
         <div class="tpl-content-wrapper">
@@ -47,52 +40,68 @@
             </ol>
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
-                    <div class="caption font-green bold">报价记录</div>
+                    <div class="caption font-green bold">报价记录列表</div>
                         <div class="tpl-portlet-input tpl-fz-ml">
                                 <div class="form-group">
-                                            <div class="input-group">
-                                            <button type="button" class="btn btn-default pull-right" id="daterange-btn">
-                                            <span>
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-default " id="daterange-btn">
+                                        <span>
+                                            <if condition="$get['search_date_value'] != '' ">
+                                                {$get['search_date_value']}
+                                            <else/>
                                                 <i class="fa fa-calendar"></i> 日期选择
-                                            </span>
-                                                <i class="fa fa-caret-down"></i>
-                                            </button>
-                                            </div>
-                                        
+                                            </if>
+                                        </span>
+                                            <i class="fa fa-caret-down"></i>
+                                        </button>
+                                        <button type="button" onclick="searchSubmit('date')" class="am-btn pull-right am-btn-success"></span> 确定</button>
+                                    </div>
+
+                                    <input type="hidden" value="{$get['search_date_value']}" id="hide_search_date" />
+
                                 </div>
                             
                         </div>
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
-                        <div class="am-u-sm-12 am-u-md-6">
+                        <div class="am-u-sm-12 am-u-md-8">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
-                                    <button type="button" onclick="addOrder()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增报价记录</button>
+                                    <button type="button" onclick="addQuote()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增报价</button>
                                     <!-- <div id="div1nnn" style="display:none;"><iframe src="add.html" width=100% height=100% id=""></iframe></div> -->
                                     <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出数据</button>
                                     <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除所选内容</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="am-u-sm-12 am-u-md-3">
-                            <div class="am-form-group">
-                                <select data-am-selected="{btnSize: 'sm'}">
-                                  <option value="option1">订单状态</option>
-                                  <option value="option2">已完成订单</option>
-                                  <option value="option3">已收货订单</option>
-                                  <option value="option3">已发货订单</option>
-                                  <option value="option3">生产中订单</option>
-                                  <option value="option3">待审核订单</option>
-                                  <option value="option3">已作废订单</option>
+                        
+                        <div class="am-u-sm-12 am-u-md-2" >
+                            <div class="am-form-group" style="margin-left:30px;">
+                                搜索类型：
+                                <select data-am-selected="{btnSize: 'sm'}" id="input_type_value">
+                                    
+                                    <if condition="$get['input_type_value'] == customer ">
+                                        <option value="0" >全部信息</option>
+                                        <option value="product">商品名称</option>
+                                        <option value="customer" selected="selected">客户名称</option>
+                                    <elseif condition="$get['input_type_value'] == product " />
+                                        <option value="0" >全部信息</option>
+                                        <option value="product" selected="selected">商品名称</option>
+                                        <option value="customer">客户名称</option>
+                                    <else/>
+                                        <option value="0" selected="selected">全部信息</option>
+                                        <option value="product">商品名称</option>
+                                        <option value="customer">客户名称</option>
+                                    </if>
                                 </select>
                             </div>
                         </div>
-                        <div class="am-u-sm-12 am-u-md-3">
+                        <div class="am-u-sm-12 am-u-md-2">
                             <div class="am-input-group am-input-group-sm">
-                                <input type="text" class="am-form-field">
+                                <input type="text" class="am-form-field" placeholder="请先选择搜索类型" value="{$get['search_value']}" id="search_value">
                                 <span class="am-input-group-btn">
-                                    <button class="am-btn  am-btn-default am-btn-success tpl-am-btn-success am-icon-search" type="button"></button>
+                                    <button class="am-btn am-btn-success tpl-am-btn-success am-icon-search" type="button"  onclick="searchSubmit('input');"></button>
                                 </span>
                             </div>
                         </div>
@@ -104,73 +113,52 @@
                                     <thead>
                                         <tr>
                                             <th class="table-check"><input type="checkbox" class="tpl-table-fz-check"></th>
-                                            <th class="table-id">订单编号</th>
-                                            <th class="table-title">商品名称</th>
-                                            <th class="table-cus">客户名称</th>
-                                            <th class="table-sum">报价</th>
-                                            <th class="table-type">类别</th>
-                                            <th class="table-status">联系人</th>
-                                            <th class="table-status">联系电话</th>
-                                            <th class="table-author am-hide-sm-only">录入人</th>
-                                            <th class="table-date am-hide-sm-only">录入时间</th>
+                                            <th class="">客户名称</th>
+                                            <th class="">客户等级</th>
+                                            <th class="">联系人姓名</th>
+                                            <th class="">联系人电话</th>
+                                            <th class="">商品名称</th>
+                                            <th class="">数量</th>
+                                            <th class="">成本单价</th>
+                                            <th class="">参考报价</th>
+                                            <th class="">最终报价</th>
+                                            <!-- <th class="table-author am-hide-sm-only">录入人</th> -->
+                                            <th class="">录入时间</th>
                                             <th class="table-set">操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td><input type="checkbox"></td>
-                                            <td>1</td>
-                                            <td><a href="#">Business management</a></td>
-                                            <td>default</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="am-hide-sm-only">测试1号</td>
-                                            <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                            <td>
-                                                <div class="am-btn-toolbar">
-                                                    <div class="am-btn-group am-btn-group-xs">
-                                                        <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                                        <foreach name="productQuoteInfo" item="v" key="k">
+                                            <tr>
+                                                <td><input type="checkbox"></td>
+                                                <td><a href="__APP__/Order/quoteDetail/id/{$v['id']}">{$v['customer_name']}</a></td>
+                                                <td>{$v['level_name']}</td>
+                                                <td>{$v['linkman_name']}</td>
+                                                <td>{$v['linkman_tel']}</td>
+                                                <td>{$v['product_name']}</td>
+                                                <td>{$v['num']}</td>
+                                                <td>{$v['cost_price']}</td>
+                                                <td>{$v['discount_money']}</td>
+                                                <td>{$v['end_money']}</td>
+                                                <!-- <td class="am-hide-sm-only">{$v['manager_id']}</td> -->
+                                                <td class="am-hide-sm-only">{$v['insert_time']}</td>
+                                                <td>
+                                                    <div class="am-btn-toolbar">
+                                                        <div class="am-btn-group am-btn-group-xs">
+                                                            <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateQuote({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                            
+                                                            <button type="button" class="am-btn am-btn-xs am-text-danger am-hide-sm-only" onclick="deleteQuote({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox"></td>
-                                            <td>2</td>
-                                            <td><a href="#">Business management</a></td>
-                                            <td>default</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="am-hide-sm-only">测试1号</td>
-                                            <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
-                                            <td>
-                                                <div class="am-btn-toolbar">
-                                                    <div class="am-btn-group am-btn-group-xs">
-                                                        <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
+                                        </foreach>
                                     </tbody>
                                 </table>
                                 <div class="am-cf">
 
                                     <div class="am-fr">
-                                        <ul class="am-pagination tpl-pagination">
-                                            <li class="am-disabled"><a href="#">«</a></li>
-                                            <li class="am-active"><a href="#">1</a></li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                            <li><a href="#">4</a></li>
-                                            <li><a href="#">5</a></li>
-                                            <li><a href="#">»</a></li>
-                                        </ul>
+                                        {$pageStr}
                                     </div>
                                 </div>
                                 <hr>
@@ -204,27 +192,133 @@
         },
         function(start, end) {
             $('#daterange-btn span').html(start.format('YYYY年MMMD日') + ' - ' + end.format('YYYY年MMMD日'));
-            alert(start.format('YYYYMMDD') + " " + end.format('YYYYMMDD'));
+
+            $("#hide_search_date").val(start.format('YYYY年MMMD日') + "-" + end.format('YYYY年MMMD日'));
+            // alert(start.format('YYYYMMDD') + " " + end.format('YYYYMMDD'));
+
+
         }
     );
 
-    //Date picker
-    $('#datepicker').datepicker({
-        autoclose: true
-    });
-    // 新增订单
-    function addOrder(){
+    //确定时间后搜索
+    function searchSubmit(name){
+        // alert(name);
+        var search_date_value = $("#hide_search_date").val();
+        // var order_status = $("#order_status").val();
+        // var money_status = $("#money_status").val();
+        var input_type_value = $("#input_type_value").val();
+        var search_value = $.trim($("#search_value").val());
+        // alert(search_date_value);
+        if(name == 'date'){
+            if(search_date_value == ''){
+                layer.alert("请选择日期！", {icon: 5,offset: '200px',});
+                return false;
+            }
+
+            if(search_value == ''){
+                input_type_value = 0;
+            }
+        }else{
+            if(search_date_value == ''){
+                search_date_value = 0;
+            }
+        }
+        
+        
+
+        if(name == 'input'){
+            if(input_type_value == 0){
+                search_value = 0;
+            }else{
+                if(search_value == ''){
+                    layer.alert("搜索内容不能为空！", {icon: 5,offset: '200px',});
+                    $("#search_value").focus();
+                    return false;
+                }
+            }
+            
+        }else{
+            if(search_value == ''){
+                search_value = 0;
+            }
+        }
+        
+
+        
+
+        location.href='__APP__/Order/quote/input_type_value/'+input_type_value+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
+    }
+
+
+    // 新增报价记录
+    function addQuote(){
         layer.open({
             type: 2,
             offset: '20px',
-            title: '新增订单',
-            shadeClose: true,
+            shadeClose : false,
+            title: '新增报价',
             shade: 0.8,
             area: ['75%', '90%'],
             btn: ['关闭'],
             content: '__APP__/Order/addQuote' //iframe的url
         });
     }
+
+    //修改报价记录信息
+    function updateQuote(id){
+        layer.open({
+                    type: 2,
+                    offset: '20px',
+                    shadeClose : false,
+                    title: '修改报价记录', 
+                    shade: 0.8,
+                    area: ['75%', '90%'],
+                    btn: ['关闭'],
+                    content: '__APP__/Order/updateQuote/id/'+id, //iframe的url
+
+                });
+    }
+
+    //删除报价记录信息
+    function deleteQuote(id){
+        layer.confirm('您确定要删除该条报价记录吗？', {
+                icon: 3,
+                anim:5,
+                offset: '200px',
+                title:'提示',
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                if(id){
+                    $.ajax({
+                        url:'__APP__/Order/deleteQuoteInfo',
+                        data:'id='+id,
+                        type:'post',
+                        dataType:'json',
+                        success:function(res){
+                            layer.confirm(res, {
+                                icon: 1,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定'] //按钮
+                            }, function(){
+                                window.location.reload();       
+                            });
+                        }
+                    });
+
+                }else{
+                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                }          
+            }, function(){
+                layer.msg('删除已取消！', {
+                time: 2000, //20s后自动关闭
+                offset: '200px',
+                // title:'提示'
+                });
+            });
+    }
+
 </script>
 </body>
 
