@@ -15,6 +15,9 @@
 	    		// dump($productMenu);
 	    		$productType[$k]["productMenu"] = $productMenu;
 	    	}
+	    	// 获取公共信息
+	    	$noticeInfo = D("XgNotice")->getNotice();
+	    	$this->assign("noticeInfo",$noticeInfo);
 	    	$this->assign("productType",$productType);
 	        $this->display();    
 	    }

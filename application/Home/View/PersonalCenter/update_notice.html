@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Amaze UI Admin index Examples</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="__PUBLIC__/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="__PUBLIC__/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/app.css">
+    <style>
+    </style>
+</head>
+
+<body data-type="generalComponents">
+    <div class="tpl-portlet-components">
+        <div class="tpl-block ">
+            <div class="am-g tpl-amazeui-form">
+                <div class="am-u-sm-12">
+                    <form class="am-form am-form-horizontal">
+                        <div class="portlet-title">
+                            <div class="caption font-green bold">修改公告信息</div>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-2 am-form-label">公告信息：</label>
+                            <div class="am-u-sm-8 am-u-end">
+                                <input type="text" value="<?php echo $noticeInfo[0]['notice_info'] ?>" name="notice_info" id="notice_info">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-2 am-form-label">特别提示：</label>
+                            <div class="am-u-sm-8 am-u-end">
+                                <textarea style="width: 40rem; height: 10rem; resize:none;" name="note_info" id="note_info"><?php echo $noticeInfo[0]['note_info'] ?></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" id="nid" name="id" value="<?php echo $noticeInfo[0]['id'] ?>">
+                        <div class="am-form-group">
+                            <div class="am-u-sm-10 am-u-sm-push-2">
+                                <button type="button" class="am-btn am-btn-primary">确认修改</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="tpl-alert"></div>
+    </div>
+
+
+    <script src="__PUBLIC__/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/js/amazeui.min.js"></script>
+    <script src="__PUBLIC__/js/app.js"></script>
+    <script src="__PUBLIC__/js/layer.js"></script>
+
+<script type="text/javascript">
+    $(".am-btn-primary").click(function(){
+        var id = $("#nid").val();
+        var notice_info = $.trim($("#notice_info").val());
+        var note_info = $.trim($("#note_info").val());
+        $.post("__APP__/PersonalCenter/updateNoticeHandle",{"id":id,"notice_info":notice_info,"note_info":note_info},function(result){
+            if(result > 0){
+                parent.layer.msg("修改成功！",{
+                    icon: 1,
+                    offset: '200px',
+                    title:'提示',
+                });
+                parent.location.href = "__APP__/PersonalCenter/notice";
+                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                parent.layer.close(index);
+            }else{
+                parent.layer.alert("修改失败！",{
+                    icon: 5,
+                    offset: '200px',
+                    title:'提示',
+                });
+                return false;
+            }
+        });
+    });
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Amaze UI Admin index Examples</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="__PUBLIC__/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="__PUBLIC__/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/app.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/boot.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/daterangepicker.css">
+    <script src="__PUBLIC__/js/jquery.min.js"></script>
+</head>
+<body data-type="generalComponents" class="abc">
+    <!-- 网站头部 -->
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <include file="Public:header"/>
+    </header>
+    <div class="tpl-page-container tpl-page-header-fixed">
+        <!-- 左侧菜单栏 -->
+        <div class="tpl-left-nav tpl-left-nav-hover xg-left-nav" nav="notice">
+            <include file="personal_menu"/>
+        </div>
+        <!-- 右侧主要内容 -->
+        <div class="tpl-content-wrapper">
+            <ol class="am-breadcrumb">
+                <li><a href="__APP__/Index/index" class="am-icon-home">首页</a></li>
+                <li><a href="__APP__/PersonalCenter">个人中心</a></li>
+                <li class="am-active">公告信息管理</li>
+            </ol>
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption font-green bold">公告信息</div>
+                </div>
+                <div class="xg-personal-content">
+                    <table class="am-table xg-personal-table">
+                        <tbody >
+                            <tr>
+                                <td align="right"><b>公告信息：</b></td>
+                                <td><?php echo $noticeInfo[0]["notice_info"] ?></td>
+                            </tr>
+                            <tr>
+                                <td align="right"><b>特别提示：</b></td>
+                                <td><?php echo $noticeInfo[0]["note_info"] ?></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center"><button type="button" class="am-btn am-btn-primary am-round" onclick="updateUserInfo()">修改公告</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tpl-alert"></div>
+            </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/amazeui.min.js"></script>
+    <script src="__PUBLIC__/js/app.js"></script>
+    <script src="__PUBLIC__/js/plus.js"></script>
+    <script src="__PUBLIC__/js/layer.js"></script>
+<script type="text/javascript">
+    // 修改用户信息页面
+    function updateUserInfo(id){
+        layer.open({
+            type: 2,
+            offset: '20px',
+            title: '修改公告',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['60%', '90%'],
+            btn: ['关闭'],
+            content: '__APP__/PersonalCenter/updateNotice', //iframe的url
+        });
+    }
+</script>
+</body>
+
+</html>

@@ -43,11 +43,10 @@
             <div class="tpl-content-scope">
                 <div class="note note-info">
                     <h3>系统消息：
-                        <span class="close" data-close="note"></span>
+                        <span class="close" data-close="note"><?php echo $noticeInfo[0]["notice_info"] ?></span>
                     </h3>
-                    <p> 这儿是备忘信息内容与提示</p>
-                    <p><span class="label label-danger">提示:</span> Amaze UI 关注中文排版，根据用户代理调整字体，实现更好的中文排版效果。
-                    </p>
+                    <p></p>
+                    <p><span class="label label-danger">提示：</span> <?php echo $noticeInfo[0]["note_info"] ?> </p>
                 </div>
             </div>
             <div class="row"  data-type="index" id="eeeee">

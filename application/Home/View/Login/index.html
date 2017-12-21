@@ -81,7 +81,6 @@
 			alert("请输入验证码！");return false;
 		}
 		$.post("__APP__/Login/checkedUser",{"user":user,"pass":pass,"code":code},function(data){
-			alert(data);return false;
 			if(data == 0){
 				window.location = "__APP__/Index/index";
 			}else if (data == 1){

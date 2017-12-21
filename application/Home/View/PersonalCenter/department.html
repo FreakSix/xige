@@ -123,88 +123,7 @@
                     </div>
                 </div>
             </div>
-            <!-- 职位信息 -->
-            <div class="tpl-portlet-components">
-                <div class="portlet-title">
-                    <div class="caption font-green bold">职位信息</div>
-                </div>
-                <div class="tpl-block">
-                    <div class="am-g">
-                        <div class="am-u-sm-12 am-u-md-2">
-                            <div class="am-btn-toolbar">
-                                <div class="am-btn-group am-btn-group-xs">
-                                    <button type="button" onclick="addPosition()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增职位</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="am-g">
-                        <div class="am-u-sm-12">
-                            <form class="am-form">
-                                <table class="am-table am-table-striped am-table-hover table-main">
-                                    <thead>
-                                        <tr>
-                                            <th class="">职位名称</th>
-                                            <th class="">员工数</th>
-                                            <th class="">所属部门</th>
-                                            <th class="">操作</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
-                                        <tr class="xg-table-tr">
-                                            <td>客服经理</td>
-                                            <td>1</td>
-                                            <td>客服部</td>
-                                            <td>
-                                                <div class="am-btn-toolbar">
-                                                    <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updatePosition()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletePosition()"><span class="am-icon-trash-o"></span> 删除</button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class="xg-table-tr">
-                                            <td>销售专员</td>
-                                            <td>2</td>
-                                            <td>销售部</td>
-                                            <td>
-                                                <div class="am-btn-toolbar">
-                                                    <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updatePosition()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletePosition()"><span class="am-icon-trash-o"></span> 删除</button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                                <div class="am-cf">
-
-                                    <div class="am-fr">
-                                        <!-- {$pageStr} -->
-                                        <!-- <ul class="am-pagination am-pagination-right"> -->
-                                            {$pageStr}
-                                        <!-- </ul> -->
-                                        <!-- <ul class="am-pagination tpl-pagination">
-                                            <li class="am-disabled"><a href="#">«</a></li>
-                                            <li class="am-active"><a href="#">1</a></li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                            <li><a href="#">4</a></li>
-                                            <li><a href="#">5</a></li>
-                                            <li><a href="#">»</a></li>
-                                        </ul> -->
-                                    </div>
-                                </div>
-                                <hr>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
     <script src="__PUBLIC__/js/jquery.min.js"></script>
@@ -250,42 +169,7 @@
                 btn: ['确定','取消'] //按钮
             });
         }
-        // 添加职位信息页面
-        function addPosition(){
-            layer.open({
-                type: 2,
-                offset: '100px',
-                title: '添加职位信息',
-                shadeClose: true,
-                shade: 0.8,
-                area: ['40%', '60%'],
-                btn: ['关闭'],
-                content: '__APP__/PersonalCenter/addPosition' //iframe的url
-            });
-        }
-        // 添加部门页面
-        function updatePosition(){
-            layer.open({
-                type: 2,
-                offset: '100px',
-                title: '修改职位信息',
-                shadeClose: true,
-                shade: 0.8,
-                area: ['40%', '60%'],
-                btn: ['关闭'],
-                content: '__APP__/PersonalCenter/updatePosition' //iframe的url
-            });
-        }
-        // 删除信息提示
-        function deletePosition(){
-            layer.confirm('您确定要删除该条职位信息吗？', {
-                icon: 3,
-                anim:5,
-                offset: '200px',
-                title:'提示',
-                btn: ['确定','取消'] //按钮
-            });
-        }
+        
     </script>
 </body>
 

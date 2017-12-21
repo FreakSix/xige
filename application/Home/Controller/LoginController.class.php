@@ -66,6 +66,10 @@
 			$data['login_type'] = $loginType;
 			$ip = get_client_ip();
 			$data['ip'] = $ip;
+			//获取登录设备
+			$data['operate_tool'] = $this->getOperateTool();
+			//获取登录系统
+			$data['operate_system'] = $this->getOperateSystem();
 			$loginLogsModel = D("XgLoginLogs");
 			$re = $loginLogsModel->addLoginLogs($data);
 		}
@@ -106,5 +110,44 @@
 		//登录提示页面
 		public function loginTishi(){
 			$this -> display();
+		}
+		//获取登录系统
+		function getOperateSystem(){
+			if(!empty($_SERVER['HTTP_USER_AGENT'])){
+				$user_os = $_SERVER['HTTP_USER_AGENT'];
+				if(preg_match('/win/i', $user_os)){
+					$user_os = 'windows';
+				}else if(preg_match('/linux/i', $user_os)){
+					$user_os = 'linux';
+				}else if(preg_match('/unix/i', $user_os)){
+					$user_os = 'unix';
+				}else if(preg_match('/mac/i', $user_os)){
+					$user_os = 'Macintosh';
+				}else{
+					$user_os = 'other';
+				}
+				return $user_os;
+			}
+		}
+		//获取登录设备
+		function getOperateTool(){
+			$agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+			$is_pc = (strpos($agent, 'windows nt'))?true:false;
+			$is_mac = (strpos($agent, 'mac os'))?true:false;
+			$is_iphone = (strpos($agent, 'iphone'))?true:false;
+			$is_android = (strpos($agent, 'android'))?true:false;
+			$is_ipad = (strpos($agent, 'ipad'))?true:false;
+			if($is_pc){
+				$type = "电脑登录";
+			}else if($is_mac){
+				$type = "MAC登录";
+			}else if($is_iphone){
+				$type = "苹果登录";
+			}else if($is_android){
+				$type = "安卓登录";
+			}else if($is_ipad){
+				$type = "ipad登录";
+			}
+			return $type;
 		}
 	}

@@ -397,12 +397,17 @@ $(document).ready(function(){
     //alert($(".tpl-left-nav-list-son ul li.tpl-left-nav-item").length);
     for (var i = 0; i < $(".tpl-left-nav-list-son ul li.tpl-left-nav-item").length; i++) {
         if($(".tpl-left-nav").attr("nav") == $(".tpl-left-nav-item").find(".nav-link").eq(i).attr("nav")){
-            $(".nav-link").eq(i).addClass("active");
+            $(".nav-link").eq(i).addClass("active").addClass("current-active");
       }else{
         $(".nav-link").eq(i).removeClass("active");
       }
     }
 });
+
+$(".nav-link").mouseout(function(){
+    $("nav-link").removeClass("active");
+})
+
     // ==========================
     // 左侧二级菜单选中设置及下拉菜单打开状态设置
     // ==========================
@@ -419,9 +424,33 @@ $(document).ready(function(){
             $(".xg-second-level-nav").eq(i).parent().parent()
                 .find('.am-icon-angle-right')
                 .toggleClass('tpl-left-nav-more-ico-rotate');
+            // $(".xg-second-level-nav").eq(i).parent().parent()
+            //     .find('.nav-link')
+            //     .addClass("active");
             // alert($(".xg-second-level-nav").eq(i).find(".xg-second-level-nav-a").addClass("active"));
         }else{
             $(".xg-second-level-nav").eq(i).find(".xg-second-level-nav-a").removeClass("active");
+        }
+    }
+});
+    // ==========================
+    // 左侧三级菜单选中设置及下拉菜单打开状态设置
+    // ==========================
+$(document).ready(function(){
+    // alert($(".xg-third-level-nav").length);
+    // alert($(".xg-left-nav-3").attr("nav"));
+    for(var i = 0; i < $(".xg-third-level-nav").length; i++){
+        // alert($(".xg-third-level-nav").eq(i).find(".xg-third-level-nav-a").attr("nav"));
+        if($(".xg-left-nav-3").attr("nav") == $(".xg-third-level-nav").eq(i).find(".xg-third-level-nav-a").attr("nav")){
+            $(".xg-third-level-nav").eq(i).parent().show();
+            $(".xg-third-level-nav").eq(i).find(".xg-third-level-nav-a").addClass("active");
+            $(".xg-third-level-nav").eq(i).parent().parent()
+                .find('.am-icon-angle-right').toggleClass('tpl-left-nav-more-ico-rotate');
+            $(".xg-third-level-nav").eq(i).parent().parent().show();
+            $(".xg-third-level-nav").eq(i).parent().parent().parent().parent()
+                .find(".nav-link").find('.am-icon-angle-right').toggleClass('tpl-left-nav-more-ico-rotate');
+            $(".xg-third-level-nav").eq(i).parent().parent().parent().show();
+            // $(".xg-third-level-nav").eq(i).parent().parent().parent().siblings().hide();
         }
     }
 });

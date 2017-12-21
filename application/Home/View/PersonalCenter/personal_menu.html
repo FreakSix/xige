@@ -21,10 +21,6 @@
         width:200px;
         overflow: hidden;
     }
-    i {
-        width: 20px;
-        text-align: right;
-    }
 </style>
 <body>
     <!-- <div id="menu_scroll"></div> -->
@@ -45,22 +41,39 @@
                 </a>
             </li>
             <li class="tpl-left-nav-item">
-                <a href="__APP__/PersonalCenter/customerRank" class="nav-link tpl-left-nav-link-list" nav="customerRank">
-                    <i class="am-icon-signal"></i>
-                    <span>客户等级管理</span>
-                </a>
-            </li>
-            <li class="tpl-left-nav-item">
                 <a href="__APP__/PersonalCenter/loginLog" class="nav-link tpl-left-nav-link-list" nav="loginLog">
                     <i class="am-icon-map-marker"></i>
                     <span>登录日志</span>
                 </a>
             </li>
             <li class="tpl-left-nav-item">
-                <a href="javascript:;" class="nav-link tpl-left-nav-link-list" nav="permission">
-                    <i class="am-icon-bar-chart"></i>
-                    <span>权限管理</span>
+                <a href="__APP__/PersonalCenter/customerRank" class="nav-link tpl-left-nav-link-list" nav="customerRank">
+                    <i class="am-icon-signal"></i>
+                    <span>客户等级管理</span>
                 </a>
+            </li>
+            <li class="tpl-left-nav-item">
+                <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                    <i class="am-icon-table"></i>
+                    <span>公共信息管理</span>
+                    <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                </a>
+                <ul class="tpl-left-nav-sub-menu">
+                    <li class="xg-second-level-nav">
+                        <a href="__APP__/PersonalCenter/notice" class="xg-second-level-nav-a" nav="notice">
+                            <i class="am-icon-angle-right"></i>
+                            <span>公告管理</span>
+                            <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                        </a>
+                    </li>
+                    <li class="xg-second-level-nav">
+                        <a href="__APP__/PersonalCenter/publicMemo" class="xg-second-level-nav-a" nav="publicMemo">
+                            <i class="am-icon-angle-right"></i>
+                            <span>公共备忘录管理</span>
+                            <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li class="tpl-left-nav-item">
                 <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
@@ -72,7 +85,7 @@
                     <li class="xg-second-level-nav">
                         <a href="__APP__/PersonalCenter/department" class="xg-second-level-nav-a" nav="department">
                             <i class="am-icon-angle-right"></i>
-                            <span>部门职位管理</span>
+                            <span>部门管理</span>
                             <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                         </a>
                     </li>
@@ -84,6 +97,18 @@
                         </a>
                     </li>
                 </ul>
+            </li>
+            <li class="tpl-left-nav-item">
+                <a href="__APP__/Rbac/index" class="nav-link tpl-left-nav-link-list" nav="permission">
+                    <i class="am-icon-bar-chart"></i>
+                    <span>职位与权限管理</span>
+                </a>
+            </li>
+            <li class="tpl-left-nav-item">
+                <a href="__APP__/Rbac/node" class="nav-link tpl-left-nav-link-list" nav="node">
+                    <i class="am-icon-bar-chart"></i>
+                    <span>权限功能管理</span>
+                </a>
             </li>
             </ul>
     </div>

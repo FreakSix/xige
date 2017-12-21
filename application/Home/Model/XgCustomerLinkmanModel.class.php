@@ -58,9 +58,7 @@
 			$customer_link['name']=$post['link_name'];
 			$customer_link['phone']=$post['link_phone'];
 			$customer_link['address']=$post['link_address'];
-			
 			$res = M("xg_customer_linkman")->data($customer_link)->add();
-			
 			return $res;
 		}
 

@@ -40,21 +40,27 @@
                     <div class="caption font-green bold">登录日志</div>
                 </div>
                 <div class="tpl-block">
+                <if condition="$userInfo['department_id'] == 0">
                     <div class="am-g">
                         <div class="am-u-sm-12">
                             <div class="am-form-group">
                                 <label class="am-u-sm-2 am-form-label xg-loginlog-label">指定成员：</label>
                                 <div class="am-u-sm-3 am-u-end">
-                                    <select data-am-selected="{btnSize: 'sm'}">
-                                        <option value="option1">全部成员</option>
-                                        <option value="option2">张三</option>
-                                        <option value="option3">李四</option>
-                                        <option value="option3">万物</option>
+                                    <select data-am-selected="{btnSize: 'sm'}" onchange="getDifList()" id="chengyau_select">
+                                        <option value="all">全部成员</option>
+                                        <if condition="count($mangerArr) != 0">
+                                        <foreach name="mangerArr" item="manager">
+                                        	<option value="{$manager.id}">{$manager.truename}</option>
+                                        </foreach>
+                                        </if>
+                                        <!-- <option value="option3">李四</option>
+                                        <option value="option3">万物</option> -->
                                     </select>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    </if>
                     <div class="am-g">
                         <div class="am-u-sm-12">
                             <form class="am-form">
@@ -69,24 +75,19 @@
                                             <th class="">IP归属度</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        
-                                        <tr>
-                                            <td>2017-12-01 9:52:21</a></td>
-                                            <td>张三</td>
-                                            <td>电脑登录</td>
-                                            <td>Windows 7</td>
-                                            <td>123.66.177.102</td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2017-12-01 9:52:21</a></td>
-                                            <td>张三</td>
-                                            <td>电脑登录</td>
-                                            <td>Windows 7</td>
-                                            <td>123.66.177.102</td>
-                                            <td></td>
-                                        </tr>
+                                    <tbody class="list_content">
+                                        <if condition="count($loginLogArr)">
+                                        <foreach name="loginLogArr" item="loginLog">
+	                                        <tr>
+	                                            <td>{$loginLog.addtime}</td>
+	                                            <td>{$loginLog.truename}</td>
+	                                            <td>{$loginLog.operate_tool}</td>
+	                                            <td>{$loginLog.operate_system}</td>
+	                                            <td>{$loginLog.ip}</td>
+	                                            <td></td>
+	                                        </tr>
+                                        </foreach>
+                                        </if>
                                     </tbody>
                                 </table>
                                 <div class="am-cf">
@@ -125,5 +126,13 @@
         
     </script>
 </body>
-
+<script>
+	function getDifList(){
+		var id = $("#chengyau_select").val();
+		$.post("__APP__/PersonalCenter/getDifLoginlogs",{"id":id},function(res){
+			$(".list_content").html('');
+			$(".list_content").html(res);
+		})
+	}
+</script>
 </html>

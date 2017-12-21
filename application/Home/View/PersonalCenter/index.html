@@ -47,30 +47,36 @@
                         <tbody >
                             <tr>
                                 <td align="right">用户名:</td>
-                                <td>细格广告</td>
+                                <td class="username">{$userInfo['username']}</td>
+                            </tr>
+                             <tr>
+                                <td align="right">真实姓名:</td>
+                                <td>{$userInfo['truename']}</td>
                             </tr>
                             <tr>
                                 <td align="right">头像:</td>
                                 <td><img src="__PUBLIC__/images/user_default.png"></td>
                             </tr>
+                            <if condition="$depeart != ''">
                             <tr>
                                 <td align="right">所属部门:</td>
-                                <td>制作部</td>
+                                <td>{$depeart['depart_name']}</td>
                             </tr>
+                            </if>
                             <tr>
                                 <td align="right">职位:</td>
-                                <td>制作部经理</td>
+                                <td>{$duty['duty_name']}</td>
                             </tr>
                             <tr>
                                 <td align="right">邮箱:</td>
-                                <td>157563285@qq.com</td>
+                                <td class="email">{$userInfo['email']}</td>
                             </tr>
                             <tr>
                                 <td align="right">手机号码:</td>
-                                <td>15756328532</td>
+                                <td class="tel">{$userInfo['tel']}</td>
                             </tr>
                             <tr>
-                                <td colspan="2" align="center"><button type="button" class="am-btn am-btn-primary am-round" onclick="updateUserInfo()">修改个人信息</button></td>
+                                <td colspan="2" align="center"><button type="button" class="am-btn am-btn-primary am-round" onclick="updateUserInfo({$userInfo['id']})">修改个人信息</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -86,6 +92,9 @@
 <script type="text/javascript">
     // 修改用户信息页面
     function updateUserInfo(id){
+    	var username = $(".username").text();
+    	var email = $(".email").text();
+    	var tel = $(".tel").text();
         layer.open({
             type: 2,
             offset: '20px',
@@ -94,7 +103,7 @@
             shade: 0.8,
             area: ['60%', '90%'],
             btn: ['关闭'],
-            content: '__APP__/PersonalCenter/updateUserInfo/customer_id/'+id //iframe的url
+            content: "__APP__/PersonalCenter/updateUserInfo/username/"+username+"/email/"+email+"/tel/"+tel+"/id/"+id,
         });
     }
 </script>
