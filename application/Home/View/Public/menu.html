@@ -72,8 +72,8 @@
                                 </a>
                                 <ul class="tpl-left-nav-sub-menu-first-{$k}" style="display: none;margin-top: 0;">
                                     <foreach name="productType[$k]['productMenu']" key="key" item="item"> 
-                                        <li>
-                                            <a href="__APP__/Goods/index/type_id/{$item.id}">
+                                        <li class="xg-third-level-nav">
+                                            <a href="__APP__/Goods/index/type_id/{$item.id}" class="xg-third-level-nav-a" nav="goods{$item.id}">
                                                 <i class="am-icon-credit-card"></i> 
                                                 <span>{$item.type_name}</span>
                                             </a>
@@ -89,38 +89,38 @@
                                 <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                             </a>
                             <ul class="tpl-left-nav-sub-menu-second">
-                                <li>
-                                    <a href="__APP__/Goods/productPrice">
+                                <li class="xg-third-level-nav">
+                                    <a href="__APP__/Goods/productPrice" class="xg-third-level-nav-a" nav="goodsPrice">
                                         <i class="am-icon-credit-card"></i>
                                         <span>商品报价</span>
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="__APP__/Goods/productType">
+                                <li class="xg-third-level-nav">
+                                    <a href="__APP__/Goods/productType" class="xg-third-level-nav-a" nav="goodsType">
                                         <i class="am-icon-credit-card"></i>
                                         <span>服务类型</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="__APP__/Goods/productParameter">
+                                    <a href="__APP__/Goods/productParameter" class="xg-third-level-nav-a" nav="goodsHeader">
                                         <i class="am-icon-credit-card"></i>
                                         <span>商品参数</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="__APP__/Goods/productName">
+                                    <a href="__APP__/Goods/productName" class="xg-third-level-nav-a" nav="goodsName">
                                         <i class="am-icon-credit-card"></i>
                                         <span>商品名称</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="__APP__/Goods/productModel">
+                                    <a href="__APP__/Goods/productModel" class="xg-third-level-nav-a" nav="goodsModel">
                                         <i class="am-icon-credit-card"></i>
                                         <span>商品型号</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="__APP__/Goods/productSpec">
+                                    <a href="__APP__/Goods/productSpec" class="xg-third-level-nav-a" nav="goodsSpec">
                                         <i class="am-icon-credit-card"></i>
                                         <span>商品规格</span>
                                     </a>
