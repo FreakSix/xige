@@ -38,6 +38,36 @@
 		public function loginLog(){
 			$this->display("login_log");
 		}
+		// 公告信息页面
+		public function notice(){
+			$noticeInfo = D("XgNotice")->getNotice();
+	    	$this->assign("noticeInfo",$noticeInfo);
+			$this->display("notice");
+		}
+		// 修改公告信息页面
+		public function updateNotice(){
+	    	$noticeInfo = D("XgNotice")->getNotice();
+	    	$this->assign("noticeInfo",$noticeInfo);
+			$this->display("update_notice");
+		}
+		// 修改公共信息处理
+		public function updateNoticeHandle(){
+			$noticeInfo = D("XgNotice")->getNotice();
+			$post = $_POST;
+			if($post){
+				if($post["notice_info"] == $noticeInfo[0]["notice_info"] && $post["note_info"] == $noticeInfo[0]["note_info"]){
+					return 1;
+				}
+			}
+		}
+		// 公共备忘录管理页面
+		public function publicMemo(){
+			$this->display("public_memo");
+		}
+		// 修改公共备忘录信息页面
+		public function updatePublicMemo(){
+			$this->display("update_public_memo");
+		}
 		
 		// 部门信息页面
 		public function department(){
@@ -51,26 +81,7 @@
 		public function updateDepartment(){
 			$this->display("update_department");
 		}
-		// 添加职位信息页面
-		public function addPosition(){
-			$this->display("add_position");
-		}
-		// 修改职位信息页面
-		public function updatePosition(){
-			$this->display("update_position");
-		}
-		// 员工信息页面
-		public function staff(){
-			$this->display("staff");
-		}
-		// 新增员工信息页面
-		public function addStaff(){
-			$this->display("add_staff");
-		}
-		// 修改员工信息页面
-		public function updateStaff(){
-			$this->display("update_staff");
-		}
+		
 		// 分配登录帐号页面
 		public function createAccount(){
 			$this->display("create_account"); 
