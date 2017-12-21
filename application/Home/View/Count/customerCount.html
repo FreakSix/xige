@@ -191,14 +191,18 @@
                     }
                 },
                 toolbox: {
+                    x: 'center', 
+                    y: 'top',
                     feature: {
-                        dataView: {show: true, readOnly: false},
+                        // dataView: {show: true, readOnly: false},
                         magicType: {show: true, type: ['line', 'bar']},
                         restore: {show: true},
                         saveAsImage: {show: true}
                     }
                 },
                 legend: {
+                    x: 'center', 
+                    y: 'bottom',
                     data:['新增客户数']
                 },
                 xAxis: [
@@ -220,7 +224,7 @@
                         type: 'value',
                         name: '人数',
                         min: 0,
-                        max: [<?php echo $data['yMax']  ?>],
+                        // max: [<?php echo $data['yMax']  ?>],
                         // interval: 10,
                         axisLabel: {
                             formatter: '{value} 人'

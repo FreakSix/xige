@@ -117,10 +117,10 @@
 
 			}
 
-			//取统计数据中的最大值
-			$maxNum = (int)max($data['num']);
-			$yMax = (floor(($maxNum/10))+1)*10;
-			$data['yMax'] = (int)$yMax;
+			// //取统计数据中的最大值
+			// $maxNum = (int)max($data['num']);
+			// $yMax = (floor(($maxNum/10))+1)*10;
+			// $data['yMax'] = (int)$yMax;
 
 			//客户等级信息
 			$csutomerInfo = D("XgCustomerLevel")->getCustomerLevelInfo();
@@ -143,6 +143,12 @@
 
 			$where = $this->getConditionInfo($get);
 			// dump($where);
+			if( $where['where'] == null ){
+				$where['where'] = "order_status != 4";
+			}else{
+				$where['where'] = $where['where']." and order_status != 4";
+			}
+
 			if($get['type'] == 'months'){
 				// var_dump($get['type']);
 				if($get['search_date'] != ''){
@@ -156,11 +162,7 @@
 
 						$endTime=mktime(23,59,59,$dateTimeArr['1'],$i,$dateTimeArr['0'])+1;
 
-						if( $where['where'] == null ){
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-						}else{
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-						}
+						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
 						
 						// $customerNum = D("XgOrder")->getOrderCount($condition);
 						// $data['num'][] = $customerNum;
@@ -194,11 +196,8 @@
 						$endTime=mktime(23,59,59,date('m'),$i,date('Y'))+1;
 
 						// $condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."'";
-						if($where['where'] == null){
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-						}else{
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-						}
+						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
+
 						$orderInfo = D("XgOrder")->orderInfo($condition);
 						//
 						$costMoney = 0;  //成本总额
@@ -233,11 +232,8 @@
 					$endTime=mktime(23,59,59,$i,$dayNum,$get['search_date'])+1;
 
 					// $condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."'";
-					if($where['where'] == null){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
+					$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
+
 					$orderInfo = D("XgOrder")->orderInfo($condition);
 					//
 					$costMoney = 0;  //成本总额
@@ -267,11 +263,8 @@
 
 					$endTime=mktime(23,59,59,$i,$dayNum,date('Y'))+1;
 
-					if($where['where'] == null){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
+					$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
+
 					// dump($condition);
 					$orderInfo = D("XgOrder")->orderInfo($condition);
 					//
@@ -295,21 +288,6 @@
 				 $get['search_date'] = date('Y');
 
 			}
-
-			// //取统计数据中的最大值
-			// $maxArr[] = (int)max($data['costMoney']);
-			// $maxArr[] = (int)max($data['money']);
-			// $maxArr[] = (int)max($data['getMoney']);
-
-			// // $maxNum = (int)max($maxArr);
-			// // // dump($maxNum);
-			// // $yMax = (floor(($maxNum/10))+1)*10;
-			// // $data['yMax'] = (int)$yMax;
-			// $result = $this->get_y_value($maxArr);
-			// $data['variance'] = $result['variance'];
-			// $data['yMax'] = $result['yMax'];
-
-			// dump($data);
 
 			//商品全部分类
 			$productTypeInfo = D("XgProductType")->getProductType();
@@ -339,6 +317,12 @@
 
 			$where = $this->getConditionInfo($get);
 			// dump($where);
+			if( $where['where'] == null ){
+				$where['where'] = "order_status != 4";
+			}else{
+				$where['where'] = $where['where']." and order_status != 4";
+			}
+
 			if($get['type'] == 'months'){
 				// var_dump($get['type']);
 				if($get['search_date'] != ''){
@@ -352,11 +336,7 @@
 
 						$endTime=mktime(23,59,59,$dateTimeArr['1'],$i,$dateTimeArr['0'])+1;
 
-						if( $where['where'] == null ){
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-						}else{
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-						}
+						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
 						
 						// $customerNum = D("XgOrder")->getOrderCount($condition);
 						// $data['num'][] = $customerNum;
@@ -387,11 +367,8 @@
 						$endTime=mktime(23,59,59,date('m'),$i,date('Y'))+1;
 
 						// $condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."'";
-						if($where['where'] == null){
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-						}else{
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-						}
+						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
+
 						$orderInfo = D("XgOrder")->orderInfo($condition);
 						//
 						$customerMoney = 0;  //客户回款
@@ -423,11 +400,8 @@
 					$endTime=mktime(23,59,59,$i,$dayNum,$get['search_date'])+1;
 
 					// $condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."'";
-					if($where['where'] == null){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
+					$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
+
 					$orderInfo = D("XgOrder")->orderInfo($condition);
 					//
 					$customerMoney = 0;  //客户回款
@@ -454,11 +428,8 @@
 
 					$endTime=mktime(23,59,59,$i,$dayNum,date('Y'))+1;
 
-					if($where['where'] == null){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
+					$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
+
 					// dump($condition);
 					$orderInfo = D("XgOrder")->orderInfo($condition);
 					//
@@ -501,6 +472,11 @@
 
 			$where = $this->getConditionInfo($get);
 			// dump($where);
+			if( $where['where'] == null ){
+				$where['where'] = "order_status != 4";
+			}else{
+				$where['where'] = $where['where']." and order_status != 4";
+			}
 			if($get['type'] == 'months'){
 				// var_dump($get['type']);
 				if($get['search_date'] != ''){
@@ -514,11 +490,7 @@
 
 						$endTime=mktime(23,59,59,$dateTimeArr['1'],$i,$dateTimeArr['0'])+1;
 
-						if( $where['where'] == null ){
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-						}else{
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-						}
+						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
 						
 						$orderCount = D("XgOrder")->getOrderCount($condition);
 						$data['orderCount'][] = $orderCount;
@@ -536,11 +508,8 @@
 						$endTime=mktime(23,59,59,date('m'),$i,date('Y'))+1;
 
 						// $condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."'";
-						if($where['where'] == null){
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-						}else{
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-						}
+						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
+
 						$orderCount = D("XgOrder")->getOrderCount($condition);
 						$data['orderCount'][] = $orderCount;
 				 	}
@@ -561,11 +530,8 @@
 					$endTime=mktime(23,59,59,$i,$dayNum,$get['search_date'])+1;
 
 					// $condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."'";
-					if($where['where'] == null){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
+					$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
+
 					$orderCount = D("XgOrder")->getOrderCount($condition);
 					$data['orderCount'][] = $orderCount;
 				 }
@@ -581,11 +547,8 @@
 
 					$endTime=mktime(23,59,59,$i,$dayNum,date('Y'))+1;
 
-					if($where['where'] == null){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
+					$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
+
 					// dump($condition);
 					$orderCount = D("XgOrder")->getOrderCount($condition);
 					$data['orderCount'][] = $orderCount;
@@ -626,6 +589,12 @@
 
 			$where = $this->getConditionInfo($get);
 			// dump($where);
+			if( $where['where'] == null ){
+				$where['where'] = "order_status != 4";
+			}else{
+				$where['where'] = $where['where']." and order_status != 4";
+			}
+
 			if($get['type'] == 'months'){
 				// var_dump($get['type']);
 				if($get['search_date'] != ''){
@@ -639,11 +608,7 @@
 
 						$endTime=mktime(23,59,59,$dateTimeArr['1'],$i,$dateTimeArr['0'])+1;
 
-						if( $where['where'] == null ){
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-						}else{
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-						}
+						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
 						
 						$orderInfo = D("XgOrder")->orderInfo($condition);
 						//
@@ -669,11 +634,8 @@
 						$endTime=mktime(23,59,59,date('m'),$i,date('Y'))+1;
 
 						// $condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."'";
-						if($where['where'] == null){
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-						}else{
-							$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-						}
+						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
+
 						$orderInfo = D("XgOrder")->orderInfo($condition);
 						//
 						$cutomerNum = 0;  //产品数
@@ -702,11 +664,8 @@
 					$endTime=mktime(23,59,59,$i,$dayNum,$get['search_date'])+1;
 
 					// $condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."'";
-					if($where['where'] == null){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
+					$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
+
 					$orderInfo = D("XgOrder")->orderInfo($condition);
 					//
 					$cutomerNum = 0;  //产品数
@@ -730,11 +689,8 @@
 
 					$endTime=mktime(23,59,59,$i,$dayNum,date('Y'))+1;
 
-					if($where['where'] == null){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."'";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
+					$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
+
 					// dump($condition);
 					// $orderCount = D("XgOrder")->getOrderCount($condition);
 					// $data['orderCount'][] = $orderCount;
@@ -805,61 +761,6 @@
 			}
 			return $data;
 		}
-		//订单状态下拉框数组
-		public function getOrderStatusArr(){
-			$orderStatusArr = array(
-					"生产中" => 1,
-					"已发货" => 2,
-					"已收货" => 3,
-					"已作废" => 4,
-				);
-			return $orderStatusArr;
-		}
-		//付款状态下拉框数组
-		public function getMoneyStatusArr(){
-			$moneyStatusArr = array(
-					"未付款" => 1,
-					"部分付款" => 2,
-					"已付款" => 3,
-				);
-			return $moneyStatusArr;
-		}
-		// public function get_y_value($maxArr){
-		// 	$maxNum = (int)max($maxArr);
-		// 	$maxNumLen = strlen($maxNum);
-		// 	// dump($maxNum);
-		// 	// dump($maxNumLen);
-
-		// 	$firstNum = (substr($maxNum, 0, 1))+1;
-		// 	// dump($firstNum);
-
-		// 	$variance = "";
-		// 	for ($i=1; $i < $maxNumLen-1; $i++) { 
-		// 		$variance .= "0";
-		// 	}
-		// 	$variance = $firstNum.$variance;
-		// 	// dump((int)$variance);
-		// 	$variance = (int)$variance;
-
-		// 	// if($maxNum <= 10){
-		// 	// 	$variance = 2;
-		// 	// }elseif ($maxNum <= 100) {
-		// 	// 	$variance = 10;
-		// 	// }else{
-		// 	// 	for ($i=1; $i<10 ; $++) {				
-		// 	// 		$topValue = (int)$i."000";
-		// 	// 		if(){
-
-		// 	// 		}
-		// 	// 	}
-		// 	// }
-			
-
-		// 	$yMax = (floor($maxNum/$variance)+1)*$variance;
-		// 	$data['variance'] = $variance;
-		// 	$data['yMax'] = (int)$yMax;
-
-		// 	return $data;
-		// }
+		
 		
 	}
