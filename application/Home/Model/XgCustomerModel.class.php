@@ -87,5 +87,11 @@
 			return $result;
 		}
 
+		//符合条件的客户总数
+		public function getCustomerCount($condition){
+			$totalCount = M("xg_customer")->where($condition['where'])->count();
+			return $totalCount;
+		}
+
 		
 	}
