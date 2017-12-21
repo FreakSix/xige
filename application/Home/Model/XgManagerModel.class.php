@@ -16,19 +16,20 @@
 			$result = M("xg_manager")->where("tel = '{$tel}'")->find();
 			return $result;
 		}
-		
-		//条件查询客户信息
-		
-
-		//查询客户等级信息
-		
-		
-
 		//删除客户信息
 		public function delete($customer_id){
 			$result = M("xg_customer")->where("id = ".$customer_id)->delete();
 			return $result;
 		}
-
-		
+		//修改密码
+		public function updatePassword($id,$new_pwd){
+			$sql = "update xg_manager set password = '{$new_pwd}' where id = {$id}";
+			$result = M()->execute($sql);
+			return $result;
+		}
+		//获取所有的管理员
+		public function getAllManager(){
+			$result = M("xg_manager")->select();
+			return $result;
+		}
 	}
