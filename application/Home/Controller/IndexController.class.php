@@ -74,4 +74,8 @@
 	    	
 	    	$this->assign("userMsg",$_SESSION["userMsg"]);
 	    }
+	    // 个人备忘录
+	    public function personalMemo(){
+	    	
+	    }
 	}

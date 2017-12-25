@@ -66,7 +66,25 @@
     $(".am-btn-primary").click(function(){
         var id = $("#nid").val();
         var notice_info = $.trim($("#notice_info").val());
+        var notice_info_length = $.trim($("#notice_info").val()).length;
         var note_info = $.trim($("#note_info").val());
+        var note_info_length = $.trim($("#note_info").val()).length;
+        if(notice_info_length > 50){
+            parent.layer.alert("公告内容的长度不得超过50个字！",{
+                    icon: 5,
+                    offset: '200px',
+                    title:'提示',
+                });
+                return false;
+        }
+        if(note_info_length > 100){
+            parent.layer.alert("提示内容的长度不得超过100个字！",{
+                    icon: 5,
+                    offset: '200px',
+                    title:'提示',
+                });
+                return false;
+        }
         $.post("__APP__/PersonalCenter/updateNoticeHandle",{"id":id,"notice_info":notice_info,"note_info":note_info},function(result){
             if(result > 0){
                 parent.layer.msg("修改成功！",{
@@ -77,13 +95,20 @@
                 parent.location.href = "__APP__/PersonalCenter/notice";
                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                 parent.layer.close(index);
-            }else{
-                parent.layer.alert("修改失败！",{
+            }else if(result == 0){
+                parent.layer.alert("请修改公告信息后再进行提交！",{
                     icon: 5,
                     offset: '200px',
                     title:'提示',
                 });
                 return false;
+            }else{
+               parent.layer.alert("修改失败！请重试或联系网站管理员！",{
+                    icon: 5,
+                    offset: '200px',
+                    title:'提示',
+                });
+                return false; 
             }
         });
     });

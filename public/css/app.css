@@ -1440,7 +1440,7 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 }
 
 .tpl-task-remind li .cosA {
-    margin-right: 80px;
+    /*margin-right: 80px;*/
 }
 
 .tpl-task-remind li .cosB {

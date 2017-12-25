@@ -11,6 +11,12 @@ class XgNoticeModel extends Model{
 		$result = $noticeModel->select();
 		return $result;
 	}
+	// 修改公告信息
+	public function updateNotice($id,$data){
+		$noticeModel = M("xg_notice");
+		$res = $noticeModel->where("id = ".$id)->save($data);
+		return $res;
+	}
 	
 }
 

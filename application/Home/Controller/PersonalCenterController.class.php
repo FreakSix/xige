@@ -114,39 +114,6 @@
 			$this->assign("loginLogArr",$loginLogArr);
 			$this->display("login_log");
 		}
-<<<<<<< HEAD
-		// 公告信息页面
-		public function notice(){
-			$noticeInfo = D("XgNotice")->getNotice();
-	    	$this->assign("noticeInfo",$noticeInfo);
-			$this->display("notice");
-		}
-		// 修改公告信息页面
-		public function updateNotice(){
-	    	$noticeInfo = D("XgNotice")->getNotice();
-	    	$this->assign("noticeInfo",$noticeInfo);
-			$this->display("update_notice");
-		}
-		// 修改公共信息处理
-		public function updateNoticeHandle(){
-			$noticeInfo = D("XgNotice")->getNotice();
-			$post = $_POST;
-			if($post){
-				if($post["notice_info"] == $noticeInfo[0]["notice_info"] && $post["note_info"] == $noticeInfo[0]["note_info"]){
-					return 1;
-				}
-			}
-		}
-		// 公共备忘录管理页面
-		public function publicMemo(){
-			$this->display("public_memo");
-		}
-		// 修改公共备忘录信息页面
-		public function updatePublicMemo(){
-			$this->display("update_public_memo");
-		}
-		
-=======
 		//点击不同的人员获取不同的登陆日志
 		public function getDifLoginlogs(){
 			$id = $_POST['id'];
@@ -164,7 +131,45 @@
 			}
 			echo $html;
 		}
->>>>>>> 196b58777f783a2876844d4ec5b406b027460e91
+		// 公告信息页面
+		public function notice(){
+			$noticeInfo = D("XgNotice")->getNotice();
+	    	$this->assign("noticeInfo",$noticeInfo);
+			$this->display("notice");
+		}
+		// 修改公告信息页面
+		public function updateNotice(){
+	    	$noticeInfo = D("XgNotice")->getNotice();
+	    	$this->assign("noticeInfo",$noticeInfo);
+			$this->display("update_notice");
+		}
+		// 修改公共信息处理
+		public function updateNoticeHandle(){
+			$noticeInfo = D("XgNotice")->getNotice();
+			// dump($noticeInfo);
+			$post = $_POST;
+			$id = $post["id"];
+			$data["notice_info"] = $post["notice_info"];
+			$data["note_info"] = $post["note_info"];
+			if($post){
+				if($post["notice_info"] == $noticeInfo[0]["notice_info"] && $post["note_info"] == $noticeInfo[0]["note_info"]){
+					echo 0;
+				}else{
+					$result = D("XgNotice")->updateNotice($id,$data);
+					echo $result;
+				}
+			}
+		}
+		// 公共备忘录管理页面
+		public function publicMemo(){
+			$this->display("public_memo");
+		}
+		// 修改公共备忘录信息页面
+		public function updatePublicMemo(){
+			$this->display("update_public_memo");
+		}
+		
+		
 		// 部门信息页面
 		public function department(){
 			$this->display("department");
