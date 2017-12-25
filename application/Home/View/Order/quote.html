@@ -71,7 +71,6 @@
                                     <button type="button" onclick="addQuote()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增报价</button>
                                     <!-- <div id="div1nnn" style="display:none;"><iframe src="add.html" width=100% height=100% id=""></iframe></div> -->
                                     <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出数据</button>
-                                    <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除所选内容</button>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +111,7 @@
                                 <table class="am-table am-table-striped am-table-hover table-main">
                                     <thead>
                                         <tr>
-                                            <th class="table-check"><input type="checkbox" class="tpl-table-fz-check"></th>
+                                            <th >序号</th>
                                             <th class="">客户名称</th>
                                             <th class="">客户等级</th>
                                             <th class="">联系人姓名</th>
@@ -130,7 +129,7 @@
                                     <tbody>
                                         <foreach name="productQuoteInfo" item="v" key="k">
                                             <tr>
-                                                <td><input type="checkbox"></td>
+                                                 <td>{$k+1}</td> 
                                                 <td><a href="__APP__/Order/quoteDetail/id/{$v['id']}">{$v['customer_name']}</a></td>
                                                 <td>{$v['level_name']}</td>
                                                 <td>{$v['linkman_name']}</td>

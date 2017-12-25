@@ -81,7 +81,7 @@
                             <div class="am-btn-group am-btn-group-xs">
                                     客户名称：
                                 </div>
-                            <select id="customer_id" onchange="submitSearch();" data-am-selected="{searchBox: 1,searchBox: 1,btnWidth:425}">
+                            <select id="customer_id" onchange="submitSearch();" data-am-selected="{searchBox: 1,btnWidth:425}">
                                 <option value="0">全部客户</option>
                                 <foreach name="customerInfo" item="v" key="k">
                                     <if condition="$get['customer_id'] == $v['id']">

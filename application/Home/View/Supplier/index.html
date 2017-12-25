@@ -38,65 +38,109 @@
                 <li><a href="#">供应商管理</a></li>
                 <li class="am-active">供应商信息</li>
             </ol>
-            <div class="tpl-portlet-components">
+            <div class="tpl-portlet-components" >
                 <div class="portlet-title">
                     <div class="caption font-green bold">供应商信息</div>
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
-                        <div class="am-u-sm-12 am-u-md-6">
+                        <div class="am-u-sm-12 am-u-md-4">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
                                     <button type="button" onclick="window.open('__APP__/Supplier/addSupplier')" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增供应商</button>
                                     <!-- <div id="div1nnn" style="display:none;"><iframe src="add.html" width=100% height=100% id=""></iframe></div> -->
                                     <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出数据</button>
-                                    <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除所选内容</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="am-u-sm-12 am-u-md-3">
-                            <div class="am-form-group">
-                                <select data-am-selected="{btnSize: 'sm'}">
-                                  <option value="option1">全部客户</option>
-                                  <option value="option2">一级用户</option>
-                                  <option value="option3">二级用户</option>
-                                  <option value="option3">三级用户</option>
-                                  <option value="option3">四级用户</option>
-                                  <option value="option3">五级用户</option>
+                        <div class="am-u-sm-12 am-u-md-2">
+                            <div class="am-form-group"> 
+                                省份信息： 
+                                <select data-am-selected="{maxHeight: 370,searchBox: 1}" id="province" onchange="searchSubmit('province');">
+                                    <option value="0">选择省份</option>
+                                    <foreach name="province" item="v" key="k">
+                                        <if condition="$get['province'] == $v['code']">
+                                            <option value="{$v['code']}" selected="selected">{$v['name']}</option>
+                                        <else/>
+                                            <option value="{$v['code']}" >{$v['name']}</option>
+                                        </if>
+                                    </foreach>
+                                </select>
+                            </div>
+                        </div> 
+                        <div class="am-u-sm-12 am-u-md-2">
+                            <div class="am-form-group"> 
+                                城市信息： 
+                                <select data-am-selected="{maxHeight: 370,searchBox: 1}" id="city" onchange="searchSubmit('city');">
+                                    <option value="0">选择城市</option>
+                                    <foreach name="city" item="v" key="k">
+                                        <if condition="$get['city'] == $v['code']">
+                                            <option value="{$v['code']}" selected="selected">{$v['name']}</option>
+                                        <else/>
+                                            <option value="{$v['code']}" >{$v['name']}</option>
+                                        </if>
+                                    </foreach>
                                 </select>
                             </div>
                         </div>
-                        <div class="am-u-sm-12 am-u-md-3">
+                        <div class="am-u-sm-12 am-u-md-2" >
+                            <div class="am-form-group" style="margin-left:30px;">
+                                搜索类型：
+                                <select data-am-selected="{btnSize: 'sm'}" id="input_type_value">
+                                    <if condition="$get['input_type_value'] == phone ">
+                                        <option value="0" >全部信息</option>
+                                        <option value="supplier">供应商名称</option> 
+                                        <option value="linkman">联系人</option>
+                                        <option value="phone" selected="selected">联系人电话</option>
+                                    <elseif condition="$get['input_type_value'] == linkman " />
+                                        <option value="0" >全部信息</option>
+                                        <option value="supplier">供应商名称</option> 
+                                        <option value="linkman" selected="selected">联系人</option>
+                                        <option value="phone">联系人电话</option>
+                                    <elseif condition="$get['input_type_value'] == supplier " />
+                                        <option value="0" >全部信息</option>
+                                        <option value="supplier" selected="selected">供应商名称</option> 
+                                        <option value="linkman">联系人</option>
+                                        <option value="phone" >联系人电话</option>
+                                    <else/>
+                                        <option value="0" selected="selected">全部信息</option>
+                                        <option value="supplier">供应商名称</option> 
+                                        <option value="linkman">联系人</option>
+                                        <option value="phone">联系人电话</option>
+                                    </if>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-12 am-u-md-2">
                             <div class="am-input-group am-input-group-sm">
-                                <input type="text" class="am-form-field">
+                                <input type="text" class="am-form-field" placeholder="请先选择搜索类型" value="{$get['search_value']}" id="search_value">
                                 <span class="am-input-group-btn">
-                                    <button class="am-btn  am-btn-default am-btn-success tpl-am-btn-success am-icon-search" type="button"></button>
+                                    <button class="am-btn am-btn-success tpl-am-btn-success am-icon-search" type="button"  onclick="searchSubmit('input');"></button>
                                 </span>
                             </div>
                         </div>
+
                     </div>
-                    <div class="am-g">
+                    <div class="am-g ">
                         <div class="am-u-sm-12">
                             <form class="am-form">
                                 <table class="am-table am-table-striped am-table-hover table-main">
                                     <thead>
                                         <tr>
-                                            <th class="table-check"><input type="checkbox" class="tpl-table-fz-check"></th>
+                                            <th >序号</th>
                                             <th class="table-name">供应商名称</th>
                                             <th class="table-region">所在地区</th>
                                             <th class="table-product">可做产品</th>
                                             <th class="table-tel">公司电话</th>
                                             <th class="table-contact">联系人</th>
                                             <th class="table-phone">联系电话</th>
-                                            <!-- <th class="table-author am-hide-sm-only">录入人</th>
-                                            <th class="table-date am-hide-sm-only">修改日期</th> -->
                                             <th class="table-set">操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <foreach name="supplierInfo" key="k" item="v">
                                         <tr>
-                                            <td><input type="checkbox"></td>
+                                            <td>{$k+1}</td> 
                                             <td><a href="__APP__/Supplier/detail/supplier_id/{$v['supplier_id']}">{$v['supplier_name']}</a></td>
                                             <td>{$v['local_name']}</td>
                                             <td>
@@ -105,15 +149,17 @@
                                                 </foreach>
                                             </td>
                                             <td>{$v['supplier_tel']}</td>
-                                            <td>{$v['linkman_name']}  [<a href="#">更多</a>] [<a href="#">添加</a>]</td>
+                                            <!-- <td>{$v['linkman_name']}  [<a href="#">更多</a>] [<a href="#">添加</a>]</td> -->
+                                            <td>{$v['linkman_name']} [<a href="#" onClick="linkMan({$v['supplier_id']})">更多</a>] [<a href="#" onClick="addLinkMan({$v['supplier_id']})">添加</a>]</td>
                                             <td>{$v['linkman_phone']}</td>
-                                            <!-- <td class="am-hide-sm-only">Freak</td>
-                                            <td class="am-hide-sm-only">{$v['info_update_time']|date="Y-m-d H:i",###}</td> -->
+                                            <td class="am-hide-sm-only">Freak</td>
+                                            <td class="am-hide-sm-only">{$v['info_update_time']|date="Y-m-d H:i",###}</td>
                                             <td>
                                                 <div class="am-btn-toolbar">
                                                     <div class="am-btn-group am-btn-group-xs">
                                                         <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="window.open('__APP__/Supplier/update/supplier_id/{$v['supplier_id']}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        <button type="button" class="am-btn am-btn-xs am-text-danger" onClick="deletes({$v['supplier_id']})"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        <!-- <button type="button" onClick='deletes({$v['id']})'>删除</button> -->
                                                     </div>
                                                 </div>
                                             </td>
@@ -124,19 +170,7 @@
                                 <div class="am-cf">
 
                                     <div class="am-fr">
-                                        <!-- {$pageStr} -->
-                                        <!-- <ul class="am-pagination am-pagination-right"> -->
-                                            {$pageStr}
-                                        <!-- </ul> -->
-                                        <!-- <ul class="am-pagination tpl-pagination">
-                                            <li class="am-disabled"><a href="#">«</a></li>
-                                            <li class="am-active"><a href="#">1</a></li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                            <li><a href="#">4</a></li>
-                                            <li><a href="#">5</a></li>
-                                            <li><a href="#">»</a></li>
-                                        </ul> -->
+                                        {$pageStr}
                                     </div>
                                 </div>
                                 <hr>
@@ -153,12 +187,124 @@
     <script src="__PUBLIC__/js/plus.js"></script>
     <script src="__PUBLIC__/js/echarts.min.js"></script>
     <script src="__PUBLIC__/layer/layer.js"></script>
+
+    <script type="text/javascript">
+        function searchSubmit(name){
+            // alert(name);
+
+            if(name == 'province'){
+                var province = $("#province").val();
+                var city = 0;
+                // var area = 0;
+            }else{
+                var province = $("#province").val();
+                var city = $("#city").val();
+            }
+
+
+            var input_type_value = $("#input_type_value").val();
+            var search_value = $.trim($("#search_value").val());
+            
+            if(name == 'input'){
+                if(input_type_value == 0){
+                    search_value = 0;
+                }else{
+                    if(search_value == ''){
+                        layer.alert("搜索内容不能为空！", {icon: 5,offset: '200px',});
+                        $("#search_value").focus();
+                        return false;
+                    }
+                }
+                
+            }else{
+                if(search_value == ''){
+                    search_value = 0;
+                }
+            }
+            
+
+            
+
+            location.href='__APP__/Supplier/index/province/'+province+'/city/'+city+'/input_type_value/'+input_type_value+'/search_value/'+search_value;
+        }
+
+
+        function deletes(supplier_id){
+            // alert(supplier_id);
+            layer.confirm('您确定要删除该条供应商信息以及其对应的联系人吗？', {
+                icon: 3,
+                anim:5,
+                offset: '200px',
+                title:'提示',
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                if(supplier_id){
+                    $.ajax({
+                        url:'__APP__/Supplier/deletes',
+                        data:'supplier_id='+supplier_id,
+                        dataType:'json',
+                        success:function(res){
+                            layer.confirm(res, {
+                                icon: 1,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定'] //按钮
+                            }, function(){
+                                window.location.reload();       
+                            });
+                        }
+                    });
+
+                }else{
+                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                }          
+            }, function(){
+                layer.msg('删除已取消！', {
+                time: 2000, //20s后自动关闭
+                offset: '200px',
+                title:'提示'
+                });
+            });
+        }
+
+        /*  查看更多的联系人信息 */
+        function linkMan(id){
+            layer.open({
+                type: 2,
+                offset: '20px',
+                title: '联系人详细信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['75%', '90%'],
+                btn: ['关闭'],
+                content: '__APP__/Supplier/detailsLinkman/supplier_id/'+id //iframe的url
+            });
+        }
+
+        // 添加供应商联系人信息
+        function addLinkMan(id){
+            
+            layer.open({
+                type: 2,
+                offset: '20px',
+                title: '添加联系人信息',
+                area: ['700px', '450px'],
+                // fixed: false, //不固定
+                maxmin: true,
+                content: '__APP__/Supplier/addSupplierLinkman/supplier_id/'+id,
+            });
+        }
+
+    </script>
+
     <script type="text/javascript">
         $(document).(function(){
             $("#btn-del").on("click",function(){
                 layer.msg('delete');
             });
         })
+
     </script>
 </body>
 

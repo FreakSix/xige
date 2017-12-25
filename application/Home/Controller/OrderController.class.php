@@ -13,6 +13,7 @@
 
 			$condition = array();
 			if(!empty($get)){
+
 				//如果有时间
 				if($get['search_date_value'] ){
 					$dateTimeArr = explode("-", $get['search_date_value']);
@@ -52,6 +53,12 @@
 
 				$where = implode(' and ',$whereArr);
 				$condition['where'] = $where;
+			}
+			//排除已删除的订单
+			if(empty($condition['where'])){
+				$condition['where'] = "order_status != 9";
+			}else{
+				$condition['where'] = "order_status != 9 and  ".$condition['where'];
 			}
 			
 			//订单信息中符合条件的总记录数
@@ -183,6 +190,7 @@
 			$this->assign("qqq","aaaa");
 			$this->display("add_order");
 		}
+		
 		//添加订单信息
 		public function addOrderInfo(){
 			$post=$_POST;
@@ -413,10 +421,14 @@
 			
 		}
 
-		//删除订单信息
+		//删除订单信息（修改订单状态为4）
 		public function deleteOrderInfo(){
 			$post = $_POST;
-			$res = D("XgOrder")->deleteOrderInfoById($post['id']);
+			// $res = D("XgOrder")->deleteOrderInfoById($post['id']);
+
+			$data['order_status'] = 4; 
+			$res = D("XgOrder")->updateOrderInfo($data,$post['id']);
+
 			if($res > 0){
 				$res_str = "删除成功！";
 			}else{
@@ -984,6 +996,13 @@
 				}
 			}
 
+		}
+
+
+		//
+		public function addCustomerMoney(){
+
+			$this->display("add_customer_money");
 		}
 
 

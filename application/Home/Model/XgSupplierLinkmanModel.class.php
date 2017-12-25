@@ -27,4 +27,25 @@
 			$result = $table->where("supplier_id = ".$supplierId)->save($supplierLinkman);
 			return $result;
 		}
+		//根据电话查询对应的联系人信息
+		public function getLinkmanInfoByPhone($phone){
+			$result = M("xg_supplier_linkman")->where("linkman_phone = ".$phone)->find();
+			return $result;
+		}
+		//根据联系人姓名查询对应的联系人信息
+		public function getLinkmanInfoByName($name){
+			$result = M("xg_supplier_linkman")->where("linkman_name = ".$name)->find();
+			return $result;
+		}
+
+		//根据供应商ID删除联系人信息
+		public function deleteBySupplierId($supplier_id){
+			$result = M("xg_supplier_linkman")->where("supplier_id = ".$supplier_id)->delete();
+			return $result;
+		}
+		//根据联系人ID删除联系人信息
+		public function deleteById($id){
+			$result = M("xg_supplier_linkman")->where("id = ".$id)->delete();
+			return $result;
+		}
 	}

@@ -65,7 +65,7 @@
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
-                        <div class="am-u-sm-12 am-u-md-3">
+                        <div class="am-u-sm-12 am-u-md-4">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
                                     <button type="button" onclick="addOrder()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增订单</button>
@@ -147,7 +147,7 @@
                                 <table class="am-table am-table-striped am-table-hover table-main">
                                     <thead>
                                         <tr>
-                                            <th class="table-check"><input type="checkbox" class="tpl-table-fz-check"></th>
+                                            <th >序号</th>
                                             <th class="table-id">订单编号</th>
                                             <th class="table-title">商品名称</th>
                                             <th class="table-cus">客户名称</th>
@@ -165,27 +165,47 @@
                                     <tbody>
                                         <foreach name="productOrderInfo" item="v" key="k">
                                             <tr>
-                                                <td><input type="checkbox"></td>
-                                                <td><a href="__APP__/Order/detail/id/{$v['id']}">{$v['order_id']}</a></td>
-                                                <td>{$v['product_name']}</td>
-                                                <td>{$v['customer_name']}</td>
-                                                <td>{$v['cost_money']}</td>
-                                                <td>{$v['end_money']}</td>
-                                                <td>{$v['supplier_money']}</td>
-                                                <td>{$v['customer_money']}</td>
-                                                <td>{$v['order_status_value']}</td>
-                                                <td>{$v['money_status_value']}</td>
-                                                <!-- <td class="am-hide-sm-only">{$v['manager_id']}</td> -->
-                                                <td class="am-hide-sm-only">{$v['insert_time']}</td>
-                                                <td>
-                                                    <div class="am-btn-toolbar">
-                                                        <div class="am-btn-group am-btn-group-xs">
-                                                            <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateOrder({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                            
-                                                            <button type="button" class="am-btn am-btn-xs am-text-danger am-hide-sm-only" onclick="deleteOrder({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
+                                                <if condition="$v['order_status'] != 4 ">
+                                                    <td>{$k+1}</td>
+                                                    <td><a href="__APP__/Order/detail/id/{$v['id']}">{$v['order_id']}</a></td>
+                                                    <td>{$v['product_name']}</td>
+                                                    <td>{$v['customer_name']}</td>
+                                                    <td>{$v['cost_money']}</td>
+                                                    <td>{$v['end_money']}</td>
+                                                    <td>{$v['supplier_money']}</td>
+                                                    <!-- <td>{$v['customer_money']}</td> -->
+                                                    <td>{$v['customer_money']} [<a href="#" onClick="addCustomerMoney({$v['id']})">回款详情</a>]</td>
+                                                    <td>{$v['order_status_value']}</td>
+                                                    <td>{$v['money_status_value']}</td>
+                                                    <!-- <td class="am-hide-sm-only">{$v['manager_id']}</td> -->
+                                                    <td class="am-hide-sm-only">{$v['insert_time']}</td>
+                                                    <td>
+                                                        <div class="am-btn-toolbar">
+                                                            <div class="am-btn-group am-btn-group-xs">
+                                                                
+                                                                    <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateOrder({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                                
+                                                                    <button type="button" class="am-btn am-btn-xs am-text-danger am-hide-sm-only" onclick="deleteOrder({$v['id']})"><span class="am-icon-trash-o"></span> 作废</button>
+
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </td>
+                                                    </td>
+                                                <else/>
+                                                    <td><span style="color:#CCC;font-size: 14px;">{$k+1}</span></td>
+                                                    <td><a href="__APP__/Order/detail/id/{$v['id']}"><span style="color:#CCC;font-size: 14px;">{$v['order_id']}</span></a></td>
+                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['product_name']}</span></td>
+                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['customer_name']}</span></td>
+                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['cost_money']}</span></td>
+                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['end_money']}</span></td>
+                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['supplier_money']}</span></td>
+                                                    <!-- <td>{$v['customer_money']}</td> -->
+                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['customer_money']}</span> [<a href="#" onClick="addCustomerMoney({$v['id']})"><span style="color:#CCC;font-size: 14px;">回款详情</span></a>]</td>
+                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['order_status_value']}</span></td>
+                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['money_status_value']}</span></td>
+                                                    <!-- <td class="am-hide-sm-only">{$v['manager_id']}</td> -->
+                                                    <td class="am-hide-sm-only"><span style="color:#CCC;font-size: 14px;">{$v['insert_time']}</span></td>
+                                                    <td> </td>
+                                                </if>
                                             </tr>
                                         </foreach>
                                     </tbody>
@@ -300,6 +320,22 @@
                                     content: '__APP__/Order/addOrder' //iframe的url
                                 });
         
+    }
+
+    //新增客户付款数
+    function addCustomerMoney(id){
+        // alert(id);
+        layer.open({
+                    type: 2,
+                    offset: '20px',
+                    shadeClose : false,
+                    title: '客户回款管理', 
+                    shade: 0.8,
+                    area: ['70%', '80%'],
+                    btn: ['关闭'],
+                    content: '__APP__/Order/addCustomerMoney/id/'+id, //iframe的url
+
+                });
     }
 
     //修改订单信息
