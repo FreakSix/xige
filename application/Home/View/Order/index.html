@@ -164,7 +164,7 @@
                                     </thead>
                                     <tbody>
                                         <foreach name="productOrderInfo" item="v" key="k">
-                                            <tr>
+                                            <tr class="xg-table-tr">
                                                 <if condition="$v['order_status'] != 4 ">
                                                     <td>{$k+1}</td>
                                                     <td><a href="__APP__/Order/detail/id/{$v['id']}">{$v['order_id']}</a></td>

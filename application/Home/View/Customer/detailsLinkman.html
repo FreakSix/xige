@@ -40,14 +40,14 @@
                         </thead>
                         <tbody>
                             <foreach name="linkmanInfo" item="v">
-                            <tr>
+                            <tr class="xg-table-tr">
                                 <td>{$v['name']}</td>
                                 <td>{$v['phone']}</td>
                                 <td>{$v['address']}</td>
                                 <td>
-                                    <div class="am-form-group">
-                                        <div class="am-btn-group am-btn-group-xs" >
-                                            <button type="button" onClick='deletes({$v['id']})'>删除</button>
+                                    <div class="am-btn-toolbar">
+                                        <div class="am-btn-group am-btn-group-xs">
+                                            <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletes({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
                                         </div>
                                     </div>
                                 </td>   

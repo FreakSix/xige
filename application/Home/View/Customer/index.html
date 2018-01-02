@@ -44,21 +44,16 @@
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
-                        <div class="am-u-sm-12 am-u-md-4">
+                        <div class="am-u-sm-12 am-u-md-3">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
-                                    <button type="button" onclick="window.open('__APP__/Customer/addCustomer')" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增客户</button>
+                                    <button type="button" onclick="window.location='__APP__/Customer/addCustomer'" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增客户</button>
                                     <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出数据</button>
                                 </div>
                             </div>
                         </div>
                         <form class="am-form am-form-horizontal" action="__APP__/Customer/index" method="post" enctype="multipart/form-data">
-                        <!-- <div class="am-u-sm-1 am-u-md-13">
-                            <div class="am-form-group">
-                                <span style="font-size:15px;color:#F00">客户等级:</span>
-                            </div>
-                        </div> -->
-                        <div class="am-u-sm-12 am-u-md-2">
+                        <div class="am-u-sm-12 am-u-md-3">
                             <div class="am-form-group">
                                 <span style="font-size:15px;color:#F00">客户等级:</span>
                                 <select data-am-selected="{btnSize: 'sm'}"id="customer_level" name="customer_level" onchange="changeLevelInfo();">
@@ -131,7 +126,7 @@
                                     <tbody>
                                         <foreach name="customerInfo" item="v" key="k">
                                             
-                                        <tr>
+                                        <tr class="xg-table-tr">
                                              <td>{$k+1}</td>
                                             <td><a href="__APP__/Customer/details/customer_id/{$v['id']}">{$v['cname']}</a></td>
                                             <if condition="$v['type_id'] eq 1">
@@ -146,14 +141,11 @@
                                             <td>{$v['local_address']}</td>
                                             <td>{$v['link_name']} [<a href="#" onClick='linkMan({$v['id']})'>更多</a>] [<a href="#" onClick='addLinkMan({$v['id']})'>添加</a>]</td>
                                             <td>{$v['link_phone']}</td>
-                                            <!-- <td class="am-hide-sm-only">刘东旭</td> -->
-                                            <!-- <td class="am-hide-sm-only">备注里边说点啥</td> -->
                                             <td>
-                                                <div class="am-form-group">
-                                                    <div class="am-btn-group am-btn-group-xs" >
-                                                            <button type="button" onclick="window.open('__APP__/Customer/update/customer_id/{$v['id']}')">编辑</button>
-                                                            &nbsp;&nbsp;&nbsp;&nbsp;
-                                                            <button type="button" onClick='deletes({$v['id']})'>删除</button>
+                                                <div class="am-btn-toolbar">
+                                                    <div class="am-btn-group am-btn-group-xs">
+                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="window.location='__APP__/Customer/update/customer_id/{$v['id']}'"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletes({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
                                                     </div>
                                                 </div>
                                             </td>
@@ -190,11 +182,11 @@
     function linkMan(id){
         layer.open({
             type: 2,
-            offset: '20px',
+            offset: '50px',
             title: '联系人详细信息',
             shadeClose: true,
             shade: 0.8,
-            area: ['75%', '90%'],
+            area: ['60%', '60%'],
             btn: ['关闭'],
             content: '__APP__/Customer/detailsLinkman/customer_id/'+id //iframe的url
         });

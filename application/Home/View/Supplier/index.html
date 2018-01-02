@@ -44,7 +44,7 @@
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
-                        <div class="am-u-sm-12 am-u-md-4">
+                        <div class="am-u-sm-12 am-u-md-3">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
                                     <button type="button" onclick="window.open('__APP__/Supplier/addSupplier')" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增供应商</button>
@@ -111,7 +111,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="am-u-sm-12 am-u-md-2">
+                        <div class="am-u-sm-12 am-u-md-2 am-u-end">
                             <div class="am-input-group am-input-group-sm">
                                 <input type="text" class="am-form-field" placeholder="请先选择搜索类型" value="{$get['search_value']}" id="search_value">
                                 <span class="am-input-group-btn">
@@ -139,7 +139,7 @@
                                     </thead>
                                     <tbody>
                                         <foreach name="supplierInfo" key="k" item="v">
-                                        <tr>
+                                        <tr class="xg-table-tr">
                                             <td>{$k+1}</td> 
                                             <td><a href="__APP__/Supplier/detail/supplier_id/{$v['supplier_id']}">{$v['supplier_name']}</a></td>
                                             <td>{$v['local_name']}</td>
