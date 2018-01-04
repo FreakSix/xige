@@ -174,7 +174,7 @@
                                                     <td>{$v['end_money']}</td>
                                                     <td>{$v['supplier_money']}</td>
                                                     <!-- <td>{$v['customer_money']}</td> -->
-                                                    <td>{$v['customer_money']} [<a href="#" onClick="addCustomerMoney({$v['id']})">回款详情</a>]</td>
+                                                    <td>{$v['customer_money']} [<a href="#" onClick="customerMoneyInfo({$v['id']})">详情</a>] [<a href="#" onClick="addCustomerMoney({$v['id']})">新增</a>]</td>
                                                     <td>{$v['order_status_value']}</td>
                                                     <td>{$v['money_status_value']}</td>
                                                     <!-- <td class="am-hide-sm-only">{$v['manager_id']}</td> -->
@@ -184,8 +184,7 @@
                                                             <div class="am-btn-group am-btn-group-xs">
                                                                 
                                                                     <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateOrder({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                                
-                                                                    <button type="button" class="am-btn am-btn-xs am-text-danger am-hide-sm-only" onclick="deleteOrder({$v['id']})"><span class="am-icon-trash-o"></span> 作废</button>
+                                                                    <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteOrder({$v['id']})"><span class="am-icon-trash-o"></span> 作废</button>
 
                                                             </div>
                                                         </div>
@@ -304,35 +303,50 @@
     }
 
 
-
-
-    var layerIndexObject = {};
+    
     // 新增订单
     function addOrder(){
-        layerIndexObject['A'] = layer.open({
-                                    type: 2,
-                                    offset: '20px',
-                                    shadeClose : false,
-                                    title: '新增订单',
-                                    shade: 0.8,
-                                    area: ['75%', '90%'],
-                                    btn: ['关闭'],
-                                    content: '__APP__/Order/addOrder' //iframe的url
-                                });
+         layer.open({
+                    type: 2,
+                    offset: '20px',
+                    shadeClose : false,
+                    title: '新增订单',
+                    shade: 0.8,
+                    area: ['75%', '90%'],
+                    btn: ['关闭'],
+                    content: '__APP__/Order/addOrder' //iframe的url
+                });
         
     }
+    //客户付款详情
+    var layerIndexObject = {};
 
-    //新增客户付款数
+    function customerMoneyInfo(id){
+        // alert(id);
+        layerIndexObject['A'] = layer.open({
+                    type: 2,
+                    offset: '20px',
+                    shadeClose : false,
+                    title: '客户回款记录', 
+                    shade: 0.8,
+                    area: ['70%', '80%'],
+                    btn: ['关闭'],
+                    content: '__APP__/Order/customerMoneyInfo/id/'+id, //iframe的url
+
+                });
+    }
+
+    //新增客户回款额
     function addCustomerMoney(id){
         // alert(id);
         layer.open({
                     type: 2,
-                    offset: '20px',
+                    // offset: '20px',
                     shadeClose : false,
-                    title: '客户回款管理', 
+                    title: '客户回款记录', 
                     shade: 0.8,
-                    area: ['70%', '80%'],
-                    btn: ['关闭'],
+                    area: ['600px', '360px'],
+                    // btn: ['关闭'],
                     content: '__APP__/Order/addCustomerMoney/id/'+id, //iframe的url
 
                 });

@@ -999,11 +999,89 @@
 		}
 
 
-		//
+		//新增订单中的客户回款弹窗页面
 		public function addCustomerMoney(){
+			//订单客户回款记录
+			$get = $_GET;
 
+			$this->assign("get",$get);
 			$this->display("add_customer_money");
 		}
+
+		//新增订单中的客户回款信息
+		public function addCustomerMoneyInfo(){
+			$post = $_POST;
+			//根据订单ID查询出订单信息，取需要的数据如表
+			$orderInfo = D("XgOrder")->getOrderInfoById($post['order_id']);
+
+			if(!empty($orderInfo)){
+				$data['order_id'] = $post['order_id'];
+				$data['order_num'] = $orderInfo['order_id'];
+				$data['customer_id'] = $orderInfo['customer_id'];
+				$data['customer_name'] = $orderInfo['customer_name'];
+				$data['money'] = $post['money'];
+				$data['remark'] = $post['remark'];
+				$data['add_time'] = time();
+
+				$res = D("XgCustomerAccount")->addCusromerAccountInfo($data);
+				//如果数据添加成功，则对订单中的客户回款数据及回款状态进行修改
+				if($res > 0){
+					$customerMoney = $orderInfo['customer_money'] + $post['money'];
+					if($customerMoney == $orderInfo['end_money']){
+						$moneyStatus = 3;
+					}elseif (($customerMoney < $orderInfo['end_money']) && $customerMoney > 0 ) {
+						$moneyStatus = 2;
+					}else{
+						$moneyStatus = 1;
+					}
+
+					$orderData['money_status'] = $moneyStatus;
+					$orderData['customer_money'] = $customerMoney;
+
+					$res = D("XgOrder")->updateOrderInfo($orderData,$post['order_id']);
+				}
+				echo $res;
+			}
+		}
+
+		//订单中的客户回款详情 
+		public function customerMoneyInfo(){
+			//订单客户回款记录
+			$get = $_GET;
+			$customerMoneyInfo = D("XgCustomerAccount")->getCustomerAccountByOrderId($get['id']);
+
+			if(!empty($customerMoneyInfo)){
+				foreach ($customerMoneyInfo as $k => $v) {
+					//录入时间处理
+					$insertTime =  date("Y-m-d H:i:s",$v['add_time']);
+					$customerMoneyInfo[$k]['insert_time'] = $insertTime;
+				}
+			}
+
+			$this->assign("customerMoneyInfo",$customerMoneyInfo); 
+			$this->assign("get",$get);
+			$this->display("customer_money_info");
+		}
+
+		//修改客户回款记录 
+		public function updateCustomerMoneyInfo(){
+			//订单客户回款记录
+			$get = $_GET;
+			$post = $_POST;
+
+			if(!empty($post)){
+
+			}else{
+				$customerMoneyInfo = D("XgCustomerAccount")->getCustomerAccountById($get['id']);
+
+				$this->assign("customerMoneyInfo",$customerMoneyInfo); 
+				$this->assign("get",$get);
+				$this->display("update_customer_money_info");
+			}
+			
+		}
+
+
 
 
 
