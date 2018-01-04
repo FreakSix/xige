@@ -79,8 +79,8 @@
     <script src="__PUBLIC__/js/layer.js"></script>
     
     <script type="text/javascript">
-        function updateCustomerMoney(order_id){
-            // alert(order_id);
+        function updateCustomerMoney(id){
+            // alert(id);
             var money = $.trim($("#money").val());
             if(money == ''){
                 parent.layer.alert("回款金额不能为空！", {icon: 5,});
@@ -89,27 +89,31 @@
 
             var remark = $.trim($("#remark").val());
 
-            // //添加订单信息
-            // $.post("__APP__/Order/addCustomerMoneyInfo",{"order_id":order_id,"money":money,"remark":remark},function(res){
-            //         if(res > 0 ){
-            //             parent.layer.alert('添加成功！', {
-            //                                                 icon: 1,
-            //                                                 offset: '200px',
-            //                                                 title:'提示',
-            //                                             });
-            //             parent.location.href='__APP__/Order/index';
-            //             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-            //             parent.layer.close(index);
+            //修改客户回款记录信息
+            $.post("__APP__/Order/updateCustomerMoneyInfo",{"id":id,"money":money,"remark":remark},function(res){
+                    if(res > 0 ){
+                        parent.layer.alert('修改成功！', {
+                                                            icon: 1,
+                                                            offset: '200px',
+                                                            title:'提示',
+                                                        });
+                        // parent.location.href='__APP__/Order/index';
 
-            //         }else{
-            //             parent.layer.alert('添加失败！', {
-            //                                                 icon: 5,
-            //                                                 offset: '200px',
-            //                                                 title:'提示',
-            //                                             });
-            //             return false;
-            //         }
-            // });
+                        parent['layui-layer-iframe' + parent.layerIndexObject['A']].$('#tr_money_'+id).text(money);
+                        parent['layui-layer-iframe' + parent.layerIndexObject['A']].$('#tr_remark_'+id).text(remark);
+
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);
+
+                    }else{
+                        parent.layer.alert('修改失败！', {
+                                                            icon: 5,
+                                                            offset: '200px',
+                                                            title:'提示',
+                                                        });
+                        return false;
+                    }
+            });
 
         }
     </script>

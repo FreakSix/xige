@@ -97,7 +97,10 @@
                                                             offset: '200px',
                                                             title:'提示',
                                                         });
-                        parent.location.href='__APP__/Order/index';
+                        // parent.location.href='__APP__/Order/index';
+                        //刷新订单页面
+                        parent. location.reload();
+                        
                         var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                         parent.layer.close(index);
 

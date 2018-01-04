@@ -394,6 +394,16 @@
 						}
 					}
 					$orderInfo['special_technology_value'] = $specialTechnologyhStr;
+					//客户付款状态处理
+					if($orderInfo['money_status'] == 1){
+						$orderInfo['money_status_value'] = "未付款";
+					}
+					if($orderInfo['money_status'] == 2){
+						$orderInfo['money_status_value'] = "部分付款";
+					}
+					if($orderInfo['money_status'] == 3){
+						$orderInfo['money_status_value'] = "已付款";
+					}
 					
 		    	}
 
@@ -1026,8 +1036,9 @@
 				$res = D("XgCustomerAccount")->addCusromerAccountInfo($data);
 				//如果数据添加成功，则对订单中的客户回款数据及回款状态进行修改
 				if($res > 0){
+					//
 					$customerMoney = $orderInfo['customer_money'] + $post['money'];
-					if($customerMoney == $orderInfo['end_money']){
+					if($customerMoney >= $orderInfo['end_money']){
 						$moneyStatus = 3;
 					}elseif (($customerMoney < $orderInfo['end_money']) && $customerMoney > 0 ) {
 						$moneyStatus = 2;
@@ -1038,7 +1049,7 @@
 					$orderData['money_status'] = $moneyStatus;
 					$orderData['customer_money'] = $customerMoney;
 
-					$res = D("XgOrder")->updateOrderInfo($orderData,$post['order_id']);
+					$res2 = D("XgOrder")->updateOrderInfo($orderData,$post['order_id']);
 				}
 				echo $res;
 			}
@@ -1070,6 +1081,41 @@
 			$post = $_POST;
 
 			if(!empty($post)){
+				//客户回款信息中的原信息
+				$oldCustomerAccount = D("XgCustomerAccount")->getCustomerAccountById($post['id']);
+
+				$data['money'] = $post['money'];
+				$data['remark'] = $post['remark'];
+				// dump($data);
+
+				$res = D("XgCustomerAccount")->updateCustomerAccountInfo($data,$post['id']);
+				//如果修改成功，则对订单中的客户回款数据及回款状态进行修改
+				if($res > 0 ){
+					//根据订单ID查询出订单信息，取需要的数据如表
+					$orderInfo = D("XgOrder")->getOrderInfoById($oldCustomerAccount['order_id']);
+					//订单中对应的客户的所有的回款金额
+					$allCustomerAccount = D('XgCustomerAccount')->getCustomerAccountByOrderId($oldCustomerAccount['order_id']);
+					$customerMoney = 0;
+					if(!empty($allCustomerAccount)){
+						foreach ($allCustomerAccount as $kk => $vv) {
+							$customerMoney = $customerMoney + $vv['money'];
+						}
+					}
+
+					if($customerMoney >= $orderInfo['end_money']){
+						$moneyStatus = 3;
+					}elseif (($customerMoney < $orderInfo['end_money']) && $customerMoney > 0 ) {
+						$moneyStatus = 2;
+					}else{
+						$moneyStatus = 1;
+					}
+
+					$orderData['money_status'] = $moneyStatus;
+					$orderData['customer_money'] = $customerMoney;
+
+					$res2 = D("XgOrder")->updateOrderInfo($orderData,$oldCustomerAccount['order_id']);
+				}
+				echo $res;
 
 			}else{
 				$customerMoneyInfo = D("XgCustomerAccount")->getCustomerAccountById($get['id']);
@@ -1079,6 +1125,45 @@
 				$this->display("update_customer_money_info");
 			}
 			
+		}
+
+		public function deleteCustomerAccountInfo(){
+			$post = $_POST;
+			//客户回款信息中的原信息
+			$oldCustomerAccount = D("XgCustomerAccount")->getCustomerAccountById($post['id']);
+
+			$res = D("XgCustomerAccount")->deleteCustomerAccountInfoById($post['id']);
+
+			if($res > 0){
+				//根据订单ID查询出订单信息，取需要的数据如表
+				$orderInfo = D("XgOrder")->getOrderInfoById($oldCustomerAccount['order_id']);
+				//订单中对应的客户的所有的回款金额
+				$allCustomerAccount = D('XgCustomerAccount')->getCustomerAccountByOrderId($oldCustomerAccount['order_id']);
+				$customerMoney = 0;
+				if(!empty($allCustomerAccount)){
+					foreach ($allCustomerAccount as $kk => $vv) {
+						$customerMoney = $customerMoney + $vv['money'];
+					}
+				}
+
+				if($customerMoney >= $orderInfo['end_money']){
+					$moneyStatus = 3;
+				}elseif (($customerMoney < $orderInfo['end_money']) && $customerMoney > 0 ) {
+					$moneyStatus = 2;
+				}else{
+					$moneyStatus = 1;
+				}
+
+				$orderData['money_status'] = $moneyStatus;
+				$orderData['customer_money'] = $customerMoney;
+
+				$res2 = D("XgOrder")->updateOrderInfo($orderData,$oldCustomerAccount['order_id']);
+
+				$res_str = "删除成功！";
+			}else{
+				$res_str = "删除失败！";
+			}
+			echo json_encode($res_str);
 		}
 
 
