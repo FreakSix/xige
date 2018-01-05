@@ -54,9 +54,8 @@
 		// 根据订单id查询客户id
 		public function getCustomerIdById($id){
 			$sql = " select customer_id from xg_order where id = ".$id;
-			echo $sql;exit;
 			$result = M()->query($sql);
-			return $result;
+			return $result[0];
 		}
 
 		
