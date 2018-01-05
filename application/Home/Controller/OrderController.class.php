@@ -63,7 +63,7 @@
 			
 			//订单信息中符合条件的总记录数
 			$count = D("XgOrder")->getOrderCount($condition);
-	 		$pageSize = 3;
+	 		$pageSize = 15;
 	 		//实例化分页类
 	 		$page = new \Think\Page($count,$pageSize);
 	 		//获取起始位置
@@ -134,7 +134,28 @@
 
 			$this -> display();
 		}
+		// 导出订货单（客户）
+		public function exportOrderForC(){
+			$post = $_POST;
+			$order_id_str = rtrim($post["order_id_str"],",");   //去除字符串最后的","
+			$order_id_arr = explode(",", $order_id_str);   //将字符串转化为数组
+			// echo $order_id_str;
+			// dump($order_id_arr);
+			foreach ($order_id_arr as $k => $v) {
+				$id = $v;
+				$customer_id[] = D("XgOrder")->getCustomerIdById($id);
+			}
+			print_r($customer_id);exit;
+			$a = array_unique($customer_id);
+			dump($a);exit;
+			if($post["checkbox"] == ""){
+				echo 0;
+			}
+		}
+		// 导出订货单（供应商）
+		public function exportOrderForS(){
 
+		}
 		// 新增订单页面
 		public function addOrder(){
 			$customerModel = D("XgCustomer");

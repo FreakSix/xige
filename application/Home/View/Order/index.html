@@ -69,14 +69,12 @@
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
                                     <button type="button" onclick="addOrder()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增订单</button>
-                                    <!-- <div id="div1nnn" style="display:none;"><iframe src="add.html" width=100% height=100% id=""></iframe></div> -->
-                                    <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出数据</button>
                                 </div>
                             </div>
                         </div>
                         <div class="am-u-sm-12 am-u-md-2">
-                            <div class="am-form-group"> 
-                                <!-- <label for="contact-department" class="am-u-sm-2 am-form-label">数量：</label> -->订单状态： 
+                            <div class="am-form-group">
+                                订单状态： 
                                 <select data-am-selected="{btnSize: 'sm'}" id="order_status" onchange="searchSubmit();">
                                     <option value="0">全部订单</option>
                                     <foreach name="orderStatusArr" item="v" key="k">
@@ -109,22 +107,22 @@
                                 搜索类型：
                                 <select data-am-selected="{btnSize: 'sm'}" id="input_type_value">
                                     <if condition="$get['input_type_value'] == supplier ">
-                                        <option value="0" >全部信息</option>
+                                        <option value="0" >选择类型</option>
                                         <option value="product">商品名称</option>
                                         <option value="customer">客户</option>
                                         <option value="supplier" selected="selected">供应商</option>
                                     <elseif condition="$get['input_type_value'] == customer " />
-                                        <option value="0" >全部信息</option>
+                                        <option value="0" >选择类型</option>
                                         <option value="product">商品名称</option>
                                         <option value="customer" selected="selected">客户</option>
                                         <option value="supplier">供应商</option>
                                     <elseif condition="$get['input_type_value'] == product " />
-                                        <option value="0" >全部信息</option>
+                                        <option value="0" >选择类型</option>
                                         <option value="product" selected="selected">商品名称</option>
                                         <option value="customer">客户</option>
                                         <option value="supplier">供应商</option>
                                     <else/>
-                                        <option value="0" selected="selected">全部信息</option>
+                                        <option value="0" selected="selected">选择类型</option>
                                         <option value="product">商品名称</option>
                                         <option value="customer">客户</option>
                                         <option value="supplier">供应商</option>
@@ -147,13 +145,14 @@
                                 <table class="am-table am-table-striped am-table-hover table-main">
                                     <thead>
                                         <tr>
+                                            <th class="table-check"><input type="checkbox" class="tpl-table-fz-check xg-select-box"></th>
                                             <th >序号</th>
                                             <th class="table-id">订单编号</th>
                                             <th class="table-title">商品名称</th>
                                             <th class="table-cus">客户名称</th>
                                             <th class="table-type">成本总额</th>
                                             <th class="table-sum">成交总额</th>
-                                            <th class="table-type">向供应商付款总额</th>
+                                            <!-- <th class="table-type">向供应商付款总额</th> -->
                                             <th class="table-type">客户付款总额</th>
                                             <th class="table-status">订单状态</th>
                                             <th class="table-status">客户付款状态</th>
@@ -166,13 +165,14 @@
                                         <foreach name="productOrderInfo" item="v" key="k">
                                             <tr class="xg-table-tr">
                                                 <if condition="$v['order_status'] != 4 ">
+                                                    <td><input type="checkbox" value="{$v['id']}" name="order_id"></td>
                                                     <td>{$k+1}</td>
                                                     <td><a href="__APP__/Order/detail/id/{$v['id']}">{$v['order_id']}</a></td>
                                                     <td>{$v['product_name']}</td>
                                                     <td>{$v['customer_name']}</td>
                                                     <td>{$v['cost_money']}</td>
                                                     <td>{$v['end_money']}</td>
-                                                    <td>{$v['supplier_money']}</td>
+                                                    <!-- <td>{$v['supplier_money']}</td> -->
                                                     <!-- <td>{$v['customer_money']}</td> -->
                                                     <td>{$v['customer_money']} [<a href="#" onClick="customerMoneyInfo({$v['id']})">详情</a>] [<a href="#" onClick="addCustomerMoney({$v['id']})">新增</a>]</td>
                                                     <td>{$v['order_status_value']}</td>
@@ -190,15 +190,16 @@
                                                         </div>
                                                     </td>
                                                 <else/>
+                                                    <td></td>
                                                     <td><span style="color:#CCC;font-size: 14px;">{$k+1}</span></td>
                                                     <td><a href="__APP__/Order/detail/id/{$v['id']}"><span style="color:#CCC;font-size: 14px;">{$v['order_id']}</span></a></td>
                                                     <td><span style="color:#CCC;font-size: 14px;">{$v['product_name']}</span></td>
                                                     <td><span style="color:#CCC;font-size: 14px;">{$v['customer_name']}</span></td>
                                                     <td><span style="color:#CCC;font-size: 14px;">{$v['cost_money']}</span></td>
                                                     <td><span style="color:#CCC;font-size: 14px;">{$v['end_money']}</span></td>
-                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['supplier_money']}</span></td>
+                                                    <!-- <td><span style="color:#CCC;font-size: 14px;">{$v['supplier_money']}</span></td> -->
                                                     <!-- <td>{$v['customer_money']}</td> -->
-                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['customer_money']}</span> [<a href="#" onClick="addCustomerMoney({$v['id']})"><span style="color:#CCC;font-size: 14px;">回款详情</span></a>]</td>
+                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['customer_money']}</span> [<a href="#" onClick="addCustomerMoney({$v['id']})"><span style="color:#CCC;font-size: 14px;">详情</span></a>]</td>
                                                     <td><span style="color:#CCC;font-size: 14px;">{$v['order_status_value']}</span></td>
                                                     <td><span style="color:#CCC;font-size: 14px;">{$v['money_status_value']}</span></td>
                                                     <!-- <td class="am-hide-sm-only">{$v['manager_id']}</td> -->
@@ -210,7 +211,14 @@
                                     </tbody>
                                 </table>
                                 <div class="am-cf">
-
+                                    <div class="am-u-sm-12 am-u-md-4">
+                                        <div class="am-btn-toolbar">
+                                            <div class="am-btn-group am-btn-group-xs">
+                                                <button type="button" onclick="exportOrderForC()" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出对账单（客户）</button>
+                                                <button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-save"></span> 导出对账单（供应商）</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="am-fr">
                                         {$pageStr}
                                     </div>
@@ -249,8 +257,6 @@
 
             $("#hide_search_date").val(start.format('YYYY年MMMD日') + "-" + end.format('YYYY年MMMD日'));
             // alert(start.format('YYYYMMDD') + " " + end.format('YYYYMMDD'));
-
-
         }
     );
     //确定时间后搜索
@@ -301,9 +307,6 @@
 
         location.href='__APP__/Order/index/order_status/'+order_status+'/money_status/'+money_status+'/input_type_value/'+input_type_value+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
     }
-
-
-    
     // 新增订单
     function addOrder(){
          layer.open({
@@ -405,6 +408,40 @@
                 // title:'提示'
                 });
             });
+    }
+    // 导出对账单（客户）
+    function exportOrderForC(){
+        var inputs = $(".xg-table-tr").find("input[type='checkbox']");
+        // var checkbox = $
+        // alert($("input:checkbox[name='order_id']:checked").length);
+        if($("input:checkbox[name='order_id']:checked").length == 0){
+            // alert("请选择要导出的数据！");
+            layer.msg("请选择要导出的数据！",{time:1500});
+        }else{
+            var order_id_str = "";
+            $("input:checkbox[name='order_id']:checked").each(function(){
+                order_id_str+=$(this).val()+",";
+            })
+            // alert(order_id_str);
+            $.ajax({
+                url : "__APP__/Order/exportOrderForC",
+                type : "post",
+                data : "order_id_str="+order_id_str,
+                success:function(res){
+                    alert(res);return false;
+                    if(res == 1){
+                        layer.alert("请选择一个客户的数据进行导出",{icon:5,title:"提示"});
+                    }else if(res == 2){
+                        layer.alert("导出失败，请稍后重试",{icon:2,title:"提示"});
+                    }
+                }
+            });
+        }
+
+        // inputs.each(function(){
+        //     alert($(this).prop("checked"));
+        // })
+        // alert()
     }
 
 </script>

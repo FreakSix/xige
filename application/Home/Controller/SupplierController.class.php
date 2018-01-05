@@ -45,7 +45,7 @@
 			//订单信息中符合条件的总记录数
 			$count = D("XgSupplier")->getSupplierCount($condition);
 			// dump($count);
-	 		$pageSize = 5;
+	 		$pageSize = 15;
 	 		//实例化分页类
 	 		$page = new \Think\Page($count,$pageSize);
 	 		//获取起始位置

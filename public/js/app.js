@@ -499,6 +499,22 @@ $("#add_supplier_contact").click(function(){
         alert("如需添加更多联系人，请到供应商信息中进行添加");
     }
 });
+// ===============================================
+// 多选框全选，全不选
+// ===============================================
+$(".xg-select-box").click(function(){
+    var inputs = $(".xg-table-tr").find("input[type='checkbox']");
+    // alert($(this).is(":checked"));
+    if($(this).is(":checked")){
+        inputs.each(function(){
+            $(this).prop("checked",true);
+        })
+    }else{
+        inputs.each(function(){
+            $(this).removeAttr("checked");
+        })
+    }
+});
 
 
     

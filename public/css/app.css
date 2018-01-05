@@ -1310,6 +1310,9 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 .task-title-sp {
     margin-right: 5px;
 }
+.task-title-b {
+    margin: auto 5px;
+}
 
 .label-sm {
     font-size: 13px;
@@ -1397,7 +1400,7 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     border: none;
     position: absolute;
     top: -55px;
-    right: 0;
+    right: 350px;
 }
 
 .tpl-index-tabs .am-nav-tabs li a {
@@ -1473,7 +1476,16 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     border-radius: 3px;
     background-color: #36c6d3;
 }
-
+.cosIco {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    color: #fff;
+    text-align: center;
+    border-radius: 3px;
+    background-color: #659be0 !important;
+}
 .label-danger {
     background-color: #ed6b75!important;
 }
@@ -2153,6 +2165,10 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 .xg-access-content {
     padding-left: 8px;
     clear: both;
+}
+.xg-index-button {
+    margin-top: 5px;
+    float: right;
 }
 @media screen and (min-width: 1400px) {
     .tpl-content-wrapper {

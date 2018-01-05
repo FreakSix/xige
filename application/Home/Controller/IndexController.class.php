@@ -74,8 +74,44 @@
 	    	
 	    	$this->assign("userMsg",$_SESSION["userMsg"]);
 	    }
-	    // 个人备忘录
-	    public function personalMemo(){
-	    	
+	    // 添加公共备忘录页面
+	    public function addPublicMemo(){
+	    	$this->display("add_public_memo");
+	    }
+	    // 添加公共备忘录处理
+	    public function addPublicMemoHandle(){
+
+	    }
+	    // 修改公共备忘录页面
+	    public function updatePublicMemo(){
+	    	$this->display("update_public_memo");
+	    }
+	    // 修改公共备忘录处理
+	    public function updatePublicMemoHandle(){
+
+	    }
+	    // 删除公共备忘录
+	    public function deletePublicMemo(){
+
+	    }
+	    // 添加个人备忘录页面
+	    public function addPersonalMemo(){
+	    	$this->display("add_personal_memo");
+	    }
+	    // 添加个人备忘录处理
+	    public function addPersonalMemoHandle(){
+
+	    }
+	    // 修改个人备忘录页面
+	    public function updatePersonalMemo(){
+	    	$this->display("update_personal_memo");
+	    }
+	    // 修改个人备忘录处理
+	    public function updatePersonalMemoHandle(){
+
+	    }
+	    // 删除个人备忘录
+	    public function deletePersonalMemo(){
+
 	    }
 	}
