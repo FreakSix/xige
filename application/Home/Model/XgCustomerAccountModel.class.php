@@ -21,9 +21,14 @@
 			$result = $table->where('id ='.$id)->find();
 			return $result;
 		}
-		// 查询全部的客户等级信息
-		public function getCustomerLevelInfo(){
-			$result = M("xg_customer_level")->select();
+		//修改客户回款信息
+		public function updateCustomerAccountInfo($data,$id){
+			$res = M("xg_customer_account")->where("id = ".$id)->save($data);
+			return $res;
+		}
+		//通过客户回款信息ID删除对应信息
+		public function deleteCustomerAccountInfoById($id){
+			$result = M("xg_customer_account")->where("id = ".$id)->delete();
 			return $result;
 		}
 

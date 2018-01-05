@@ -159,7 +159,7 @@
                         <div class="am-form-group">
                             <label for="contact-department" class="am-u-sm-2 am-form-label">客户付款状态：</label>
                             <div class="am-u-sm-4">
-                                <select id="money_status">
+                                <!-- <select id="money_status">
                                     <foreach name="moneyStatusArr" item="v" key="k">
                                         <if condition="$orderInfo['money_status'] == $v">
                                             <option value="{$v}" selected="selected">{$k}</option>
@@ -167,11 +167,13 @@
                                             <option value="{$v}" >{$k}</option>
                                         </if>
                                     </foreach>
-                                </select>
+                                </select> -->
+                                {$orderInfo['money_status_value']}
                             </div>
                             <label for="contact-department" class="am-u-sm-2 am-form-label">客户付款总额：</label>
                             <div class="am-u-sm-4">
-                                <input type="text" id="customer_money" value="{$orderInfo['customer_money']}">
+                                <!-- <input type="text" id="customer_money" value="{$orderInfo['customer_money']}"> -->
+                                {$orderInfo['customer_money']}
                             </div>
                         </div>
                         <div class="am-form-group">

@@ -328,12 +328,13 @@
         // alert(id);
         layerIndexObject['A'] = layer.open({
                     type: 2,
+                    closeBtn: 0,
                     offset: '20px',
                     shadeClose : false,
                     title: '客户回款记录', 
                     shade: 0.8,
                     area: ['70%', '80%'],
-                    btn: ['关闭'],
+                    // btn: ['关闭'],
                     content: '__APP__/Order/customerMoneyInfo/id/'+id, //iframe的url
 
                 });
