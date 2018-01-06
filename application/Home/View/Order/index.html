@@ -429,9 +429,9 @@
                 type : "post",
                 data : "order_id_str="+order_id_str,
                 success:function(res){
-                    alert(res);return false;
+                    // alert(res);return false;
                     if(res == 1){
-                        layer.alert("请选择一个客户的数据进行导出",{icon:5,title:"提示"});
+                        layer.alert("不能同时导出多个客户的数据，请选择一个客户的数据进行导出",{icon:5,title:"提示"});
                     }else if(res == 2){
                         layer.alert("导出失败，请稍后重试",{icon:2,title:"提示"});
                     }

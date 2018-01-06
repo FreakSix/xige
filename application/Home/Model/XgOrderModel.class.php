@@ -57,6 +57,10 @@
 			$result = M()->query($sql);
 			return $result[0];
 		}
+		// 根据订单id查数据
+		public function getInfoById($id){
+			
+		}
 
 		
 	}
