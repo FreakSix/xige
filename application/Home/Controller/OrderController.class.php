@@ -169,53 +169,55 @@
 			$customerList = $customerModel->getCustomerInfos('');
 			$productTypeModel = D("XgProductType");
 			$productTypeFirst = $productTypeModel->getProductTypeByPid(0);
-			$parameterStr = "";
-			if(!empty($productTypeFirst)){
-				//默认的商品名称信息
-				$productNameFirst = D("XgProductType")->getProductTypeByPid($productTypeFirst[0]['id']);
-				if(!empty($productNameFirst)){
-					//默认的商品型号信息
-					$productModelFirst = D("XgProduct")->getProductByPid($productNameFirst[0]['id']);
-					//默认的商品规格信息
-					$parameterId = explode(",", $productNameFirst[0]['parameter_id_str']);
-					if(!empty($parameterId)){
-						foreach ($parameterId as $k => $v) {
-							//获取商品规格名称信息
-							$productParameter = D("XgProductParameter")->getProductParameterById($v);
-							//获取该商品型号对应的商品规格信息
-							$condition['where'] = "parameter_id = '".$v."' and product_id = '".$productNameFirst[0]['id']."' and product_model_id = '".$productModelFirst['0']['id']."'";
-							$productSpec = D("XgProductSpec")->getProductSpecInfo($condition);
-							//拼接该商品下第一种商品型号对应的商品规格信息
-							if(!empty($productParameter['0'])){
-								$specInfo[$k]['parameter'] = $productParameter['0'];
-								$parameterStr .= $productParameter['0']['id']."-".$productParameter['0']['name'].",";
-								if(!empty($productSpec)){
-									$specInfo[$k]['spec'] = $productSpec;
-								}
-							}
-						}
-					}
-					//默认的供应商信息
-					$supplierId = explode(",", $productNameFirst[0]['supplier_id_str']);
-					if(!empty($supplierId)){
-						foreach ($supplierId as $kk => $vv) {
-							$productSupplierFirst[] = D("XgSupplier")->getSupplierInfo($vv);
-						}
-					}
-				}
+			// $parameterStr = "";
+			// if(!empty($productTypeFirst)){
+			// 	//默认的商品名称信息
+			// 	$productNameFirst = D("XgProductType")->getProductTypeByPid($productTypeFirst[0]['id']);
+			// 	if(!empty($productNameFirst)){
+			// 		//默认的商品型号信息
+			// 		$productModelFirst = D("XgProduct")->getProductByPid($productNameFirst[0]['id']);
+			// 		//默认的商品规格信息
+			// 		$parameterId = explode(",", $productNameFirst[0]['parameter_id_str']);
+			// 		if(!empty($parameterId)){
+			// 			foreach ($parameterId as $k => $v) {
+			// 				//获取商品规格名称信息
+			// 				$productParameter = D("XgProductParameter")->getProductParameterById($v);
+			// 				//获取该商品型号对应的商品规格信息
+			// 				$condition['where'] = "parameter_id = '".$v."' and product_id = '".$productNameFirst[0]['id']."' and product_model_id = '".$productModelFirst['0']['id']."'";
+			// 				$productSpec = D("XgProductSpec")->getProductSpecInfo($condition);
+			// 				//拼接该商品下第一种商品型号对应的商品规格信息
+			// 				if(!empty($productParameter['0'])){
+			// 					$specInfo[$k]['parameter'] = $productParameter['0'];
+			// 					$parameterStr .= $productParameter['0']['id']."-".$productParameter['0']['name'].",";
+			// 					if(!empty($productSpec)){
+			// 						$specInfo[$k]['spec'] = $productSpec;
+			// 					}
+			// 				}
+			// 			}
+			// 		}
+			// 		//默认的供应商信息
+			// 		$supplierId = explode(",", $productNameFirst[0]['supplier_id_str']);
+			// 		if(!empty($supplierId)){
+			// 			foreach ($supplierId as $kk => $vv) {
+			// 				$productSupplierFirst[] = D("XgSupplier")->getSupplierInfo($vv);
+			// 			}
+			// 		}
+			// 	}
 				
-			}
-			$parameterStr = rtrim($parameterStr,",");
+			// }
+			// $parameterStr = rtrim($parameterStr,",");
+			//全部产品名称
+			$condition['where'] = "pid > 0";
+			$productNameFirst = D("XgProductType")->getProductInfo($condition);
 			
 			$this->assign("customerList",$customerList);
 			$this->assign("productTypeFirst",$productTypeFirst);
 			$this->assign("productNameFirst",$productNameFirst);
-			$this->assign("productModelFirst",$productModelFirst);
-			$this->assign("specInfo",$specInfo);
-			$this->assign("productSupplierFirst",$productSupplierFirst);
-			$this->assign("parameterStr",$parameterStr);
+			// $this->assign("productModelFirst",$productModelFirst);
+			// $this->assign("specInfo",$specInfo);
+			// $this->assign("productSupplierFirst",$productSupplierFirst);
+			// $this->assign("parameterStr",$parameterStr);
 
-			$this->assign("qqq","aaaa");
 			$this->display("add_order");
 		}
 		
@@ -280,6 +282,7 @@
 				$data['material_link'] = $post['product_material_link'];
 				$data['cost_money'] = $post['cost_money'];
 				$data['discount_money'] = $post['discount_money'];
+				$data['end_price'] = $post['end_price'];
 				$data['end_money'] = $post['end_money'];
 				$data['cost_price'] = $post['cost_price'];
 				$data['add_time'] = time();
@@ -671,6 +674,7 @@
 				$data['supplier_name'] = $post['supplier_name'];
 				$data['num'] = $post['num']; 
 				$data['discount_money'] = $post['discount_money'];
+				$data['end_price'] = $post['end_price'];
 				$data['end_money'] = $post['end_money'];
 				$data['cost_price'] = $post['cost_price'];
 				$data['add_time'] = time();

@@ -97,20 +97,21 @@
                             <label for="contact-wechat" class="am-u-sm-2 am-form-label">产品型号：</label>
                             <div class="am-u-sm-10 am-u-end">
                                 <ul class="product_model">
-                                    <if condition="$productModelFirst != ''">
+                                    <!-- <if condition="$productModelFirst != ''">
                                         <foreach name="productModelFirst" item="item" key="key">
                                             <li class="xg-product-btn" name="product_model" id="product_model_{$item.id}" style="margin-right:10px;" value="{$item.id}" onclick="getProductSpec({$item.id})">{$item.name}</li>  
                                         </foreach>
                                     <else/>
                                         <li class="xg-product-btn" value="">暂无产品型号</li>
-                                    </if>
+                                    </if> -->
+                                    <span style="color: #f00;">请先选择产品！</span> 
                                    
                                 </ul>
                             </div>
                             <input type="hidden" value="" id="hide_product_model_value" />
                         </div>
                         <div class="product_paramerter">
-                            <if condition="$specInfo != ''">
+                            <!-- <if condition="$specInfo != ''">
                                 <foreach name="specInfo" item="item" key="key">
                                     <div class="am-form-group">
                                         <label for="contact-department" class="am-u-sm-2 am-form-label">{$item['parameter']['name']}：</label>
@@ -139,7 +140,17 @@
                                         </ul>
                                     </div>
                                 </div>
-                            </if>
+                            </if> -->
+                            <div class="am-form-group">
+                                <label for="contact-department" class="am-u-sm-2 am-form-label">产品规格：</label>
+                                <div class="am-u-sm-10">
+                                    <ul>
+                                        <li class="" value="1">
+                                            <span style="color: #f00;">请先选择产品型号！</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                             
                             <input type="hidden" value="{$parameterStr}" id="post_parameter_spec_value" />
 
@@ -149,11 +160,11 @@
                         </div> 
                         <div class="am-form-group">
                             <label for="contact-department" class="am-u-sm-2 am-form-label">供应商：</label>
-                            <div class="am-u-sm-2">
+                            <div class="am-u-sm-1">
                                 <button type="button" class="am-btn am-btn-default" id="selectSupplier" onclick="selectSupplier()">选择供应商</button>
                             </div>
-                            <div class="am-u-sm-8"  id="product_supplier_select" >
-                                <span style="color: #f00;">请先选择产品信息！</span>
+                            <div class="am-u-sm-9"  id="product_supplier_select" >
+                                <span style="color: #f00;margin-left:20px;">请先选择产品信息！</span>
                                 <input type='hidden' value='' id='select_supplier_id' />
                                 <input type='hidden' value='' id='select_supplier_name' /> 
                                 <input type='hidden' value='' id='product_cost_price' /> 
@@ -185,17 +196,23 @@
                             </div>
                         </div>
                         <div class="am-form-group" id="order_refer_info_button">
-                            <div class="am-u-sm-1">
-                                
-                            </div>
-                            <div class="am-u-sm-11">
-                                <button type="button"  onclick="getOrderReferInfo()" class="am-btn am-btn-default">查看参考信息</button>
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">参考信息：</label>
+                            <div class="am-u-sm-10">
+                                <button type="button"  onclick="getOrderReferInfo()" class="am-btn am-btn-default">查看</button>
                             </div>
 
                         </div>
                         <div class="am-form-group" id="end_price_div">
                             
-                            <label for="contact-department" class="am-u-sm-2 am-form-label">最终价格：</label>
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">成交单价：</label>
+                            <div class="am-u-sm-2 am-u-end" id="end_product_price_div">
+                                <input type="text" name="end_product_price" id="end_product_price" class="end_product_price" value=''   >
+                            </div>
+
+                        </div>
+                        <div class="am-form-group" id="end_price_div">
+                            
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">成交总价：</label>
                             <div class="am-u-sm-2 am-u-end" id="end_price_div">
                                 <input type="text" name="end_price" id="end_price" class="end_price" value=''   >
                             </div>
@@ -282,6 +299,11 @@
             }
             
             var product_cost_price = $.trim($("#product_cost_price").val());
+            if(product_cost_price == '' ){
+                layer.alert("请输入成本单价！", {icon: 5,offset: '200px',});
+                $("#product_cost_price").focus();
+                exit;
+            }
             var product_cost_money = $.trim($("#product_cost_money").val());
             if(product_cost_money == '' ){
                 layer.alert("请输入成本总价！", {icon: 5,offset: '200px',});
@@ -289,16 +311,22 @@
                 exit;
             }
             var product_discount_money = $("#hide_product_discount_money").val();
+            var product_end_price_one = $.trim($("#end_product_price").val());
+            if(product_end_price_one == '' ){
+                layer.alert("请输入成交单价！", {icon: 5,offset: '200px',}); 
+                $("#end_product_price").focus();
+                exit;
+            }
             var product_end_price = $.trim($("#end_price").val());
             if(product_end_price == '' ){
-                layer.alert("请输入最终价格！", {icon: 5,offset: '200px',});
+                layer.alert("请输入成交总价！", {icon: 5,offset: '200px',}); 
                 $("#end_price").focus();
                 exit;
             }
             // alert(product_end_price_2); 
 
             //添加订单信息
-            $.post("__APP__/Order/addOrderInfo",{"customer_id":customer_id,"trade_time":trade_time,"linkman_name":lxr_name,"linkman_tel":lxr_phone,"link_address":lxr_address,"product_type":product_type_id,"product_name":product_name_id,"product_model":product_model_id,"product_spec_id_str":product_spec_str,"special_technologyh_id_str":special_techmology_str,"supplier_id":product_supplier_id,"supplier_name":product_supplier_name,"num":product_num,"product_material_link":product_material_link,"cost_money":product_cost_money,"discount_money":product_discount_money,"end_money":product_end_price,"cost_price":product_cost_price},function(res){
+            $.post("__APP__/Order/addOrderInfo",{"customer_id":customer_id,"trade_time":trade_time,"linkman_name":lxr_name,"linkman_tel":lxr_phone,"link_address":lxr_address,"product_type":product_type_id,"product_name":product_name_id,"product_model":product_model_id,"product_spec_id_str":product_spec_str,"special_technologyh_id_str":special_techmology_str,"supplier_id":product_supplier_id,"supplier_name":product_supplier_name,"num":product_num,"product_material_link":product_material_link,"cost_money":product_cost_money,"discount_money":product_discount_money,"end_money":product_end_price,"end_price":product_end_price_one,"cost_price":product_cost_price},function(res){
                     if(res > 0 ){
                         parent.layer.alert('订单添加成功！', {
                                                             icon: 1,
@@ -358,9 +386,13 @@
                 $("#product_special_technology_div").html(' ');
                 $("#product_special_technology_div").html(res);
             })
-            //移除产品型号、规格的选项框 
-            $('li[name=product_model]').removeClass("xg-product-btn-selected");
-            $('li[name=product_spec]').removeClass("xg-product-btn-selected");
+            // //移除产品型号、规格的选项框 
+            // $('li[name=product_model]').removeClass("xg-product-btn-selected");
+            // $('li[name=product_spec]').removeClass("xg-product-btn-selected");
+            //移除产品型号
+            removeProductModel();
+            //移除产品规格
+            removeProductSpec(); 
             //移除原来的参考信息
             removeRrferInfo();
 
@@ -377,10 +409,19 @@
             rand_info();
             
             //渲染产品型号信息
-            $.post("__APP__/Order/getProductModelByProductName",{"id":id},function(res){
-                $(".product_model").html('');
-                $(".product_model").html(res);
-            })
+            if( id != 0){
+                //渲染产品型号信息
+                $.post("__APP__/Order/getProductModelByProductName",{"id":id},function(res){
+                    $(".product_model").html('');
+                    $(".product_model").html(res);
+                })
+            }else{
+                //移除产品型号
+                removeProductModel();
+            }
+            
+            //移除产品规格
+            removeProductSpec();
 
             //若该分类有价格，则重新渲染特殊工艺选项
             var hide_have_price_value = $("#hide_have_price_value").val();
@@ -392,7 +433,7 @@
             }
 
             //移除产品规格的选项框 
-            $('li[name=product_spec]').removeClass("xg-product-btn-selected");
+            // $('li[name=product_spec]').removeClass("xg-product-btn-selected");
             //移除原来的参考信息
             removeRrferInfo();
         }
@@ -514,7 +555,7 @@
             })
 
             //移除原来的参考信息
-            removeRrferInfo();
+            // removeRrferInfo();
 
         });
 
@@ -547,19 +588,21 @@
             if(have_price_value == 1 ){
                 if(price == undefined){
                     var price_value = '';
-                    var price_html = "<span style='color: #f00;'>暂无价格</span> <input type='hidden' value='"+price_value+"' id='product_cost_price' />";
+                    var price_html = "<div class='am-u-sm-2'> <span style='font-size:18px;color:#f00;'>暂无价格</span> </div> <input type='hidden' value='"+price_value+"' id='product_cost_price' />";
                 }else{
                     var price_value = price;
-                    var price_html = "<span style='color: #f00;'>￥ "+price+"元</span>  <input type='hidden' value='"+price_value+"' id='product_cost_price' />";
+                    var price_html = "<div class='am-u-sm-2'> <span  style='font-size:18px;color: #f00;'> "+price+"元</span> </div>  <input type='hidden' value='"+price_value+"' id='product_cost_price' />";
                 }
             }else{
-                var price_html = "<input type='text' value='' id='product_cost_price' />";
+                // var price_html = "<div class='am-u-sm-1'> <input type='text' value='' id='product_cost_price' /> </div>";
+                var price_html = "<div class='am-u-sm-2'> <input type='text' value='' id='product_cost_price' style='width:120px;'/> </div>";
             }
+
 
 
             //显示选择的供应商信息
             // var supplier_html = "<span  style='font-size:18px;''> "+supplier_name+"</span> &nbsp;&nbsp;&nbsp;&nbsp;";
-            var html = "<div class='am-u-sm-6'> <span  style='font-size:18px;''> "+supplier_name+"</span> </div> &nbsp;&nbsp;&nbsp;&nbsp; <div class='am-u-sm-2'> "+price_html+" </div> <input type='hidden' value='"+supplier_id+"' id='select_supplier_id' /> <input type='hidden' value='"+supplier_name+"' id='select_supplier_name' /> ";
+            var html = "<div class='am-u-sm-5'> <span  style='font-size:18px;''> "+supplier_name+"</span> </div> &nbsp;&nbsp;&nbsp;&nbsp; <div class='am-u-sm-2'> 成本单价：</div> "+price_html+" <input type='hidden' value='"+supplier_id+"' id='select_supplier_id' /> <input type='hidden' value='"+supplier_name+"' id='select_supplier_name' /> ";
 
             $('#product_supplier_select').html(' ');
             $('#product_supplier_select').html(html);
@@ -574,7 +617,7 @@
             $('#select_supplier_group').html(' ');
 
             //移除原来的参考信息
-            removeRrferInfo();
+            // removeRrferInfo();
 
         }
 
@@ -599,7 +642,7 @@
             }
 
             //移除原来的参考信息
-            removeRrferInfo();
+            // removeRrferInfo();
         }
 
         function getOrderReferInfo(){
@@ -638,15 +681,15 @@
 
             var hide_have_price_value = $("#hide_have_price_value").val();
             
-            if(product_cost_price == ''){
-                if(hide_have_price_value == 2){
-                    layer.alert("请输入产品成本单价！", {icon: 5,offset: '200px',});
-                    $("#product_cost_price").focus();
-                    exit;
-                }
+            // if(product_cost_price == ''){
+            //     if(hide_have_price_value == 2){
+            //         layer.alert("请输入产品成本单价！", {icon: 5,offset: '200px',});
+            //         $("#product_cost_price").focus();
+            //         exit;
+            //     }
 
-                product_cost_price = 0;
-            }
+            //     product_cost_price = 0;
+            // }
             
             // alert(product_cost_price); 
 
@@ -806,7 +849,7 @@
         function rand_info(){
             //重新渲染与价格有关的信息
             //供应商及产品单价
-            var supplier_price_html = "<span style='color: #f00;'>请先选择产品信息！</span> <input type='hidden' value='' id='select_supplier_id' /> </span> <input type='hidden' value='' id='select_supplier_name' /> <input type='hidden' value='' id='product_cost_price' />";
+            var supplier_price_html = "<span style='color: #f00;margin-left:20px;'>请先选择产品信息！</span> <input type='hidden' value='' id='select_supplier_id' /> </span> <input type='hidden' value='' id='select_supplier_name' /> <input type='hidden' value='' id='product_cost_price' />";
             $("#product_supplier_select").html(' ');
             $("#product_supplier_select").html(supplier_price_html);
             //供应商信息列表
@@ -833,6 +876,18 @@
 
             
             
+        }
+
+        function removeProductModel(){
+            var html = "<span style='color: #f00;'>请先选择产品！</span>";
+            $(".product_model").html(' ');
+            $(".product_model").html(html);
+        }
+
+        function removeProductSpec(){
+            var html = "<div class='am-form-group'> <label for='contact-department' class='am-u-sm-2 am-form-label'>产品规格：</label> <div class='am-u-sm-10'> <ul> <li value='1'> <span style='color: #f00;'>请先选择产品型号！</span> </li> </ul> </div> </div> <input type='hidden' value='' id='post_parameter_spec_value' />";
+            $(".product_paramerter").html(' ');
+            $(".product_paramerter").html(html);
         }
     </script>
 

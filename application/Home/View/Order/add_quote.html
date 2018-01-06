@@ -124,11 +124,11 @@
 
                         <div class="am-form-group">
                             <label for="contact-department" class="am-u-sm-2 am-form-label">供应商：</label>
-                            <div class="am-u-sm-2">
+                            <div class="am-u-sm-1">
                                 <button type="button" class="am-btn am-btn-default" id="selectSupplier" onclick="selectSupplier()">选择供应商</button>
                             </div>
-                            <div class="am-u-sm-8"  id="product_supplier_select" >
-                                <span style="color: #f00;">请先选择产品信息！</span>
+                            <div class="am-u-sm-9"  id="product_supplier_select" >
+                                <span style="color: #f00;margin-left:20px;">请先选择产品信息！</span>
                                 <input type='hidden' value='' id='select_supplier_id' />
                                 <input type='hidden' value='' id='select_supplier_name' /> 
                                 <input type='hidden' value='' id='product_cost_price' /> 
@@ -157,7 +157,13 @@
 
                         </div>
                         <div class="am-form-group" id="end_price_div">
-                            <label for="contact-department" class="am-u-sm-2 am-form-label">最终报价：</label>
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">单价：</label>
+                            <div class="am-u-sm-2 am-u-end" id="end_product_price_div">
+                                <input type="text" name="end_product_price" id="end_product_price" class="end_product_price" value=''   >
+                            </div>
+                        </div>
+                        <div class="am-form-group" id="end_price_div">
+                            <label for="contact-department" class="am-u-sm-2 am-form-label">总报价：</label>
                             <div class="am-u-sm-2 am-u-end" id="end_price_div">
                                 <input type="text" name="end_price" id="end_price" class="end_price" value=''   >
                             </div>
@@ -266,6 +272,14 @@
             }
             
             var product_discount_money = $("#hide_product_discount_money").val();
+
+            var product_end_price_one = $.trim($("#end_product_price").val());
+            if(product_end_price_one == '' ){
+                layer.alert("请输入单价！", {icon: 5,offset: '200px',}); 
+                $("#end_product_price").focus();
+                exit;
+            }
+
             var product_end_price = $.trim($("#end_price").val());
             if(product_end_price == '' ){
                 layer.alert("请输入最终价格！", {icon: 5,offset: '200px',});
@@ -274,7 +288,7 @@
             }
 
             //添加报价记录
-            $.post("__APP__/Order/addQuoteInfo",{"customer_name":customer_name,"customer_level":customer_level,"linkman_name":linkman_name,"linkman_tel":linkman_phone,"remark":remark,"product_type_id":product_type_id,"product_name_id":product_name_id,"product_model_id":product_model_id,"product_spec_id_str":product_spec_str,"special_technologyh_id_str":special_techmology_str,"supplier_id":product_supplier_id,"supplier_name":product_supplier_name,"num":product_num,"discount_money":product_discount_money,"end_money":product_end_price,"cost_price":product_cost_price},function(res){
+            $.post("__APP__/Order/addQuoteInfo",{"customer_name":customer_name,"customer_level":customer_level,"linkman_name":linkman_name,"linkman_tel":linkman_phone,"remark":remark,"product_type_id":product_type_id,"product_name_id":product_name_id,"product_model_id":product_model_id,"product_spec_id_str":product_spec_str,"special_technologyh_id_str":special_techmology_str,"supplier_id":product_supplier_id,"supplier_name":product_supplier_name,"num":product_num,"discount_money":product_discount_money,"end_price":product_end_price_one,"end_money":product_end_price,"cost_price":product_cost_price},function(res){
                     if(res > 0 ){
                         parent.layer.alert('报价记录添加成功！', {
                                                             icon: 1,
@@ -328,6 +342,7 @@
             removeProductModel();
             //移除产品规格
             removeProductSpec(); 
+
 
         }
 
@@ -476,7 +491,7 @@
             })
 
             //移除原来的参考信息
-            removeRrferInfo();
+            // removeRrferInfo();
 
         });
 
@@ -509,19 +524,19 @@
             if(have_price_value == 1 ){
                 if(price == undefined){
                     var price_value = '';
-                    var price_html = "<span style='color: #f00;'>暂无价格</span> <input type='hidden' value='"+price_value+"' id='product_cost_price' />";
+                    var price_html = "<div class='am-u-sm-2'> <span style='font-size:18px;color:#f00;'>暂无价格</span> </div> <input type='hidden' value='"+price_value+"' id='product_cost_price' />";
                 }else{
                     var price_value = price;
-                    var price_html = "<span style='color: #f00;'>￥ "+price+"元</span>  <input type='hidden' value='"+price_value+"' id='product_cost_price' />";
+                    var price_html = "<div class='am-u-sm-2'> <span  style='font-size:18px;color: #f00;'> "+price+"元</span> </div>  <input type='hidden' value='"+price_value+"' id='product_cost_price' />";
                 }
             }else{
-                var price_html = "<input type='text' value='' id='product_cost_price' />";
+                var price_html = "<div class='am-u-sm-2'> <input type='text' value='' id='product_cost_price' style='width:120px;'/> </div>";
             }
 
 
             //显示选择的供应商信息
             // var supplier_html = "<span  style='font-size:18px;''> "+supplier_name+"</span> &nbsp;&nbsp;&nbsp;&nbsp;";
-            var html = "<div class='am-u-sm-6'> <span  style='font-size:18px;''> "+supplier_name+"</span> </div> &nbsp;&nbsp;&nbsp;&nbsp; <div class='am-u-sm-2'> "+price_html+" </div> <input type='hidden' value='"+supplier_id+"' id='select_supplier_id' /> <input type='hidden' value='"+supplier_name+"' id='select_supplier_name' /> ";
+            var html = "<div class='am-u-sm-5'> <span  style='font-size:18px;''> "+supplier_name+"</span> </div> &nbsp;&nbsp;&nbsp;&nbsp;  <div class='am-u-sm-2'> 成本单价：</div>  "+price_html+"  <input type='hidden' value='"+supplier_id+"' id='select_supplier_id' /> <input type='hidden' value='"+supplier_name+"' id='select_supplier_name' /> ";
 
             $('#product_supplier_select').html(' ');
             $('#product_supplier_select').html(html);
@@ -530,7 +545,7 @@
             $('#select_supplier_group').html(' ');
 
             //移除原来的参考信息
-            removeRrferInfo();
+            // removeRrferInfo();
 
         }
 
@@ -716,7 +731,7 @@
         function rand_info(){
             //重新渲染与价格有关的信息
             //供应商及产品单价
-            var supplier_price_html = "<span style='color: #f00;'>请先选择产品信息！</span> <input type='hidden' value='' id='select_supplier_id' /> </span> <input type='hidden' value='' id='select_supplier_name' /> <input type='hidden' value='' id='product_cost_price' />";
+            var supplier_price_html = "<span style='color: #f00;margin-left:20px;'>请先选择产品信息！</span> <input type='hidden' value='' id='select_supplier_id' /> </span> <input type='hidden' value='' id='select_supplier_name' /> <input type='hidden' value='' id='product_cost_price' />";
             $("#product_supplier_select").html(' ');
             $("#product_supplier_select").html(supplier_price_html);
             //供应商信息列表
