@@ -65,8 +65,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        <foreach name="depeatArr" item="item">
                                         <tr class="xg-table-tr">
+                                            <td>{$item.depart_name}</td>
+                                            <td>{$item.managerCount}</td>
+                                            <td><if condition="$item['manager'] != '' ">{$item.manager.truename}<else />暂无分配部门经理</if></td>
+                                            <td><if condition="$item['manager'] != '' ">{$item.manager.tel}<else />暂无电话</if></td>
+                                            <td><if condition="$item['manager'] != '' ">{$item.manager.email}<else />暂无邮箱</if></td>
+                                            <td>
+                                                <div class="am-btn-toolbar">
+                                                    <div class="am-btn-group am-btn-group-xs">
+                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateDepartment('{$item.depart_name}',{$item.id})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteDepartment({$item.id})"><span class="am-icon-trash-o"></span> 删除</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                       </foreach>
+                                        <!-- <tr class="xg-table-tr">
                                             <td>客服部</td>
                                             <td>10</td>
                                             <td>张三</td>
@@ -80,22 +96,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                        </tr>
-                                        <tr class="xg-table-tr">
-                                            <td>客服部</td>
-                                            <td>10</td>
-                                            <td>张三</td>
-                                            <td>18649521584</td>
-                                            <td>abcabc@163.com</td>
-                                            <td>
-                                                <div class="am-btn-toolbar">
-                                                    <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateDepartment()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteDepartment()"><span class="am-icon-trash-o"></span> 删除</button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        </tr> -->
 
                                     </tbody>
                                 </table>
@@ -147,7 +148,7 @@
             });
         }
         // 添加部门页面
-        function updateDepartment(){
+        function updateDepartment(depart_name,id){
             layer.open({
                 type: 2,
                 offset: '150px',
@@ -156,18 +157,53 @@
                 shade: 0.8,
                 area: ['40%', '50%'],
                 btn: ['关闭'],
-                content: '__APP__/PersonalCenter/updateDepartment' //iframe的url
+                content: '__APP__/PersonalCenter/updateDepartment/id/'+id+'/depart_name/'+depart_name, //iframe的url
             });
         }
-        // 删除信息提示
-        function deleteDepartment(){
-            layer.confirm('您确定要删除该条部门信息吗？', {
+    	 // 删除信息提示
+        function deleteDepartment(id){
+        	layer.confirm('您确定要删除该条部门信息吗？', {
                 icon: 3,
                 anim:5,
                 offset: '200px',
                 title:'提示',
                 btn: ['确定','取消'] //按钮
+            }, function(){
+                if(id){
+                    $.ajax({
+                        url:'__APP__/PersonalCenter/deleteDepartmentInfo',
+                        data:'id='+id,
+                        type:'post',
+                        dataType:'json',
+                        success:function(res){
+                        	if(res == 1){
+                        		var tihsiContent = "删除该部门信息成功！";
+                        	}else{
+                        		var tihsiContent = "删除该部门信息失败！";
+                        	}
+                            layer.confirm(tihsiContent, {
+                                icon: 1,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定'] //按钮
+                            }, function(){
+                                window.location.reload();       
+                            });
+                        }
+                    });
+
+                }else{
+                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                }          
+            }, function(){
+                layer.msg('删除已取消！', {
+                time: 2000, //20s后自动关闭
+                offset: '200px',
+                // title:'提示'
+                });
             });
+
         }
         
     </script>

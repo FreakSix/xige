@@ -29,64 +29,25 @@
                         <div class="portlet-title">
                             <div class="caption font-green bold">分配权限</div>
                         </div>
-                        
+                        <foreach name="powerList" item="item" key="num">
                         <div class="xg-access">
                             <div class="am-checkbox xg-access-title">
                                 <label class="">
-                                    <b>订单管理</b><input type="checkbox" name="">
+                                    <b>{$item.power_name}</b><input type="checkbox" name="p_power_select" rec="{$num}" value="{$item.power_en}">
                                 </label>
                             </div>
                             <div class="am-form-group xg-access-content">
+                            <foreach name="item.info" item="v">
                                 <label class="am-checkbox-inline">
-                                    <input type="checkbox" value=""> 新增订单
+                                    <input type="checkbox" value="{$v.power_en}" name="z_power_select_{$num}" class="z_power_select"> {$v.power_name}
                                 </label>
-                                <label class="am-checkbox-inline">
-                                    <input type="checkbox" value=""> 修改订单
-                                </label>
-                                <label class="am-checkbox-inline">
-                                    <input type="checkbox" value=""> 删除订单
-                                </label>
+                             </foreach>
                             </div>
                         </div>
-                        <div class="xg-access">
-                            <div class="am-checkbox xg-access-title">
-                                <label class="">
-                                    <b>客户管理</b><input type="checkbox" name="">
-                                </label>
-                            </div>
-                            <div class="am-form-group xg-access-content">
-                                <label class="am-checkbox-inline">
-                                    <input type="checkbox" value=""> 新增客户信息
-                                </label>
-                                <label class="am-checkbox-inline">
-                                    <input type="checkbox" value=""> 修改客户信息
-                                </label>
-                                <label class="am-checkbox-inline">
-                                    <input type="checkbox" value=""> 删除客户信息
-                                </label>
-                            </div>
-                        </div>
-                        <div class="xg-access">
-                            <div class="am-checkbox xg-access-title">
-                                <label class="">
-                                    <b>产品管理</b><input type="checkbox" name="">
-                                </label>
-                            </div>
-                            <div class="am-form-group xg-access-content">
-                                <label class="am-checkbox-inline">
-                                    <input type="checkbox" value=""> 新增产品
-                                </label>
-                                <label class="am-checkbox-inline">
-                                    <input type="checkbox" value=""> 修改产品
-                                </label>
-                                <label class="am-checkbox-inline">
-                                    <input type="checkbox" value=""> 删除产品
-                                </label>
-                            </div>
-                        </div>
+                        </foreach>
                         <div class="am-form-group">
                             <div class="am-u-sm-10 am-u-sm-push-2">
-                                <button type="button" class="am-btn am-btn-primary">确认添加</button>
+                                <button type="button" class="am-btn am-btn-primary" onclick="addNewPower()">确认添加</button>
                             </div>
                         </div>
                     </form>
@@ -94,7 +55,7 @@
             </div>
         </div>
     </div>
-
+	<input type="hidden" value="{$duty_id}" id="hide_duty_id">
 
     <script src="__PUBLIC__/js/jquery.min.js"></script>
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
@@ -102,6 +63,38 @@
     <script src="__PUBLIC__/js/layer.js"></script>
 
 <script type="text/javascript">
+
+	//全选和反选
+		$("input[name=p_power_select]").click(function(){   
+			var key = $(this).attr("rec");
+	    	if(this.checked){ 
+	       		$("input[name=z_power_select_"+key+"]").prop("checked", true);  
+	    	}else{   
+				$("input[name=z_power_select_"+key+"]").prop("checked", false);
+	    	}   
+		});
+
+	
+	//添加新的权限
+	function addNewPower(){
+		var duty_id = $("#hide_duty_id").val();
+		var children_select =[]; 
+		$('.z_power_select:checked').each(function(){ 
+			children_select.push($(this).val()); 
+		}); 
+		$.post("__APP__/Rbac/savePowerSubmit/",{"children_select":children_select,"duty_id":duty_id},function(res){
+			if(res == 1){
+				alert("修改权限成功！");
+				/* closeLayer(); */
+			}else{
+				alert("修改权限失败！");
+			}
+		})
+	}
+	/* function closeLayer(){
+		var index = parent.layer.getFrameIndex(window.name);
+		parent.layer.close(index);
+	} */
     $(document).ready(function(){
         // $("#submit2").click(function(){
         //     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

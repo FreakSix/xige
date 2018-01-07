@@ -172,6 +172,24 @@
 		
 		// 部门信息页面
 		public function department(){
+		    $depeatModel = D("XgDepeartment");
+		    $depeatArr = $depeatModel->getDepeartAll();
+		    $managerModel = D("XgManager");
+		    if(!empty($depeatArr)){
+		        foreach($depeatArr as $k=>$v){
+		            //根据manager_id 获取部门经理的信息
+		            $managerInfo = $managerModel->getManagerInfoById($v['manager_id']);
+		            if(!empty($managerInfo)){
+		            	$depeatArr[$k]['manager'] = $managerInfo;
+		            }else{
+		            	$depeatArr[$k]['manager'] = "";
+		            }
+		            //根据部门id在manager表中获取该部门有多少员工
+		            $count = $managerModel->getDepartManagerCount($v['id']);
+		            $depeatArr[$k]['managerCount'] = $count;
+		        }
+		    }
+		    $this->assign("depeatArr",$depeatArr);
 			$this->display("department");
 		}
 		// 添加部门页面
@@ -180,11 +198,182 @@
 		}
 		// 修改部门页面
 		public function updateDepartment(){
+			$id = $_REQUEST['id'];
+			$depart_name = $_REQUEST['depart_name'];
+			$this->assign("id",$id);
+			$this->assign("depart_name",$depart_name);
 			$this->display("update_department");
 		}
 		
 		// 分配登录帐号页面
 		public function createAccount(){
 			$this->display("create_account"); 
+		}
+		/**
+		 * 保存新添加的部门名称
+		 */
+		public function saveNewAddDepartment(){
+		    $depart_name = $_REQUEST['depart_name'];
+		    $departModel = D("XgDepeartment");
+		    $res = $departModel->saveNewAddDepartment($depart_name);
+		    if($res){
+		        echo 1;
+		    }else{
+		        echo 0;
+		    }
+		}
+		/**
+		 * 修改部门名称
+		 */
+		public function saveUpdateDepartment(){
+			$id = $_REQUEST['id'];
+			$depart_name = $_REQUEST['depart_name'];
+			$departModel = D("XgDepeartment");
+			$res = $departModel->saveUpdateDepartName($id,$depart_name);
+			if($res){
+				echo 1;
+			}else{
+				echo 0;
+			}
+		}
+		
+		/**
+		 * 删除部门信息
+		 */
+		public function deleteDepartmentInfo(){
+			$id = $_REQUEST['id'];
+			$departModel = D("XgDepeartment");
+			$res = $departModel->deleteDepartmentById($id);
+			if($res){
+				echo 1;
+			}else{
+				echo 0;
+			}
+		}
+		
+		// 员工信息页面
+		public function staff(){
+			//读取员工的信息
+			$managerModel = D("XgManager");
+			$dutyModel = D("XgDuty");
+			$departModel = D("XgDepeartment");
+			$managerArr = $managerModel->getAllManager();
+			if(!empty($managerArr)){
+				foreach($managerArr as $k=>$v){
+					//获取职位名称
+					$dutyInfo = $dutyModel->getDutyById($v['duty_id']);
+					$managerArr[$k]['duty_name'] = $dutyInfo['duty_name'];
+					//获取部门名称
+					$deprtInfo = $departModel->getDepeartmentById($v['department_id']);
+					$managerArr[$k]['depart_name'] = $deprtInfo['depart_name'];
+				}
+			}
+			$this->assign("managerArr",$managerArr);
+			$this->display("staff");
+		}
+		// 新增员工信息页面
+		public function addStaff(){
+			$departModel = D("XgDepeartment");
+			$dutyModel = D("XgDuty");
+			$departArr = $departModel->getDepeartAll();
+			$firstDepartDutyInfo = array();
+			if(!empty($departArr)){
+				$firstDepartId = $departArr[0]['id'];
+				$firstDepartDutyInfo = $dutyModel->getDutyByDepartId($firstDepartId);
+				
+			}
+			$this->assign("firstDepartDutyInfo",$firstDepartDutyInfo);
+			$this->assign("departArr",$departArr);
+			$this->display("add_staff");
+		}
+		// 修改员工信息页面
+		public function updateStaff(){
+			$manager_id = $_REQUEST['id'];
+			$managerModel = D("XgManager");
+			$departModel= D("XgDepeartment");
+			$dutyModel = D("XgDuty");
+			$managerInfo = $managerModel->getManagerInfoById($manager_id);
+			//获取该员工的部门信息
+			$departInfo = $departModel->getDepeartmentById($managerInfo['department_id']);
+			//获取该员工的职位信息
+			$dutyInfo = $dutyModel->getDutyById($managerInfo['duty_id']); 
+			//获取所有的部门信息
+			$departArr = $departModel->getDepeartAll();	
+			//获取所有的职位信息
+// 			$dutyArr = $dutyModel->getDutyAll();
+			
+			$this->assign("departArr",$departArr);
+// 			$this->assign("dutyArr",$dutyArr);
+			$this->assign("managerInfo",$managerInfo);
+			$this->assign("departInfo",$departInfo);
+			$this->assign("dutyInfo",$dutyInfo);
+			$this->display("update_staff");
+		}
+		//当用户点击部门的时候湖区该部门对应的所哟职位
+		public function GetDifDutyByDepartId(){
+			$depart_id = $_REQUEST['depart_id'];
+			$dutyModel = D("XgDuty");
+			$dutyArr = $dutyModel->getDutyByDepartId($depart_id);
+			$html = "";
+			if(!empty($dutyArr)){
+				foreach ($dutyArr as $k=>$v){
+					$html .= "<option value='".$v['id']."'>".$v['duty_name']."</option>";
+				}
+			}
+			echo $html;
+		}
+		
+		/**
+		 * 保存添加用户的信息
+		 */
+		public function saveNewAddManager(){
+			$data['truename'] = $_REQUEST['truename'];
+			$data['username'] = $_REQUEST['username'];
+			$data['password'] = "123456";
+			$data['tel'] = $_REQUEST['tel'];
+			$data['email'] = $_REQUEST['email'];
+			$data['department_id'] = $_REQUEST['depart_id'];
+			$data['duty_id'] = $_REQUEST['duty_id'];
+			$managerModel = D("XgManager");
+			$res = $managerModel->addNewManager($data);
+			if($res){
+				echo 1;
+			}else{
+				echo 0;
+			}
+		}
+		
+		/**
+		 * 保存修改员工信息
+		 */
+		public function saveEditManager(){
+			$id = $_REQUEST['id'];
+			$data['truename'] = $_REQUEST['truename'];
+			$data['username'] = $_REQUEST['username'];
+			$data['password'] = "123456";
+			$data['tel'] = $_REQUEST['tel'];
+			$data['email'] = $_REQUEST['email'];
+			$data['department_id'] = $_REQUEST['depart_id'];
+			$data['duty_id'] = $_REQUEST['duty_id'];
+			$managerModel = D("XgManager");
+			$res = $managerModel->updateEditManager($id,$data);
+			if($res){
+				echo 1;
+			}else{
+				echo 0;
+			}
+		}
+		/**
+		 * 删除员工的信息
+		 */
+		public function deleteManagerInfo(){
+			$id = $_REQUEST['id'];
+			$managerModel = D("XgManager");
+			$res = $managerModel->delManagerInfo($id);
+			if($res){
+				echo 1;
+			}else{
+				echo 0;
+			}
 		}
 	}

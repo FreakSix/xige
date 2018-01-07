@@ -65,22 +65,23 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
-                                        <tr class="xg-table-tr">
-                                            <td>客服经理</td>
-                                            <td>1</td>
-                                            <td>客服部</td>
-                                            <td><a href="javascript:;" onclick="access()">权限管理</a></td>
-                                            <td>
-                                                <div class="am-btn-toolbar">
-                                                    <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updatePosition()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletePosition()"><span class="am-icon-trash-o"></span> 删除</button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class="xg-table-tr">
+                                        <foreach name="list" item="item" key="key">
+	                                        <tr class="xg-table-tr">
+	                                            <td>{$item.duty_name}</td>
+	                                            <td>{$item.totla_person}</td>
+	                                            <td>{$item.depart}</td>
+	                                            <td><a href="javascript:void(0);" onclick="access({$item.id})">权限管理</a></td>
+	                                            <td>
+	                                                <div class="am-btn-toolbar">
+	                                                    <div class="am-btn-group am-btn-group-xs">
+	                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updatePosition({$item.id},{$item.depart_id})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+	                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletePosition()"><span class="am-icon-trash-o"></span> 删除</button>
+	                                                    </div>
+	                                                </div>
+	                                            </td>
+	                                        </tr>
+                                        </foreach>
+                                        <!-- <tr class="xg-table-tr">
                                             <td>销售专员</td>
                                             <td>2</td>
                                             <td>销售部</td>
@@ -93,7 +94,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                        </tr>
+                                        </tr> -->
 
                                     </tbody>
                                 </table>
@@ -125,13 +126,13 @@
                 title: '添加职位信息',
                 shadeClose: true,
                 shade: 0.8,
-                area: ['40%', '60%'],
+                area: ['50%', '70%'],
                 btn: ['关闭'],
                 content: '__APP__/Rbac/addPosition' //iframe的url
             });
         }
         // 修改职位页面
-        function updatePosition(){
+        function updatePosition(duty_id,depart_id){
             layer.open({
                 type: 2,
                 offset: '100px',
@@ -140,7 +141,7 @@
                 shade: 0.8,
                 area: ['40%', '60%'],
                 btn: ['关闭'],
-                content: '__APP__/Rbac/updatePosition' //iframe的url
+                content: '__APP__/Rbac/updatePosition?duty_id='+duty_id+'&depart_id='+depart_id //iframe的url
             });
         }
         // 删除职位信息提示
@@ -154,16 +155,16 @@
             });
         }
         // 权限管理页面
-        function access(){
+        function access(id){
             layer.open({
                 type: 2,
                 offset: '50px',
                 title: '分配权限',
-                shadeClose: true,
+                shadeClose: false,
                 shade: 0.8,
                 area: ['60%', '85%'],
                 btn: ['关闭'],
-                content: '__APP__/Rbac/access' //iframe的url
+                content: '__APP__/Rbac/access?id='+id //iframe的url
             });
         }
     </script>

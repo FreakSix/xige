@@ -67,25 +67,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        <foreach name="managerArr" item="item" key="key">
                                         <tr class="xg-table-tr">
                                             <td><img class="xg-staff-img" src="__PUBLIC__/images/user_default.png"></td>
-                                            <td>cigo</td>
-                                            <td>张三</td>
-                                            <td>客服专员</td>
-                                            <td>客服部</td>
-                                            <td>18614851235</td>
+                                            <td>{$item.username}</td>
+                                            <td>{$item.truename}</td>
+                                            <td>{$item.duty_name}</td>
+                                            <td>{$item.depart_name}</td>
+                                            <td>{$item.tel}</td>
                                             <td>是 <a href="javascript:;" onclick="deleteAccount()">[注销帐号]</a></td>
                                             <td>
                                                 <div class="am-btn-toolbar">
                                                     <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateStaff()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteStaff()"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateStaff({$item.id})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteStaff({$item.id})"><span class="am-icon-trash-o"></span> 删除</button>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr class="xg-table-tr">
+                                        </foreach>
+                                        <!-- <tr class="xg-table-tr">
                                             <td><img class="xg-staff-img" src="__PUBLIC__/images/user_default.png"></td>
                                             <td>media</td>
                                             <td>李四</td>
@@ -101,7 +102,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                        </tr>
+                                        </tr> -->
 
                                     </tbody>
                                 </table>
@@ -152,7 +153,7 @@
             });
         }
         // 修改员工信息页面
-        function updateStaff(){
+        function updateStaff(id){
             layer.open({
                 type: 2,
                 offset: '50px',
@@ -161,17 +162,51 @@
                 shade: 0.8,
                 area: ['40%', '80%'],
                 btn: ['关闭'],
-                content: '__APP__/PersonalCenter/updateStaff' //iframe的url
+                content: '__APP__/PersonalCenter/updateStaff/id/'+id //iframe的url
             });
         }
         // 删除员工信息提示
-        function deleteStaff(){
+        function deleteStaff(id){
             layer.confirm('您确定要删除该条员工信息吗？', {
                 icon: 3,
                 anim:5,
                 offset: '200px',
                 title:'提示',
                 btn: ['确定','取消'] //按钮
+            }, function(){
+                if(id){
+                    $.ajax({
+                        url:'__APP__/PersonalCenter/deleteManagerInfo',
+                        data:'id='+id,
+                        type:'post',
+                        dataType:'json',
+                        success:function(res){
+                        	if(res == 1){
+                        		var tihsiContent = "删除该部门信息成功！";
+                        	}else{
+                        		var tihsiContent = "删除该部门信息失败！";
+                        	}
+                            layer.confirm(tihsiContent, {
+                                icon: 1,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定'] //按钮
+                            }, function(){
+                                window.location.reload();       
+                            });
+                        }
+                    });
+
+                }else{
+                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                }          
+            }, function(){
+                layer.msg('删除已取消！', {
+                time: 2000, //20s后自动关闭
+                offset: '200px',
+                // title:'提示'
+                });
             });
         }
         // 分配帐号页面

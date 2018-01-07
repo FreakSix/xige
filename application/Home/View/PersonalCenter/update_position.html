@@ -32,21 +32,26 @@
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label">所属部门：</label>
                             <div class="am-u-sm-5 am-u-end">
-                                <select>
-                                    <option>客服部</option>
-                                    <option>销售部</option>
+                                <select id="depart_select">
+	                                <foreach name="all_depart" item="item">
+	                                	<if condition="$depart_id eq $item.id">
+	                                    	<option value="{$item.id}"  selected="selected">{$item.depart_name}</option>
+	                                    <else />
+	                                    	<option value="{$item.id}">{$item.depart_name}</option>
+	                                    </if>
+	                                </foreach>
                                 </select>
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label">职位名称：</label>
                             <div class="am-u-sm-5 am-u-end">
-                                <input type="text" value="客服专员" name="">
+                                <input type="text" value="{$duty_info.duty_name}" name="duty_name_input" id="duty_name_input">
                             </div>
                         </div>
                         <div class="am-form-group">
                             <div class="am-u-sm-10 am-u-sm-push-2">
-                                <button type="button" class="am-btn am-btn-primary">确认修改</button>
+                                <button type="button" class="am-btn am-btn-primary" onclick="saveEditPosition({$duty_info.id})">确认修改</button>
                             </div>
                         </div>
                     </form>
@@ -54,14 +59,39 @@
             </div>
         </div>
     </div>
-
-
+	<input type="hidden" value="{$depart_id}" id="old_depart_id"/>
+	<input type="hidden" value="{$duty_info.duty_name}" id="old_duty_name"/>
     <script src="__PUBLIC__/js/jquery.min.js"></script>
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
     <script src="__PUBLIC__/js/layer.js"></script>
 
 <script type="text/javascript">
+	function saveEditPosition(id){
+		var depart_id = $("#depart_select").val();
+		var duty_name = $("#duty_name_input").val();
+		var old_depart = $("#old_depart_id").val();
+		var old_duty_name = $("#old_duty_name").val();
+		if(duty_name == ''){
+			alert("请输入职位名称！");return false;
+		}
+		if((depart_id == old_depart) && (duty_name == old_duty_name)){
+			alert("未进行任何修改，无法提交！");return false;
+		}
+		if(depart_id == old_depart){
+			depart_id = '';
+		}
+		if(duty_name == old_duty_name){
+			duty_name = '';
+		}
+		$.post("__APP__/Rbac/saveEditPosition",{"id":id,"depart_id":depart_id,"duty_name":duty_name},function(res){
+			if(res == 1){
+				alert("修改职位信息成功!");
+			}else{
+				alert("修改职位信息失败！");
+			}
+		})
+	}
     $(document).ready(function(){
         // $("#submit2").click(function(){
         //     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

@@ -37,7 +37,7 @@
                         </div>
                         <div class="am-form-group">
                             <div class="am-u-sm-10 am-u-sm-push-2">
-                                <button type="button" class="am-btn am-btn-primary">确认添加</button>
+                                <button type="button" class="am-btn am-btn-primary" onclick="add_new_depeart()">确认添加</button>
                             </div>
                         </div>
                     </form>
@@ -53,53 +53,23 @@
     <script src="__PUBLIC__/js/layer.js"></script>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        // $("#submit2").click(function(){
-        //     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-        
-        //     var customer_id = $("#customer_id").val();
-        //     var link_address = $("#link_address").val();
-            
-        //     //联系人姓名验证
-        //     var link_name = $("#link_name").val();
-        //     if(link_name == ''){
-        //         parent.layer.msg('联系人姓名不能为空！');
-        //         $("#link_name").focus();
-        //         return false;
-        //     }
-        //     //联系人电话验证
-        //     var link_phone = $("#link_phone").val();
-        //     if(link_phone == ''){
-        //         parent.layer.msg('联系人电话不能为空！');
-        //         $("#link_phone").focus();
-        //         return false;
-        //     }
-            
-        //     $.ajax({
-        //         url:'__APP__/Customer/addCustomerLinkman',
-        //         type:'post',
-        //         data:'link_name='+link_name+'&link_phone='+link_phone+'&link_address='+link_address+'&customer_id='+customer_id,
-        //         dataType:'json',
-        //         success:function(res){
-        //             if(res == 1){
-        //                 parent.layer.alert('信息添加成功！', {
-        //                                                     icon: 1,
-        //                                                     offset: '200px',
-        //                                                     title:'提示',
-        //                                                 });
-        //                 parent.layer.close(index);
-        //             }
-        //             if(res == 2){
-        //                 parent.layer.alert('信息添加失败！', {
-        //                                                     icon: 5,
-        //                                                     offset: '200px',
-        //                                                     title:'提示',
-        //                                                 });
-        //             }
-        //         }
-        //     });
-        // });
-    });
+	function add_new_depeart(){
+		var depart_name = $("input[name=department_name]").val();
+		$.post("__APP__/PersonalCenter/saveNewAddDepartment",{"depart_name":depart_name},function(res){
+			if(res == 1){
+				alert("添加部门成功！");
+				closeLayer(); 
+			}else{
+				alert("添加部门失败！");
+			}
+		})
+	} 
+	function closeLayer(){
+		var index=parent.layer.getFrameIndex(window.name);
+		parent.layer.close(index);
+		window.parent.location.reload(); //刷新父页面
+
+	}
 </script>
 
 
