@@ -52,6 +52,18 @@
 			
 		}
 		/**
+		 *退出登录
+		**/
+		public function loginOut(){
+			session_unset();
+	    	session_destroy();
+			if(isset($_SESSION['userInfo'])){
+				echo 0;
+			}else{
+				echo 1;
+			}
+		}
+		/**
 		 * 将用户登录的信息记录到登陆日志表中
 		 * @param unknown $userInfo
 		 */

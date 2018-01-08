@@ -1,25 +1,52 @@
 <div class="am-topbar-brand">
-            <a href="javascript:;" class="tpl-logo">
-                <img src="__PUBLIC__/img/logo.png" alt="">
+    <a href="javascript:;" class="tpl-logo">
+        <img src="__PUBLIC__/img/logo.png" alt="">
+    </a>
+</div>
+<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+<div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+    <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+        <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+            <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                <span class="tpl-header-list-user-nick"><?php echo $_SESSION["userInfo"]["truename"] ?></span><span class="tpl-header-list-user-ico"> <img src="__PUBLIC__/img/user01.png"></span>
             </a>
-        </div>
-        <!--<div class="am-icon-list tpl-header-nav-hover-ico am-fl am-margin-right"></div>-->
-        <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
-        <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
-            <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
-                <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
-                    <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                        <span class="tpl-header-list-user-nick">Admin</span><span class="tpl-header-list-user-ico"> <img src="__PUBLIC__/img/user01.png"></span>
-                    </a>
-                    <ul class="am-dropdown-content">
-                        <li><a href="__APP__/PersonalCenter/index"><span class="am-icon-user"></span> 个人中心</a></li>
-                        <li><a href="__APP__/PersonalCenter/updateUserPwd"><span class="am-icon-lock"></span> 修改密码</a></li>
-                        <li><a href="__APP__/PersonalCenter/loginLog"><span class="am-icon-map-marker"></span> 登录日志</a></li>
-                    </ul>
-                </li>
-                <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
-                    <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                        <span class="am-icon-power-off"></span> 退出系统 
-                </li>
+            <ul class="am-dropdown-content">
+                <li><a href="__APP__/PersonalCenter/index"><span class="am-icon-user"></span> 个人中心</a></li>
+                <li><a href="__APP__/PersonalCenter/updateUserPwd"><span class="am-icon-lock"></span> 修改密码</a></li>
+                <li><a href="__APP__/PersonalCenter/loginLog"><span class="am-icon-map-marker"></span> 登录日志</a></li>
             </ul>
-        </div>
+        </li>
+        <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+            <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;" onclick="loginOut()">
+                <span class="am-icon-power-off"></span> 退出系统 
+        </li>
+    </ul>
+</div>
+<script>
+    function loginOut(){
+        // if(confirm("您确定要退出系统吗？")){
+        //     $.post("__APP__/Login/loginOut",function(res){
+        //         // alert(res);return false;
+        //         if(res == 1){
+        //             alert("退出系统成功！");
+        //             //跳转到登录页面  
+        //             window.location.href="__APP__/Login/index";
+        //         }else{
+        //             alert("退出系统失败！");
+        //         }
+        //     })
+        // }
+        layer.confirm("您确定要退出系统吗？", {icon:3,anim:5,offset:'200px',title:"提示",btn:["确定","取消"]},function(){
+            $.post("__APP__/Login/loginOut",function(res){
+                if(res == 1){
+                    layer.msg("正在退出，请稍候...",{time:10000});
+                    window.location.href="__APP__/Login/index";
+                }else{
+                    layer.msg("退出失败！请刷新后重试");
+                }
+            })
+        },function(){
+            layer.msg("退出操作已取消",{time:1000});
+        })
+    }
+</script>

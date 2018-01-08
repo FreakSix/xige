@@ -1227,7 +1227,7 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 
 .wrapper {
     z-index: 1;
-    height: 400px;
+    height: 450px;
     width: 100%;
     background: #fff;
     overflow: hidden;
@@ -1259,7 +1259,7 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 .scroller ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0 0 100px 0;
     width: 100%;
     text-align: left;
 }
@@ -1367,7 +1367,7 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 }
 
 .tpl-task-list-dropdown-ul li {
-    /*padding: 0!important;*/
+    padding: 5px!important;
     text-align: center;
 }
 
@@ -1439,7 +1439,7 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 
 .tpl-task-remind li {
     color: #82949a;
-    margin-bottom: 7px;
+    /*margin-bottom: 7px;*/
 }
 
 .tpl-task-remind li .cosA {
@@ -2192,7 +2192,13 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     .tpl-content-wrapper {
         /*padding-left: 230px;*/
         /*width:100%;*/
-    }   
+    }
+    .tpl-index-tabs .am-nav-tabs {
+    border: none;
+    position: absolute;
+    top: -55px;
+    right: 200px;
+}
 }
  @media screen and (max-width: 960px) {
     .tpl-content-wrapper {

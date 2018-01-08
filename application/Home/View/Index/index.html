@@ -63,7 +63,6 @@
             </div>
             <div class="row"  data-type="index" id="eeeee">
                 <div class="am-u-md-6 am-u-sm-12 row-mb">
-
                     <div class="tpl-portlet">
                         <div class="tpl-portlet-title">
                             <div class="tpl-caption font-green ">
@@ -77,28 +76,36 @@
                         <div id="wrapper" class="wrapper">
                             <div id="scroller" class="scroller">
                                 <ul class="tpl-task-list">
-                                    <li>
-                                        <div class="task-title">
-                                            <!-- 这里判断一下，如果是超级管理员发的使用第二个图标，员工发的使用第一个 -->
-                                            <span class="cosIco"><i class="am-icon-bell-o"></i></span>
-                                            <span class="cosIco label-info"><i class="am-icon-bullhorn"></i></span>
-                                            <b class="task-title-b"> 2018-1-4 </b>
-                                            <span class="task-title-sp"> 上午九点，把展架送到鹏润大厦 </span>
-                                            <span class="label label-sm label-success">张三</span>
-                                        </div>
-                                        <div class="task-config">
-                                            <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                    <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                </a>
-                                                <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                    <li><a onclick="updatePublicMemo()" href="javascript:;"><i class="am-icon-pencil"></i> 编辑 </a></li>
-                                                    <li><a onclick="deletePublicMemo()" href="javascript:;"><i class="am-icon-trash-o"></i> 删除 </a></li>
-                                                </ul>
+                                    <foreach name="publicMemo" item="public" key="key">
+                                        <li>
+                                            <div class="task-title">
+                                                <!-- 这里判断一下，如果是超级管理员发的使用第二个图标，员工发的使用第一个 -->
+                                                <if condition="$public['memo_level'] == 1">
+                                                    <span class="cosIco label-danger"><i class="am-icon-bullhorn"></i></span>
+                                                <elseif condition="$public['memo_level'] == 0"/>
+                                                    <span class="cosIco"><i class="am-icon-bell-o"></i></span>
+                                                </if>
+                                                
+                                                <b class="task-title-b"> {$public['memo_time']|date="Y-m-d",###} </b>
+                                                <span class="task-title-sp"> {$public['memo_event']} </span>
+                                                <span class="label label-sm label-success">{$public['manager_name']}</span>
                                             </div>
-                                        </div>
-                                    </li>
-
+                                            <if condition="$public['manager_name'] == $_SESSION['userInfo']['truename']">
+                                                <div class="task-config">
+                                                    <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
+                                                        <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
+                                                            <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
+                                                        </a>
+                                                        <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
+                                                            <li><a onclick="updatePublicMemo({$public['id']})" href="javascript:;"><i class="am-icon-pencil"></i> 编辑 </a></li>
+                                                            <li><a onclick="deletePublicMemo({$public['id']})" href="javascript:;"><i class="am-icon-trash-o"></i> 删除 </a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            <else/>
+                                            </if>
+                                        </li>
+                                    </foreach>
                                     <li>
                                         <div class="task-title">
                                             <span class="task-title-sp"> 在 data-am-dropdown 里指定要适应到的元素，下拉内容的宽度会设置为该元素的宽度。当然可以直接在 CSS 里设置下拉内容的宽度。 </span>
@@ -305,7 +312,7 @@
                                 <span>个人备忘录</span>
                             </div>
                             <div class="am-btn-group am-btn-group-xs xg-index-button">
-                                <button type="button" onclick="addPersonalMemo()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增个人备忘录</button>
+                                <button type="button" onclick="window.location='__APP__/Index/autoAddOrderMemo'" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增个人备忘录</button>
                             </div>
                         </div>
 
@@ -613,7 +620,7 @@
     <script type="text/javascript">
         // 新增公共备忘录
         function addPublicMemo(){
-            layer.open({
+            var index = layer.open({
                 type: 2,
                 offset: '100px',
                 title: '新增公共备忘录',
@@ -621,11 +628,11 @@
                 shade: 0.8,
                 area: ['50%', '60%'],
                 btn: ['关闭'],
-                content: '__APP__/Index/addPublicMemo' //iframe的url
+                content: '__APP__/Index/addPublicMemo', //iframe的url
             });
         }
         // 修改公共备忘录
-        function updatePublicMemo(){
+        function updatePublicMemo(id){
             layer.open({
                 type: 2,
                 offset: '100px',
@@ -634,11 +641,12 @@
                 shade: 0.8,
                 area: ['50%', '60%'],
                 btn: ['关闭'],
-                content: '__APP__/Index/updatePublicMemo' //iframe的url
+                content: '__APP__/Index/updatePublicMemo/id/'+id //iframe的url
             });
         }
         // 删除公共备忘录
         function deletePublicMemo(id){
+            
             layer.confirm('您确定要删除该条公共备忘录吗？', {
                 icon: 3,
                 anim:5,
@@ -649,19 +657,17 @@
                 if(id){
                     $.ajax({
                         url:'__APP__/Index/deletePublicMemo',
+                        type:'post',
                         data:'id='+id,
-                        dataType:'json',
                         success:function(res){
-                            layer.confirm(res, {
-                                icon: 1,
-                                anim:5,
-                                offset: '200px'
-                            }, function(){
-                                window.location.reload();       
-                            });
+                            if(res == 1){
+                                layer.msg("删除成功！", {icon: 1,time:5000});
+                                parent. location.reload();
+                            }else{
+                               layer.msg('删除失败！请稍后重试', {icon: 2,time: 1000,offset: '200px'}); 
+                            }
                         }
                     });
-
                 }else{
                     layer.msg('删除失败！', {icon: 2,time: 1000,offset: '200px'});
                 }          
@@ -714,6 +720,7 @@
                         data:'id='+id,
                         dataType:'json',
                         success:function(res){
+                            alert(res);return false;
                             layer.confirm(res, {
                                 icon: 1,
                                 anim:5,

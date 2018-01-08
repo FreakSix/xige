@@ -34,7 +34,7 @@
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-form-label">时间：</label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" id="memo_time" class="am-form-field" placeholder="时间" data-am-datepicker readonly required />
+                                    <input type="text" id="memo_date" class="am-form-field" placeholder="时间" data-am-datepicker readonly required />
                                 </div>
                             </div>
                             <div class="am-form-group">
@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" id="mid" name="id" value="<?php echo $noticeInfo[0]['id'] ?>">
+                        <input type="hidden" id="mName" name="mName" value="<?php echo $_SESSION['userInfo']['truename'] ?>">
                         <hr/>
                         <div class="am-form-group">
                             <div class="am-u-sm-10 am-u-sm-push-2">
@@ -73,13 +73,13 @@
         $("#submit2").click(function(){
             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
             // 事件时间验证
-            var memo_time = $("#memo_time").val();
-            if(memo_time == ''){
+            var memo_date = $("#memo_date").val();
+            if(memo_date == ''){
                 parent.layer.msg('请填写时间！');
-                $("#memo_time").focus();
+                $("#memo_date").focus();
                 return false;
             }
-            //联系人电话验证
+            //备忘录内容验证
             var memo_info = $("#memo_info").val();
             if(memo_info == ''){
                 parent.layer.msg('备忘录内容不能为空！');
@@ -90,14 +90,14 @@
                 $("#memo_info").focus();
                 return false;
             }
-            var manager_id = $("#mid").val();
+            var manager_name = $("#mName").val();
             var memo_level = $("input:radio[name='memo_level']:checked").val();
             $.ajax({
                 url:'__APP__/Index/addPublicMemoHandle',
                 type:'post',
-                data:'memo_time='+memo_time+'&memo_info='+memo_info+'&manager_id='+manager_id+'&memo_level'+memo_level,
-                dataType:'json',
+                data:'memo_date='+memo_date+'&memo_info='+memo_info+'&manager_name='+manager_name+'&memo_level='+memo_level,
                 success:function(res){
+                    // alert(res);return false;
                     if(res > 0){
                         parent.layer.alert('公共备忘录添加成功！', {
                                                             icon: 1,
@@ -105,6 +105,7 @@
                                                             title:'提示',
                                                         });
                         parent.layer.close(index);
+                        parent. location.reload();
                     }
                     if(res < 0){
                         parent.layer.alert('公共备忘录添加失败！请稍后重试~', {

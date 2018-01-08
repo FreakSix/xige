@@ -286,7 +286,7 @@
 				$data['end_money'] = $post['end_money'];
 				$data['cost_price'] = $post['cost_price'];
 				$data['add_time'] = time();
-
+				$data['manager_name'] = $_SESSION['userInfo']['truename'];
 				$res = D("XgOrder")->addOrderInfo($data);
 				echo $res;
 
