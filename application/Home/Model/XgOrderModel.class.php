@@ -59,7 +59,9 @@
 		}
 		// 根据订单id查数据
 		public function getInfoById($id){
-			
+			$sql = "select order_id,add_time,customer_name,product_model,num,end_price,end_money from xg_order where id = ".$id;
+			$result = M()->query($sql);
+			return $result;
 		}
 		// 查询订单录入人为当前登录用户且交货时间为明天的订单
 		public function getOrderByTime($tomorrow,$user){

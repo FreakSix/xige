@@ -21,7 +21,7 @@
 		}
 		//查看所有人的登录日志
 		public function getLoginLogs(){
-			$res = M("xg_login_logs")->select();
+			$res = M("xg_login_logs")->order("addtime asc")->select();
 			return $res;
 		}
 	}

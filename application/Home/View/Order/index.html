@@ -411,39 +411,42 @@
             });
     }
     // 导出对账单（客户）
-    function exportOrderForC(){
-        var inputs = $(".xg-table-tr").find("input[type='checkbox']");
-        // var checkbox = $
-        // alert($("input:checkbox[name='order_id']:checked").length);
-        if($("input:checkbox[name='order_id']:checked").length == 0){
-            // alert("请选择要导出的数据！");
-            layer.msg("请选择要导出的数据！",{time:1500});
-        }else{
-            var order_id_str = "";
-            $("input:checkbox[name='order_id']:checked").each(function(){
-                order_id_str+=$(this).val()+",";
-            })
-            // alert(order_id_str);
-            $.ajax({
-                url : "__APP__/Order/exportOrderForC",
-                type : "post",
-                data : "order_id_str="+order_id_str,
-                success:function(res){
-                    // alert(res);return false;
-                    if(res == 1){
-                        layer.alert("不能同时导出多个客户的数据，请选择一个客户的数据进行导出",{icon:5,title:"提示"});
-                    }else if(res == 2){
-                        layer.alert("导出失败，请稍后重试",{icon:2,title:"提示"});
-                    }
-                }
-            });
-        }
+    // function exportOrderForC(){
+    //     var inputs = $(".xg-table-tr").find("input[type='checkbox']");
+    //     // var checkbox = $
+    //     // alert($("input:checkbox[name='order_id']:checked").length);
+    //     if($("input:checkbox[name='order_id']:checked").length == 0){
+    //         // alert("请选择要导出的数据！");
+    //         layer.msg("请选择要导出的数据！",{time:1500});
+    //     }else{
+    //         var order_id_str = "";
+    //         $("input:checkbox[name='order_id']:checked").each(function(){
+    //             order_id_str+=$(this).val()+",";
+    //         })
+    //         // alert(order_id_str);
+    //         $.ajax({
+    //             url : "__APP__/Order/exportOrderForC",
+    //             type : "post",
+    //             data : "order_id_str="+order_id_str,
+    //             success:function(res){
+    //                 location.href="__APP__/Order/exportOrderForC()";
+    //             }
+    //             error:function(res){
+    //                 // alert(res);return false;
+    //                 if(res == 1){
+    //                     layer.alert("不能同时导出多个客户的数据，请选择一个客户的数据进行导出",{icon:5,title:"提示"});
+    //                 }else if(res == 2){
+    //                     layer.alert("导出失败，请稍后重试",{icon:2,title:"提示"});
+    //                 }
+    //             }
+    //         });
+    //     }
 
-        // inputs.each(function(){
-        //     alert($(this).prop("checked"));
-        // })
-        // alert()
-    }
+    //     // inputs.each(function(){
+    //     //     alert($(this).prop("checked"));
+    //     // })
+    //     // alert()
+    // }
 
 </script>
 </body>

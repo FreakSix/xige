@@ -5,10 +5,20 @@
 	 **操作个人备忘录信息
 	 **/
 	Class XgPersonalMemoModel extends Model{
-		// 获取今天以后公共备忘录信息
-		public function getPersonalMemoByDate($date){
+		// 获取今天以后个人备忘录信息
+		public function getPersonalFutureMemo($date,$user){
+			$sql = " select * from xg_personal_memo where manager_name = '".$user."' AND memo_time >= ".$date." order by memo_time asc,memo_level desc";
+			$result = M()->query($sql);
+			// $table = M("xg_personal_memo");
+			// $result = $table->where("manager_name = '".$user."'")->where("memo_time >= ".$date)->order("memo_time asc,memo_level desc")->select();
+			return $result;
+		}
+		// 获取今天以前的个人备忘录信息
+		public function getPersonalPastMemo($date,$user){
+			$sql = " select * from xg_personal_memo where manager_name = '".$user."' AND memo_time < ".$date." order by memo_time desc,memo_level desc";
+			$result = M()->query($sql);
 			$table = M("xg_personal_memo");
-			$result = $table->where("memo_time > ".$date)->order("memo_time asc,memo_level desc")->select();
+			// $result = $table->where("manager_name = '".$user."'")->where("memo_time < ".$date)->order("memo_time asc,memo_level desc")->select();
 			return $result;
 		}
 		// 根据备忘录ID获取该条备忘录信息
