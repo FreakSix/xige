@@ -363,6 +363,13 @@
 		}
 		// 修改订单信息页面
 		public function update(){
+			$power = $this->isPower("bianjidingdan");
+			if($power == false){
+				echo "<script>";
+				echo "alert('您没有权限操作该功能！请联系管理员！')";
+				echo "</script>";
+				exit;
+			}
 			$get = $_GET;
 			$post = $_POST;
 			// dump($get);
@@ -464,6 +471,12 @@
 
 		//删除订单信息（修改订单状态为4）
 		public function deleteOrderInfo(){
+			$power = $this->isPower("dingdanzuofei");
+			if($power == false){
+				$res_str = "您没有权限操作此功能，请联系管理员！";
+				echo json_encode($res_str);
+				exit;
+			}
 			$post = $_POST;
 			// $res = D("XgOrder")->deleteOrderInfoById($post['id']);
 
@@ -1043,6 +1056,13 @@
 
 		//新增订单中的客户回款弹窗页面
 		public function addCustomerMoney(){
+			$power = $this->isPower("xinzengkehuhuikuanjilu");
+			if($power == false){
+				echo "<script>";
+				echo "alert('您没有权限操作该功能！请联系管理员！')";
+				echo "</script>";
+				exit;
+			}
 			//订单客户回款记录
 			$get = $_GET;
 

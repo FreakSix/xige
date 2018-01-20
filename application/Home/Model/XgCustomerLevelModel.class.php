@@ -20,7 +20,30 @@
 			$result = M("xg_customer_level")->select();
 			return $result;
 		}
-
-
-		
+		//添加客户等级
+		public function addLevel($data){
+			$feilds=array_keys($data);
+			$sql="insert into xg_customer_level (".implode(',',$feilds).") values('".implode("','",$data)."')";
+			$result = M()->execute($sql);
+			return $result;
+		}
+		//修改客户等级
+		public function updateCustomerLevel($id,$name,$level){
+			$sql = "update xg_customer_level set ";
+			if(!empty($name)){
+				$sql .= "name = '{$name}',";
+			}
+			if(!empty($level)){
+				$sql .= "level = '{$level}',";
+			}
+			$sql =  rtrim($sql,",");
+			$sql .= " where id = {$id}";
+			$result = M()->execute($sql);
+			return $result;
+		}
+		//删除客户等级
+		public function deleteCustomerRank($id){
+			$result = M("xg_customer_level")->where("id = ".$id)->delete();
+			return $result;
+		}
 	}

@@ -62,20 +62,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        <foreach name="levelArr" item="item">
                                         <tr class="xg-table-tr">
-                                            <td>普通会员</td>
-                                            <td>1.3</td>
+                                            <td>{$item.name}</td>
+                                            <td>{$item.level}</td>
                                             <td>
                                                 <div class="am-btn-toolbar">
                                                     <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateCustomerRank()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteCustomerRank()"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateCustomerRank({$item.id})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteCustomerRank({$item.id})"><span class="am-icon-trash-o"></span> 删除</button>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr class="xg-table-tr">
+                                        </foreach>
+                                        <!-- <tr class="xg-table-tr">
                                             <td>黄金会员</td>
                                             <td>1.2</td>
                                             <td>
@@ -86,7 +87,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                        </tr>
+                                        </tr> -->
 
                                     </tbody>
                                 </table>
@@ -137,7 +138,7 @@
             });
         }
         // 添加部门页面
-        function updateCustomerRank(){
+        function updateCustomerRank(id){
             layer.open({
                 type: 2,
                 offset: '150px',
@@ -146,17 +147,51 @@
                 shade: 0.8,
                 area: ['40%', '50%'],
                 btn: ['关闭'],
-                content: '__APP__/PersonalCenter/updateCustomerRank' //iframe的url
+                content: '__APP__/PersonalCenter/updateCustomerRank/id/'+id //iframe的url
             });
         }
         // 删除信息提示
-        function deleteCustomerRank(){
+        function deleteCustomerRank(id){
             layer.confirm('您确定要删除该条客户等级的信息吗？', {
                 icon: 3,
                 anim:5,
                 offset: '200px',
                 title:'提示',
                 btn: ['确定','取消'] //按钮
+            }, function(){
+                if(id){
+                    $.ajax({
+                        url:'__APP__/PersonalCenter/deleteCustomerRank',
+                        data:'id='+id,
+                        type:'post',
+                        dataType:'json',
+                        success:function(res){
+                        	if(res == 1){
+                        		var tihsiContent = "删除该条客户等级的信息成功！";
+                        	}else{
+                        		var tihsiContent = "删除该条客户等级的信息失败！";
+                        	}
+                            layer.confirm(tihsiContent, {
+                                icon: 1,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定'] //按钮
+                            }, function(){
+                                window.location.reload();       
+                            });
+                        }
+                    });
+
+                }else{
+                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                }          
+            }, function(){
+                layer.msg('删除已取消！', {
+                time: 2000, //20s后自动关闭
+                offset: '200px',
+                // title:'提示'
+                });
             });
         }
     </script>

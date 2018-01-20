@@ -7,10 +7,6 @@
 		//判断用户是否登录
 		public function _initialize()
 		{
-			// echo "<hr>";
-			// echo "<hr>";
-			// echo "<hr>";
-			// print_r($_SESSION);
 			if(!isset($_SESSION['userInfo'])) {
 				$this->redirect('Login/index');
 			}
@@ -110,5 +106,23 @@
 			}
 			return $temp;
 		}
-		
+		/**
+		 * 判断是否有权限操作当前的方法
+		 */
+		public function isPower($powerName){
+			$powerStr = $_SESSION['userInfo']['dutyCode'];
+			$powerArr = explode(",",$powerStr);
+			if(in_array($powerName,$powerArr)){
+				//有权限操作，不做任何事情继续执行下面的内容
+				return 1;
+			}else{
+				//没有权限操作，给出提示，之后停止程序继续执行
+				return 0;
+// 				echo "<script>";
+// 				echo "alert('您没有权限才做该功能！请联系管理员！')";
+// 				echo "</script>";
+// 				exit;
+			}
+			
+		}
 	}

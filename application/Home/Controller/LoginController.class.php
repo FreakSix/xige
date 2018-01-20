@@ -28,25 +28,35 @@
 			$userInfo = $manageModel->getManageInfoByUsername($user);
 			//若$userinfo 为空的时候继续根据电话号码吗在获取一次
 			if(!empty($userInfo)){
-				if($userInfo['password'] == $pass){
-					$loginType = "username";
-					$this->addLoginLogs($userInfo,$loginType);
-					echo 0;   //用户名登陆成功
+				if($userInfo['state'] == 1){
+					if($userInfo['password'] == $pass){
+						$loginType = "username";
+						$this->addLoginLogs($userInfo,$loginType);
+						echo 0;   //用户名登陆成功
+					}else{
+						echo 1;   //用户名存在，但是密码错误
+					}
 				}else{
-					echo 1;   //用户名存在，但是密码错误
+					//账号被注销
+					echo 4;
 				}
 			}else{
 				$userInfo = $manageModel->getManageInfoByTel($user);
-				if(!empty($userInfo)){
-					if($userInfo['password'] == $pass){
-						$loginType = "tel";
-						$this->addLoginLogs($userInfo,$loginType);
-						echo 0;   //电话登录成功
+				if($userInfo['state'] == 1){
+					if(!empty($userInfo)){
+						if($userInfo['password'] == $pass){
+							$loginType = "tel";
+							$this->addLoginLogs($userInfo,$loginType);
+							echo 0;   //电话登录成功
+						}else{
+							echo 1;    //电话登录，信息存在，但是密码错误
+						}
 					}else{
-						echo 1;    //电话登录，信息存在，但是密码错误
+						echo 2;   //输入的用户不存在
 					}
 				}else{
-					echo 2;   //输入的用户不存在
+					//站好被注销
+					echo 4;
 				}
 			}
 			
@@ -72,6 +82,11 @@
 			//此处暂时未处理IP的归属地，后期添加
 			session_start();
 			$_SESSION["userInfo"] = $userInfo;
+			//获取该用户的职位，根据职位获取该职位对应的所有操作权限
+			$duty_id = $_SESSION["userInfo"]['duty_id'];
+			$dutyModel = D("XgDuty");
+			$dutyInfo = $dutyModel->getDutyById($duty_id);
+			$_SESSION['userInfo']['dutyCode'] = $dutyInfo['power'];
 			$data['user_id'] = $userInfo['id'];
 			$data['truename'] = $userInfo['truename'];
 			$data['addtime'] = date("Y-m-d H:i:s");

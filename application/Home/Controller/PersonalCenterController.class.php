@@ -2,6 +2,7 @@
 	namespace Home\Controller;
 	
 	
+	use Think\Model;
 	class PersonalCenterController extends BaseController{
 		
 		public function index(){
@@ -66,6 +67,9 @@
 
 		// 客户等级管理页面
 		public function customerRank(){
+			$customerLevelModel = D("XgCustomerLevel");
+			$levelArr = $customerLevelModel->getCustomerLevelInfo();
+			$this->assign("levelArr",$levelArr);
 			$this->display("customer_rank");
 		}
 
@@ -75,6 +79,10 @@
 		}
 		// 修改客户等级页面
 		public function updateCustomerRank(){
+			$id = $_REQUEST['id'];
+			$customerLevelModel = D("XgCustomerLevel");
+			$levelInfo = $customerLevelModel->getLevelInfoById($id);
+			$this->assign("levelInfo",$levelInfo);
 			$this->display("update_customer_rank");
 		}
 
@@ -374,6 +382,80 @@
 				echo 1;
 			}else{
 				echo 0;
+			}
+		}
+		/**
+		 * 注销员工账号
+		 */
+		public function deleteAccount(){
+			$id = $_REQUEST['id'];
+			$managerModel = D("XgManager");
+			$res = $managerModel->deleteAccount($id);
+			if($res){
+				echo 1;
+			}else{
+				echo 0;
+			}
+		}
+		/**
+		 * 开通员工账号
+		 */
+		public function kaitongAccount(){
+			$id = $_REQUEST['id'];
+			$managerModel = D("XgManager");
+			$res = $managerModel->kaitongAccount($id);
+			if($res){
+				echo 1;
+			}else{
+				echo 0;
+			}
+		}
+		
+		/**
+		 * 保存客户等级的添加
+		 */
+		public function saveNewAddKehudengji(){
+			$dengji_name = $_REQUEST['dengji_name'];
+			$dengji_xishu = $_REQUEST['dengji_xishu'];
+			$data['name'] = $dengji_name;
+			$data['level'] = $dengji_xishu;
+			$data['ctime'] = date("Y-m-d H:i:s");
+			$customerLevelModel = D("XgCustomerLevel");
+			$res = $customerLevelModel->addLevel($data);
+			if($res){
+				echo 1;
+			}else{
+				echo 0;
+			}
+		}
+		
+		/**
+		 * 保存修改的客户等级
+		 */
+		public function saveEditLevel(){
+			$id = $_REQUEST['id'];
+			$level_name = $_REQUEST['level_name'];
+			$level_level = $_REQUEST['level_level'];
+			$customerLevelModel = D("XgCustomerLevel");
+			$res = $customerLevelModel->updateCustomerLevel($id,$level_name,$level_level);
+			if($res){
+				echo 1;
+			}else{
+				echo 0;
+			}
+		}
+		
+		/**
+		 * 删除客户的信息
+		 */
+		public function deleteCustomerRank(){
+			$id = $_REQUEST['id'];
+			$customerLevelModel = D("XgCustomerLevel");
+			$res = $customerLevelModel->deleteCustomerRank($id);
+			if($res){
+				echo 1;
+			}else{
+				echo 2;
 			}
 		}
 	}

@@ -67,4 +67,16 @@
 			$result = M("xg_manager")->where("id = ".$id)->delete();
 			return $result;
 		}
+		//注销员工账号
+		public function deleteAccount($id){
+			$sql = "update xg_manager set state = 0 where id = ".$id;
+			$result = M()->execute($sql);
+			return $result;
+		}
+		//开通员工账号
+		public function kaitongAccount($id){
+			$sql = "update xg_manager set state = 1 where id = ".$id;
+			$result = M()->execute($sql);
+			return $result;
+		}
 	}

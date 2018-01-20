@@ -62,7 +62,7 @@
                                             <th class="">职位</th>
                                             <th class="">所在部门</th>
                                             <th class="">手机号</th>
-                                            <th class="">是否分配帐号</th>
+                                            <th class="">管理帐号</th>
                                             <th class="">操作</th>
                                         </tr>
                                     </thead>
@@ -75,7 +75,13 @@
                                             <td>{$item.duty_name}</td>
                                             <td>{$item.depart_name}</td>
                                             <td>{$item.tel}</td>
-                                            <td>是 <a href="javascript:;" onclick="deleteAccount()">[注销帐号]</a></td>
+                                            <td>
+                                            <if condition="$item.state == 1">
+                                            	<a href="javascript:void(0);" onclick="deleteAccount({$item.id})">[注销帐号]</a>
+                                            <else/>
+                                            	<a href="javascript:void(0);" onclick="kaitongAccount({$item.id})">[开通帐号]</a>
+                                            </if>
+                                            </td>
                                             <td>
                                                 <div class="am-btn-toolbar">
                                                     <div class="am-btn-group am-btn-group-xs">
@@ -223,13 +229,91 @@
             });
         }
         // 注销帐号提示
-        function deleteAccount(){
+        function deleteAccount(id){
             layer.confirm('您确定要注销该员工的帐号吗？', {
                 icon: 3,
                 anim:5,
                 offset: '200px',
                 title:'提示',
                 btn: ['确定','取消'] //按钮
+            }, function(){
+                if(id){
+                    $.ajax({
+                        url:'__APP__/PersonalCenter/deleteAccount',
+                        data:'id='+id,
+                        type:'post',
+                        dataType:'json',
+                        success:function(res){
+                        	if(res == 1){
+                        		var tihsiContent = "注销该员工的帐号成功！";
+                        	}else{
+                        		var tihsiContent = "注销该员工的帐号失败！";
+                        	}
+                            layer.confirm(tihsiContent, {
+                                icon: 1,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定'] //按钮
+                            }, function(){
+                                window.location.reload();       
+                            });
+                        }
+                    });
+
+                }else{
+                    layer.alert('注销失败！', {icon: 1,offset: '200px',title:'提示'});
+                }          
+            }, function(){
+                layer.msg('注销已取消！', {
+                time: 2000, //20s后自动关闭
+                offset: '200px',
+                // title:'提示'
+                });
+            });
+        }
+        //开通员工账号
+        function kaitongAccount(id){
+            layer.confirm('您确定要开通该员工的帐号吗？', {
+                icon: 3,
+                anim:5,
+                offset: '200px',
+                title:'提示',
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                if(id){
+                    $.ajax({
+                        url:'__APP__/PersonalCenter/kaitongAccount',
+                        data:'id='+id,
+                        type:'post',
+                        dataType:'json',
+                        success:function(res){
+                        	if(res == 1){
+                        		var tihsiContent = "开通该员工的帐号成功！";
+                        	}else{
+                        		var tihsiContent = "开通该员工的帐号失败！";
+                        	}
+                            layer.confirm(tihsiContent, {
+                                icon: 1,
+                                anim:5,
+                                offset: '200px',
+                                title:'提示',
+                                btn: ['确定'] //按钮
+                            }, function(){
+                                window.location.reload();       
+                            });
+                        }
+                    });
+
+                }else{
+                    layer.alert('开通失败！', {icon: 1,offset: '200px',title:'提示'});
+                }          
+            }, function(){
+                layer.msg('开通已取消！', {
+                time: 2000, //20s后自动关闭
+                offset: '200px',
+                // title:'提示'
+                });
             });
         }
     </script>
