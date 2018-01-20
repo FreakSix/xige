@@ -67,7 +67,6 @@
                         <div class="tpl-portlet-title">
                             <div class="tpl-caption font-green ">
                                 <span>公共备忘录</span>
-                                <span class="caption-helper">16 件</span>
                             </div>
                             <div class="am-btn-group am-btn-group-xs xg-index-button">
                                 <button type="button" onclick="addPublicMemo()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增公共备忘录</button>
@@ -79,7 +78,6 @@
                                     <foreach name="publicMemo" item="public" key="key">
                                         <li>
                                             <div class="task-title">
-                                                <!-- 这里判断一下，如果是超级管理员发的使用第二个图标，员工发的使用第一个 -->
                                                 <if condition="$public['memo_level'] == 1">
                                                     <span class="cosIco label-danger"><i class="am-icon-bullhorn"></i></span>
                                                 <elseif condition="$public['memo_level'] == 0"/>
@@ -106,200 +104,6 @@
                                             </if>
                                         </li>
                                     </foreach>
-                                    <li>
-                                        <div class="task-title">
-                                            <span class="task-title-sp"> 在 data-am-dropdown 里指定要适应到的元素，下拉内容的宽度会设置为该元素的宽度。当然可以直接在 CSS 里设置下拉内容的宽度。 </span>
-                                            <span class="label label-sm label-danger">运营</span>
-
-                                        </div>
-                                        <div class="task-config">
-                                            <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                    <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                </a>
-                                                <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-pencil"></i> 编辑 </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-trash-o"></i> 删除 </a>
-                                                    </li>
-                                                </ul>
-
-
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="task-title">
-                                            <span class="task-title-sp"> 使用 LESS： 通过设置变量 @fa-font-path 覆盖默认的值，如 @fa-font-path: "../fonts";。这个变量定义在 icon.less 里。 </span>
-                                            <span class="label label-sm label-warning">市场部</span>
-
-                                        </div>
-                                        <div class="task-config">
-                                            <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                    <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                </a>
-                                                <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-pencil"></i> 编辑 </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-trash-o"></i> 删除 </a>
-                                                    </li>
-                                                </ul>
-
-
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="task-title">
-                                            <span class="task-title-sp"> 添加 .am-btn-group-justify class 让按钮组里的按钮平均分布，填满容器宽度。 </span>
-                                            <span class="label label-sm label-default">已废弃</span>
-
-                                        </div>
-                                        <div class="task-config">
-                                            <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                    <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                </a>
-                                                <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                    
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-pencil"></i> 编辑 </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-trash-o"></i> 删除 </a>
-                                                    </li>
-                                                </ul>
-
-
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="task-title">
-                                            <span class="task-title-sp"> 按照示例组织好 HTML 结构（不加 data-am-dropdown 属性），然后通过 JS 来调用。 </span>
-                                            <span class="label label-sm label-success">技术部</span>
-                                            <span class="task-bell">
-                                            <i class="am-icon-bell-o"></i>
-                                        </span>
-                                        </div>
-                                        <div class="task-config">
-                                            <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                    <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                </a>
-                                                <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                    
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-pencil"></i> 编辑 </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-trash-o"></i> 删除 </a>
-                                                    </li>
-                                                </ul>
-
-
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="task-title">
-                                            <span class="task-title-sp"> 使用 LESS： 通过设置变量 @fa-font-path 覆盖默认的值，如 @fa-font-path: "../fonts";。这个变量定义在 icon.less 里。 </span>
-                                            <span class="label label-sm label-warning">市场部</span>
-
-                                        </div>
-                                        <div class="task-config">
-                                            <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                    <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                </a>
-                                                <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                    
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-pencil"></i> 编辑 </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-trash-o"></i> 删除 </a>
-                                                    </li>
-                                                </ul>
-
-
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="task-title">
-                                            <span class="task-title-sp"> 添加 .am-btn-group-justify class 让按钮组里的按钮平均分布，填满容器宽度。 </span>
-                                            <span class="label label-sm label-default">已废弃</span>
-
-                                        </div>
-                                        <div class="task-config">
-                                            <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                    <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                </a>
-                                                <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                    
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-pencil"></i> 编辑 </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-trash-o"></i> 删除 </a>
-                                                    </li>
-                                                </ul>
-
-
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="task-title">
-                                            <span class="task-title-sp"> 按照示例组织好 HTML 结构（不加 data-am-dropdown 属性），然后通过 JS 来调用。 </span>
-                                            <span class="label label-sm label-success">技术部</span>
-                                            <span class="task-bell">
-                                            <i class="am-icon-bell-o"></i>
-                                        </span>
-                                        </div>
-                                        <div class="task-config">
-                                            <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                    <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                </a>
-                                                <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                    
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-pencil"></i> 编辑 </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-trash-o"></i> 删除 </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -312,7 +116,7 @@
                                 <span>个人备忘录</span>
                             </div>
                             <div class="am-btn-group am-btn-group-xs xg-index-button">
-                                <button type="button" onclick="window.location='__APP__/Index/autoAddOrderMemo'" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增个人备忘录</button>
+                                <button type="button" onclick="addPersonalMemo()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增个人备忘录</button>
                             </div>
                         </div>
 
@@ -327,188 +131,30 @@
                                     <div id="wrapperA" class="wrapper">
                                         <div id="scroller" class="scroller">
                                             <ul class="tpl-task-list tpl-task-remind">
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco">
-                                                            <i class="am-icon-bell-o"></i>
-                                                        </span>
-                                                        <span> 注意：Chrome 和 Firefox 下， display: inline-block; 或 display: block; 的元素才会应用旋转动画。<span class="tpl-label-info"> 提取文件
-                                                            <i class="am-icon-share"></i>
-                                                        </span></span>
-                                                    </div>
-                                                    <div class="task-config">
-                                                        <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                            <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                                <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                            </a>
-                                                            <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                                <li><a onclick="updatePersonalMemo()" href="javascript:;"><i class="am-icon-pencil"></i> 编辑 </a></li>
-                                                                <li><a onclick="deletePersonalMemo()" href="javascript:;"><i class="am-icon-trash-o"></i> 删除 </a></li>
-                                                            </ul>
+                                                <foreach name="personalFutureMemo" item="pf" key="ke">
+                                                    <li>
+                                                        <div class="cosA">
+                                                            <if condition="$pf['memo_level'] == 0">
+                                                                <span class="cosIco"><i class="am-icon-bell-o"></i></span>
+                                                            <elseif condition="$pf['memo_level'] == 1"/>
+                                                                <span class="cosIco label-danger"><i class="am-icon-bolt"></i></span>
+                                                            </if>
+                                                            <b class="task-title-b"> {$pf['memo_time']|date="Y-m-d",###} </b>
+                                                            <span> {$pf['memo_event']} </span>
                                                         </div>
-                                                    </div>
-
-                                                </li>
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco label-danger">
-                                                            <i class="am-icon-bolt"></i>
-                                                        </span>
-
-                                                        <span> FontAwesome 在绘制图标的时候不同图标宽度有差异， 添加 .am-icon-fw 将图标设置为固定的宽度，解决宽度不一致问题（v2.3 新增）。</span>
-                                                    </div>
-                                                    <div class="task-config">
-                                                        <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                            <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                                <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                            </a>
-                                                            <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="am-icon-pencil"></i> 编辑 </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="am-icon-trash-o"></i> 删除 </a>
-                                                                </li>
-                                                            </ul>
+                                                        <div class="task-config">
+                                                            <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
+                                                                <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
+                                                                    <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
+                                                                </a>
+                                                                <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
+                                                                    <li><a onclick="updatePersonalMemo({$pf['id']})" href="javascript:;"><i class="am-icon-pencil"></i> 编辑 </a></li>
+                                                                    <li><a onclick="deletePersonalMemo({$pf['id']})" href="javascript:;"><i class="am-icon-trash-o"></i> 删除 </a></li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco label-info">
-                                                            <i class="am-icon-bullhorn"></i>
-                                                        </span>
-
-                                                        <span> 使用 flexbox 实现，只兼容 IE 10+ 及其他现代浏览器。</span>
-                                                    </div>
-                                                    <div class="task-config">
-                                                        <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                            <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                                <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                            </a>
-                                                            <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="am-icon-pencil"></i> 编辑 </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="am-icon-trash-o"></i> 删除 </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco label-warning">
-                                                            <i class="am-icon-plus"></i>
-                                                        </span>
-
-                                                        <span> 部分用户反应在过长的 Tabs 中滚动页面时会意外触发 Tab 切换事件，用户可以选择禁用触控操作。</span>
-                                                    </div>
-                                                    <div class="task-config">
-                                                        <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                            <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                                <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                            </a>
-                                                            <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="am-icon-pencil"></i> 编辑 </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="am-icon-trash-o"></i> 删除 </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco">
-                                                            <i class="am-icon-bell-o"></i>
-                                                        </span>
-
-                                                        <span> 注意：Chrome 和 Firefox 下， display: inline-block; 或 display: block; 的元素才会应用旋转动画。<span class="tpl-label-info"> 提取文件
-                                                            <i class="am-icon-share"></i>
-                                                        </span></span>
-                                                    </div>
-                                                    <div class="task-config">
-                                                        <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                            <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                                <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                            </a>
-                                                            <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="am-icon-pencil"></i> 编辑 </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="am-icon-trash-o"></i> 删除 </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco label-danger">
-                                                            <i class="am-icon-bolt"></i>
-                                                        </span>
-
-                                                        <span> FontAwesome 在绘制图标的时候不同图标宽度有差异， 添加 .am-icon-fw 将图标设置为固定的宽度，解决宽度不一致问题（v2.3 新增）。</span>
-                                                    </div>
-                                                    <div class="task-config">
-                                                        <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                            <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                                <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                            </a>
-                                                            <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="am-icon-pencil"></i> 编辑 </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="am-icon-trash-o"></i> 删除 </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco label-info">
-                                                            <i class="am-icon-bullhorn"></i>
-                                                        </span>
-
-                                                        <span> 使用 flexbox 实现，只兼容 IE 10+ 及其他现代浏览器。</span>
-                                                    </div>
-                                                    <div class="task-config">
-                                                        <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
-                                                            <a href="###" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
-                                                                <i class="am-icon-cog"></i> <span class="am-icon-caret-down"></span>
-                                                            </a>
-                                                            <ul class="am-dropdown-content tpl-task-list-dropdown-ul">
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="am-icon-pencil"></i> 编辑 </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="am-icon-trash-o"></i> 删除 </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
+                                                    </li>
+                                                </foreach>
                                             </ul>
                                         </div>
                                     </div>
@@ -517,15 +163,33 @@
                                     <div id="wrapperB" class="wrapper">
                                         <div id="scroller" class="scroller">
                                             <ul class="tpl-task-list tpl-task-remind">
+                                                <foreach name="personalPastMemo" item="pp" key="keyy">
+                                                    <li>
+                                                        <div class="cosA">
+                                                            <if condition="$pp['memo_level'] == 0">
+                                                                <span class="cosIco"><i class="am-icon-bell-o"></i></span>
+                                                            <elseif condition="$pp['memo_level'] == 1"/>
+                                                                <span class="cosIco label-danger"><i class="am-icon-bolt"></i></span>
+                                                            </if>
+                                                            <b class="task-title-b"> {$pp['memo_time']|date="Y-m-d",###} </b>
+                                                            <span> {$pp['memo_event']} </span>
+                                                        </div>
+                                                        <div class="task-config">
+                                                            <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
+                                                            <a onclick="deletePersonalMemo({$pp['id']})" href="javascript:;" class="am-dropdown-toggle tpl-task-list-hover " data-am-dropdown-toggle>
+                                                                <i class="am-icon-trash-o"></i> <span class="">删除</span>
+                                                            </a>
+                                                        </div>
+                                                        </div>
+                                                    </li>
+                                                </foreach>
                                                 <li>
                                                     <div class="cosA">
                                                         <span class="cosIco">
                                                             <i class="am-icon-bell-o"></i>
                                                         </span>
 
-                                                        <span> 注意：Chrome 和 Firefox 下， display: inline-block; 或 display: block; 的元素才会应用旋转动画。<span class="tpl-label-info"> 提取文件
-                                                            <i class="am-icon-share"></i>
-                                                        </span></span>
+                                                        <span> 注意：Chrome 和 Firefox 下， display: inline-block; 或 display: block; 的元素才会应用旋转动画。</span>
                                                     </div>
                                                     <div class="task-config">
                                                         <div class="am-dropdown tpl-task-list-dropdown" data-am-dropdown>
@@ -535,78 +199,12 @@
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco label-danger">
-                                                            <i class="am-icon-bolt"></i>
-                                                        </span>
-
-                                                        <span> FontAwesome 在绘制图标的时候不同图标宽度有差异， 添加 .am-icon-fw 将图标设置为固定的宽度，解决宽度不一致问题（v2.3 新增）。</span>
-                                                    </div>
-
-                                                </li>
-
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco label-info">
-                                                            <i class="am-icon-bullhorn"></i>
-                                                        </span>
-
-                                                        <span> 使用 flexbox 实现，只兼容 IE 10+ 及其他现代浏览器。</span>
-                                                    </div>
-
-                                                </li>
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco label-warning">
-                                                            <i class="am-icon-plus"></i>
-                                                        </span>
-
-                                                        <span> 部分用户反应在过长的 Tabs 中滚动页面时会意外触发 Tab 切换事件，用户可以选择禁用触控操作。</span>
-                                                    </div>
-
-                                                </li>
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco">
-                                                            <i class="am-icon-bell-o"></i>
-                                                        </span>
-
-                                                        <span> 注意：Chrome 和 Firefox 下， display: inline-block; 或 display: block; 的元素才会应用旋转动画。<span class="tpl-label-info"> 提取文件
-                                                            <i class="am-icon-share"></i>
-                                                        </span></span>
-                                                    </div>
-
-                                                </li>
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco label-danger">
-                                                            <i class="am-icon-bolt"></i>
-                                                        </span>
-
-                                                        <span> FontAwesome 在绘制图标的时候不同图标宽度有差异， 添加 .am-icon-fw 将图标设置为固定的宽度，解决宽度不一致问题（v2.3 新增）。</span>
-                                                    </div>
-
-                                                </li>
-
-                                                <li>
-                                                    <div class="cosA">
-                                                        <span class="cosIco label-info">
-                                                            <i class="am-icon-bullhorn"></i>
-                                                        </span>
-
-                                                        <span> 使用 flexbox 实现，只兼容 IE 10+ 及其他现代浏览器。</span>
-                                                    </div>
-
-                                                </li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -646,7 +244,6 @@
         }
         // 删除公共备忘录
         function deletePublicMemo(id){
-            
             layer.confirm('您确定要删除该条公共备忘录吗？', {
                 icon: 3,
                 anim:5,
@@ -693,7 +290,8 @@
                 content: '__APP__/Index/addPersonalMemo' //iframe的url
             });
         }
-        function updatePersonalMemo(){
+        // 修改个人备忘录
+        function updatePersonalMemo(id){
             layer.open({
                 type: 2,
                 offset: '100px',
@@ -702,10 +300,10 @@
                 shade: 0.8,
                 area: ['50%', '60%'],
                 btn: ['关闭'],
-                content: '__APP__/Index/updatePersonalMemo' //iframe的url
+                content: '__APP__/Index/updatePersonalMemo/id/'+id //iframe的url
             });
         }
-        // 删除公共备忘录
+        // 删除个人备忘录
         function deletePersonalMemo(id){
             layer.confirm('您确定要删除该条个人备忘录吗？', {
                 icon: 3,
@@ -717,26 +315,23 @@
                 if(id){
                     $.ajax({
                         url:'__APP__/Index/deletePersonalMemo',
+                        type:'post',
                         data:'id='+id,
-                        dataType:'json',
                         success:function(res){
-                            alert(res);return false;
-                            layer.confirm(res, {
-                                icon: 1,
-                                anim:5,
-                                offset: '200px'
-                            }, function(){
-                                window.location.reload();       
-                            });
+                            if(res == 1){
+                                layer.msg("删除成功！", {icon: 1,time:5000});
+                                parent. location.reload();
+                            }else{
+                               layer.msg('删除失败！请稍后重试', {icon: 2,time: 1000,offset: '200px'}); 
+                            }
                         }
                     });
-
                 }else{
-                    layer.msg('删除失败！', {icon: 2,time: 2000,offset: '200px'});
+                    layer.msg('删除失败！', {icon: 2,time: 1000,offset: '200px'});
                 }          
             }, function(){
                 layer.msg('删除已取消！', {
-                time: 2000, //2s后自动关闭
+                time: 1000, //2s后自动关闭
                 offset: '200px',
                 });
             });

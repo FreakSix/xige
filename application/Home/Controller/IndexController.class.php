@@ -21,9 +21,14 @@
 	    	$noticeInfo = D("XgNotice")->getNotice();
 	    	// 获取公共备忘录信息
 	    	$date = strtotime(date("Y-m-d"));
-
-	    	$publicMemo = D("XgPublicMemo")->getPublicMemoByDate($date);   // 获取今天以后的备忘录信息
-	    	// dump($publicMemo);exit;
+	    	$user = $_SESSION['userInfo']['truename'];
+	    	$publicMemo = D("XgPublicMemo")->getPublicMemoByDate($date);   // 获取今天以后的公共备忘录信息
+	    	$personalFutureMemo = D("XgPersonalMemo")->getPersonalFutureMemo($date,$user);   // 获取今天以后的个人备忘录信息
+	    	// dump($personalFuturelMemo);
+	    	$personalPastMemo = D("XgPersonalMemo")->getPersonalPastMemo($date,$user);   // 获取今天以前的个人备忘录信息
+	    	// dump($personalPastMemo);exit;
+	    	$this->assign("personalFutureMemo",$personalFutureMemo);
+	    	$this->assign("personalPastMemo",$personalPastMemo);
 	    	$this->assign("publicMemo",$publicMemo);
 	    	$this->assign("noticeInfo",$noticeInfo);
 	    	$this->assign("productType",$productType);
@@ -104,7 +109,6 @@
 	    // 修改公共备忘录页面
 	    public function updatePublicMemo(){
 	    	$id = $_GET['id'];
-	    	
 	    	$data = D("XgPublicMemo")->getPublicMemoById($id);
 	    	// dump($data);exit;
 	    	$this->assign("data",$data);
@@ -148,6 +152,20 @@
 	    public function addPersonalMemo(){
 	    	$this->display("add_personal_memo");
 	    }
+	    // 添加个人备忘录处理
+	    public function addPersonalMemoHandle(){
+	    	$post = $_POST;
+	    	if($post){
+	    		$post['memo_time'] = strtotime($post["memo_date"]);
+		    	$data["memo_time"] = $post["memo_time"];
+		    	$data["memo_event"] = $post["memo_info"];
+		    	$data["memo_level"] = $post["memo_level"];
+		    	$data["edit_time"] = time();
+		    	$data["manager_name"] = $post["manager_name"];
+		    	$res = D("XgPersonalMemo")->addPersonalMemo($data);
+		    	echo $res;
+	    	}
+	    }
 	    // 自动将明天要交货的订单信息加入到备忘录中
 	    public function autoAddOrderMemo(){
 	    	$tomorrow = strtotime(date("Y-m-d",strtotime("+1 day")));
@@ -158,7 +176,6 @@
 	    		foreach ($orderInfo as $k => $v) {
 	    			$memoEvent = "明天是订单（编号：".$v['order_id']."， 客户：".$v['customer_name']."，商品名称：".$v['product_model']."）的交货时间，请注意及时处理！";
 	    			$originalData = D("XgPersonalMemo")->getPersoalMemoByEvent($memoEvent);
-	    			// dump($originalData);exit;
 	    			if($originalData == ""){
 	    				$data['memo_time'] = strtotime(date("Y-m-d"));
 			    		$data['memo_event'] = $memoEvent;
@@ -169,22 +186,47 @@
 	    			}
 		    	}
 	    	}
-	    	
-	    }
-	    // 添加个人备忘录处理
-	    public function addPersonalMemoHandle(){
-
 	    }
 	    // 修改个人备忘录页面
 	    public function updatePersonalMemo(){
+	    	$id = $_GET['id'];
+	    	$data = D("XgPersonalMemo")->getPersonalMemoById($id);
+	    	// dump($data);exit;
+	    	$this->assign("data",$data);
 	    	$this->display("update_personal_memo");
 	    }
 	    // 修改个人备忘录处理
 	    public function updatePersonalMemoHandle(){
-
+	    	$post = $_POST;
+	    	// print_r($post);exit;
+	    	if($post){
+	    		$id = $post["memo_id"];
+	    		// 获取原始数据
+	    		$data = D("XgPersonalMemo")->getPersonalMemoById($id);
+	    		if($data["memo_time"] == strtotime($post['memo_date']) && $data["memo_event"] == $post['memo_info'] && $data["memo_level"] == $post['memo_level']){
+	    			echo 0;
+	    		}else{
+	    			$newData['memo_time'] = strtotime($post['memo_date']);
+			    	$newData['memo_event'] = $post['memo_info'];
+			    	$newData['memo_level'] = $post['memo_level'];
+			    	// print_r($data);exit;
+			    	$res = D("XgpersonalMemo")->updatePersonalMemo($id,$newData);
+			    	// dump($res);exit;
+			    	echo 1;
+	    		}
+	    	}else{
+	    		echo 2;
+	    	}
 	    }
 	    // 删除个人备忘录
 	    public function deletePersonalMemo(){
-
+	    	if($_POST){
+	    		$id = $_POST["id"];
+	    		// print_r($_POST);exit;
+	    		$res = D("XgPersonalMemo")->deletePersonalMemo($id);
+	    		echo $res;
+	    	}else{
+	    		echo 0;
+	    	}
 	    }
 	}
