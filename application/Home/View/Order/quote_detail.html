@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
     <link rel="stylesheet" href="__PUBLIC__/css/app.css">
     <style>
+        h4 { margin: .5rem 0; }
+        hr { margin: 0; }
     </style>
 </head>
 
@@ -32,53 +34,54 @@
         <div class="tpl-content-wrapper">
             <ol class="am-breadcrumb">
             <li><a href="#" class="am-icon-home">首页</a></li>
-            <li><a href="#">订单列表</a></li>
+            <li><a href="#">报价记录管理</a></li>
             <li class="am-active">报价记录详情</li>
             </ol>
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
-                        <div class="tpl-portlet-input tpl-fz-ml">
+                    <div class="caption font-green bold">报价记录详情</div>
+                    <div class="tpl-portlet-input tpl-fz-ml">
                         <div class="am-btn-group am-btn-group-xs">
                             <button type="button" onclick="javascript:history.back(-1);" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-angle-left"></span> 返回</button>
-                            </div>
                         </div>
+                    </div>
                 </div>
                 <div class="tpl-block ">
                     <div class="am-g tpl-amazeui-form">
                         <div class="am-u-sm-12 am-u-md-9">
                             <form class="am-form am-form-horizontal">
                                 <!-- 公司信息 -->
-                                <h6>客户信息</h6>
-                                <div class="am-form-group">
+                                <h4>客户信息</h4>
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">客户名称：</label>
-                                    <div class="am-u-sm-5">
+                                    <div class="am-u-sm-4">
                                         {$quoteInfo['customer_name']}
                                     </div>
                                     <label for="user-name" class="am-u-sm-2 am-form-label">客户等级：</label>
-                                    <div class="am-u-sm-3">
+                                    <div class="am-u-sm-4 am-u-end">
                                         {$quoteInfo['customer_level_name']}
                                     </div>
                                 </div>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">联系人：</label>
-                                    <div class="am-u-sm-5">
+                                    <div class="am-u-sm-4">
                                         {$quoteInfo['linkman_name']}
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">联系电话：</label>
-                                    <div class="am-u-sm-3">
+                                    <div class="am-u-sm-4 am-u-end">
                                         {$quoteInfo['linkman_tel']}
                                     </div>
                                 </div>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">备注：</label>
-                                    <div class="am-u-sm-10">
+                                    <div class="am-u-sm-10 am-u-end">
                                         {$quoteInfo['remark']}
                                     </div>
                                 </div>
                                 <hr/>
                                 <!-- 商品信息 -->
-                                <h6>商品信息</h6>
-                                <div class="am-form-group">
+                                <h4>商品信息</h4>
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">产品分类：</label>
                                     <div class="am-u-sm-2">
                                         {$quoteInfo['product_type']}
@@ -88,87 +91,84 @@
                                         {$quoteInfo['product_name']}
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">产品型号：</label>
-                                    <div class="am-u-sm-2">
+                                    <div class="am-u-sm-2 am-u-end">
                                         {$quoteInfo['product_model']}
                                     </div>
                                 </div>
                                 <if condition="$quoteInfo['parameter_spec_value'] != '' ">
                                     <foreach name="quoteInfo['parameter_spec_value']" item="v" key="k">
-                                        <div class="am-form-group">
+                                        <div class="am-form-group xg-form-group">
                                             <label class="am-u-sm-2 am-form-label">{$v['parameter_name']}：</label>
-                                            <div class="am-u-sm-10">
+                                            <div class="am-u-sm-10 am-u-end">
                                                 {$v['spec_value']}
                                             </div>
                                         </div>
                                     </foreach> 
                                 <else/>
-                                    <div class="am-form-group">
+                                    <div class="am-form-group xg-form-group">
                                         <label class="am-u-sm-2 am-form-label">产品规格：</label>
-                                        <div class="am-u-sm-10">
+                                        <div class="am-u-sm-10 am-u-end">
                                             该报价记录中无产品规格信息！
                                         </div>
                                     </div>
                                 </if>
 
                                 <if condition="$quoteInfo['special_technology_value'] != '' ">
-                                    <div class="am-form-group">
+                                    <div class="am-form-group xg-form-group">
                                         <label class="am-u-sm-2 am-form-label">特殊工艺：</label>
-                                        <div class="am-u-sm-10">
+                                        <div class="am-u-sm-10 am-u-end">
                                             {$quoteInfo['special_technology_value']}
                                         </div>
                                     </div>
                                 </if>
                                 
-                                <div class="am-form-group">
-                                    
-                                </div>
-                                <div class="am-form-group">
-                                    <label for="contact-department" class="am-u-sm-2 am-form-label">供应商：</label>
-                                    <div class="am-u-sm-10">
+                                <div class="am-form-group xg-form-group">
+                                    <label class="am-u-sm-2 am-form-label">供应商：</label>
+                                    <div class="am-u-sm-10 am-u-end">
                                         {$quoteInfo['supplier_name']}
                                     </div>
                                 </div>
-                                <div class="am-form-group">
-                                    <label for="contact-department" class="am-u-sm-2 am-form-label">数量：</label>
-                                    <div class="am-u-sm-10">
+                                <div class="am-form-group xg-form-group">
+                                    <label class="am-u-sm-2 am-form-label">数量：</label>
+                                    <div class="am-u-sm-10 am-u-end">
                                         {$quoteInfo['num']}
                                     </div>
                                 </div>
-                                <div class="am-form-group">
-                                    <label for="contact-department" class="am-u-sm-2 am-form-label">成本单价：</label>
-                                    <div class="am-u-sm-2 am-u-end">
+                                <div class="am-form-group xg-form-group">
+                                    <label class="am-u-sm-2 am-form-label">成本单价：</label>
+                                    <div class="am-u-sm-4 am-u-end">
                                         {$quoteInfo['cost_price']} 元
                                     </div>
                                 </div>
-                                <div class="am-form-group">
-                                    <label for="contact-department" class="am-u-sm-2 am-form-label">参考价格：</label>
+                                <div class="am-form-group xg-form-group">
+                                    <label class="am-u-sm-2 am-form-label">参考价格：</label>
                                     <div class="am-u-sm-2 am-u-end">
                                         {$quoteInfo['discount_money']} 元
                                     </div>
                                 </div>
-                                <div class="am-form-group">
-                                    <label for="contact-department" class="am-u-sm-2 am-form-label">最终价格：</label>
-                                    <div class="am-u-sm-2 am-u-end">
+                                <div class="am-form-group xg-form-group">
+                                    <label class="am-u-sm-2 am-form-label">最终价格：</label>
+                                    <div class="am-u-sm-4 am-u-end">
                                         {$quoteInfo['end_money']} 元
                                     </div>
                                 </div>
                                 <hr/>
                                 <!-- 其他信息 -->
-                                <h6>其他信息</h6>
-                                <div class="am-form-group">
+                                <h4>其他信息</h4>
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">录入人：</label>
                                     <div class="am-u-sm-4">
                                         王五
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">录入时间：</label>
-                                    <div class="am-u-sm-4"> 
+                                    <div class="am-u-sm-4 am-u-end"> 
                                         {$quoteInfo['insert_time']}
                                     </div>
                                 </div>
                                 <hr/>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <div class="am-u-sm-10 am-u-sm-push-2">
-                                        <button type="button" class="am-btn am-btn-primary">修改订单</button>
+                                        <button type="button" class="am-btn am-btn-primary" onclick="updateQuote({$quoteInfo['id']})" style="margin-top: 10px">修改报价记录</button>
                                     </div>
                                 </div>
 
@@ -186,7 +186,19 @@
     <script src="__PUBLIC__/js/plus.js"></script>
     <script src="__PUBLIC__/js/layer.js"></script>
     <script type="text/javascript">
-        
+        //修改报价记录信息
+    function updateQuote(id){
+        layer.open({
+                    type: 2,
+                    shadeClose : false,
+                    title: '修改报价记录', 
+                    shade: 0.8,
+                    area: ['75%', '90%'],
+                    btn: ['关闭'],
+                    content: '__APP__/Order/updateQuote/id/'+id, //iframe的url
+
+                });
+    }
     </script>
 </body>
 

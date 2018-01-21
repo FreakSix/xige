@@ -3,15 +3,12 @@
 	use Think\Model;
 	
 	class XgCustomerModel extends Model{
-		
 		public $trueTableName = "xg_customer";
-
 		//查询单条客户信息
 		public function getCustomerInfo($customer_id){
 			$result = M("xg_customer")->where("id = ".$customer_id)->find();
 			return $result;
 		}
-
 		//条件查询客户信息
 		public function getCustomerInfos($condition){
 			$query = M("xg_customer");
@@ -45,10 +42,10 @@
 		}
 
 		//客户信息处理
-		public function dellCustomerInfo($post,$type){
+		public function dealCustomerInfo($post,$type){
 			if($post){
 				$time = time();
-				$customers['cname']=$post['cname'];
+				$customers['cname']=$post['customer_name'];
 				$customers['type_id']=$post['customer_type'];
 				$customers['rank']=$post['rank'];
 				$customers['local_procode']=$post['province_name'];
@@ -63,11 +60,13 @@
 				$customers['bank_num']=$post['bank_num'];
 				$customers['bank_address']=$post['bank_address'];
 				$customers['utime']=$time;
-
 				$customer_model = M("xg_customer");
 				if($type == 'update'){
+					$customers['edit_manager_name']=$_SESSION['userInfo']['truename'];
 					$result_1 = $customer_model->where("id = ".$post['customer_id'])->save($customers);
 				}else if($type == 'add'){
+					$customers['create_manager_name']=$_SESSION['userInfo']['truename'];
+					$customers['edit_manager_name']=$_SESSION['userInfo']['truename'];
 					$customers['ctime']=$time;
 					$result_1 = $customer_model->data($customers)->add();
 				}

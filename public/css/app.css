@@ -1772,6 +1772,7 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     color: #999;
     font-weight: normal;
     font-size: 14px;
+    text-align: right;
 }
 
 .tpl-amazeui-form input::-webkit-input-placeholder {
@@ -2077,6 +2078,9 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     margin-top: 20px;
     margin-bottom: 40px;
 }
+.am-fr {
+    font-size: 14px;
+}
 /**
 **自定义CSS样式
 **/
@@ -2170,6 +2174,32 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     margin-top: 5px;
     float: right;
 }
+/*客户、供应商详情页*/
+.xg-form-group {
+    margin: 0!important;
+    height: 35px;
+}
+.xg-form-group label {
+    line-height: 35px;
+    padding: 0!important;
+    min-width: 100px!important;
+    max-width: 120px;
+    width: 15%;
+    text-align: right;
+}
+.xg-form-group div {
+    height: 35px;
+    line-height: 35px;
+    font-size: 16px;
+}
+.xg-checkbox {
+    font-weight: normal;
+    padding-right: 25px;
+    cursor: pointer;
+}
+.xg-table-center {
+    text-align: center;
+}
 @media screen and (min-width: 1400px) {
     .tpl-content-wrapper {
         
@@ -2182,9 +2212,12 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     }
 
 }
-@media screen and (max-width: 1399px) {
+@media screen and (max-width: 1366px) {
+    .tpl-content-wrapper {
+        width: 1150px !important;
+    }
     .abc{
-        overflow:hidden;
+        overflow-y:hidden;
     }
     .tpl-left-nav {
         height: 650px;
@@ -2198,11 +2231,18 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     position: absolute;
     top: -55px;
     right: 200px;
-}
+    }
+    .xg-search-condition {
+        width: 235px!important;
+        font-size: 14px;
+    }
+    .xg-hide {
+        display: none !important;
+    }
 }
  @media screen and (max-width: 960px) {
     .tpl-content-wrapper {
-        width: 960px !important;
+        width: 1100px !important;
     }
     .abc{
         overflow:auto;
@@ -2212,6 +2252,12 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     }
     .login-am-center .am-form .am-form-group .validate{
     right:20px;
+    }
+    .xg-search-condition {
+        width: 220px!important;
+    }
+    .xg-hide {
+        display: none !important;
     }
    
 }

@@ -2,18 +2,27 @@
 	namespace Home\Model;
 	use Think\Model;
 	class XgProductParameterModel extends Model {
-		// 查询商品参数的所有信息
+		// 查询产品规格名称的所有信息
 		public function getProductParameter(){
-			
 			$sql = "select * from xg_product_parameter order by id desc";
 			$parameter = M()->query($sql);
 			return $parameter;
 		}
-		//根据id查询商品参数信息
+		//根据id查询产品规格名称返回一个二维数组
 		public function getProductParameterById($id){
 			$sql = "select * from xg_product_parameter where id = {$id}";
 			$typeArr = M()->query($sql);
 			return $typeArr;
+		}
+		// 根据id查询产品规格名称返回一个一维数组
+		public function getParameterByProduct($id){
+			$result = M("xg_product_parameter")->where("id = ".$id)->find();
+			return $result;
+		}
+		// 根据name查询产品规格名称
+		public function getProductParameterName($name){
+			$result = M("xg_product_parameter")->where("name = '".$name."'")->find();
+			return $result;
 		}
 		//根据pid进行in条件查询
 		public function getProductParameterByIdWhereIn($id){

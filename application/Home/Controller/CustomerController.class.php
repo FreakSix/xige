@@ -3,13 +3,10 @@
 	
 	class CustomerController extends BaseController
 	{
-		
 		public function index(){
 			// 左侧菜单
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
-
-
 			$get = $_GET;
 			$post = $_POST;
 			// var_dump($get);var_dump($post);
@@ -124,7 +121,7 @@
 
 	 		//总记录数
 	 		$totalCount = M("xg_customer")->where($condition['where'])->count();
-	 		$pageSize = 3;
+	 		$pageSize = 15;
 	 		//实例化分页类
 	 		$page = new \Think\Page($totalCount,$pageSize);
 	 		//获取起始位置
@@ -146,11 +143,7 @@
 	 					"pageStr"      => $pageStr,
 	 					"search"	   => $search,
 	 			];
-
 		}
-
-
-
 		//客户详情页
 		public function details(){
 			// 左侧菜单
@@ -165,9 +158,6 @@
 	    		$productType[$k]["productMenu"] = $productMenu;
 	    	}
 	    	$this->assign("productType",$productType);
-
-
-
 	 		//查询客户公司信息
 	 		// $condition['where'] = "id = ".$_GET['customer_id']."";
 	 		// $customerInfo = D("XgCustomer")->getCustomerInfos($condition);
@@ -242,8 +232,6 @@
 	    		$productType[$k]["productMenu"] = $productMenu;
 	    	}
 	    	$this->assign("productType",$productType);
-
-
 			//客户等级信息
 			$levelInfo = M("xg_customer_level")->order("level asc")->select();
 			//获取省份信息
@@ -252,11 +240,10 @@
 			$cityInfo = $this->getCity("0");
 			//得到地区名称
 			$areaInfo = $this->getArea("0");
-
 			$post = $_POST;
 			if ($post) {
 				//将表单中提交过来的数据添加到 xg_customer 表中
-				$res_1 = D("XgCustomer")->dellCustomerInfo($post,"add");
+				$res_1 = D("XgCustomer")->dealCustomerInfo($post,"add");
 				// 将表单提交过来的数据添加到 xg_customer_linkman 表中
 				if($res_1 > 0){
 					$res_2 = D("XgCustomerLinkman")->addCustomerLinkInfo($post,$res_1);
@@ -270,18 +257,27 @@
 					$this->assign("province",$provinceInfo);
 					$this->assign("city",$cityInfo);
 					$this->assign("area",$areaInfo);
-
-					$this -> display("addCustomer");
+					$this -> display("add_customer");
 				}
 			}
 			$this->assign("rank",$levelInfo);
 			$this->assign("province",$provinceInfo);
 			$this->assign("city",$cityInfo);
 			$this->assign("area",$areaInfo);
-	 		
-			$this->display();
+			$this->display("add_customer");
 		}
-
+		// 验证客户是否已存在
+		public function checkCname(){
+			$cname = $_POST['cname'];
+			$arr = M("xg_customer")->where("cname = '".$cname."'")->find();
+			// dump($arr);exit;
+			if(!empty($arr)){
+				$res = 1;
+			}else{
+				$res = 2;
+			}
+			echo $res;
+		}
 		//已知客户信息，添加联系人信息
 		public function addCustomerLinkman(){
 			//客户信息ID
@@ -302,7 +298,6 @@
 				$this->display();
 			}
 		}
-		
 		//修改客户信息
 		public function update(){
 			// 左侧菜单
@@ -335,7 +330,7 @@
 			$post = $_POST;
 			if($post){
 				//保存客户信息
-				$result_1 = D("XgCustomer")->dellCustomerInfo($post,"update");
+				$result_1 = D("XgCustomer")->dealCustomerInfo($post,"update");
 
 				if($post['link_man']){
 					//修改客户联系人信息

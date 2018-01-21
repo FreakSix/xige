@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>客户管理</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
     <link rel="stylesheet" href="__PUBLIC__/css/app.css">
 </head>
-
 <body class="abc">
     <!-- 网站头部 -->
     <header class="am-topbar am-topbar-inverse admin-header">
@@ -30,27 +29,25 @@
         </div>
         <!-- 右侧主要内容 -->
         <div class="tpl-content-wrapper">
-            <ol class="am-breadcrumb">
-                <li><a href="#" class="am-icon-home">首页</a></li>
-                <li><a href="#">客户管理</a></li>
-                <li class="am-active">客户信息</li>
+            <ol class="am-breadcrumb" style="margin: 5px">
+                <li><a href="__APP__/Index" class="am-icon-home">首页</a></li>
+                <li class="am-active">客户管理</li>
             </ol>
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
-                    <div class="caption font-green bold">客户信息</div>
+                    <div class="caption font-green bold">客户管理</div>
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
-                        <div class="am-u-sm-12 am-u-md-3">
+                        <div class="am-u-sm-1 am-u-lg-3" style="min-width: 100px;">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
                                     <button type="button" onclick="window.location='__APP__/Customer/addCustomer'" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增客户</button>
-                                    <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出数据</button>
                                 </div>
                             </div>
                         </div>
                         <form class="am-form am-form-horizontal" action="__APP__/Customer/index" method="post" enctype="multipart/form-data">
-                        <div class="am-u-sm-12 am-u-md-3">
+                        <div class="am-u-sm-3 am-u-lg-3 xg-search-condition">
                             <div class="am-form-group">
                                 <span style="font-size:15px;color:#F00">客户等级:</span>
                                 <select data-am-selected="{btnSize: 'sm'}"id="customer_level" name="customer_level" onchange="changeLevelInfo();">
@@ -65,12 +62,7 @@
                                 </select>
                             </div>
                         </div>
-                        <!-- <div class="am-u-sm-1 am-u-md-13">
-                            <div class="am-form-group">
-                                <span style="font-size:15px;color:#F00">搜索类型:</span>
-                            </div>
-                        </div> -->
-                        <div class="am-u-sm-12 am-u-md-2">
+                        <div class="am-u-sm-3 am-u-lg-3 xg-search-condition" style="text-align: right;">
                             <div class="am-form-group">
                                 <span style="font-size:15px;color:#F00">搜索类型:</span>
                                   <select data-am-selected="{btnSize: 'sm'}" id="customer_type" name="customer_type">
@@ -90,7 +82,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="am-u-sm-12 am-u-md-3">
+                        <div class="am-u-sm-4 am-u-lg-3 xg-search-condition">
                             <div class="am-input-group am-input-group-sm">
                                 <input type="text" class="am-form-field" id="search_content" name="search_content" value="{$search['search_content']}">
                                 <span class="am-input-group-btn">
@@ -173,15 +165,13 @@
     <script src="__PUBLIC__/js/plus.js"></script>
     <script src="__PUBLIC__/js/layer.js"></script>
 	<script src="__PUBLIC__/js/echarts.min.js"></script>
-
 <script>
     /*  查看更多的联系人信息 */
     function linkMan(id){
         layer.open({
             type: 2,
-            offset: '50px',
             title: '联系人详细信息',
-            shadeClose: true,
+            shadeClose: false,
             shade: 0.8,
             area: ['60%', '60%'],
             btn: ['关闭'],
@@ -191,10 +181,8 @@
 
     // 添加供应商联系人信息
     function addLinkMan(id){
-        
         layer.open({
             type: 2,
-            offset: '20px',
             title: '添加联系人信息',
             area: ['700px', '450px'],
             // fixed: false, //不固定
@@ -211,7 +199,6 @@
         layer.confirm('您确定要删除该条客户信息以及其对应的联系人？', {
             icon: 3,
             anim:5,
-            offset: '200px',
             title:'提示',
             btn: ['确定','取消'] //按钮
         }, function(){
@@ -221,20 +208,16 @@
                     data:'customer_id='+id,
                     dataType:'json',
                     success:function(res){
-                        layer.confirm(res, {
+                        layer.msg(res, {
                             icon: 1,
                             anim:5,
-                            offset: '200px',
-                            title:'提示',
-                            btn: ['确定'] //按钮
-                        }, function(){
-                            window.location.reload();       
+                            time:1000,
                         });
+                        window.location.reload(); 
                     }
                 });
-
             }else{
-                layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                layer.alert('删除失败！', {icon: 1,title:'提示'});
             }          
         }, function(){
             layer.msg('删除已取消！', {

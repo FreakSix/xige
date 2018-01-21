@@ -22,9 +22,11 @@
 			return $linkmanInfo;
 		}
 		// 按供应商ID修改联系人信息
-		public function updateSupplierLinkman($supplierId,$supplierLinkman){
+		public function updateSupplierLinkman($supplierId,$linkmanId,$supplierLinkman){
+			$condition['supplier_id'] = $supplierId;
+			$condition['id'] = $linkmanId;
 			$table = M("xg_supplier_linkman");
-			$result = $table->where("supplier_id = ".$supplierId)->save($supplierLinkman);
+			$result = $table->where($condition)->save($supplierLinkman);
 			return $result;
 		}
 		//根据电话查询对应的联系人信息

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>修改供应商信息</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
     <link rel="stylesheet" href="__PUBLIC__/css/app.css">
     <style>
+        h4 { margin: .5rem 0; }
+        hr { margin: 0; }
     </style>
 </head>
 
@@ -32,14 +34,14 @@
         </div>
         <!-- 右侧主要内容 -->
         <div class="tpl-content-wrapper">
-            <ol class="am-breadcrumb">
-                <li><a href="#" class="am-icon-home">首页</a></li>
-                <li><a href="#">供应商管理</a></li>
+            <ol class="am-breadcrumb" style="margin: 5px">
+                <li><a href="__APP__/Index" class="am-icon-home">首页</a></li>
+                <li><a href="__APP__/Supplier/Index">供应商管理</a></li>
                 <li class="am-active">修改供应商信息</li>
             </ol>
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
-                    <div class="caption font-green bold">修改供应商信息<span id="notice" style="color:#FF0000;font-size: 14px;"> (带 “*” 为必填项) </span></div>
+                    <div class="caption font-green bold">修改供应商({$supplierInfo['supplier_name']})信息<span id="notice" style="color:#FF0000;font-size: 14px;"> (带 “*” 为必填项) </span></div>
                         <div class="tpl-portlet-input tpl-fz-ml">
                         <div class="am-btn-group am-btn-group-xs">
                             <button type="button" onclick="javascript:history.back(-1);" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-angle-left"></span> 返回</button>
@@ -48,23 +50,24 @@
                 </div>
                 <div class="tpl-block ">
                     <div class="am-g tpl-amazeui-form">
-                        <div class="am-u-sm-12">
+                        <div class="am-u-sm-12 am-u-lg-10">
                             <form class="am-form am-form-horizontal" action="__APP__/Supplier/updateHandle" method="post" enctype="multipart/form-data">
                                 <!-- 公司信息 -->
                                 <h4>公司信息</h4>
                                 <div class="am-form-group">
                                     <input type="hidden" name="supplier_id" value="{$supplierInfo['supplier_id']}">
-                                    <label class="am-u-sm-2 am-form-label">供应商名称<span id="important" style="color:#FF0000">*</span></label>
+                                    <label class="am-u-sm-2 am-form-label">供应商名称<span style="color:#FF0000">*</span></label>
                                     <div class="am-u-sm-4">
                                         <input type="text" id="supplier_name" name="supplier_name" value="{$supplierInfo['supplier_name']}">
+                                        <span id="name_notice" style="color:#FF0000;font-size: 14px"></span>
                                     </div>
-                                    <label class="am-u-sm-2 am-form-label">公司电话<span id="important" style="color:#FF0000">*</span></label>
+                                    <label class="am-u-sm-2 am-form-label">公司电话</label>
                                     <div class="am-u-sm-4">
                                         <input type="text" id="supplier_tel" name="supplier_tel" value="{$supplierInfo['supplier_tel']}">
                                     </div>
                                 </div>
                                 <div class="am-form-group">
-                                    <label class="am-u-sm-2 am-form-label">供应商地址<span id="important" style="color:#FF0000">*</span></label>
+                                    <label class="am-u-sm-2 am-form-label">所在区域<span id="important" style="color:#FF0000">*</span></label>
                                     <div class="am-u-sm-3"> 
                                         <select id="supplier_pro" name="supplier_pro" onchange="getCityInfo();">
                                             <option value="0" >请选择省</option>
@@ -76,6 +79,7 @@
                                                 </if>
                                             </foreach>
                                         </select>
+                                        <span id="address_notice" style="color:#FF0000;font-size: 14px"></span>
                                     </div>
                                     <div class="am-u-sm-3">
                                         <select id="supplier_city" name="supplier_city" onchange="getAreaInfo();">
@@ -104,9 +108,10 @@
                                     <label class="am-u-sm-3 am-form-label"></label>
                                 </div>
                                 <div class="am-form-group">
-                                    <label class="am-u-sm-2 am-form-label">街道<span id="important" style="color:#FF0000">*</span></label>
+                                    <label class="am-u-sm-2 am-form-label">街道<span style="color:#FF0000">*</span></label>
                                     <div class="am-u-sm-10">
                                         <input type="text" id="supplier_street" name="supplier_street" value="{$supplierInfo['supplier_street']}">
+                                        <span id="street_notice" style="color:#FF0000;font-size: 14px"></span>
                                     </div>
                                 </div>
                                 <div class="am-form-group">
@@ -115,21 +120,29 @@
                                         <input type="text" id="spare_address" name="spare_address" placeholder="如有备用地址，请填全省市区街道全部信息" value="{$supplierInfo['spare_address']}">
                                     </div>
                                 </div>
-                                
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">备注</label>
+                                    <div class="am-u-sm-10">
+                                        <input type="text" id="remark" name="remark" placeholder="供应商备注信息" value="{$supplierInfo['remark']}">
+                                    </div>
+                                </div>
                                 <hr/>
 
                                 <!-- 可做产品 -->
                                 <h4>可做产品</h4>
+                                <span id="product_notice" style="color:#FF0000;font-size: 14px"></span>
                                 <foreach name="productType" key="key" item="pt">
                                     <div class="am-form-group">
                                         <label class="am-u-sm-2 am-form-label">{$pt.type_name}</label>
                                         <div class="am-u-sm-10">
                                             <foreach name="productType[$key][productMenu]" key="ke" item="pm">
-                                                 <?php if(in_array($pm['id'],$productType[$key][productIdArr])){ ?>    
-                                                    <input type="checkbox" name="checkbox[]" value="{$pm.id}" checked="checked"> <?php echo $pm['id'].$pia; ?><?php echo $pm['type_name']; ?>
-                                                <?php }else{ ?>
-                                                    <input type="checkbox" name="checkbox[]" value="{$pm.id}"> <?php echo $pm['id'].$pia; ?><?php echo $pm['type_name']; ?>
-                                                <?php } ?>
+                                                <label class="xg-checkbox">
+                                                     <?php if(in_array($pm['id'],$productType[$key][productIdArr])){ ?>    
+                                                        <input type="checkbox" name="checkbox[]" value="{$pm.id}" checked="checked"> <?php echo $pm['id'].$pia; ?><?php echo $pm['type_name']; ?>
+                                                    <?php }else{ ?>
+                                                        <input type="checkbox" name="checkbox[]" value="{$pm.id}"> <?php echo $pm['id'].$pia; ?><?php echo $pm['type_name']; ?>
+                                                    <?php } ?>
+                                                </label>
                                             </foreach>
                                         </div>
                                     </div>
@@ -138,29 +151,26 @@
                                 <!-- 联系人信息 -->
                                 <h4>联系人</h4>
                                 <foreach name="linkmanInfo" item="v" key="k">
-                                <div class="contact">
-                                    <div class="am-form-group">
-                                        <label class="am-u-sm-2 am-form-label">联系人姓名
-                                                <span id="sname_notice" style="color:#FF0000"> *</span>
-                                        </label>
-                                        <div class="am-u-sm-4">
-                                            <input type="tel" id="link_name0" name="link_man[{$k}][linkman_name]" value="{$v['linkman_name']}" >
-                                        </div>
-                                        <label class="am-u-sm-2 am-form-label">联系电话
-                                                <span id="sname_notice" style="color:#FF0000"> *</span>
-                                        </label>
-                                        <div class="am-u-sm-4">
-                                            <input type="tel" id="link_phone0" name="link_man[{$k}][linkman_phone]" value="{$v['linkman_phone']}" >
+                                    <div class="contact">
+                                        <div class="am-form-group">
+                                            <label class="am-u-sm-2 am-form-label">联系人姓名
+                                                <span style="color:#FF0000"> *</span>
+                                            </label>
+                                            <div class="am-u-sm-4">
+                                                <input type="tel" id="link_name0" name="link_man[{$k}][linkman_name]" value="{$v['linkman_name']}" >
+                                            </div>
+                                            <label class="am-u-sm-2 am-form-label">联系电话</label>
+                                            <div class="am-u-sm-4">
+                                                <input type="tel" id="link_phone0" name="link_man[{$k}][linkman_phone]" value="{$v['linkman_phone']}" >
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <input type="hidden" name="link_man[{$k}][link_id]" value="{$v['id']}">
-                                <hr/>
+                                    <input type="hidden" name="link_man[{$k}][link_id]" value="{$v['id']}">
                                 </foreach>
-
+                                <hr/>
                                 <div class="am-form-group">
                                     <div class="am-u-sm-10 am-u-sm-push-2">
-                                        <button type="submit" class="am-btn am-btn-primary">确认添加</button>
+                                        <button id="submit" type="submit" class="am-btn am-btn-primary">确认修改</button>
                                     </div>
                                 </div>
                             </form>
@@ -174,34 +184,72 @@
 <script src="__PUBLIC__/js/amazeui.min.js"></script>
 <script src="__PUBLIC__/js/app.js"></script>
 <script src="__PUBLIC__/js/plus.js"></script>
+<script src="__PUBLIC__/layer/layer.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-        $("#sname").blur(function(){
-            var sname = $("#sname").val();
+        // 输入框失去焦点时验证
+        // 供应商名称失去焦点时验证
+        $("#supplier_name").blur(function(){
+            var sname = $("#supplier_name").val();
             if(sname == ''){
-                $("#sname_notice").html("* 供应商名称不能为空！");
+                $("#name_notice").html("请填写供应商名称！");
             }else{
-                $.ajax({
-                    "url":"__APP__/Supplier/checkSname", //发送ajax请求的地址
-                    "type":"post",     //以post形式发送数据
-                    "data":"sname="+sname,
-                    // "data":{
-                    //      "username":$("#username").val(),
-                    //      "password":$("#password").val()
-                    // },         //data是ajax发送请求的数据 
-                    //"data":"username=tom&password=123",      
-                    "success":function(response){
-                         if(response==1){
-                             // alert(111);
-                             $("#sname_notice").html("* 该供应商的数据已存在！");
-                         }else if(response==2){
-                             // alert(22222);
-                             $("#sname_notice").html("* 没有该供应商的数据！");
-                         }
-                    }
-                });
+                $("#name_notice").html("");
             }
         });
+        // 所在地区验证
+        $("#supplier_area").blur(function(){
+            var pro = $("#supplier_pro").val();
+            var city = $("#supplier_city").val();
+            var area = $("#supplier_area").val();
+            if(pro==0 && city==0 && area==0){
+                $("#address_notice").html("请选择供应商所在地区！");
+            }else if(pro==0 || city==0 || area==0){
+                $("#address_notice").html("请填全供应商所在地区！");
+            }else{
+                $("#address_notice").html("");
+            }
+        });
+        // 街道
+        $("#supplier_street").blur(function(){
+            if(($("#supplier_street").val()) == ""){
+                $("#street_notice").html("请填写供应商具体街道信息！");
+            }else{
+                $("#street_notice").html("");
+            }
+        });
+        $("#submit").click(function(){
+            var supplierName = $("#supplier_name").val();
+            if(supplierName == ""){
+                layer.msg("请输入供应商名称！",{icon:7,time:2000});
+                $("#name_notice").html("请填写供应商名称！");
+                $("#supplier_name").focus();
+                return false;
+            }
+            var pro = $("#supplier_pro").val();
+            var city = $("#supplier_city").val();
+            var area = $("#supplier_area").val();
+            // alert($("#supplier_pro").val());
+            // alert($("#supplier_city").val());
+            // alert($("#supplier_area").val());
+            if(pro==0 && city==0 && area==0){
+                $("#address_notice").html("请选择供应商所在地区！");
+                return false;
+            }else if(pro==0 || city==0 || area==0){
+                $("#address_notice").html("请填全供应商所在地区！");
+                return false;
+            }
+            var street = $("#supplier_street").val();
+            if(street == ""){
+                $("#street_notice").html("请填写供应商具体街道信息！");
+                return false;
+            }
+            var product = $("input[type='checkbox']:checked").length;
+            if(product == 0){
+                $("#product_notice").html("请选择供应商可做产品！");
+                return false;
+            }
+        })
     });
 </script>
 

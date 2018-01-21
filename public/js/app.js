@@ -479,7 +479,7 @@ $("#add-contact").click(function(){
     if(i<6){
 	    $("input[name=select_num_hide]").val(i);
 //	    alert($("input[name=select_num_hide]").val());
-	    var html = '<div class="am-form-group"><label class="am-u-sm-2 am-form-label">联系人姓名<span id="important" style="color:#FF0000"> *</span></label><div class="am-u-sm-4"><input type="tel" id="link_name'+i+'" name="link_name'+i+'" ></div><label class="am-u-sm-2 am-form-label">联系电话<span id="important" style="color:#FF0000"> *</span></label><div class="am-u-sm-4"><input type="tel" id="link_phone'+i+'" name="link_phone'+i+'" ></div></div><div class="am-form-group"><label class="am-u-sm-2 am-form-label">联系人地址</label><div class="am-u-sm-10"><input type="text" id="link_address'+i+'" name="link_address'+i+'" ></div></div>';
+	    var html = '<div class="am-form-group"><label class="am-u-sm-2 am-form-label">联系人姓名<span style="color:#FF0000"> *</span></label><div class="am-u-sm-4"><input type="tel" id="link_name'+i+'" name="link_name'+i+'" ></div><label class="am-u-sm-2 am-form-label">联系电话</label><div class="am-u-sm-4"><input type="tel" id="link_phone'+i+'" name="link_phone'+i+'" ></div></div><div class="am-form-group"><label class="am-u-sm-2 am-form-label">联系人地址</label><div class="am-u-sm-10"><input type="text" id="link_address'+i+'" name="link_address'+i+'" ></div></div>';
 	    $('.contact').append(html);
     }else{
     	alert ("抱歉，最多可以添加五个联系人！！");
@@ -493,7 +493,7 @@ $("#add_supplier_contact").click(function(){
     i++;
     if(i<6){
         $("input[name=select_num_hide]").val(i);
-        var html = '<div class="am-form-group"><label class="am-u-sm-2 am-form-label">联系人姓名<span id="important" style="color:#FF0000"> *</span></label><div class="am-u-sm-4"><input type="tel" id="link_name'+i+'" name="link_name'+i+'" ></div><label class="am-u-sm-2 am-form-label">联系电话<span id="important" style="color:#FF0000"> *</span></label><div class="am-u-sm-4"><input type="tel" id="link_phone'+i+'" name="link_phone'+i+'" ></div></div>'
+        var html = '<div class="am-form-group"><label class="am-u-sm-2 am-form-label">联系人姓名<span style="color:#FF0000"> *</span></label><div class="am-u-sm-4"><input type="tel" id="link_name'+i+'" name="link_name'+i+'" ></div><label class="am-u-sm-2 am-form-label">联系电话</label><div class="am-u-sm-4"><input type="tel" id="link_phone'+i+'" name="link_phone'+i+'" ></div></div>'
         $('.contact').append(html);
     }else{
         alert("如需添加更多联系人，请到供应商信息中进行添加");

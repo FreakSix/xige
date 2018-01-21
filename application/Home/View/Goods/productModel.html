@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
   <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
   <link rel="stylesheet" href="__PUBLIC__/css/app.css" />
+  <style>
+      .am-selected button { font-size: 14px; width: 150px; }
+  </style>
 </head>
 <body class="abc">
     <!-- 网站头部 -->
@@ -24,9 +27,8 @@
         </div>
         <!-- 右侧主要内容 -->
         <div class="tpl-content-wrapper">
-            <div class="layui-tab layui-tab-card">
+            <!-- <div class="layui-tab layui-tab-card">
                 <div class="layui-tab-content" style="height: 100px;">
-
                     <div class="layui-row">
                         <form class="layui-form" action="">
                             <div class="layui-form-item">
@@ -36,7 +38,6 @@
                                         <button type="button" class="layui-btn layui-btn-warm"  onClick='addProductModel()'>添加商品型号</button> 
                                     </div>
                                 </div>
-
                                 <div class="layui-inline" style="margin-top:15px;">
                                     <label class="layui-form-label">所属分类</label> 
                                     <div class="layui-input-inline">
@@ -68,12 +69,8 @@
                                     </div>
                                 </div>
                             </div>
-
                         </form>
-
                     </div>
-
-
                     <table class="layui-table" >
                         <thead>
                             <tr>
@@ -106,93 +103,146 @@
                     </div>
                     
                 </div>
+            </div> -->
+            <ol class="am-breadcrumb" style="margin: 5px">
+                <li><a href="__APP__/Index" class="am-icon-home">首页</a></li>
+                <li class="am-active">产品型号管理</li>
+            </ol>
+            <div class="tpl-portlet-components" >
+                <div class="portlet-title">
+                    <div class="caption font-green bold">产品型号管理</div>
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-3 am-u-lg-2">
+                            <div class="am-btn-toolbar">
+                                <div class="am-btn-group am-btn-group-xs">
+                                    <button type="button" onClick="addProductModel()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 添加产品型号</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-3 am-u-lg-3">
+                            <div class="am-form-group" > 
+                                <span style="font-size: 16px;vertical-align: middle;">按服务类型搜索：</span>
+                                <select id="product_type" name="product_type" onchange="changeProductTypeInfo()" data-am-selected="{maxHeight: 370}" >
+                                    <option value="" checked="checked">全部服务</option>
+                                    <foreach name="productTypeInfo" item="v">
+                                    <if condition="$search['product_type'] == $v['id']">
+                                       <option value="{$v[id]}" selected="selected">{$v['type_name']}</option>
+                                    <else/>
+                                       <option value="{$v['id']}" >{$v['type_name']}</option>
+                                    </if>
+                                    </foreach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-3 am-u-lg-3 am-u-end">
+                            <div class="am-form-group" > 
+                                <span style="font-size: 16px;vertical-align: middle;">按产品名称搜索：</span>
+                                <select id="product" name="product" data-am-selected="{maxHeight: 370,searchBox: 1}" onchange="changeProduct()">
+                                    <option value="">全部产品</option>
+                                    <foreach name="productInfo" item="v">
+                                        <if condition="$search['product'] == $v['id']">
+                                            <option value="{$v[id]}" selected="selected">{$v['type_name']}</option>
+                                        <else/>
+                                            <option value="{$v['id']}" >{$v['type_name']}</option>
+                                        </if>
+                                    </foreach>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-g ">
+                        <div class="am-u-sm-12">
+                            <form class="am-form">
+                                <table class="am-table am-table-striped am-table-hover table-main ">
+                                    <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>产品型号</th>
+                                            <th>产品名称</th>
+                                            <th>服务类型</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <foreach name="productModelInfo" item="v" key="k">
+                                            <tr class="xg-table-tr">
+                                                <td>{$k+1}</td>
+                                                <td>{$v['name']}</td>
+                                                <td>{$v['product']['type_name']}</td>
+                                                <td>{$v['product_type']['type_name']}</td>
+                                                <td>
+                                                    <div class="am-btn-toolbar">
+                                                        <div class="am-btn-group am-btn-group-xs">
+                                                            <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onClick="updateProductModel({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                            <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onClick="deleteProductModel({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </foreach>
+                                    </tbody>
+                                </table>
+                                <div class="am-fr">{$pageStr}</div>
+                                <hr>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
           
-<script src="__PUBLIC__/css/layui/layui.js" charset="utf-8"></script>
-<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
 <script src="__PUBLIC__/js/jquery.min.js"></script>
 <script src="__PUBLIC__/js/amazeui.min.js"></script>
 <script src="__PUBLIC__/js/app.js"></script>
 <script src="__PUBLIC__/js/plus.js"></script>
+<script src="__PUBLIC__/js/layer.js"></script>
 <script type="text/javascript">
     function addProductModel(){
-        layui.use('layer', function(){
-          var layer = layui.layer;
-          
-            layer.open({
-                type: 2,
-                offset: '80px',
-                title: '添加商品型号',
-                area: ['700px', '450px'],
-                // fixed: false, //不固定
-                maxmin: true,
-                content: '__APP__/Goods/addProductModel',
-            });
-        }); 
+        layer.open({
+            type: 2,
+            title: '添加产品型号',
+            area: ['40%', '50%'],
+            content: '__APP__/Goods/addProductModel',
+        });
     }
-
     function updateProductModel(model_id){
-        layui.use('layer', function(){
-          var layer = layui.layer;
-          
-            layer.open({
-                type: 2,
-                offset: '80px',
-                title: '修改商品型号',
-                area: ['700px', '450px'],
-                // fixed: false, //不固定
-                maxmin: true,
-                content: '__APP__/Goods/updateProductModel/model_id/'+model_id,
-            });
-        }); 
+        layer.open({
+            type: 2,
+            title: '修改产品型号',
+            area: ['40%', '50%'],
+            content: '__APP__/Goods/updateProductModel/model_id/'+model_id,
+        });
     }
-
     function deleteProductModel(model_id){
-        layui.use('layer', function(){
-          var layer = layui.layer;
-
-            layer.confirm('您确定要删除该条信息？', {
-                icon: 3,
-                anim:5,
-                offset: '200px',
-                title:'提示',
-                btn: ['确定','取消'] //按钮
-            }, function(){
-                if(model_id){
-                    $.ajax({
-                        url:'__APP__/Goods/deleteProductModel',
-                        data:'model_id='+model_id,
-                        type:'post',
-                        dataType:'json',
-                        success:function(res){
-                            layer.confirm(res, {
-                                icon: 1,
-                                anim:5,
-                                offset: '200px',
-                                title:'提示',
-                                btn: ['确定'] //按钮
-                            }, function(){
-                                window.location.reload();       
-                            });
-                        }
-                    });
-
-                }else{
-                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
-                }          
-            }, function(){
-                layer.msg('删除已取消！', {
-                time: 2000, //20s后自动关闭
-                offset: '200px',
-                // title:'提示'
+        layer.confirm('您确定要删除该条信息？', {
+            icon: 3,
+            anim:5,
+            title:'提示',
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            if(model_id){
+                $.ajax({
+                    url:'__APP__/Goods/deleteProductModel',
+                    data:'model_id='+model_id,
+                    type:'post',
+                    dataType:'json',
+                    success:function(res){
+                        layer.msg(res, {icon: 1,anim:5,});
+                        window.location.reload(); 
+                    }
                 });
-            });
-        }); 
+            }else{
+                layer.alert('删除失败！', {icon: 1,title:'提示'});
+            }          
+        }, function(){
+            layer.msg('删除已取消！', {time: 1000,});
+        });
     }
 </script>
-
 <script>
 layui.use(['form', 'layedit', 'laydate'], function(){
     var form = layui.form
