@@ -91,7 +91,31 @@
 			$userInfo = $_SESSION['userInfo'];
 			$select_user_id = isset($_POST['user_id'])?$_POST['user_id']:"";
 			//根据职位给权限，要是老板的话可以查看所有的人的登录日志，要是其他人只能查看自己的(老板的duty_id为9)
+			$mangerArr = array();
 			$loginLogsModel = D("XgLoginLogs");
+			if($userInfo['department_id'] == 0){
+				if($select_user_id == ''){
+					$user_id = $userInfo['id'];
+					$count = $loginLogsModel->getLoginLogsByUserIdCount($user_id);
+				}else{
+					$count = $loginLogsModel->getLoginLogsByUserIdCount($select_user_id);
+				}
+			}else{
+				$user_id = $userInfo['id'];
+				$count = $loginLogsModel->getLoginLogsByUserIdCount($user_id);
+			}
+			
+			//分页
+			//订单信息中符合条件的总记录数
+			$pageSize = 15;
+			//实例化分页类
+			$page = new \Think\Page($count,$pageSize);
+			$firstRow = $page->firstRow;
+			//获取分页结果
+			$pageStr = $page->show();
+			//总页数
+			$totalPage = $page->totalPages;
+			
 			if($userInfo['department_id'] == 0){
 				//获取其他员工
 				$managerModel = D("XgManager");
@@ -105,19 +129,17 @@
 				}
 				if($select_user_id == ''){
 					$user_id = $userInfo['id'];
-					$loginLogArr = $loginLogsModel->getLoginLogsByUserId($user_id);
+					$loginLogArr = $loginLogsModel->getLoginLogsByUserId($user_id,$firstRow,$pageSize);
 				}else{
-					$loginLogArr = $loginLogsModel->getLoginLogsByUserId($select_user_id);
+					$loginLogArr = $loginLogsModel->getLoginLogsByUserId($select_user_id,$firstRow,$pageSize);
 				}
-				$this->assign("mangerArr",$mangerArr);
 			}else{
 				$user_id = $userInfo['id'];
-				$loginLogArr = $loginLogsModel->getLoginLogsByUserId($user_id);
+				$loginLogArr = $loginLogsModel->getLoginLogsByUserId($user_id,$firstRow,$pageSize);
 			}
 			
-			//分页
-// 			$totalCount
-			
+			$this->assign("mangerArr",$mangerArr);
+			$this->assign("pageStr",$pageStr);
 			$this->assign("userInfo",$userInfo);
 			$this->assign("loginLogArr",$loginLogArr);
 			$this->display("login_log");
@@ -127,17 +149,28 @@
 			$id = $_POST['id'];
 			$loginLogsModel = D("XgLoginLogs");
 			if($id == "all"){
-				$loginLogArr = $loginLogsModel->getLoginLogs();
+				$count = $loginLogsModel->getLoginLogsCount();
 			}else{
-				$loginLogArr = $loginLogsModel->getLoginLogsByUserId($id);
+				$count = $loginLogsModel->getLoginLogsByUserIdCount($id);
 			}
-			$html = '';
-			if(!empty($loginLogArr)){
-				foreach($loginLogArr as $k=>$v){
-					$html.="<tr><td>{$v['addtime']}</td><td>{$v['truename']}</td><td>{$v['operate_tool']}</td><td>{$v['operate_system']}</td><td>{$v['ip']}</td><td></td></tr>";
-				}
+			//订单信息中符合条件的总记录数
+			$pageSize = 15;
+			//实例化分页类
+			$page = new \Think\Page($count,$pageSize);
+			$firstRow = $page->firstRow;
+			//获取分页结果
+			$pageStr = $page->show();
+			//总页数
+			$totalPage = $page->totalPages;
+			
+			if($id == "all"){
+				$loginLogArr = $loginLogsModel->getLoginLogs($firstRow,$pageSize);
+			}else{
+				$loginLogArr = $loginLogsModel->getLoginLogsByUserId($id,$firstRow,$pageSize);
 			}
-			echo $html;
+			$this->assign("pageStr",$pageStr);
+			$this->assign("loginLogArr",$loginLogArr);
+			$this->display("getDifLoginlogs");
 		}
 		// 公告信息页面
 		public function notice(){

@@ -63,7 +63,7 @@
                     </if>
                     <div class="am-g">
                         <div class="am-u-sm-12">
-                            <form class="am-form">
+                            <form class="am-form" id="list_com_form">
                                 <table class="am-table am-table-striped am-table-hover table-main">
                                     <thead>
                                         <tr>
@@ -76,7 +76,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="list_content">
-                                        <if condition="count($loginLogArr)">
+                                        <if condition="$loginLogArr">
                                         <foreach name="loginLogArr" item="loginLog">
 	                                        <tr>
 	                                            <td>{$loginLog.addtime}</td>
@@ -130,8 +130,8 @@
 	function getDifList(){
 		var id = $("#chengyau_select").val();
 		$.post("__APP__/PersonalCenter/getDifLoginlogs",{"id":id},function(res){
-			$(".list_content").html('');
-			$(".list_content").html(res);
+			$("#list_com_form").html('');
+			$("#list_com_form").html(res);
 		})
 	}
 </script>

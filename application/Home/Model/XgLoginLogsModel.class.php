@@ -15,13 +15,23 @@
 			return $res;
 		}
 		//查看自己的登录日志
-		public function getLoginLogsByUserId($user_id){
-			$res = M("xg_login_logs")->where("user_id = {$user_id}")->select();
+		public function getLoginLogsByUserId($user_id,$start=0,$size=15){
+			$res = M("xg_login_logs")->where("user_id = {$user_id}")->order("addtime desc")->limit($start,$size)->select();
+			return $res;
+		}
+		//查看自己的登录日志总数
+		public function getLoginLogsByUserIdCount($user_id){
+			$res = M("xg_login_logs")->where("user_id = {$user_id}")->count();
 			return $res;
 		}
 		//查看所有人的登录日志
-		public function getLoginLogs(){
-			$res = M("xg_login_logs")->order("addtime asc")->select();
+		public function getLoginLogs($start=0,$size=15){
+			$res = M("xg_login_logs")->order("addtime asc")->limit($start,$size)->select();
+			return $res;
+		}
+		//查看所有人的登录日志总数
+		public function getLoginLogsCount(){
+			$res = M("xg_login_logs")->count();
 			return $res;
 		}
 	}
