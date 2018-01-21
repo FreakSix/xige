@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>基本信息统计</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,7 +30,7 @@
     </header>
     <div class="tpl-page-container tpl-page-header-fixed">
         <!-- 左侧菜单栏 -->
-        <div class="tpl-left-nav tpl-left-nav-hover" nav="supplier">
+        <div class="tpl-left-nav tpl-left-nav-hover xg-left-nav" nav="indexCount">
             <include file="Public:menu"/>
         </div>
         <!-- 右侧主要内容 -->
@@ -44,9 +44,63 @@
                 <li class="am-active">Amaze UI 表单</li>
             </ol>
             <div class="tpl-portlet-components">
-                <div class="outer">
-                   <div style="width:2000px;"> aaasdfffffffffffffffffffffffffffffffffffffffffff</div>
-                </div>
+                <div class="row">
+                    <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                        <div class="dashboard-stat blue">
+                            <div class="visual">
+                                <i class="am-icon-user-plus"></i>
+                            </div>
+                            <div class="details">
+                                <div class="number"> 1349 </div>
+                                <div class="desc"> 本月新增客户数 </div>
+                            </div>
+                            <a class="more" href="#"> 查看更多客户数信息
+                                <i class="m-icon-swapright m-icon-white"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                        <div class="dashboard-stat red">
+                            <div class="visual">
+                                <i class="am-icon-cny"></i>
+                            </div>
+                            <div class="details">
+                                <div class="number"> ￥15600 </div>
+                                <div class="desc"> 截止目前客户欠款金额 </div>
+                            </div>
+                            <a class="more" href="#"> 查看更多客户欠款情况
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                        </div>
+                    </div>
+                    <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                        <div class="dashboard-stat green">
+                            <div class="visual">
+                                <i class="am-icon-star"></i>
+                            </div>
+                            <div class="details">
+                                <div class="number"> ￥12000 </div>
+                                <div class="desc"> 本月销售额 </div>
+                            </div>
+                            <a class="more" href="#"> 查看更多销售额信息
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                        </div>
+                    </div>
+                    <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                        <div class="dashboard-stat purple">
+                            <div class="visual">
+                                <i class="am-icon-android"></i>
+                            </div>
+                            <div class="details">
+                                <div class="number"> 786 </div>
+                                <div class="desc"> 安卓设备 </div>
+                            </div>
+                            <a class="more" href="#"> 查看更多
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                        </div>
+                    </div>
             </div>
         </div>
     </div>

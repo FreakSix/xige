@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>修改客户信息</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
     <link rel="stylesheet" href="__PUBLIC__/css/app.css">
     <style>
+        h4 { margin: .5rem 0; }
+        hr { margin: 0; }
     </style>
 </head>
 
@@ -32,14 +34,14 @@
         </div>
         <!-- 右侧主要内容 -->
         <div class="tpl-content-wrapper">
-            <ol class="am-breadcrumb">
-                <li><a href="#" class="am-icon-home">首页</a></li>
-                <li><a href="#">客户管理</a></li>
-                <li class="am-active">新增客户</li>
+            <ol class="am-breadcrumb" style="margin: 5px">
+                <li><a href="__APP__/Index" class="am-icon-home">首页</a></li>
+                <li><a href="__APP__/Customer/index">客户管理</a></li>
+                <li class="am-active">修改客户信息</li>
             </ol>
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
-                    <div class="caption font-green bold">新增客户</div>
+                    <div class="caption font-green bold">修改客户({$customerInfo['cname']})信息</div>
                         <div class="tpl-portlet-input tpl-fz-ml">
                         <div class="am-btn-group am-btn-group-xs">
                             <button type="button" onclick="javascript:history.back(-1);" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-angle-left"></span> 返回</button>
@@ -56,10 +58,11 @@
                                 </h4>
                                 <div class="am-form-group">
                                     <label for="cname" class="am-u-sm-2 am-form-label">客户名称
-                                            <span id="sname_notice" style="color:#FF0000"> *</span>
+                                            <span style="color:#FF0000"> *</span>
                                     </label>
                                     <div class="am-u-sm-4"> 
-                                        <input type="text" id="cname" name="cname" value="{$customerInfo['cname']}">
+                                        <input type="text" id="customer_name" name="customer_name" value="{$customerInfo['cname']}">
+                                        <span id="name_notice" style="color:#f00;font-size: 14px"></span>
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">客户类型</label>
                                     <div class="am-u-sm-4">
@@ -103,7 +106,7 @@
                                     </div>
                                 </div>
                                 <div class="am-form-group">
-                                    <label class="am-u-sm-2 am-form-label">所在区域</label>
+                                    <label class="am-u-sm-2 am-form-label">所在区域<span style="color:#FF0000"> *</span></label>
                                     <div class="am-u-sm-2">
                                         <select id="porvinces2" name="province_name" onchange="getCityInfos2();">
                                             <option value="0" >请选择省</option>
@@ -115,6 +118,7 @@
                                                 </if>
                                             </foreach>
                                         </select>
+                                        <span id="address_notice" style="color:#f00;font-size: 14px"></span>
                                     </div>
                                     <div class="am-u-sm-2">
                                         <select id="citys2" name="city_name" onchange="getAreaInfos2();">
@@ -148,6 +152,7 @@
                                     </label>
                                     <div class="am-u-sm-10">
                                         <input type="text" id="local_address" name="local_address" value="{$customerInfo['local_address']}">
+                                        <span id="street_notice" style="color:#FF0000;font-size: 14px"></span>
                                     </div>
                                 </div>
                                 <div class="am-form-group">
@@ -159,32 +164,31 @@
                                 <hr/>
                                 <h4>联系人信息</h4>
                                 <foreach name="linkmanInfo" item="v" key="k">
-                                <div class="contact">
-                                    <div class="am-form-group">
-                                        <label class="am-u-sm-2 am-form-label">联系人姓名
-                                                <span id="sname_notice" style="color:#FF0000"> *</span>
-                                        </label>
-                                        <div class="am-u-sm-4">
-                                            <input type="tel" id="link_name0" name="link_man[{$k}][name]" value="{$v['name']}" >
+                                    <div class="contact">
+                                        <div class="am-form-group">
+                                            <label class="am-u-sm-2 am-form-label">联系人姓名
+                                                    <span id="sname_notice" style="color:#FF0000"> *</span>
+                                            </label>
+                                            <div class="am-u-sm-4">
+                                                <input type="tel" id="link_name0" name="link_man[{$k}][name]" value="{$v['name']}" >
+                                            </div>
+                                            <label class="am-u-sm-2 am-form-label">联系电话
+                                                    <span id="sname_notice" style="color:#FF0000"> *</span>
+                                            </label>
+                                            <div class="am-u-sm-4">
+                                                <input type="tel" id="link_phone0" name="link_man[{$k}][phone]" value="{$v['phone']}" >
+                                            </div>
                                         </div>
-                                        <label class="am-u-sm-2 am-form-label">联系电话
-                                                <span id="sname_notice" style="color:#FF0000"> *</span>
-                                        </label>
-                                        <div class="am-u-sm-4">
-                                            <input type="tel" id="link_phone0" name="link_man[{$k}][phone]" value="{$v['phone']}" >
+                                        <div class="am-form-group">
+                                            <label class="am-u-sm-2 am-form-label">联系人地址</label>
+                                            <div class="am-u-sm-10">
+                                                <input type="text" id="link_address0" name="link_man[{$k}][address]" value="{$v['address']}" >
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="am-form-group">
-                                        <label class="am-u-sm-2 am-form-label">联系人地址</label>
-                                        <div class="am-u-sm-10">
-                                            <input type="text" id="link_address0" name="link_man[{$k}][address]" value="{$v['address']}" >
-                                        </div>
-                                    </div>
-                                </div>
                                 <input type="hidden" name="link_man[{$k}][link_id]" value="{$v['id']}">
-                                <hr/>
                                 </foreach>
-                                
+                                <hr/>
                                 <h4>财务信息</h4>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">纳税人识别号</label>
@@ -202,7 +206,6 @@
                                         <else/>
                                             <input type="tel" id="invoice_tel" name="invoice_tel" value="{$customerInfo['invoice_tel']}">
                                         </if>
-                                        
                                     </div>
                                 </div>
 
@@ -218,7 +221,6 @@
                                         <else/>
                                             <input type="text" id="bank_num" name="bank_num" value="{$customerInfo['bank_num']}" >
                                         </if>
-                                        
                                     </div>
                                 </div>
                                 <div class="am-form-group">
@@ -232,7 +234,7 @@
 
                                 <div class="am-form-group">
                                     <div class="am-u-sm-10 am-u-sm-push-2">
-                                        <button id="submit" type="submit" class="am-btn am-btn-primary">确认修改</button>
+                                        <button id="submit" type="submit" class="am-btn am-btn-primary" style="margin-top: 10px">确认修改</button>
                                     </div>
                                 </div>
                             </form>
@@ -246,6 +248,7 @@
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
     <script src="__PUBLIC__/js/plus.js"></script>
+    <script src="__PUBLIC__/layer/layer.js"></script>
     <script type="text/javascript">
 
     //已有的地址信息修改
@@ -336,33 +339,64 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+        // 客户名称验证
+        $("#customer_name").blur(function(){
+            var cname = $("#customer_name").val();
+            if(cname == ''){
+                $("#name_notice").html("请填写客户名称！");
+                $("#customer_name").focus();
+            }else{
+                $("#name_notice").html("");
+            }
+        });
+        // 所在地区验证
+        $("#customer_area").blur(function(){
+            var pro = $("#customer_pro").val();
+            var city = $("#customer_city").val();
+            var area = $("#customer_area").val();
+            if(pro==0 && city==0 && area==0){
+                $("#address_notice").html("请选择客户所在地区！");
+            }else if(pro==0 || city==0 || area==0){
+                $("#address_notice").html("请填全客户所在地区！");
+            }else{
+                $("#address_notice").html("");
+            }
+        });
+        // 详细地址验证
+        $("#local_address").blur(function(){
+            if(($("#local_address").val()) == ""){
+                $("#street_notice").html("请填写客户具体街道信息！");
+            }else{
+                $("#street_notice").html("");
+            }
+        });
         $("#submit").click(function(){
             //客户名称验证
-            var cname = $("#cname").val();
-            if(cname == ''){
-                alert("客户名称不能为空！");
-                $("#cname").focus();
+            var customerName = $("#customer_name").val();
+            if(customerName == ''){
+                layer.msg("请输入客户名称！",{icon:7,time:2000});
+                $("#name_notice").html("请填写客户名称！");
+                $("#customer_name").focus();
+                return false;
+            }else{
+                $("#name_notice").html("");
+            }
+            // 客户所在地区
+            var pro = $("#customer_pro").val();
+            var city = $("#customer_city").val();
+            var area = $("#customer_area").val();
+            if(pro==0 && city==0 && area==0){
+                $("#address_notice").html("请选择客户所在地区！");
+                return false;
+            }else if(pro==0 || city==0 || area==0){
+                $("#address_notice").html("请填全客户所在地区！");
                 return false;
             }
             //客户详细地址验证
             var local_address = $("#local_address").val();
             if(local_address == ''){
-                alert("客户详细地址不能为空！");
+                $("#street_notice").html("请填写客户具体街道信息！");
                 $("#local_address").focus();
-                return false;
-            }
-            //联系人姓名验证
-            var link_name = $("#link_name").val();
-            if(link_name == ''){
-                alert("联系人姓名不能为空！");
-                $("#link_name").focus();
-                return false;
-            }
-            //联系人电话验证
-            var link_phone = $("#link_phone").val();
-            if(link_phone == ''){
-                alert("联系人电话不能为空！");
-                $("#link_phone").focus();
                 return false;
             }
         });

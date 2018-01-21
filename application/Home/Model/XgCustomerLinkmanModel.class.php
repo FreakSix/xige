@@ -65,15 +65,20 @@
 		//客户联系人信息添加
 		public function addCustomerLinkInfo($post,$res_id){
 			if($res_id > 0){
-				for($i=0;$i<=$post['select_num_hide'];$i++){
-					$cus_link['c_id']=$res_id;    //公司的id
-					$cus_link['name']=$post['link_name'.$i];
-					$cus_link['phone']=$post['link_phone'.$i];
-					$cus_link['address']=$post['link_address'.$i];
+				// for($i=0;$i<=$post['select_num_hide'];$i++){
+				// 	$cus_link['c_id']=$res_id;    //公司的id
+				// 	$cus_link['name']=$post['link_name'.$i];
+				// 	$cus_link['phone']=$post['link_phone'.$i];
+				// 	$cus_link['address']=$post['link_address'.$i];
 					
-					$res = M("xg_customer_linkman")->data($cus_link)->add();
-					$res_2[$post['link_name'.$i]] = $res;
-				}
+				// 	$res = M("xg_customer_linkman")->data($cus_link)->add();
+				// 	$res_2[$post['link_name'.$i]] = $res;
+				// }
+				$cus_link['c_id'] = $res_id;
+				$cus_link['name'] = $post['link_name'];
+				$cus_link['phone'] = $post['link_phone'];
+				$cus_link['address'] = $post['link_address'];
+				$res_2 = M('xg_customer_linkman')->data($cus_link)->add();
 			}
 			return $res_2;
 		}

@@ -33,6 +33,22 @@
 			$result = M()->query($sql);
 			return $result;
 		}
+		// 根据id查parameter_id_str
+		public function getParameterIdStr($id){
+			$sql = "select parameter_id_str from xg_product_type where id = {$id}";
+			$result = M()->query($sql);
+			return $result;
+		}
+		// 根据产品规格名称id进行模糊查询
+		public function getProductByParameterIdStr($idStr){
+			$data['parameter_id_str'] = array('like','%'.$idStr.'%');
+			$result = M("xg_product_type")->where($data)->select();
+			return $result;
+		}
+		// 修改parameter_id_str
+		public function updateParameterStrId($productId,$data){
+			$result = M("xg_product_type")->where("id = ".$productId)->save($data);
+		}
 		// 添加或修改Xg_product_type表中对应产品的供应商id所组成的字符串
 		public function updateSupplierIdStr($id,$supplierIdStr){
 			$sql = "update xg_product_type set supplier_id_str = '{$supplierIdStr}' where id = {$id}";

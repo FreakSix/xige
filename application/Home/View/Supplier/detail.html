@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>供应商详情页</title>
+    <title>供应商详情</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
     <link rel="stylesheet" href="__PUBLIC__/css/app.css">
     <style>
+        h4 { margin: .5rem 0; }
+        hr { margin: 0; }
     </style>
 </head>
 
@@ -32,18 +34,19 @@
         </div>
         <!-- 右侧主要内容 -->
         <div class="tpl-content-wrapper">
-            <ol class="am-breadcrumb">
-                <li><a href="#" class="am-icon-home">首页</a></li>
-                <li><a href="#">供应商管理</a></li>
+            <ol class="am-breadcrumb" style="margin: 5px">
+                <li><a href="__APP__/Index" class="am-icon-home">首页</a></li>
+                <li><a href="__APP__/Supplier/Index">供应商管理</a></li>
                 <li class="am-active">供应商详情</li>
             </ol>
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
-                        <div class="tpl-portlet-input tpl-fz-ml">
+                    <div class="caption font-green bold">{$supplierInfo['supplier_name']}</div>
+                    <div class="tpl-portlet-input tpl-fz-ml">
                         <div class="am-btn-group am-btn-group-xs">
                             <button type="button" onclick="javascript:history.back(-1);" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-angle-left"></span> 返回</button>
-                            </div>
                         </div>
+                    </div>
                 </div>
                 <div class="tpl-block ">
                     <div class="am-g tpl-amazeui-form">
@@ -51,76 +54,115 @@
                             <form class="am-form am-form-horizontal">
                                 <!-- 公司信息 -->
                                 <h4>公司详细信息</h4>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">供应商名称</label>
                                     <div class="am-u-sm-4">
                                         {$supplierInfo['supplier_name']}
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">公司电话</label>
-                                    <div class="am-u-sm-4">
+                                    <div class="am-u-sm-4 am-u-end">
                                         {$supplierInfo['supplier_tel']}
                                     </div>
-                                    
                                 </div>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">所在区域</label>
-                                    <div class="am-u-sm-10">
+                                    <div class="am-u-sm-10 am-u-end">
                                         {$supplierInfo['local_name']}
                                     </div>
                                 </div>
-                                <div class="am-form-group">
-                                    <label class="am-u-sm-2 am-form-label">公司详细地址</label>
-                                    <div class="am-u-sm-10">
+                                <div class="am-form-group xg-form-group">
+                                    <label class="am-u-sm-2 am-form-label">街道</label>
+                                    <div class="am-u-sm-10 am-u-end">
                                         {$supplierInfo['address']}
                                     </div>
                                 </div>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">备用地址</label>
-                                    <div class="am-u-sm-10">
-                                        {$supplierInfo['spare_adress']}
+                                    <div class="am-u-sm-10 am-u-end">
+                                        {$supplierInfo['spare_address']}
+                                    </div>
+                                </div>
+                                <div class="am-form-group xg-form-group">
+                                    <label class="am-u-sm-2 am-form-label">备注</label>
+                                    <div class="am-u-sm-10 am-u-end">
+                                        {$supplierInfo['remark']}
                                     </div>
                                 </div>
                                 <hr/>
-
                                 <h4>可做产品</h4>
-                                    
-                                <div class="am-panel-group" id="accordion">
+                                <!-- <div class="am-panel-group" id="accordion">
                                 <foreach name="supplierProductInfo" key="key" item="spi">
                                     <div class="am-panel am-panel-default">
                                         <div class="am-panel-hd">
-                                          <h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#do-not-say-<?php echo $spi['productType']['type_name'] ?>'}">
+                                          <h6 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#do-not-say-<?php echo $spi['productType']['type_name'] ?>'}">
                                             {$spi['productType']['type_name']}
-                                          </h4>
+                                          </h6>
                                         </div>
                                         <div id="do-not-say-<?php echo $spi['productType']['type_name'] ?>" class="am-panel-collapse am-collapse am-in">
                                         <div class="am-panel-bd">
                                             <foreach name="supplierProductInfo[$key][productType][product]" key="k" item="p">
                                                 <span>
-                                                    <button type="button" class="am-btn am-btn-primary am-round">{$p['type_name']}</button>
+                                                    <button type="button" class="am-btn am-btn-success am-round" style="padding: .2rem 2rem; margin-right: 10px">{$p['type_name']}</button>
                                                 </span>
                                             </foreach>
                                         </div>
                                         </div>
                                     </div>
                                 </foreach>
-                                </div>
+                                </div> -->
+                                <foreach name="supplierProductInfo" key="key" item="spi">
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">{$spi['productType']['type_name']}</label>
+                                        <div class="am-u-sm-10">
+                                            <foreach name="supplierProductInfo[$key][productType][product]" key="k" item="p">
+                                                <span>
+                                                    <button type="button" class="am-btn am-btn-success am-round" style="padding: .2rem 2rem; margin-right: 10px">{$p['type_name']}</button>
+                                                </span>
+                                            </foreach>
+                                        </div>
+                                    </div>
+                                </foreach>
                                 <hr/>
                                 
                                 <h4>联系人信息</h4>
                                 <foreach name="supplierLinkmanInfo" item="v" key="k">
-                                    <div class="am-form-group">
-                                        <label class="am-u-sm-3 am-form-label">联系人</label>
+                                    <div class="am-form-group xg-form-group">
+                                        <label class="am-u-sm-2 am-form-label">联系人</label>
                                         <div class="am-u-sm-4">
                                             {$v['linkman_name']}
                                         </div>
                                         <label class="am-u-sm-2 am-form-label">联系电话
                                         </label>
-                                        <div class="am-u-sm-3">
+                                        <div class="am-u-sm-4 am-u-end">
                                             {$v['linkman_phone']}
                                         </div>
                                     </div>
-                                    <hr/>
                                 </foreach>
+                                <hr/>
+                                <!-- 其他信息 -->
+                                <h4>其他信息</h4>
+                                <div class="am-form-group xg-form-group">
+                                    <label class="am-u-sm-2 am-form-label">录入人</label>
+                                    <div class="am-u-sm-4">
+                                        {$supplierInfo['create_manager_name']}
+                                    </div>
+                                    <label class="am-u-sm-2 am-form-label">录入时间
+                                    </label>
+                                    <div class="am-u-sm-4 am-u-end">
+                                        {$supplierInfo['create_time']|date='Y-m-d H:i',###}
+                                    </div>
+                                </div>
+                                <div class="am-form-group xg-form-group">
+                                    <label class="am-u-sm-2 am-form-label">修改人</label>
+                                    <div class="am-u-sm-4">
+                                        {$supplierInfo['edit_manager_name']}
+                                    </div>
+                                    <label class="am-u-sm-2 am-form-label">修改时间
+                                    </label>
+                                    <div class="am-u-sm-4 am-u-end">
+                                        {$supplierInfo['update_time']|date='Y-m-d H:i',###}
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>

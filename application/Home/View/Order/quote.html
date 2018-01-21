@@ -22,7 +22,6 @@
     <script src="__PUBLIC__/js/jquery.min.js"></script>
 
 </head>
-
 <body data-type="generalComponents" class="abc">
     <!-- 网站头部 -->
     <header class="am-topbar am-topbar-inverse admin-header">
@@ -41,31 +40,10 @@
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
                     <div class="caption font-green bold">报价记录列表</div>
-                        <div class="tpl-portlet-input tpl-fz-ml">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <button type="button" class="btn btn-default " id="daterange-btn">
-                                        <span>
-                                            <if condition="$get['search_date_value'] != '' ">
-                                                {$get['search_date_value']}
-                                            <else/>
-                                                <i class="fa fa-calendar"></i> 日期选择
-                                            </if>
-                                        </span>
-                                            <i class="fa fa-caret-down"></i>
-                                        </button>
-                                        <button type="button" onclick="searchSubmit('date')" class="am-btn pull-right am-btn-success"></span> 确定</button>
-                                    </div>
-
-                                    <input type="hidden" value="{$get['search_date_value']}" id="hide_search_date" />
-
-                                </div>
-                            
-                        </div>
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
-                        <div class="am-u-sm-12 am-u-md-8">
+                        <div class="am-u-sm-2 am-u-md-2">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
                                     <button type="button" onclick="addQuote()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增报价</button>
@@ -74,29 +52,43 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="am-u-sm-12 am-u-md-2" >
-                            <div class="am-form-group" style="margin-left:30px;">
-                                搜索类型：
+                        <div class="am-u-sm-5 am-u-md-5">
+                            <div class="tpl-portlet-input tpl-fz-ml">
+                                <button type="button" class="btn btn-default " id="daterange-btn">
+                                    <span>
+                                        <if condition="$get['search_date_value'] != '' ">
+                                            {$get['search_date_value']}
+                                        <else/>
+                                            <i class="fa fa-calendar"></i> 日期选择
+                                        </if>
+                                    </span>
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                                <button type="button" onclick="searchSubmit('date')" class="am-btn pull-right am-btn-success"> 确定</button>
+                                <input type="hidden" value="{$get['search_date_value']}" id="hide_search_date" />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-3 am-u-md-3" >
+                            <div class="am-form-group" style="margin-left:30px;text-align: right;">
+                                <span style="font-size: 16px; vertical-align: middle;">搜索类型：</span>
                                 <select data-am-selected="{btnSize: 'sm'}" id="input_type_value">
-                                    
                                     <if condition="$get['input_type_value'] == customer ">
-                                        <option value="0" >全部信息</option>
+                                        <option value="0" >请选择条件</option>
                                         <option value="product">商品名称</option>
                                         <option value="customer" selected="selected">客户名称</option>
                                     <elseif condition="$get['input_type_value'] == product " />
-                                        <option value="0" >全部信息</option>
+                                        <option value="0" >请选择条件</option>
                                         <option value="product" selected="selected">商品名称</option>
                                         <option value="customer">客户名称</option>
                                     <else/>
-                                        <option value="0" selected="selected">全部信息</option>
+                                        <option value="0" selected="selected">请选择条件</option>
                                         <option value="product">商品名称</option>
                                         <option value="customer">客户名称</option>
                                     </if>
                                 </select>
                             </div>
                         </div>
-                        <div class="am-u-sm-12 am-u-md-2">
+                        <div class="am-u-sm-2 am-u-md-2">
                             <div class="am-input-group am-input-group-sm">
                                 <input type="text" class="am-form-field" placeholder="请先选择搜索类型" value="{$get['search_value']}" id="search_value">
                                 <span class="am-input-group-btn">
@@ -242,9 +234,6 @@
             }
         }
         
-
-        
-
         location.href='__APP__/Order/quote/input_type_value/'+input_type_value+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
     }
 
@@ -253,7 +242,6 @@
     function addQuote(){
         layer.open({
             type: 2,
-            offset: '20px',
             shadeClose : false,
             title: '新增报价',
             shade: 0.8,
@@ -267,7 +255,6 @@
     function updateQuote(id){
         layer.open({
                     type: 2,
-                    offset: '20px',
                     shadeClose : false,
                     title: '修改报价记录', 
                     shade: 0.8,
@@ -283,7 +270,6 @@
         layer.confirm('您确定要删除该条报价记录吗？', {
                 icon: 3,
                 anim:5,
-                offset: '200px',
                 title:'提示',
                 btn: ['确定','取消'] //按钮
             }, function(){
@@ -297,7 +283,6 @@
                             layer.confirm(res, {
                                 icon: 1,
                                 anim:5,
-                                offset: '200px',
                                 title:'提示',
                                 btn: ['确定'] //按钮
                             }, function(){
@@ -311,9 +296,7 @@
                 }          
             }, function(){
                 layer.msg('删除已取消！', {
-                time: 2000, //20s后自动关闭
-                offset: '200px',
-                // title:'提示'
+                time: 1000,
                 });
             });
     }

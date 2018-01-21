@@ -58,7 +58,6 @@
 					}
 				}
 			}
-
 			//对商品规格为空的数据进行提示处理
 			if(empty($specInfo)){
 				$specInfo['0']['parameter']['name'] = "商品规格";
@@ -72,7 +71,7 @@
 			if(empty($productModel)){
 				$productModel[]['name'] = "请先添加商品信息";
 			}
-
+			$this->assign("productName",$productName);
 			$this->assign("productModel",$productModel);
 			$this->assign("specInfo",$specInfo);
 			$this->assign("productSupplier",$productSupplier);
@@ -80,7 +79,6 @@
 
 			$this->display();
 		}
-
 		public function getProductSpec(){
 			$post = $_POST;
 			//查询商品型号对应的商品名称
@@ -144,7 +142,6 @@
 			echo $html;
 		}
 
-
 		//添加商品价格
 		public function productPrice(){
 
@@ -175,27 +172,190 @@
 			$this->display();
 		}
 
-		/*商品类型*/
+		// 服务类型管理页面
 		public function productType(){
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
 			$productTypeInfo = D("XgProductType")->getProductType();
-			
 			$this->assign("productTypeInfo",$productTypeInfo);
-			
 			$this->display();
 		}
-		/*商品参数*/
+		// 添加服务类型
+		public function addProductType(){
+			$post = $_POST;
+			if(!empty($post)){
+				$product['type_name'] = $post['product_type'];
+				$product['pid'] = $post['pid'];
+				$res = D("XgProductType")->addProductTypeInfo($product);
+				echo json_encode($res);
+			}else{
+				$this->display();
+			}
+		}
+		// 修改服务类型名称
+		public function updateProductType(){
+			$post = $_POST;
+			$get = $_GET;
+			
+			if(!empty($post)){
+				$id = $post['id'];
+				$product['type_name'] = $post['product_type'];
+
+				$res = D("XgProductType")->updateProductTypeInfo($product,$id);
+
+				echo json_encode($res);
+			}else{
+				//查询出对应的信息
+				$productTypeInfo = D("XgProductType")->getProduct($get['type_id']);
+
+				$this->assign("productTypeInfo",$productTypeInfo);
+
+				$this->display();
+			}
+		}
+		// 删除服务类型
+		public function deleteProductType(){
+			$post = $_POST;
+			//删除商品分类对应的规格信息
+			$res_spec = D("XgProductSpec")->deleteProductSpecByProduct_Id($post['type_id']);
+			//删除商品分类对应的型号信息
+			$product = D("XgProductType")->getProductTypeByPid($post['type_id']);
+			foreach ($product as $k => $v) {
+				$res_model[$v['id']] = D("XgProduct")->deleteProductModelByPid($v['id']);
+			}
+			//删除商品分类对应的名称信息
+			$res_name = D("XgProductType")->deleteProductByPid($post['type_id']);
+			//删除商品分类信息
+			$res_type = D("XgProductType")->deleteProductById($post['type_id']);
+			if($res_type > 0 ){
+				$res_str = "删除成功！";
+			}else{
+				$res_str = "删除失败！";
+			}
+			echo json_encode($res_str); 
+		}
+
+
+		// 产品规格页面
 		public function productParameter(){
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
-			$productParameterInfo = D("XgProductParameter")->getProductParameter();
-			
+			// dump($_GET['product_id']);exit;
+			$product_id = $_GET['product_id'];
+			if(empty($product_id)){
+				$productParameterInfo = D("XgProductParameter")->getProductParameter();
+			}else{
+				$parameter_id_str = D("XgProductType")->getParameterIdStr($product_id);
+				if(!empty($parameter_id_str[0]['parameter_id_str'])){
+					// dump($parameter_id_str);
+					$parameter_id_arr = explode(",",$parameter_id_str[0]['parameter_id_str']);
+					// dump($parameter_id_arr);
+					// dump(count($parameter_id_arr));
+					$num=count($parameter_id_arr);
+					for($i=0;$i<$num;$i++){
+						$id = $parameter_id_arr[$i];
+						// dump($id);
+						$productParameterdata = D("XgProductParameter")->getParameterByProduct($id);
+						// 判断选出的产品规格名称是否已被删除，如果已被删除将不会显示出来
+						if(!empty($productParameterdata)){
+							$productParameterInfo[] = $productParameterdata;
+						}
+						// dump($productParameterdata);
+					}
+					// dump($productParameterInfo);
+					// exit;	
+				}
+			}
 			$this->assign("productParameterInfo",$productParameterInfo);
 			
 			$this->display();
 		}
-		/*商品名称*/
+		// 验证产品规格名称是否已存在
+		public function checkProductParameter(){
+			if($_POST){
+				$name = $_POST["name"];
+				$data = D("XgProductParameter")->getProductParameterName($name);
+				if(empty($data)){
+					$res = 1;
+				}else{
+					$res = 0;
+				}
+				echo $res;
+			}
+		}
+		// 添加产品规格名称
+		public function addProductParameter(){
+			$post = $_POST;
+			if(!empty($post)){
+				$parameter['name'] = $post['name'];
+				$res = D("XgProductParameter")->addProductParameterInfo($parameter);
+				echo $res;
+			}else{
+				$this->display();
+			}		
+		}
+		// 修改产品规格名称
+		public function updateProductParameter(){
+			$post = $_POST;
+			$get = $_GET;
+			if(!empty($post)){
+				$id = $post['id'];
+				$parameter['name'] = $post['name'];
+				$res = D("XgProductParameter")->updateProductParameterInfo($parameter,$id);
+				echo json_encode($res);
+			}else{
+				//查询出对应的信息
+				$productParameterInfo = D("XgProductParameter")->getProductParameterById($get['parameter_id']);
+				// dump($productTypeInfo);
+				$this->assign("productParameterInfo",$productParameterInfo);
+
+				$this->display();
+			}
+		}
+		// 删除产品规格名称
+		public function deleteProductParameter(){
+			$post = $_POST;
+			// 删除有该规格的产品的规格id
+			$idStr = $post["parameter_id"];
+			// print_r($idStr);
+			$product = D("XgProductType")->getProductByParameterIdStr($idStr);
+			// print_r(sizeof($product));
+			$arrLength = count($product);
+			for ($i=0; $i < $arrLength; $i++) { 
+				// print_r($product[$i]["parameter_id_str"]);
+				$parameterIdStr = $product[$i]["parameter_id_str"];
+				$parameterIdArr = explode(",", $parameterIdStr);
+				// print_r($parameterIdArr);
+				foreach ($parameterIdArr as $k => $v) {
+					if($v == $idStr){
+						unset($parameterIdArr[$k]);
+					}
+				}
+				// print_r($parameterIdArr);
+				$newParameterIdStr = implode(",",$parameterIdArr);
+				// print_r($newParameterIdStr);
+				$productId = $parameterIdStr = $product[$i]["id"];
+				// print_r($productId);
+				$data['parameter_id_str'] = $newParameterIdStr;
+				// print_r($data);
+				$res_product = D("XgProductType")->updateParameterStrId($productId,$data);
+			}
+			// print_r($product);
+			// exit;
+			//删除产品对应的详细规格信息
+			$res_spec = D("XgProductSpec")->deleteProductSpecByParameter_id($post['parameter_id']);
+			//删除商品规格名称信息
+			$res_parameter = D("XgProductParameter")->deleteProductParameterById($post['parameter_id']);
+			if($res_parameter > 0 ){
+				$res_str = "删除成功！";
+			}else{
+				$res_str = "删除失败！";
+			}
+			echo json_encode($res_str); 
+		}
+
+
+		// 产品名称管理页面
 		public function productName(){
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
@@ -211,23 +371,24 @@
 			
 			//表xg_product_type中符合条件的总记录数
 			$count = D("XgProductType")->getProductCount($condition['where']);
-	 		$pageSize = 5;
+	 		$pageSize = 10;
 	 		//实例化分页类
 	 		$page = new \Think\Page($count,$pageSize);
 	 		//获取起始位置
 	 		$firstRow = $page->firstRow;
+	 		// 设置显示页码个数
+	 		$page->rollPage = 5;
 	 		//获取分页结果
 	 		$pageStr = $page->show();
 	 		//总页数
 	 		$totalPage = $page->totalPages;
-	 		
 	 		//查询商品名称
 	 		$condition['order'] = "id desc";
 	 		$condition['limit']['firstRow'] = $firstRow;
 	 		$condition['limit']['pageSize'] = $pageSize;
 
 	 		$productInfo = D("XgProductType")->getProductInfo($condition);
-	 		
+	 		// dump($productInfo);
 	 		foreach ($productInfo as $k => $v) {
 	 			//查询所属分类
 	 			$typeName = D("XgProductType")->getProductName($v['pid']);
@@ -235,6 +396,8 @@
 	 			//查询商品规格信息
 	 			// $parameter_id_str = rtrim($v['parameter_id_str'], ',');
 				$productParameterInfo = D("XgProductParameter")->getProductParameterByIdWhereIn($v['parameter_id_str']);
+				// dump($productParameterInfo);
+				$parameter = "";
 	 			if(!empty($productParameterInfo)){
 	 				foreach ($productParameterInfo as $kk => $vv) {
 	 					$parameter .= $vv['name']." / ";
@@ -242,8 +405,10 @@
 	 				$parameter = rtrim($parameter,' / ');
 	 				$productInfo[$k]['parameter'] = $parameter;
 	 			}
+	 			// dump($parameter);
 	 		}
-
+	 		// dump($productInfo);
+	 		// exit;
 			$this->assign("productInfo",$productInfo);
 			$this->assign("pageStr",$pageStr);
 			$this->assign("productType",$productType);
@@ -251,8 +416,74 @@
 
 			$this->display();
 		}
+		// 添加产品名称及其规格名称
+		public function addProductName(){
+			$post = $_POST;
+			//获取产品全部分类
+			$productTypeInfo = D("XgProductType")->getProductType();
+			//获取产品的全部规格类型
+			$productParameterInfo = D("XgProductParameter")->getProductParameter();
 
-		/*商品型号*/
+			if(!empty($post)){
+				$product['type_name'] = $post['type_name'];
+				$product['pid'] = $post['pid'];
+				$product['parameter_id_str'] = $post['parameter'];
+				
+				$res = D("XgProductType")->addProductTypeInfo($product);
+
+				echo json_encode($res);
+			}else{
+				$this->assign("productTypeInfo",$productTypeInfo);
+				$this->assign("productParameterInfo",$productParameterInfo);
+
+				$this->display();
+			}		
+		}
+		// 修改产品名称及其规格名称
+		public function updateProductName(){
+			$post = $_POST;
+			$get = $_GET;
+			if(!empty($post)){
+				$id = $post['id'];
+				$product['type_name'] = $post['type_name'];
+				$product['pid'] = $post['pid'];
+				$product['parameter_id_str'] = $post['parameter'];
+				$res = D("XgProductType")->updateProductTypeInfo($product,$id);
+				echo json_encode($res);
+			}else{
+				//查询出全部的商品分类信息
+				$productType = D("XgProductType")->getProductType();
+				//查询出对应的信息
+				$productTypeInfo = D("XgProductType")->getProduct($get['name_id']);
+				$selectParameter = explode(",", $productTypeInfo['0']['parameter_id_str']);
+				//查询商品规格的全部信息
+				$productParameterInfo = D("XgProductParameter")->getProductParameter();
+				$this->assign("productType",$productType);
+				$this->assign("productTypeInfo",$productTypeInfo);
+				$this->assign("productParameterInfo",$productParameterInfo);
+				$this->assign("selectParameter",$selectParameter);
+				$this->display();
+			}
+		}
+		// 删除产品名称及其相关数据
+		public function deleteProductName(){
+			$post = $_POST;
+			//删除商品名称对应的规格信息
+			$res_spec = D("XgProductSpec")->deleteProductSpecByProduct_Id($post['name_id']);
+			//删除商品名称对应的型号信息
+			$res_model = D("XgProduct")->deleteProductModelByPid($post['name_id']);
+			//删除商品名称信息
+			$res_name = D("XgProductType")->deleteProductById($post['name_id']);
+			if($res_name > 0 ){
+				$res_str = "删除成功！";
+			}else{
+				$res_str = "删除失败！";
+			}
+			echo json_encode($res_str); 
+		}
+
+
+		// 产品型号管理页面
 		public function productModel(){
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
@@ -276,7 +507,6 @@
 						$condition['product']['where'] = "pid > 0 ";
 						$productInfo = D("XgProductType")->getProductInfo($condition['product']);
 					}
-					
 				}else{
 					if(!empty($productInfo)){
 						foreach ($productInfo as $k => $v) {
@@ -290,11 +520,13 @@
 			
 			//表xg_product_type中符合条件的总记录数
 			$count = D("XgProduct")->getProductModelCount($condition['where']);
-	 		$pageSize = 5;
+	 		$pageSize = 10;
 	 		//实例化分页类
 	 		$page = new \Think\Page($count,$pageSize);
 	 		//获取起始位置
 	 		$firstRow = $page->firstRow;
+	 		// 设置显示页码个数
+	 		$page->rollPage = 5;
 	 		//获取分页结果
 	 		$pageStr = $page->show();
 	 		//总页数
@@ -329,8 +561,75 @@
 
 			$this->display();
 		}
+		// 添加产品型号
+		public function addProductModel(){
+			$post = $_POST;
+			//获取全部服务类型及产品名称
+			$productTypeInfo = D("XgProductType")->getProductType();
+			//获取全部产品名称
+			$condition['product']['where'] = "pid > 0 ";
+			$productNameInfo = D("XgProductType")->getProductInfo($condition['product']);
+			if(!empty($post)){
+				$product['name'] = $post['model_name'];
+				$product['pid'] = $post['pid'];
+				$res = D("XgProduct")->addProductModelInfo($product);
+				echo json_encode($res);
+			}else{
+				$this->assign("productTypeInfo",$productTypeInfo);
+				$this->assign("productNameInfo",$productNameInfo);
+				$this->display();
+			}		
+		}
+		// 修改商品型号
+		public function updateProductModel(){
+			$post = $_POST;
+			$get = $_GET;
+			
+			if(!empty($post)){
+				$id = $post['id'];
 
-		/*商品型号*/
+				$product['name'] = $post['model_name'];
+				$product['pid'] = $post['pid'];
+				
+				$res = D("XgProduct")->updateProductModelInfo($product,$id);
+
+				echo json_encode($res);
+			}else{
+				//查询出全部的商品分类信息
+				$productType = D("XgProductType")->getProductType();
+				//查询出全部的商品名称
+				$condition['product']['where'] = "pid > 0 ";
+				$productNameInfo = D("XgProductType")->getProductInfo($condition['product']);
+				//查询出对应的商品型号信息
+				$productModelInfo = D("XgProduct")->getProductById($get['model_id']);
+				//商品型号对应的商品信息
+				$productTypeId = D("XgProductType")->getProduct($productModelInfo['0']['pid']);
+				
+				$this->assign("productType",$productType);
+				$this->assign("productNameInfo",$productNameInfo);
+				$this->assign("productModelInfo",$productModelInfo);
+				$this->assign("productTypeId",$productTypeId);
+
+				$this->display();
+			}
+		}
+		// 删除商品型号信息
+		public function deleteProductModel(){
+			$post = $_POST;
+			//删除商品型号对应的规格信息
+			$res_spec = D("XgProductSpec")->deleteProductSpecByProduct_Model_Id($post['model_id']);
+			//删除商品型号信息
+			$res_model = D("XgProduct")->deleteProductModelById($post['model_id']);
+			if($res_model > 0 ){
+				$res_str = "删除成功！";
+			}else{
+				$res_str = "删除失败！";
+			}
+			echo json_encode($res_str); 
+		}
+
+
+		// 产品详细规格信息
 		public function productSpec(){
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
@@ -377,16 +676,16 @@
 				}
 				$where = implode(' and ',$whereArr);
 				$condition['spec']['where'] = $where;
-				
 			}
-			
 			//表xg_product_type中符合条件的总记录数
 			$count = D("XgProductSpec")->getProductSpecCount($condition['spec']['where']);
-	 		$pageSize = 3;
+	 		$pageSize = 15;
 	 		//实例化分页类
 	 		$page = new \Think\Page($count,$pageSize);
 	 		//获取起始位置
 	 		$firstRow = $page->firstRow;
+	 		// 设置显示页码个数
+	 		$page->rollPage = 5;
 	 		//获取分页结果
 	 		$pageStr = $page->show();
 	 		//总页数
@@ -427,86 +726,7 @@
 
 			$this->display();
 		}
-
-		/*添加商品服务类型*/
-		public function addProductType(){
-			$post = $_POST;
-			if(!empty($post)){
-				$product['type_name'] = $post['product_type'];
-				$product['pid'] = $post['pid'];
-
-				$res = D("XgProductType")->addProductTypeInfo($product);
-
-				echo json_encode($res);
-			}else{
-				$this->display();
-			}
-		}
-
-		/*添加商品规格名称*/
-		public function addProductParameter(){
-			$post = $_POST;
-			if(!empty($post)){
-				$parameter['name'] = $post['name'];
-				$parameter['name_pinyin'] = $post['name_pinyin'];
-
-				$res = D("XgProductParameter")->addProductParameterInfo($parameter);
-
-				echo json_encode($res);
-			}else{
-				$this->display();
-			}		
-		}
-
-		/*添加商品名称*/
-		public function addProductName(){
-			$post = $_POST;
-			//获取商品全部分类
-			$productTypeInfo = D("XgProductType")->getProductType();
-			//获取商品的全部规格类型
-			$productParameterInfo = D("XgProductParameter")->getProductParameter();
-
-			if(!empty($post)){
-				$product['type_name'] = $post['type_name'];
-				$product['pid'] = $post['pid'];
-				$product['parameter_id_str'] = $post['parameter'];
-				
-				$res = D("XgProductType")->addProductTypeInfo($product);
-
-				echo json_encode($res);
-			}else{
-				$this->assign("productTypeInfo",$productTypeInfo);
-				$this->assign("productParameterInfo",$productParameterInfo);
-
-				$this->display();
-			}		
-		}
-
-		/*添加商品型号*/
-		public function addProductModel(){
-			$post = $_POST;
-			//获取商品全部分类
-			$productTypeInfo = D("XgProductType")->getProductType();
-			//获取全部商品名称
-			$condition['product']['where'] = "pid > 0 ";
-			$productNameInfo = D("XgProductType")->getProductInfo($condition['product']);
-
-			if(!empty($post)){
-				$product['name'] = $post['model_name'];
-				$product['pid'] = $post['pid'];
-				
-				$res = D("XgProduct")->addProductModelInfo($product);
-
-				echo json_encode($res);
-			}else{
-				$this->assign("productTypeInfo",$productTypeInfo);
-				$this->assign("productNameInfo",$productNameInfo);
-
-				$this->display();
-			}		
-		}
-
-		/*添加商品规格*/
+		// 添加商品规格
 		public function addProductSpec(){
 			$post = $_POST;
 
@@ -538,7 +758,7 @@
 				$this->display();
 			}
 		}
-		/*添加商品规格*/
+		// 添加商品规格
 		public function addProductSpecVerify(){
 			$post = $_POST;
 			if(!empty($post)){
@@ -557,7 +777,58 @@
 				echo json_encode($resualt);
 			}
 		}
+		// 修改商品规格信息
+		public function updateProductSpec(){
+			$post = $_POST;
+			$get = $_GET;
+			
+			if(!empty($post)){
+				$id = $post['spec_id'];
 
+				$spec['spec_value']=$post['spec_value'];
+				$spec['parameter_id']=$post['parameter_id'];
+				$spec['product_type_id']=$post['type_id'];
+				$spec['product_id']=$post['id'];
+				$spec['product_model_id']=$post['model_id'];
+				
+				$res = D("XgProductSpec")->updateProductSpecInfo($spec,$id);
+
+				echo json_encode($res);
+			}else{
+				//查询出全部的商品分类信息
+				$productTypeInfo = D("XgProductType")->getProductType();
+				//查询出全部的商品名称
+				$condition['product']['where'] = "pid > 0 ";
+				$productNameInfo = D("XgProductType")->getProductInfo($condition['product']);
+				//查询出全部的商品型号信息
+				$productModelInfo = D("XgProduct")->getProductModelInfo();
+				//获取商品的规格名
+				$productParameterInfo = D("XgProductParameter")->getProductParameter();
+				//查询出对应的商品规格信息
+				$productSpecInfo = D("XgProductSpec")->getSpecById($get['spec_id']);
+				
+				$this->assign("productTypeInfo",$productTypeInfo);
+				$this->assign("productNameInfo",$productNameInfo);
+				$this->assign("productModelInfo",$productModelInfo);
+				$this->assign("productParameterInfo",$productParameterInfo);
+				$this->assign("productSpecInfo",$productSpecInfo);
+
+				$this->display();
+			}
+		}
+		// 删除产品规格信息
+		public function deleteProductSpec(){
+			$post = $_POST;
+			$res = D("XgProductSpec")->deleteProductSpecById($post['spec_id']);
+			if($res > 0){
+				$res_str = "删除成功！";
+			}else{
+				$res_str = "删除失败！";
+			}
+			echo json_encode($res_str); 
+		}
+
+		
 		/*添加商品规格*/
 		public function addProductPrice(){
 			$post = $_POST;
@@ -670,240 +941,7 @@
 				$this->display();
 			}
 		}
-
-		/*修改商品服务类型*/
-		public function updateProductType(){
-			$post = $_POST;
-			$get = $_GET;
-			
-			if(!empty($post)){
-				$id = $post['id'];
-				$product['type_name'] = $post['product_type'];
-
-				$res = D("XgProductType")->updateProductTypeInfo($product,$id);
-
-				echo json_encode($res);
-			}else{
-				//查询出对应的信息
-				$productTypeInfo = D("XgProductType")->getProduct($get['type_id']);
-
-				$this->assign("productTypeInfo",$productTypeInfo);
-
-				$this->display();
-			}
-		}
-
-		/*修改商品规格类型*/
-		public function updateProductParameter(){
-			$post = $_POST;
-			$get = $_GET;
-			
-			if(!empty($post)){
-				$id = $post['id'];
-				$parameter['name'] = $post['name'];
-				$parameter['name_pinyin'] = $post['name_pinyin'];
-
-				$res = D("XgProductParameter")->updateProductParameterInfo($parameter,$id);
-
-				echo json_encode($res);
-			}else{
-				//查询出对应的信息
-				$productParameterInfo = D("XgProductParameter")->getProductParameterById($get['parameter_id']);
-				// dump($productTypeInfo);
-				$this->assign("productParameterInfo",$productParameterInfo);
-
-				$this->display();
-			}
-		}
-
-		/*修改商品名称*/
-		public function updateProductName(){
-			$post = $_POST;
-			$get = $_GET;
-			
-			if(!empty($post)){
-				$id = $post['id'];
-
-				$product['type_name'] = $post['type_name'];
-				$product['pid'] = $post['pid'];
-				$product['parameter_id_str'] = $post['parameter'];
-
-				$res = D("XgProductType")->updateProductTypeInfo($product,$id);
-
-				echo json_encode($res);
-			}else{
-				//查询出全部的商品分类信息
-				$productType = D("XgProductType")->getProductType();
-				//查询出对应的信息
-				$productTypeInfo = D("XgProductType")->getProduct($get['name_id']);
-				$selectParameter = explode(",", $productTypeInfo['0']['parameter_id_str']);
-				//查询商品规格的全部信息
-				$productParameterInfo = D("XgProductParameter")->getProductParameter();
-				
-				$this->assign("productType",$productType);
-				$this->assign("productTypeInfo",$productTypeInfo);
-				$this->assign("productParameterInfo",$productParameterInfo);
-				$this->assign("selectParameter",$selectParameter);
-
-				$this->display();
-			}
-		}
-
-		/*修改商品型号*/
-		public function updateProductModel(){
-			$post = $_POST;
-			$get = $_GET;
-			
-			if(!empty($post)){
-				$id = $post['id'];
-
-				$product['name'] = $post['model_name'];
-				$product['pid'] = $post['pid'];
-				
-				$res = D("XgProduct")->updateProductModelInfo($product,$id);
-
-				echo json_encode($res);
-			}else{
-				//查询出全部的商品分类信息
-				$productType = D("XgProductType")->getProductType();
-				//查询出全部的商品名称
-				$condition['product']['where'] = "pid > 0 ";
-				$productNameInfo = D("XgProductType")->getProductInfo($condition['product']);
-				//查询出对应的商品型号信息
-				$productModelInfo = D("XgProduct")->getProductById($get['model_id']);
-				//商品型号对应的商品信息
-				$productTypeId = D("XgProductType")->getProduct($productModelInfo['0']['pid']);
-				
-				$this->assign("productType",$productType);
-				$this->assign("productNameInfo",$productNameInfo);
-				$this->assign("productModelInfo",$productModelInfo);
-				$this->assign("productTypeId",$productTypeId);
-
-				$this->display();
-			}
-		}
- 
-		/*修改商品规格信息*/
-		public function updateProductSpec(){
-			$post = $_POST;
-			$get = $_GET;
-			
-			if(!empty($post)){
-				$id = $post['spec_id'];
-
-				$spec['spec_value']=$post['spec_value'];
-				$spec['parameter_id']=$post['parameter_id'];
-				$spec['product_type_id']=$post['type_id'];
-				$spec['product_id']=$post['id'];
-				$spec['product_model_id']=$post['model_id'];
-				
-				$res = D("XgProductSpec")->updateProductSpecInfo($spec,$id);
-
-				echo json_encode($res);
-			}else{
-				//查询出全部的商品分类信息
-				$productTypeInfo = D("XgProductType")->getProductType();
-				//查询出全部的商品名称
-				$condition['product']['where'] = "pid > 0 ";
-				$productNameInfo = D("XgProductType")->getProductInfo($condition['product']);
-				//查询出全部的商品型号信息
-				$productModelInfo = D("XgProduct")->getProductModelInfo();
-				//获取商品的规格名
-				$productParameterInfo = D("XgProductParameter")->getProductParameter();
-				//查询出对应的商品规格信息
-				$productSpecInfo = D("XgProductSpec")->getSpecById($get['spec_id']);
-				
-				$this->assign("productTypeInfo",$productTypeInfo);
-				$this->assign("productNameInfo",$productNameInfo);
-				$this->assign("productModelInfo",$productModelInfo);
-				$this->assign("productParameterInfo",$productParameterInfo);
-				$this->assign("productSpecInfo",$productSpecInfo);
-
-				$this->display();
-			}
-		}
-
-		//删除商品分类信息
-		public function deleteProductType(){
-			$post = $_POST;
-			//删除商品分类对应的规格信息
-			$res_spec = D("XgProductSpec")->deleteProductSpecByProduct_Id($post['type_id']);
-			//删除商品分类对应的型号信息
-			$product = D("XgProductType")->getProductTypeByPid($post['type_id']);
-			foreach ($product as $k => $v) {
-				$res_model[$v['id']] = D("XgProduct")->deleteProductModelByPid($v['id']);
-			}
-			//删除商品分类对应的名称信息
-			$res_name = D("XgProductType")->deleteProductByPid($post['type_id']);
-			//删除商品分类信息
-			$res_type = D("XgProductType")->deleteProductById($post['type_id']);
-			if($res_type > 0 ){
-				$res_str = "删除成功！";
-			}else{
-				$res_str = "删除失败！";
-			}
-			echo json_encode($res_str); 
-		}
-
-		//删除商品规格名称信息
-		public function deleteProductParameter(){
-			$post = $_POST;
-			//删除商品名称对应的规格信息
-			$res_spec = D("XgProductSpec")->deleteProductSpecByParameter_id($post['parameter_id']);
-			//删除商品规格名称信息
-			$res_parameter = D("XgProductParameter")->deleteProductParameterById($post['parameter_id']);
-			if($res_parameter > 0 ){
-				$res_str = "删除成功！";
-			}else{
-				$res_str = "删除失败！";
-			}
-			echo json_encode($res_str); 
-		}
-
-		//删除商品名称信息
-		public function deleteProductName(){
-			$post = $_POST;
-			//删除商品名称对应的规格信息
-			$res_spec = D("XgProductSpec")->deleteProductSpecByProduct_Id($post['name_id']);
-			//删除商品名称对应的型号信息
-			$res_model = D("XgProduct")->deleteProductModelByPid($post['name_id']);
-			//删除商品名称信息
-			$res_name = D("XgProductType")->deleteProductById($post['name_id']);
-			if($res_name > 0 ){
-				$res_str = "删除成功！";
-			}else{
-				$res_str = "删除失败！";
-			}
-			echo json_encode($res_str); 
-		}
-
-		//删除商品型号信息
-		public function deleteProductModel(){
-			$post = $_POST;
-			//删除商品型号对应的规格信息
-			$res_spec = D("XgProductSpec")->deleteProductSpecByProduct_Model_Id($post['model_id']);
-			//删除商品型号信息
-			$res_model = D("XgProduct")->deleteProductModelById($post['model_id']);
-			if($res_model > 0 ){
-				$res_str = "删除成功！";
-			}else{
-				$res_str = "删除失败！";
-			}
-			echo json_encode($res_str); 
-		}
-
-		//删除商品规格信息
-		public function deleteProductSpec(){
-			$post = $_POST;
-			$res = D("XgProductSpec")->deleteProductSpecById($post['spec_id']);
-			if($res > 0){
-				$res_str = "删除成功！";
-			}else{
-				$res_str = "删除失败！";
-			}
-			echo json_encode($res_str); 
-		}
-
+		
 		//Ajax获取商品分类下的商品名称
 		public function getProductNames(){
 			$post = $_POST;

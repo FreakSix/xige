@@ -26,7 +26,7 @@
     </header>
     <div class="tpl-page-container tpl-page-header-fixed">
         <!-- 左侧菜单栏 -->
-        <div class="tpl-left-nav tpl-left-nav-hover xg-left-nav-3" nav="goods<?php echo $productModel[0][pid] ?>">
+        <div class="tpl-left-nav tpl-left-nav-hover xg-left-nav-3" nav="goods<?php echo $productName[0][id] ?>">
             <include file="Public:menu"/>
         </div>
         <!-- 右侧主要内容 -->
@@ -37,7 +37,7 @@
             <ol class="am-breadcrumb">
                 <li><a href="__APP__/Index/index" class="am-icon-home">首页</a></li>
                 <li><a href="#">产品信息</a></li>
-                <li class="am-active">名片</li>
+                <li class="am-active"><?php echo $productName[0][type_name] ?></li>
             </ol>
 
 

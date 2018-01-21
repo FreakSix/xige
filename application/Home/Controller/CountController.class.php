@@ -17,7 +17,6 @@
 			// 左侧菜单
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
-
 			$get=$_GET;
 			if($get['type'] == 'months'){
 				// var_dump($get['type']);
