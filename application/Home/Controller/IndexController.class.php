@@ -2,7 +2,7 @@
 	namespace Home\Controller;
 	use Think\Verify;
 	
-	class IndexController extends BaseController {
+	class IndexController extends BaseController { 
 		
 	    public function index(){
 	    	dump($_SESSION);exit;
