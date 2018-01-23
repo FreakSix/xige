@@ -1,0 +1,45 @@
+<table class="am-table am-table-striped am-table-hover table-main">
+    <thead>
+        <tr>
+            <th class="">登录时间</th>
+            <th class="">姓名</th>
+            <th class="">使用设备</th>
+            <th class="">操作系统</th>
+            <th class="">登录IP</th>
+            <th class="">IP归属度</th>
+        </tr>
+    </thead>
+    <tbody class="list_content">
+        <if condition="$loginLogArr">
+        <foreach name="loginLogArr" item="loginLog">
+         <tr>
+             <td>{$loginLog.addtime}</td>
+             <td>{$loginLog.truename}</td>
+             <td>{$loginLog.operate_tool}</td>
+             <td>{$loginLog.operate_system}</td>
+             <td>{$loginLog.ip}</td>
+             <td></td>
+         </tr>
+        </foreach>
+        </if>
+    </tbody>
+</table>
+<div class="am-cf">
+
+    <div class="am-fr">
+        <!-- {$pageStr} -->
+     <!-- <ul class="am-pagination am-pagination-right"> -->
+         {$pageStr}
+     <!-- </ul> -->
+     <!-- <ul class="am-pagination tpl-pagination">
+         <li class="am-disabled"><a href="#">«</a></li>
+         <li class="am-active"><a href="#">1</a></li>
+         <li><a href="#">2</a></li>
+         <li><a href="#">3</a></li>
+         <li><a href="#">4</a></li>
+         <li><a href="#">5</a></li>
+         <li><a href="#">»</a></li>
+     </ul> -->
+    </div>
+</div>
+<hr>

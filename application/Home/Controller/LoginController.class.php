@@ -6,7 +6,7 @@
 	class LoginController extends Controller{
 		
 		public function index(){
-			
+			print_r($_SESSION);
 			$this -> display();
 		}
 		
@@ -21,6 +21,14 @@
 			$trueCode = $_SESSION['trueCode'];
 			if($code != $trueCode){
 				echo "3";exit();
+			}
+			//检测用户是否已经登录，若已经登录，则直接跳转到首页
+			if($_SESSION['userInfo']){
+				$userInfo = $_SESSION['userInfo'];
+				if(($userInfo['username'] == $user && $userInfo['pass'] = $pass) or ($userInfo['tel'] == $user && $userInfo['pass'] = $pass)){
+					echo 0;
+					exit;
+				}
 			}
 			//根据登喜的信息获取密码(登录的信息可能是登录用户名，也可能是电话号码)
 			//现根据用户名获取信息
