@@ -17,9 +17,10 @@
     <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
     <link rel="stylesheet" href="__PUBLIC__/css/app.css">
     <style>
+        h4 { margin: .5rem 0; }
+        hr { margin: 0; }
     </style>
 </head>
-
 <body data-type="generalComponents">
     <div class="tpl-portlet-components">
         <div class="tpl-block ">
@@ -27,15 +28,14 @@
                 <div class="am-u-sm-12">
                     <form class="am-form am-form-horizontal">
                         <!-- 公司信息 -->
-                        <h5>客户信息</h5>
+                        <h4>客户信息</h4>
                         <div class="am-form-group">
                             <label class="am-u-sm-2 am-form-label">客户名称：</label>
-                            <div class="am-u-sm-5">
+                            <div class="am-u-sm-4">
                                 <input type="text" id="customer_name" value="">
                             </div>
                             <label for="user-name" class="am-u-sm-2 am-form-label">客户等级：</label>
-                            <div class="am-u-sm-3">
-                                
+                            <div class="am-u-sm-2 am-u-end">
                                 <select id="customer_level_discount">
                                     <option value="">请选择客户等级</option>
                                     <if condition="$customerLevelInfo != ''">
@@ -44,32 +44,30 @@
                                         </foreach>
                                     </if>
                                 </select>
-
-                                
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label class="am-u-sm-2 am-form-label">联系人：</label>
-                            <div class="am-u-sm-5">
+                            <div class="am-u-sm-4">
                                 <input type="text" id="linkman_name" value="">
                             </div>
                             <label class="am-u-sm-2 am-form-label">联系电话：</label>
-                            <div class="am-u-sm-3">
+                            <div class="am-u-sm-2 am-u-end">
                                 <input type="text" id="linkman_phone" value="">
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label class="am-u-sm-2 am-form-label">备注：</label>
-                            <div class="am-u-sm-10">
+                            <div class="am-u-sm-8 am-u-end">
                                 <input type="text" id="remark" value="">
                             </div>
                         </div>
                         <hr/>
                         <!-- 联系人信息 -->
-                        <h5>商品信息</h5>
+                        <h4>商品信息</h4>
                         <div class="am-form-group">
                             <label for="contact-name" class="am-u-sm-2 am-form-label">产品分类：</label>
-                            <div class="am-u-sm-4">
+                            <div class="am-u-sm-2">
                                 <select id="product_type">
                                     <option value="" onclick="getProductName(0,0)">请选择产品分类</option>
                                     <if condition="$productTypeInfo != ''">
@@ -83,7 +81,7 @@
 
                             </div>
                             <label for="contact-name" class="am-u-sm-2 am-form-label">产品名称：</label>
-                            <div class="am-u-sm-4">
+                            <div class="am-u-sm-4 am-u-end">
                                 <select id="product_name">
                                     <option value="" onclick="getProductModel(0)">请选择产品名称</option>
                                     <if condition="$productNameInfo != ''">
@@ -96,7 +94,7 @@
                         </div>
                         <div class="am-form-group">
                             <label for="contact-wechat" class="am-u-sm-2 am-form-label">产品型号：</label>
-                            <div class="am-u-sm-10 am-u-end">
+                            <div class="am-u-sm-8 am-u-end">
                                 <ul id="product_model">
                                     <span style="color: #f00;">请先选择产品！</span>
                                 </ul>
@@ -106,7 +104,7 @@
                         <div class="product_paramerter">
                             <div class="am-form-group">
                                 <label for="contact-department" class="am-u-sm-2 am-form-label">产品规格：</label>
-                                <div class="am-u-sm-10">
+                                <div class="am-u-sm-8 am-u-end">
                                     <ul>
                                         <li class="" value="1">
                                             <span style="color: #f00;">请先选择产品型号！</span>
@@ -141,7 +139,6 @@
                         <div class="am-form-group" id="select_supplier_group">
 
                         </div>
-
 
                         <div class="am-form-group">
                             <label for="contact-department" class="am-u-sm-2 am-form-label">数量：</label>
@@ -289,20 +286,16 @@
 
             //添加报价记录
             $.post("__APP__/Order/addQuoteInfo",{"customer_name":customer_name,"customer_level":customer_level,"linkman_name":linkman_name,"linkman_tel":linkman_phone,"remark":remark,"product_type_id":product_type_id,"product_name_id":product_name_id,"product_model_id":product_model_id,"product_spec_id_str":product_spec_str,"special_technologyh_id_str":special_techmology_str,"supplier_id":product_supplier_id,"supplier_name":product_supplier_name,"num":product_num,"discount_money":product_discount_money,"end_price":product_end_price_one,"end_money":product_end_price,"cost_price":product_cost_price},function(res){
+                    alert($res);return false;
                     if(res > 0 ){
-                        parent.layer.alert('报价记录添加成功！', {
-                                                            icon: 1,
-                                                            offset: '200px',
-                                                            title:'提示',
-                                                        });
+                        parent.layer.msg('报价记录添加成功！', {icon: 1,});
                         parent.location.href='__APP__/Order/quote';
                         var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                         parent.layer.close(index);
 
                     }else{
-                        parent.layer.alert('报价记录添加失败！', {
+                        parent.layer.alert('报价记录添加失败！请稍后重试！', {
                                                             icon: 5,
-                                                            offset: '200px',
                                                             title:'提示',
                                                         });
                         return false;
@@ -716,7 +709,7 @@
             $("#product_model").html(html);
         }
         function removeProductSpec(){
-            var html = "<div class='am-form-group'> <label for='contact-department' class='am-u-sm-2 am-form-label'>产品规格：</label> <div class='am-u-sm-10'> <ul> <li value='1'> <span style='color: #f00;'>请先选择产品型号！</span> </li> </ul> </div> </div> <input type='hidden' value='' id='post_parameter_spec_value' />";
+            var html = "<div class='am-form-group'> <label for='contact-department' class='am-u-sm-2 am-form-label'>产品规格：</label> <div class='am-u-sm-8 am-u-end'> <ul> <li value='1'> <span style='color: #f00;'>请先选择产品型号！</span> </li> </ul> </div> </div> <input type='hidden' value='' id='post_parameter_spec_value' />";
             $(".product_paramerter").html(' ');
             $(".product_paramerter").html(html);
         }

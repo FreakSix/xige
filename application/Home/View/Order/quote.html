@@ -40,35 +40,31 @@
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
                     <div class="caption font-green bold">报价记录列表</div>
+                    <div class="tpl-portlet-input tpl-fz-ml">
+                        <button type="button" class="btn btn-default " id="daterange-btn">
+                            <span>
+                                <if condition="$get['search_date_value'] != '' ">
+                                    {$get['search_date_value']}
+                                <else/>
+                                    日期选择
+                                </if>
+                            </span>
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <button type="button" onclick="searchSubmit('date')" class="am-btn pull-right am-btn-success"> 确定</button>
+                        <input type="hidden" value="{$get['search_date_value']}" id="hide_search_date" />
+                    </div>
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
-                        <div class="am-u-sm-2 am-u-md-2">
+                        <div class="am-u-sm-4 am-u-md-4">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
                                     <button type="button" onclick="addQuote()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增报价</button>
-                                    <!-- <div id="div1nnn" style="display:none;"><iframe src="add.html" width=100% height=100% id=""></iframe></div> -->
-                                    <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出数据</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="am-u-sm-5 am-u-md-5">
-                            <div class="tpl-portlet-input tpl-fz-ml">
-                                <button type="button" class="btn btn-default " id="daterange-btn">
-                                    <span>
-                                        <if condition="$get['search_date_value'] != '' ">
-                                            {$get['search_date_value']}
-                                        <else/>
-                                            <i class="fa fa-calendar"></i> 日期选择
-                                        </if>
-                                    </span>
-                                    <i class="fa fa-caret-down"></i>
-                                </button>
-                                <button type="button" onclick="searchSubmit('date')" class="am-btn pull-right am-btn-success"> 确定</button>
-                                <input type="hidden" value="{$get['search_date_value']}" id="hide_search_date" />
-                            </div>
-                        </div>
-                        <div class="am-u-sm-3 am-u-md-3" >
+                        <div class="am-u-sm-5 am-u-md-5" >
                             <div class="am-form-group" style="margin-left:30px;text-align: right;">
                                 <span style="font-size: 16px; vertical-align: middle;">搜索类型：</span>
                                 <select data-am-selected="{btnSize: 'sm'}" id="input_type_value">
@@ -88,7 +84,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="am-u-sm-2 am-u-md-2">
+                        <div class="am-u-sm-3 am-u-md-3 am-u-end">
                             <div class="am-input-group am-input-group-sm">
                                 <input type="text" class="am-form-field" placeholder="请先选择搜索类型" value="{$get['search_value']}" id="search_value">
                                 <span class="am-input-group-btn">
@@ -103,6 +99,7 @@
                                 <table class="am-table am-table-striped am-table-hover table-main">
                                     <thead>
                                         <tr>
+                                            <th class=""><input type="checkbox" class="tpl-table-fz-check xg-select-box"></th>
                                             <th >序号</th>
                                             <th class="">客户名称</th>
                                             <th class="">客户等级</th>
@@ -110,17 +107,17 @@
                                             <th class="">联系人电话</th>
                                             <th class="">商品名称</th>
                                             <th class="">数量</th>
-                                            <th class="">成本单价</th>
-                                            <th class="">参考报价</th>
-                                            <th class="">最终报价</th>
-                                            <!-- <th class="table-author am-hide-sm-only">录入人</th> -->
-                                            <th class="">录入时间</th>
+                                            <th class="">单价</th>
+                                            <th class="">总价</th>
+                                            <th class="">录入人</th>
+                                            <th class="am-hide-sm-only">录入时间</th>
                                             <th class="table-set">操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <foreach name="productQuoteInfo" item="v" key="k">
                                             <tr class="xg-table-tr">
+                                                <td><input type="checkbox" value="{$v['id']}" name="quote_id"></td>
                                                  <td>{$k+1}</td> 
                                                 <td><a href="__APP__/Order/quoteDetail/id/{$v['id']}">{$v['customer_name']}</a></td>
                                                 <td>{$v['level_name']}</td>
@@ -128,10 +125,9 @@
                                                 <td>{$v['linkman_tel']}</td>
                                                 <td>{$v['product_name']}</td>
                                                 <td>{$v['num']}</td>
-                                                <td>{$v['cost_price']}</td>
-                                                <td>{$v['discount_money']}</td>
+                                                <td>{$v['end_price']}</td>
                                                 <td>{$v['end_money']}</td>
-                                                <!-- <td class="am-hide-sm-only">{$v['manager_id']}</td> -->
+                                                <td>{$v['manager_name']}</td>
                                                 <td class="am-hide-sm-only">{$v['insert_time']}</td>
                                                 <td>
                                                     <div class="am-btn-toolbar">
@@ -147,7 +143,14 @@
                                     </tbody>
                                 </table>
                                 <div class="am-cf">
-
+                                    <div class="am-u-sm-4 am-u-md-4">
+                                        <div class="am-btn-toolbar">
+                                            <div class="am-btn-group am-btn-group-xs">
+                                                <button type="button" onclick="exportAllQuote()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 导出全部</button>
+                                                <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出选中</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="am-fr">
                                         {$pageStr}
                                     </div>
@@ -173,23 +176,20 @@
     // 日期插件
     $('#daterange-btn').daterangepicker({
             ranges: {
-                '今天': [moment(), moment()],
+                '全部': ['2013-01-01', moment()],
                 '本周': [moment().startOf('week'), moment().endOf('week')],
                 '本月': [moment().startOf('month'), moment().endOf('month')],
                 '今年': [moment().startOf('year'), moment().endOf('year')]
             },
-            startDate: moment(),
-            endDate: moment().endOf('month')
-        },
-        function(start, end) {
-            $('#daterange-btn span').html(start.format('YYYY年MMMD日') + ' - ' + end.format('YYYY年MMMD日'));
+            startDate: moment().startOf('month'),
+            endDate: moment(),
+            opens:'left'
+    },function(start, end) {
+            $('#daterange-btn span').html(start.format('YYYY-MM-DD') + ' 到 ' + end.format('YYYY-MM-DD'));
 
-            $("#hide_search_date").val(start.format('YYYY年MMMD日') + "-" + end.format('YYYY年MMMD日'));
+            $("#hide_search_date").val(start.format('YYYY-MM-DD') + "To" + end.format('YYYY-MM-DD'));
             // alert(start.format('YYYYMMDD') + " " + end.format('YYYYMMDD'));
-
-
-        }
-    );
+    });
 
     //确定时间后搜索
     function searchSubmit(name){
@@ -202,10 +202,9 @@
         // alert(search_date_value);
         if(name == 'date'){
             if(search_date_value == ''){
-                layer.alert("请选择日期！", {icon: 5,offset: '200px',});
+                layer.alert("请选择日期！", {icon: 5,});
                 return false;
             }
-
             if(search_value == ''){
                 input_type_value = 0;
             }
@@ -214,29 +213,23 @@
                 search_date_value = 0;
             }
         }
-        
-        
-
         if(name == 'input'){
             if(input_type_value == 0){
                 search_value = 0;
             }else{
                 if(search_value == ''){
-                    layer.alert("搜索内容不能为空！", {icon: 5,offset: '200px',});
+                    layer.msg("搜索内容不能为空！", {icon: 5,time:1500,});
                     $("#search_value").focus();
                     return false;
                 }
             }
-            
         }else{
             if(search_value == ''){
                 search_value = 0;
             }
         }
-        
         location.href='__APP__/Order/quote/input_type_value/'+input_type_value+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
     }
-
 
     // 新增报价记录
     function addQuote(){
@@ -299,6 +292,18 @@
                 time: 1000,
                 });
             });
+    }
+
+    // 导出检索出来的全部报价记录
+    function exportAllQuote(){
+        var search_date_value = $("#hide_search_date").val();
+        alert(search_date_value);
+        var input_type_value = $("#input_type_value").val();
+        alert(input_type_value);
+        var search_value = $.trim($("#search_value").val());
+        alert(search_value);
+        return false;
+        window.location="__APP__/Order/exportQuote/input_type_value/"+input_type_value+"/search_value/"+search_value+"/search_date_value/"+search_date_value;
     }
 
 </script>

@@ -2259,6 +2259,10 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     .xg-hide {
         display: none !important;
     }
+    .xg-layer-size {
+        width: 1000px;
+        min-height: 200px!important;
+    }
    
 }
 /* @media screen and (max-width: 640px) {

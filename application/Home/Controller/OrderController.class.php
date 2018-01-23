@@ -79,6 +79,14 @@
 
 			if(!empty($productOrderInfo)){
 				foreach ($productOrderInfo as $k => $v) {
+					//订单总成本计算处理
+					$order_cost_money = 0;
+					$order_product_id_arr = explode(",", $v['order_product_id']);
+					foreach ($order_product_id_arr as $kk => $vv) {
+						$orderProductInfo = D("XgOrderProduct")->getOrderProductInfoById($vv);
+						$order_cost_money = $order_cost_money+$orderProductInfo['cost_money'];
+					}
+					$productOrderInfo[$k]['cost_money'] = $order_cost_money;
 					//订单状态处理
 					if($v['order_status'] == 1){
 						$productOrderInfo[$k]['order_status_value'] = "生产中";
@@ -268,17 +276,53 @@
 			if(!empty($post)){
 				//获取订单编号
 				$today =  date("Y-m-d",time());
-				
-				for ($i=0; $i < 4; $i++) { 
-					$randNum .= rand(0,9);
-				}
 				$todayDate = str_replace('-','',$today);
-				$order_id = $todayDate.$randNum;
+				$condition['where'] = "order_id like '".$todayDate."%'";
+				$todayOrderNum = D("XgOrder")->getOrderCount($condition);
+
+				$todayDate = (int)$todayDate*1000;
+				$order_id = $todayDate+($todayOrderNum+1);
 				//获取客户名称
 				$customerInfo = D("XgCustomer")->getCustomerInfo($post['customer_id']);
 				$customerName = $customerInfo['cname'];
 				//对交货日期进行处理
 				$trade_time = strtotime($post['trade_time']);
+
+				$data['order_id']= $order_id;
+				$data['customer_id'] = $post['customer_id'];
+				$data['customer_name'] = $customerName;
+				$data['trade_time'] = $trade_time;
+				$data['linkman_name'] = $post['linkman_name'];
+				$data['linkman_tel'] = $post['linkman_tel'];
+				$data['link_address'] = $post['link_address'];
+				$data['order_product_id'] = $post['order_product_id'];
+				$data['order_money'] = $post['order_money'];
+				$data['order_remarks'] = $post['order_remarks'];
+				$data['add_time'] = time();
+				$data['add_manager_name'] = $_SESSION['userInfo']['truename'];
+
+				$res = D("XgOrder")->addOrderInfo($data);
+				//如果新增订单成功，则把该订单的ID 和订单编号存入对应的订单商品信息内
+				if($res > 0){
+					$order_product_id_arr = explode(",", $post['order_product_id']);
+					foreach ($order_product_id_arr as $k => $v) {
+						$orderProductData['order_id'] = $res;
+						$orderProductData['order_num'] = $order_id;
+
+						$res_2 = D("XgOrderProduct")->updateOrderProductInfo($orderProductData,$v);
+					}
+				}
+				echo $res;
+
+			}
+		}
+
+		//添加订单商品信息
+		public function addOrderProductInfo(){
+			$post=$_POST;
+			// dump($post);
+			$data = array();
+			if(!empty($post)){
 				//获取产品分类名称
 				$productTypeInfo = D("XgProductType")->getProductName($post['product_type']);
 				$productTypeName = $productTypeInfo['0']['type_name'];
@@ -299,14 +343,6 @@
 				sort($spec_arr);
 				$spec_str = implode(",",$spec_arr);
 
-
-				$data['order_id']= $order_id;
-				$data['customer_id'] = $post['customer_id'];
-				$data['customer_name'] = $customerName;
-				$data['trade_time'] = $trade_time;
-				$data['linkman_name'] = $post['linkman_name'];
-				$data['linkman_tel'] = $post['linkman_tel'];
-				$data['link_address'] = $post['link_address'];
 				$data['product_type_id'] = $post['product_type'];
 				$data['product_type'] = $productTypeName;
 				$data['product_name_id'] = $post['product_name'];
@@ -324,13 +360,14 @@
 				$data['end_price'] = $post['end_price'];
 				$data['end_money'] = $post['end_money'];
 				$data['cost_price'] = $post['cost_price'];
+				$data['product_remarks'] = $post['product_remark'];
 				$data['add_time'] = time();
-				$data['manager_name'] = $_SESSION['userInfo']['truename'];
-				$res = D("XgOrder")->addOrderInfo($data);
+				$res = D("XgOrderProduct")->addOrderProductInfo($data);
 				echo $res;
 
 			}
 		}
+
 		// 订单详情页
 		public function detail(){
 			// 左侧菜单
@@ -538,29 +575,28 @@
 			// 左侧菜单
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
-
 			$get = $_GET;
 			// dump($get);
-
 			$condition = array();
 			if(!empty($get)){
 				//如果有时间
 				if($get['search_date_value'] ){
-					$dateTimeArr = explode("-", $get['search_date_value']);
-					foreach ($dateTimeArr as $k => $v) {
-						$str = str_replace('年','-',$v);
-						$str = str_replace('月','-',$str);
-						$str = rtrim($str,"日");
-						$dateTimeArr_2[] = $str;
-					}
-					$startTime = strtotime($dateTimeArr_2['0']);
-					$endTime = (strtotime($dateTimeArr_2['1'])) + 86400;
+					// dump($get);
+					$dateTimeArr = explode("To", $get['search_date_value']);
+					// dump($dateTimeArr);exit;
+					// foreach ($dateTimeArr as $k => $v) {
+					// 	$str = str_replace('年','-',$v);
+					// 	$str = str_replace('月','-',$str);
+					// 	$str = rtrim($str,"日");
+					// 	$dateTimeArr_2[] = $str;
+					// }
+					$startTime = strtotime($dateTimeArr['0']);
+					$endTime = (strtotime($dateTimeArr['1'])) + 86400;
 
 					$whereArr[] = "add_time >= '".$startTime."' and add_time < '".$endTime."'";
 				}else{
 					$get['search_date_value'] = '';
 				}
-
 				//如果有输入值搜索
 				if($get['search_value']){
 					if($get['input_type_value'] == 'customer'){
@@ -583,11 +619,13 @@
 			//订单信息中符合条件的总记录数
 			$count = D("XgQuote")->getQuoteCount($condition);
 			// dump($count);
-	 		$pageSize = 3;
+	 		$pageSize = 15;
 	 		//实例化分页类
 	 		$page = new \Think\Page($count,$pageSize);
 	 		//获取起始位置
 	 		$firstRow = $page->firstRow;
+	 		// 设置显示页码个数
+	 		$page->rollPage = 5;
 	 		//获取分页结果
 	 		$pageStr = $page->show();
 	 		//总页数
@@ -665,7 +703,6 @@
 			$this->display("quote_detail");
 		}
 
-
 		// 新增报价记录页面
 		public function addQuote(){
 			//客户等级信息
@@ -685,7 +722,7 @@
 		//添加订单信息
 		public function addQuoteInfo(){
 			$post=$_POST;
-			// dump($post);
+			dump($post);exit;
 			$data = array();
 			if(!empty($post)){
 				//获取产品分类名称
@@ -724,12 +761,12 @@
 				$data['supplier_id'] = $post['supplier_id'];
 				$data['supplier_name'] = $post['supplier_name'];
 				$data['num'] = $post['num']; 
+				$data['cost_price'] = $post['cost_price'];
 				$data['discount_money'] = $post['discount_money'];
 				$data['end_price'] = $post['end_price'];
 				$data['end_money'] = $post['end_money'];
-				$data['cost_price'] = $post['cost_price'];
 				$data['add_time'] = time();
-
+				$data['manager_name'] = $_SESSION['userInfo']['truename'];
 				// dump($data);
 				$res = D("XgQuote")->addQuoteInfo($data);
 				echo $res;
@@ -752,8 +789,8 @@
 				$data['linkman_name'] = $post['linkman_name'];
 				$data['linkman_tel'] = $post['linkman_phone'];
 				$data['remark'] = $post['remark'];
+				$data['end_price'] = $post['end_price'];
 				$data['end_money'] = $post['end_money'];
-
 				$res = D("XgQuote")->updateQuoteInfo($data,$id);
 
 				echo json_encode($res);
@@ -810,7 +847,6 @@
 			echo json_encode($res_str);
 		}
 
-
 		//获得全部的产品名称信息
 		public function getProductNameInfoAll(){
 			$condition['where'] = "pid > 0";
@@ -822,6 +858,11 @@
 				}
 			}
 			echo $html;
+		}
+
+		// 导出检索出的全部报价记录
+		public function exportQuote(){
+			dump($_GET);exit;
 		}
 
 
@@ -862,7 +903,7 @@
 			$html = "<option value='' onclick='getProductModel(0)'>请选择产品名称</option>";
 			if(!empty($productTypeFirst)){
 				foreach($productTypeFirst as $k=>$v){
-					$html .= " <option value='".$v['id']."' onclick='getProductModel(".$v['id'].")'>".$v['type_name']."</option>";
+					$html .= " <option value='".$v['id']."' onclick=getProductModel('".$v['id']."','".$v['type_name']."')>".$v['type_name']."</option>";
 				}
 			}
 			echo $html;
@@ -924,7 +965,7 @@
 			$this->assign("parameterSpec",$parameterSpec);
 			$this->assign("parameterStr",$parameterStr);
 			$this->display("common_parameter");
-		}
+		}  
 
 
 		/**
@@ -1039,10 +1080,50 @@
 
 			$condition = "product_type_id = '".$post['product_type_id']."' and product_name_id = '".$post['product_name_id']."' and product_model_id = '".$post['product_model_id']."' and product_spec_id_str = '".$spec_str."' order by id desc limit 0,3";
 
-			$productHistoryOrderInfo = D("XgOrder")->getProductOrderInfo($condition);
+			$productHistoryOrderInfo = D("XgOrderProduct")->getOrderProductInfo($condition);
+			if(!empty($productHistoryOrderInfo)){
+				foreach ($productHistoryOrderInfo as $kk => $vv) {
+					$thisOrderInfo = D("XgOrder")->getOrderInfoById($vv['order_id']); 
+					$productHistoryOrderInfo[$kk]['customer_name'] = $thisOrderInfo['customer_name'];
+				}
+			}
 			//查询历史报价信息
-
 			$productHistoryQuoteInfo = D("XgQuote")->getProductQuoteInfo($condition);
+
+			// //计算草考价格
+			// if(empty($post['customer_level'])){
+			// 	$customerInfo = D("XgCustomer")->getCustomerInfo($post['customer_id']);
+			// 	if(!empty($customerInfo)){
+			// 		$customerLevel = D("XgCustomer")->getLevelInfoByLevel($customerInfo['rank']);
+			// 		$levelDiscount = $customerLevel['level_discount'];
+					
+			// 		$discountMoneyVal = $levelDiscount*($post['product_num']*$post['product_cost_price']);
+			// 		$discountMoney['money'] = $discountMoneyVal;
+			// 		$discountMoney['money_1'] = "￥ ";
+			// 		$discountMoney['money_2'] = " 元";
+			// 	}else{
+			// 		$discountMoney['money'] = "请输入该产品的成本单价！";
+			// 		$discountMoney['money_1'] = " ";
+			// 		$discountMoney['money_2'] = " ";
+			// 	}
+			// }else{
+			// 	//根据客户等级ID获取等级信息 
+			// 	$customerLevelInfo = D("XgCustomerLevel")->getLevelInfoById($post['customer_level']);
+			// 	$discountMoneyVal = $customerLevelInfo['level_discount']*($post['product_num']*$post['product_cost_price']);
+			// 	$discountMoney['money'] = $discountMoneyVal;
+			// 	$discountMoney['money_1'] = "￥ ";
+			// 	$discountMoney['money_2'] = " 元";
+			// }
+
+			$this->assign("productHistoryOrderInfo",$productHistoryOrderInfo);
+			$this->assign("productHistoryQuoteInfo",$productHistoryQuoteInfo);
+			// $this->assign("discountMoney",$discountMoney);
+			$this->display("common_order_refer_info");
+		}
+
+		//商品参考报价信息
+		public function getOrderReferInfoMoney(){
+			$post=$_POST;
 
 			//计算草考价格
 			if(empty($post['customer_level'])){
@@ -1069,10 +1150,8 @@
 				$discountMoney['money_2'] = " 元";
 			}
 
-			$this->assign("productHistoryOrderInfo",$productHistoryOrderInfo);
-			$this->assign("productHistoryQuoteInfo",$productHistoryQuoteInfo);
 			$this->assign("discountMoney",$discountMoney);
-			$this->display("common_order_refer_info");
+			$this->display("common_order_refer_info_money");
 		}
 
 
@@ -1253,6 +1332,37 @@
 				$res_str = "删除失败！";
 			}
 			echo json_encode($res_str);
+		}
+
+
+		//新增订单时添加商品信息弹窗页面
+		public function addProductInfo(){
+			$productTypeModel = D("XgProductType");
+			$productTypeFirst = $productTypeModel->getProductTypeByPid(0);
+			//全部产品名称
+			$condition['where'] = "pid > 0";
+			$productNameFirst = D("XgProductType")->getProductInfo($condition);
+			
+			$this->assign("productTypeFirst",$productTypeFirst);
+			$this->assign("productNameFirst",$productNameFirst);
+			$this->assign("get",$_GET);
+			$this->display("add_product_info");
+		}
+
+		//订单页面计算订单总价
+		public function getOrderAllMoney(){
+			$post = $_POST;
+			$allMoney = 0;
+			if(!empty($post)){
+				$order_product_id_arr = explode(",", $post['order_product_id']);
+				foreach ($order_product_id_arr as $k => $v) {
+					$orderProductInfo = D("XgOrderProduct")->getOrderProductInfoById($v);
+					$allMoney = $allMoney+$orderProductInfo['end_money'];
+
+				}
+			}
+
+			echo $allMoney;
 		}
 
 
