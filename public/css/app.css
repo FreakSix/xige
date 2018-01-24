@@ -2200,6 +2200,10 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 .xg-table-center {
     text-align: center;
 }
+.xg-layer-size {
+        width: auto!important;
+        min-height: 200px!important;
+    }
 @media screen and (min-width: 1400px) {
     .tpl-content-wrapper {
         
@@ -2260,7 +2264,7 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
         display: none !important;
     }
     .xg-layer-size {
-        width: 1000px;
+        width: 960px;
         min-height: 200px!important;
     }
    

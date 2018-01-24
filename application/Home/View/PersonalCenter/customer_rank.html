@@ -76,37 +76,11 @@
                                             </td>
                                         </tr>
                                         </foreach>
-                                        <!-- <tr class="xg-table-tr">
-                                            <td>黄金会员</td>
-                                            <td>1.2</td>
-                                            <td>
-                                                <div class="am-btn-toolbar">
-                                                    <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateCustomerRank()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteCustomerRank()"><span class="am-icon-trash-o"></span> 删除</button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr> -->
-
                                     </tbody>
                                 </table>
                                 <div class="am-cf">
-
                                     <div class="am-fr">
-                                        <!-- {$pageStr} -->
-                                        <!-- <ul class="am-pagination am-pagination-right"> -->
                                             {$pageStr}
-                                        <!-- </ul> -->
-                                        <!-- <ul class="am-pagination tpl-pagination">
-                                            <li class="am-disabled"><a href="#">«</a></li>
-                                            <li class="am-active"><a href="#">1</a></li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                            <li><a href="#">4</a></li>
-                                            <li><a href="#">5</a></li>
-                                            <li><a href="#">»</a></li>
-                                        </ul> -->
                                     </div>
                                 </div>
                                 <hr>
@@ -123,78 +97,65 @@
     <script src="__PUBLIC__/js/plus.js"></script>
     <script src="__PUBLIC__/js/echarts.min.js"></script>
     <script src="__PUBLIC__/layer/layer.js"></script>
-    <script type="text/javascript">
-        // 添加部门页面
-        function addCustomerRank(){
-            layer.open({
-                type: 2,
-                offset: '150px',
-                title: '添加部门',
-                shadeClose: true,
-                shade: 0.8,
-                area: ['40%', '50%'],
-                btn: ['关闭'],
-                content: '__APP__/PersonalCenter/addCustomerRank' //iframe的url
-            });
-        }
-        // 添加部门页面
-        function updateCustomerRank(id){
-            layer.open({
-                type: 2,
-                offset: '150px',
-                title: '修改部门名称',
-                shadeClose: true,
-                shade: 0.8,
-                area: ['40%', '50%'],
-                btn: ['关闭'],
-                content: '__APP__/PersonalCenter/updateCustomerRank/id/'+id //iframe的url
-            });
-        }
-        // 删除信息提示
-        function deleteCustomerRank(id){
-            layer.confirm('您确定要删除该条客户等级的信息吗？', {
-                icon: 3,
-                anim:5,
-                offset: '200px',
-                title:'提示',
-                btn: ['确定','取消'] //按钮
-            }, function(){
-                if(id){
-                    $.ajax({
-                        url:'__APP__/PersonalCenter/deleteCustomerRank',
-                        data:'id='+id,
-                        type:'post',
-                        dataType:'json',
-                        success:function(res){
-                        	if(res == 1){
-                        		var tihsiContent = "删除该条客户等级的信息成功！";
-                        	}else{
-                        		var tihsiContent = "删除该条客户等级的信息失败！";
-                        	}
-                            layer.confirm(tihsiContent, {
-                                icon: 1,
+<script type="text/javascript">
+    // 添加部门页面
+    function addCustomerRank(){
+        layer.open({
+            type: 2,
+            title: '添加部门',
+            shade: 0.8,
+            area: ['40%', '50%'],
+            btn: ['关闭'],
+            content: '__APP__/PersonalCenter/addCustomerRank' //iframe的url
+        });
+    }
+    // 修改部门页面
+    function updateCustomerRank(id){
+        layer.open({
+            type: 2,
+            title: '修改部门名称',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['40%', '50%'],
+            btn: ['关闭'],
+            content: '__APP__/PersonalCenter/updateCustomerRank/id/'+id //iframe的url
+        });
+    }
+    // 删除信息提示
+    function deleteCustomerRank(id){
+        layer.confirm('您确定要删除该条客户等级的信息吗？', {
+            icon: 3,
+            anim:5,
+            title:'提示',
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            if(id){
+                $.ajax({
+                    url:'__APP__/PersonalCenter/deleteCustomerRank',
+                    data:'id='+id,
+                    type:'post',
+                    dataType:'json',
+                    success:function(res){
+                    	if(res == 1){
+                    		var tihsiContent = "删除该条客户等级的信息成功！";
+                            layer.msg("删除该条客户等级的信息成功！", {icon: 1,anim:5,});
+                            window.location.reload();
+                    	}else{
+                            layer.confirm("删除该条客户等级的信息失败！", {
+                                icon: 5,
                                 anim:5,
-                                offset: '200px',
                                 title:'提示',
                                 btn: ['确定'] //按钮
-                            }, function(){
-                                window.location.reload();       
                             });
-                        }
-                    });
-
-                }else{
-                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
-                }          
-            }, function(){
-                layer.msg('删除已取消！', {
-                time: 2000, //20s后自动关闭
-                offset: '200px',
-                // title:'提示'
+                    	}
+                    }
                 });
-            });
-        }
-    </script>
+            }else{
+                layer.alert('删除失败！请稍后重试', {icon: 5,title:'提示'});
+            }          
+        });
+    }
+</script>
 </body>
 
 </html>

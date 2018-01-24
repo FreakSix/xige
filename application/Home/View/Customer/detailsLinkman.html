@@ -24,7 +24,7 @@
 </head>
 
 <body data-type="generalComponents">
-    <div class="tpl-portlet-components">
+    <div class="tpl-portlet-components xg-layer-size" style="min-height: 200px">
         
         <div class="am-g">
             <div class="am-u-sm-12">
@@ -47,55 +47,46 @@
                                 <td>
                                     <div class="am-btn-toolbar">
                                         <div class="am-btn-group am-btn-group-xs">
-                                            <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletes({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
+                                            <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletes('deleteCustomerLXR',{$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
                                         </div>
                                     </div>
                                 </td>   
                             </tr>
                             </foreach>
-                            
                         </tbody>
                     </table>
                 </form>
             </div>
         </div>
     </div>
-
 <script>
-    function deletes(id){
-        layer.confirm('您确定要删除该联系人信息吗？', {
-            icon: 3,
-            anim:5,
-            offset: '80px',
-            title:'提示',
-            btn: ['确定','取消'] //按钮
-        }, function(){
-            if(id){
-                $.ajax({
-                    url:'__APP__/Customer/deletesLinkman',
-                    data:'linkman_id='+id,
-                    dataType:'json',
-                    success:function(res){
-                        layer.confirm(res, {
-                            icon: 1,
-                            anim:5,
-                            offset: '80px',
-                            title:'提示',
-                            btn: ['确定'] //按钮
-                        }, function(){
-                            window.location.reload();       
-                        });
-                    }
-                });
-
+    function deletes(powerName,id){
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
             }else{
-                layer.alert('删除失败！', {icon: 1,offset: '80px',title:'提示'});
-            }          
-        }, function(){
-            layer.msg('已取消！', {
-            time: 2000, //20s后自动关闭
-            offset: '100px',
-            });
+                layer.confirm('您确定要删除该联系人信息吗？', {
+                    icon: 3,
+                    anim:5,
+                    title:'提示',
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    if(id){
+                        $.ajax({
+                            url:'__APP__/Customer/deletesLinkman',
+                            data:'linkman_id='+id,
+                            dataType:'json',
+                            success:function(res){
+                                layer.msg(res, {icon: 1,anim:5,});
+                                window.location.reload();
+                            }
+                        });
+                    }else{
+                        layer.alert('删除失败！请稍候重试', {icon: 5,title:'提示'});
+                    }          
+                });
+            }
         });
     }
 </script>

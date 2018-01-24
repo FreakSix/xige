@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>添加部门信息</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +21,7 @@
 </head>
 
 <body data-type="generalComponents">
-    <div class="tpl-portlet-components">
+    <div class="tpl-portlet-components xg-layer-size">
         <div class="tpl-block ">
             <div class="am-g tpl-amazeui-form">
                 <div class="am-u-sm-12">
@@ -46,7 +46,6 @@
         </div>
     </div>
 
-
     <script src="__PUBLIC__/js/jquery.min.js"></script>
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
@@ -57,10 +56,10 @@
 		var depart_name = $("input[name=department_name]").val();
 		$.post("__APP__/PersonalCenter/saveNewAddDepartment",{"depart_name":depart_name},function(res){
 			if(res == 1){
-				alert("添加部门成功！");
+				layer.msg("添加部门成功！",{icon:1});
 				closeLayer(); 
 			}else{
-				alert("添加部门失败！");
+				layer.alert("添加部门失败！"{icon:5,title:'提示',btn:['确定']});
 			}
 		})
 	} 

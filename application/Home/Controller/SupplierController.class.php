@@ -110,6 +110,14 @@
 
 		// 添加供应商信息
 		public function addSupplier(){
+			// 权限验证
+			$power = $this->isPower("addSupplier");
+			if($power == false){
+				echo "<script>";
+				echo "alert('您没有权限操作该功能！请联系管理员！')";
+				echo "</script>";
+				exit;
+			}
 			// 左侧菜单
 			$productTypeModel = D("XgProductType");
 	    	// 获取商品分类
@@ -364,7 +372,7 @@
 				$productType[$k]["productIdArr"] = $productIdArr;
 				// dump($productType);
 	    	}
-	    	// dump($linkmanInfo);exit;
+	    	// dump($productType);exit;
 			$this->assign("supplierInfo",$supplierInfo);
 			$this->assign("linkmanInfo",$linkmanInfo);
 			$this->assign("province",$provinceInfo);

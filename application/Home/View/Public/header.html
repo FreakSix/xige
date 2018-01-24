@@ -1,5 +1,5 @@
 <div class="am-topbar-brand">
-    <a href="javascript:;" class="tpl-logo">
+    <a href="__APP__/Index" class="tpl-logo">
         <img src="__PUBLIC__/img/logo.png" alt="">
     </a>
 </div>
@@ -24,19 +24,7 @@
 </div>
 <script>
     function loginOut(){
-        // if(confirm("您确定要退出系统吗？")){
-        //     $.post("__APP__/Login/loginOut",function(res){
-        //         // alert(res);return false;
-        //         if(res == 1){
-        //             alert("退出系统成功！");
-        //             //跳转到登录页面  
-        //             window.location.href="__APP__/Login/index";
-        //         }else{
-        //             alert("退出系统失败！");
-        //         }
-        //     })
-        // }
-        layer.confirm("您确定要退出系统吗？", {icon:3,anim:5,offset:'200px',title:"提示",btn:["确定","取消"]},function(){
+        layer.confirm("您确定要退出系统吗？", {icon:3,anim:5,title:"提示",btn:["确定","取消"]},function(){
             $.post("__APP__/Login/loginOut",function(res){
                 if(res == 1){
                     layer.msg("正在退出，请稍候...",{time:10000});

@@ -42,7 +42,7 @@
                         <div class="am-u-sm-1 am-u-lg-3" style="min-width: 100px;">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
-                                    <button type="button" onclick="window.location='__APP__/Customer/addCustomer'" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增客户</button>
+                                    <button type="button" onclick="checkPower('addCustomer','__APP__/Customer/addCustomer')" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增客户</button>
                                 </div>
                             </div>
                         </div>
@@ -117,7 +117,7 @@
                                             
                                         <tr class="xg-table-tr">
                                              <td>{$k+1}</td>
-                                            <td><a href="__APP__/Customer/details/customer_id/{$v['id']}">{$v['cname']}</a></td>
+                                            <td><a href="javascript:;" onclick="checkPower('detailCustomer','__APP__/Customer/details/customer_id/{$v['id']}')">{$v['cname']}</a></td>
                                             <if condition="$v['type_id'] eq 1">
                                                 <td>企业</td>
                                             <elseif condition="$v['type_id'] eq 2" />
@@ -128,13 +128,13 @@
                                             <td>{$v['level_name']}</td>
                                             <td>{$v['local_name']}</td>
                                             <td>{$v['local_address']}</td>
-                                            <td>{$v['link_name']} [<a href="#" onClick='linkMan({$v['id']})'>更多</a>] [<a href="#" onClick='addLinkMan({$v['id']})'>添加</a>]</td>
+                                            <td>{$v['link_name']} [<a href="javascript:;" onClick="linkMan('detailCustomerLXR',{$v['id']})">更多</a>] [<a href="javascript:;" onClick="addLinkMan('addCustomerLXR',{$v['id']})">添加</a>]</td>
                                             <td>{$v['link_phone']}</td>
                                             <td>
                                                 <div class="am-btn-toolbar">
                                                     <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="window.location='__APP__/Customer/update/customer_id/{$v['id']}'"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletes({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="checkPower('updateCustomer','__APP__/Customer/update/customer_id/{$v['id']}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletes('deleteCustomer',{$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
                                                     </div>
                                                 </div>
                                             </td>
@@ -144,11 +144,8 @@
                                     </tbody>
                                 </table>
                                 <div class="am-cf">
-
                                     <div class="am-fr">
                                         {$pageStr}
-
-                                        
                                     </div>
                                 </div>
                                 <hr>
@@ -166,66 +163,84 @@
     <script src="__PUBLIC__/js/layer.js"></script>
 	<script src="__PUBLIC__/js/echarts.min.js"></script>
 <script>
+    // 权限验证
+    function checkPower(powerName,url){
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 1){
+                window.location=url;
+            }else{
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+            }
+        })
+    }
     /*  查看更多的联系人信息 */
-    function linkMan(id){
-        layer.open({
-            type: 2,
-            title: '联系人详细信息',
-            shadeClose: false,
-            shade: 0.8,
-            area: ['60%', '60%'],
-            btn: ['关闭'],
-            content: '__APP__/Customer/detailsLinkman/customer_id/'+id //iframe的url
+    function linkMan(powerName,id){
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layer.open({
+                    type: 2,
+                    title: '联系人详细信息',
+                    shadeClose: false,
+                    shade: 0.8,
+                    area: ['60%', '60%'],
+                    btn: ['关闭'],
+                    content: '__APP__/Customer/detailsLinkman/customer_id/'+id //iframe的url
+                });
+            }
         });
     }
-
-    // 添加供应商联系人信息
-    function addLinkMan(id){
-        layer.open({
-            type: 2,
-            title: '添加联系人信息',
-            area: ['700px', '450px'],
-            // fixed: false, //不固定
-            maxmin: true,
-            content: '__APP__/Customer/addCustomerLinkman/customer_id/'+id,
+    // 添加客户联系人信息
+    function addLinkMan(powerName,id){
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layer.open({
+                    type: 2,
+                    title: '添加联系人信息',
+                    area: ['700px', '450px'],
+                    content: '__APP__/Customer/addCustomerLinkman/customer_id/'+id,
+                });
+            }
         });
     }
 </script>
 
 <!-- 删除客户及联系人信息 -->
 <script>
-    function deletes(id){
-        
-        layer.confirm('您确定要删除该条客户信息以及其对应的联系人？', {
-            icon: 3,
-            anim:5,
-            title:'提示',
-            btn: ['确定','取消'] //按钮
-        }, function(){
-            if(id){
-                $.ajax({
-                    url:'__APP__/Customer/deletes',
-                    data:'customer_id='+id,
-                    dataType:'json',
-                    success:function(res){
-                        layer.msg(res, {
-                            icon: 1,
-                            anim:5,
-                            time:1000,
-                        });
-                        window.location.reload(); 
-                    }
-                });
+    function deletes(powerName,id){
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
             }else{
-                layer.alert('删除失败！', {icon: 1,title:'提示'});
-            }          
-        }, function(){
-            layer.msg('删除已取消！', {
-            time: 2000, //20s后自动关闭
-            offset: '200px',
-            title:'提示'
-            });
+                layer.confirm('您确定要删除该条客户信息以及其对应的联系人？', {
+                    icon: 3,
+                    anim:5,
+                    title:'提示',
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    if(id){
+                        $.ajax({
+                            url:'__APP__/Customer/deletes',
+                            data:'customer_id='+id,
+                            dataType:'json',
+                            success:function(res){
+                                layer.msg(res, {icon:1,anim:5,time:2000,});
+                                window.location.reload(); 
+                            }
+                        });
+                    }else{
+                        layer.alert('删除失败！请稍后重试', {icon:5,title:'提示'});
+                    }          
+                });
+            }
         });
+        
     }
 </script>
 

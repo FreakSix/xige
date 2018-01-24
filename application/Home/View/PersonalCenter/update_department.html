@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>修改部门信息</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,9 +19,8 @@
     <style>
     </style>
 </head>
-
 <body data-type="generalComponents">
-    <div class="tpl-portlet-components">
+    <div class="tpl-portlet-components xg-layer-size">
         <div class="tpl-block ">
             <div class="am-g tpl-amazeui-form">
                 <div class="am-u-sm-12">
@@ -59,16 +58,22 @@
     	var old_depart_name = $("#old_depart_name").val();
     	var depart_name = $("#department_name").val();
     	if(old_depart_name == depart_name){
-    		alert("请修改内容之后再确认提交！");
+    		layer.alert("请修改内容之后再确认提交！",{icon:7,title:'提示'});
     		return false;
     	}
     	$.post("__APP__/PersonalCenter/saveUpdateDepartment",{"id":id,"depart_name":depart_name},function(res){
     		if(res == 1){
-    			alert("修改成功！");
+    			layer.msg("修改部门信息成功！",{icon:1,});
+                closeLayer();
     		}else{
-    			alert("修改失败！");
+    			layer.alert("修改部门信息失败！请稍后重试",{icon:5,title:'提示'});
     		}
     	})
+        function closeLayer(){
+            var index=parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            window.parent.location.reload(); //刷新父页面
+        }
     }
 </script>
 

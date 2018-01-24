@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>部门管理</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -82,40 +82,11 @@
                                             </td>
                                         </tr>
                                        </foreach>
-                                        <!-- <tr class="xg-table-tr">
-                                            <td>客服部</td>
-                                            <td>10</td>
-                                            <td>张三</td>
-                                            <td>18649521584</td>
-                                            <td>abcabc@163.com</td>
-                                            <td>
-                                                <div class="am-btn-toolbar">
-                                                    <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateDepartment()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteDepartment()"><span class="am-icon-trash-o"></span> 删除</button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr> -->
-
                                     </tbody>
                                 </table>
                                 <div class="am-cf">
-
                                     <div class="am-fr">
-                                        <!-- {$pageStr} -->
-                                        <!-- <ul class="am-pagination am-pagination-right"> -->
                                             {$pageStr}
-                                        <!-- </ul> -->
-                                        <!-- <ul class="am-pagination tpl-pagination">
-                                            <li class="am-disabled"><a href="#">«</a></li>
-                                            <li class="am-active"><a href="#">1</a></li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                            <li><a href="#">4</a></li>
-                                            <li><a href="#">5</a></li>
-                                            <li><a href="#">»</a></li>
-                                        </ul> -->
                                     </div>
                                 </div>
                                 <hr>
@@ -138,22 +109,18 @@
         function addDepartment(){
             layer.open({
                 type: 2,
-                offset: '150px',
                 title: '添加职位信息',
-                shadeClose: true,
                 shade: 0.8,
                 area: ['40%', '50%'],
                 btn: ['关闭'],
                 content: '__APP__/PersonalCenter/addDepartment' //iframe的url
             });
         }
-        // 添加部门页面
+        // 修改部门页面
         function updateDepartment(depart_name,id){
             layer.open({
                 type: 2,
-                offset: '150px',
                 title: '修改职位信息',
-                shadeClose: true,
                 shade: 0.8,
                 area: ['40%', '50%'],
                 btn: ['关闭'],
@@ -165,7 +132,6 @@
         	layer.confirm('您确定要删除该条部门信息吗？', {
                 icon: 3,
                 anim:5,
-                offset: '200px',
                 title:'提示',
                 btn: ['确定','取消'] //按钮
             }, function(){
@@ -177,31 +143,22 @@
                         dataType:'json',
                         success:function(res){
                         	if(res == 1){
-                        		var tihsiContent = "删除该部门信息成功！";
+                                layer.msg("删除该部门信息成功！", {icon: 1,anim:5,});
+                                window.location.reload();
                         	}else{
-                        		var tihsiContent = "删除该部门信息失败！";
+                                layer.confirm("删除该部门信息失败！", {
+                                    icon: 5,
+                                    anim:5,
+                                    title:'提示',
+                                    btn: ['确定'] //按钮
+                                });
                         	}
-                            layer.confirm(tihsiContent, {
-                                icon: 1,
-                                anim:5,
-                                offset: '200px',
-                                title:'提示',
-                                btn: ['确定'] //按钮
-                            }, function(){
-                                window.location.reload();       
-                            });
                         }
                     });
 
                 }else{
-                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                    layer.alert('删除失败！请稍后重试', {icon: 5,title:'提示'});
                 }          
-            }, function(){
-                layer.msg('删除已取消！', {
-                time: 2000, //20s后自动关闭
-                offset: '200px',
-                // title:'提示'
-                });
             });
 
         }

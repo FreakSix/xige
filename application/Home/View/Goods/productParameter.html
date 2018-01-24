@@ -37,32 +37,11 @@
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
-                        <div class="am-u-sm-3 am-u-lg-2">
+                        <div class="am-u-sm-3 am-u-lg-2 am-u-end">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
-                                    <button type="button" onClick="addProductType()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 添加产品规格名称</button>
+                                    <button type="button" onClick="addProductParameter()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 添加产品规格名称</button>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="am-u-sm-3 am-u-lg-3 am-u-end">
-                            <div class="am-form-group" > 
-                                <span style="font-size: 16px;vertical-align: middle;">按产品搜索：</span>
-                                <select data-am-selected="{maxHeight: 370,searchBox: 1}" id="product_name" onchange="changeProduct()">
-                                    <optgroup>
-                                        <option value="0">全部产品</option>
-                                    </optgroup>
-                                    <foreach name="productType" key="k" item="pt">
-                                        <optgroup label="{$pt.type_name}">
-                                            <foreach name="productType[$k]['productMenu']" key="key" item="item">
-                                                <if condition="$_GET['product_id'] eq $item['id']">
-                                                   <option value="{$item.id}" selected="selected">{$item.type_name}</option> 
-                                                <else/>
-                                                    <option value="{$item.id}">{$item.type_name}</option>
-                                                </if>
-                                            </foreach>
-                                        </optgroup>
-                                    </foreach>
-                                </select>
                             </div>
                         </div>
                     </div>
@@ -119,47 +98,69 @@
 <script src="__PUBLIC__/js/layer.js"></script>
 <script type="text/javascript">
     // 添加产品规格名称页面
-    function addProductType(){
-      layer.open({
-            type: 2,
-            title: '添加产品规格名称',
-            area: ['30%', '40%'],
-            content: '__APP__/Goods/addProductParameter',
+    function addProductParameter(){
+        var powerName = 'addProductPara';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layer.open({
+                    type: 2,
+                    title: '添加产品规格名称',
+                    area: ['30%', '40%'],
+                    content: '__APP__/Goods/addProductParameter',
+                });
+            }
         });
     }
     // 修改产品规格名称页面
     function updateProductParameter(parameter_id){
-        layer.open({
-            type: 2,
-            title: '修改产品规格名称',
-            area: ['30%', '40%'],
-            content: '__APP__/Goods/updateProductParameter/parameter_id/'+parameter_id,
+        var powerName = 'updateProductPara';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layer.open({
+                    type: 2,
+                    title: '修改产品规格名称',
+                    area: ['30%', '40%'],
+                    content: '__APP__/Goods/updateProductParameter/parameter_id/'+parameter_id,
+                });
+            }
         });
     }
     // 删除产品规格名称
     function deleteProductParameter(parameter_id){
-        layer.confirm('删除该产品规格名称将删除其对应的所有数据，确定要删除吗？', {
-            icon: 3,
-            anim:5,
-            title:'提示',
-            btn: ['确定','取消'] //按钮
-        }, function(){
-            if(parameter_id){
-                $.ajax({
-                    url:'__APP__/Goods/deleteProductParameter',
-                    data:'parameter_id='+parameter_id,
-                    type:'post',
-                    dataType:'json',
-                    success:function(res){
-                        layer.msg(res, {icon: 1,anim:5,});
-                        window.location.reload();
-                    }
-                });
+        var powerName = 'deleteProductPara';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
             }else{
-                layer.alert('删除失败，请刷新页面后重试！', {icon: 1,title:'提示'});
-            }          
-        }, function(){
-            layer.msg('删除已取消！', {time: 1000,});
+                layer.confirm('删除该产品规格名称将删除其对应的所有数据，确定要删除吗？', {
+                    icon: 3,
+                    anim:5,
+                    title:'提示',
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    if(parameter_id){
+                        $.ajax({
+                            url:'__APP__/Goods/deleteProductParameter',
+                            data:'parameter_id='+parameter_id,
+                            type:'post',
+                            dataType:'json',
+                            success:function(res){
+                                layer.msg(res, {icon: 1,anim:5,});
+                                window.location.reload();
+                            }
+                        });
+                    }else{
+                        layer.alert('删除失败，请稍后重试！', {icon: 5,title:'提示'});
+                    }          
+                });
+            }
         });
     }
     function changeProduct(){

@@ -42,7 +42,7 @@
                         <div class="am-u-sm-1 am-u-lg-1" style="min-width: 110px;">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
-                                    <button type="button" onclick="window.location='__APP__/Supplier/addSupplier'" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增供应商</button>
+                                    <button type="button" onclick="checkPower('addSupplier','__APP__/Supplier/addSupplier')" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增供应商</button>
                                 </div>
                             </div>
                         </div>
@@ -134,7 +134,7 @@
                                         <foreach name="supplierInfo" key="k" item="v">
                                         <tr class="xg-table-tr">
                                             <td class="xg-table-center">{$k+1}</td> 
-                                            <td><a href="__APP__/Supplier/detail/supplier_id/{$v['supplier_id']}">{$v['supplier_name']}</a></td>
+                                            <td><a href="javascript:;" onclick="checkPower('detailSupplier','__APP__/Supplier/detail/supplier_id/{$v['supplier_id']}')">{$v['supplier_name']}</a></td>
                                             <td class="xg-table-center">{$v['local_name']}</td>
                                             <td>
                                                 <if condition="count($supplierInfo[$k]['type_name_arr']) gt 3">
@@ -153,14 +153,14 @@
                                                 </if>
                                             </td>
                                             <td class="xg-table-center xg-hide">{$v['supplier_tel']}</td>
-                                            <td>{$v['linkman_name']} [<a href="#" onClick="linkMan({$v['supplier_id']})">更多</a>] [<a href="#" onClick="addLinkMan({$v['supplier_id']})">添加</a>]</td>
+                                            <td>{$v['linkman_name']} [<a href="#" onClick="linkMan('detailSupplierLXR',{$v['supplier_id']})">更多</a>] [<a href="#" onClick="addLinkMan('addSupplierLXR',{$v['supplier_id']})">添加</a>]</td>
                                             <td  class="xg-table-center">{$v['linkman_phone']}</td>
                                             <td class="xg-hide">{$v['create_manager_name']}</td>
                                             <td>
                                                 <div class="am-btn-toolbar">
                                                     <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="window.location='__APP__/Supplier/update/supplier_id/{$v['supplier_id']}'"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletes({$v['supplier_id']})"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="checkPower('updateSupplier','__APP__/Supplier/update/supplier_id/{$v['supplier_id']}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletes('deleteSupplier',{$v['supplier_id']})"><span class="am-icon-trash-o"></span> 删除</button>
                                                     </div>
                                                 </div>
                                             </td>
@@ -185,7 +185,6 @@
     <script src="__PUBLIC__/js/plus.js"></script>
     <script src="__PUBLIC__/js/echarts.min.js"></script>
     <script src="__PUBLIC__/layer/layer.js"></script>
-
     <script type="text/javascript">
         function searchSubmit(name){
             // alert(name);
@@ -216,64 +215,94 @@
             }
             location.href='__APP__/Supplier/index/province/'+province+'/city/'+city+'/input_type_value/'+input_type_value+'/search_value/'+search_value;
         }
-
-        function deletes(supplier_id){
-            // alert(supplier_id);
-            layer.confirm('您确定要删除该条供应商信息以及其对应的联系人吗？', {
-                icon: 3,
-                anim:5,
-                offset: '200px',
-                title:'提示',
-                btn: ['确定','取消'] //按钮
-            }, function(){
-                if(supplier_id){
-                    $.ajax({
-                        url:'__APP__/Supplier/deletes',
-                        data:'supplier_id='+supplier_id,
-                        dataType:'json',
-                        success:function(res){
-                            layer.msg(res, {
-                                icon: 1,
-                                anim:5,
-                                time:500,
-                            }, function(){
-                                window.location.reload();       
-                            });
-                        }
-                    });
-
+        // 权限验证
+        function checkPower(powerName,url){
+            $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+                if(res == 1){
+                    window.location=url;
                 }else{
-                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
-                }          
-            }, function(){
-                layer.msg('删除已取消！', {
-                time: 2000, //20s后自动关闭
-                offset: '200px',
-                });
+                    layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                }
+            })
+        }
+        function deletes(powerName,supplier_id){
+            // alert(supplier_id);
+            $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+                if(res == 0){
+                    layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                    return false;
+                }else{
+                    layer.confirm('您确定要删除该条供应商信息以及其对应的联系人吗？', {
+                        icon: 3,
+                        anim:5,
+                        title:'提示',
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        if(supplier_id){
+                            $.ajax({
+                                url:'__APP__/Supplier/deletes',
+                                data:'supplier_id='+supplier_id,
+                                dataType:'json',
+                                success:function(res){
+                                    layer.msg(res, {
+                                        icon: 1,
+                                        anim:5,
+                                        time:500,
+                                    }, function(){
+                                        window.location.reload();       
+                                    });
+                                }
+                            });
+
+                        }else{
+                            layer.alert('删除供应商失败！请稍后重试或联系管理员', {icon: 1,title:'提示'});
+                        }          
+                    }, function(){
+                        layer.msg('删除已取消！', {time: 1000,});
+                    });    
+                }
             });
+            
         }
 
         // 查看更多的联系人信息
-        function linkMan(id){
-            layer.open({
-                type: 2,
-                title: '联系人详细信息',
-                shadeClose: false,
-                shade: 0.8,
-                area: ['50%', '40%'],
-                btn: ['关闭'],
-                content: '__APP__/Supplier/detailsLinkman/supplier_id/'+id //iframe的url
+        function linkMan(powerName,id){
+            $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+                if(res == 0){
+                    layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                    return false;
+                }else{
+                    layer.open({
+                        type: 2,
+                        title: '联系人详细信息',
+                        shadeClose: false,
+                        shade: 0.8,
+                        area: ['50%', '40%'],
+                        btn: ['关闭'],
+                        content: '__APP__/Supplier/detailsLinkman/supplier_id/'+id //iframe的url
+                    }); 
+                }
             });
+            
         }
 
         // 添加供应商联系人信息
-        function addLinkMan(id){
-            layer.open({
-                type: 2,
-                title: '添加联系人信息',
-                area: ['60%', '60%'],
-                content: '__APP__/Supplier/addSupplierLinkman/supplier_id/'+id,
+        function addLinkMan(powerName,id){
+            $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+                if(res == 0){
+                    layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                    return false;
+                }else{
+                    layer.open({
+                        type: 2,
+                        title: '添加联系人信息',
+                        area: ['60%', '60%'],
+                        content: '__APP__/Supplier/addSupplierLinkman/supplier_id/'+id,
+                    }); 
+                }
+                
             });
+            
         }
     </script>
 </body>

@@ -8,7 +8,7 @@
 
 		//用户登录写入登陆日志
 		public function addLoginLogs($data){
-// 			$res = M("xg_login_logs")->data($data)->add();
+			// $res = M("xg_login_logs")->data($data)->add();
 			$feilds=array_keys($data);
 			$sql="insert into xg_login_logs (".implode(',',$feilds).") values('".implode("','",$data)."')";
 			$result = M()->execute($sql);
@@ -26,7 +26,7 @@
 		}
 		//查看所有人的登录日志
 		public function getLoginLogs($start=0,$size=15){
-			$res = M("xg_login_logs")->order("addtime asc")->limit($start,$size)->select();
+			$res = M("xg_login_logs")->order("addtime desc")->limit($start,$size)->select();
 			return $res;
 		}
 		//查看所有人的登录日志总数

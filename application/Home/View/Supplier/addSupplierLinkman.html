@@ -22,45 +22,45 @@
     </style>
 </head>
 <body>
-            <div class="tpl-portlet-components" style="min-height:380px;">
-                <div class="portlet-title">
-                    <div class="caption font-green bold">新增联系人</div>
-                </div>
-                <div class="tpl-block ">
-                    <div class="am-g tpl-amazeui-form">
-                        <div class="am-u-sm-12 am-u-md-9">
-                            <form class="am-form am-form-horizontal">
-                                <div class="contact">
-                                    <div class="am-form-group">
-                                        <label class="am-u-sm-3 am-form-label">联系人姓名
-                                                <span id="sname_notice" style="color:#FF0000"> *</span>
-                                        </label>
-                                        <div class="am-u-sm-9">
-                                            <input type="tel" id="link_name" name="link_name">
-                                        </div>
-                                    </div>
-                                    <div class="am-form-group">
-                                        <label class="am-u-sm-3 am-form-label">联系电话
-                                                <span id="sname_notice" style="color:#FF0000"> *</span>
-                                        </label>
-                                        <div class="am-u-sm-9">
-                                            <input type="tel" id="link_phone" name="link_phone" >
-                                        </div>
-                                    </div>
-                                    <input type="hidden" id="supplier_id" name="supplier_id" value="{$supplier_id}" >
+    <div class="tpl-portlet-components xg-layer-size">
+        <div class="portlet-title">
+            <div class="caption font-green bold">新增联系人</div>
+        </div>
+        <div class="tpl-block ">
+            <div class="am-g tpl-amazeui-form">
+                <div class="am-u-sm-12 am-u-md-9">
+                    <form class="am-form am-form-horizontal">
+                        <div class="contact">
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-form-label">联系人姓名
+                                        <span id="sname_notice" style="color:#FF0000"> *</span>
+                                </label>
+                                <div class="am-u-sm-9">
+                                    <input type="tel" id="link_name" name="link_name">
                                 </div>
-                                <hr/>
-
-                                <div class="am-form-group">
-                                    <div class="am-u-sm-10 am-u-sm-push-2">
-                                        <button id="submit2" type="button" class="am-btn am-btn-primary">确认添加</button>
-                                    </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-form-label">联系电话
+                                        <span id="sname_notice" style="color:#FF0000"> *</span>
+                                </label>
+                                <div class="am-u-sm-9">
+                                    <input type="tel" id="link_phone" name="link_phone" >
                                 </div>
-                            </form>
+                            </div>
+                            <input type="hidden" id="supplier_id" name="supplier_id" value="{$supplier_id}" >
                         </div>
-                    </div>
+                        <hr/>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-10 am-u-sm-push-2">
+                                <button id="submit2" type="button" class="am-btn am-btn-primary">确认添加</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
+    </div>
     <script src="__PUBLIC__/js/jquery.min.js"></script>
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
@@ -87,7 +87,6 @@
                 $("#link_phone").focus();
                 return false;
             }
-            
             $.ajax({
                 url:'__APP__/Supplier/addSupplierLinkman',
                 type:'post',
@@ -95,19 +94,11 @@
                 dataType:'json',
                 success:function(res){
                     if(res == 1){
-                        parent.layer.alert('信息添加成功！', {
-                                                            icon: 1,
-                                                            offset: '200px',
-                                                            title:'提示',
-                                                        });
+                        parent.layer.msg('信息添加成功！', {icon: 1,time:1000});
                         parent.layer.close(index);
                     }
                     if(res == 2){
-                        parent.layer.alert('信息添加失败！', {
-                                                            icon: 5,
-                                                            offset: '200px',
-                                                            title:'提示',
-                                                        });
+                        parent.layer.alert('信息添加失败！请稍后重试', {icon: 5,title:'提示',});
                     }
                 }
             });

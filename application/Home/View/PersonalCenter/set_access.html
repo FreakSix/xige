@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>分配权限</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,24 +30,28 @@
                             <div class="caption font-green bold">分配权限</div>
                         </div>
                         <foreach name="powerList" item="item" key="num">
-                        <div class="xg-access">
-                            <div class="am-checkbox xg-access-title">
-                                <label class="">
-                                    <b>{$item.power_name}</b><input type="checkbox" name="p_power_select" rec="{$num}" value="{$item.power_en}">
-                                </label>
+                            <div class="xg-access">
+                                <div class="am-checkbox xg-access-title">
+                                    <label class="">
+                                        <b>{$item.power_name}</b><input type="checkbox" name="p_power_select" rec="{$num}" value="{$item.power_en}">
+                                    </label>
+                                </div>
+                                <div class="am-form-group xg-access-content">
+                                    <foreach name="item.info" item="v">
+                                        <label class="am-checkbox-inline">
+                                            <if condition="in_array($v['power_en'],$item['dutyPower'])">
+                                                <input type="checkbox" value="{$v.power_en}" name="z_power_select_{$num}" class="z_power_select" checked="checked"> {$v.power_name}
+                                            <else/>
+                                                <input type="checkbox" value="{$v.power_en}" name="z_power_select_{$num}" class="z_power_select"> {$v.power_name}
+                                            </if>
+                                        </label>
+                                     </foreach>
+                                </div>
                             </div>
-                            <div class="am-form-group xg-access-content">
-                            <foreach name="item.info" item="v">
-                                <label class="am-checkbox-inline">
-                                    <input type="checkbox" value="{$v.power_en}" name="z_power_select_{$num}" class="z_power_select"> {$v.power_name}
-                                </label>
-                             </foreach>
-                            </div>
-                        </div>
                         </foreach>
                         <div class="am-form-group">
                             <div class="am-u-sm-10 am-u-sm-push-2">
-                                <button type="button" class="am-btn am-btn-primary" onclick="addNewPower()">确认添加</button>
+                                <button type="button" class="am-btn am-btn-primary" onclick="addNewPower()">确认修改</button>
                             </div>
                         </div>
                     </form>
@@ -74,9 +78,9 @@
 	    	}   
 		});
 
-	
 	//添加新的权限
 	function addNewPower(){
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 		var duty_id = $("#hide_duty_id").val();
 		var children_select =[]; 
 		$('.z_power_select:checked').each(function(){ 
@@ -84,10 +88,11 @@
 		}); 
 		$.post("__APP__/Rbac/savePowerSubmit/",{"children_select":children_select,"duty_id":duty_id},function(res){
 			if(res == 1){
-				alert("修改权限成功！");
+				parent.layer.msg("修改权限成功！",{icon:1,time:2000});
+                parent.layer.close(index);
 				/* closeLayer(); */
 			}else{
-				alert("修改权限失败！");
+				layer.alert("修改权限失败！请稍后重试或联系管理员");
 			}
 		})
 	}

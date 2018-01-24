@@ -110,13 +110,18 @@
 		 * 判断是否有权限操作当前的方法
 		 */
 		public function isPower($powerName){
+			if($powerName == ""){
+				$powerName = $_POST['powerName'];
+			}
 			$powerStr = $_SESSION['userInfo']['dutyCode'];
 			$powerArr = explode(",",$powerStr);
 			if(in_array($powerName,$powerArr)){
 				//有权限操作，不做任何事情继续执行下面的内容
+				echo 1;
 				return 1;
 			}else{
 				//没有权限操作，给出提示，之后停止程序继续执行
+				echo 0;
 				return 0;
 // 				echo "<script>";
 // 				echo "alert('您没有权限才做该功能！请联系管理员！')";

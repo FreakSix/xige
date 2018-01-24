@@ -64,6 +64,11 @@ class RbacController extends BaseController {
 	// 分配权限页面
 	public function access(){
 		$id = $_REQUEST['id'];
+		$duty = D("XgDuty")->getDutyById($id);
+		// dump($duty);
+		$dutyPower = explode(",", $duty["power"]);
+		// dump($dutyPower);
+		// exit;
 		$powerModel = D("XgPower");
 		$powerArr = $powerModel->getAllPower();
 		$powerList = array();
@@ -79,12 +84,14 @@ class RbacController extends BaseController {
 				foreach ($powerArr as $kk=>$vv){
 					if($val['id'] == $vv['fid']){
 						$powerList[$key]['info'][]=$vv;
+						$powerList[$key]['dutyPower']=$dutyPower;
 					}
 				}
 			}
 		}
+		// dump($powerList);
 		//获取当前用户对应的职位，同时获取该职位对应的所有的权限
-		
+		$this->assign("dutyPower",$dutyPower);
 		$this->assign("duty_id",$id);
 		$this->assign("powerList",$powerList);
 		$this->display("PersonalCenter/set_access");

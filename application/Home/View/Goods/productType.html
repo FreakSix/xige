@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>layui</title>
+  <title>服务类型管理</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -90,48 +90,68 @@
 
 <script type="text/javascript">
     function addProductType(){
-        layer.open({
-            type: 2,
-            title: '添加服务类型',
-            area: ['700px', '300px'],
-            content: '__APP__/Goods/addProductType',
+        var powerName = 'addProductType';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layer.open({
+                    type: 2,
+                    title: '添加服务类型',
+                    area: ['700px', '300px'],
+                    content: '__APP__/Goods/addProductType',
+                });
+            }
         });
-        
     }
 
     function updateProductType(type_id){
-        layer.open({
-            type: 2,
-            title: '修改服务类型',
-            area: ['700px', '300px'],
-            content: '__APP__/Goods/updateProductType/type_id/'+type_id,
+        var powerName = 'updateProductType';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layer.open({
+                    type: 2,
+                    title: '修改服务类型',
+                    area: ['700px', '300px'],
+                    content: '__APP__/Goods/updateProductType/type_id/'+type_id,
+                });
+            }
         });
     }
 
     function deleteProductType(type_id){
-        layer.confirm('删除该服务类型将删除其对应的全部信息，确定要删除吗？', {
-            icon: 7,
-            anim:5,
-            title:'提示',
-            btn: ['确定','取消'] //按钮
-        }, function(){
-            if(type_id){
-                $.ajax({
-                    url:'__APP__/Goods/deleteProductType',
-                    data:'type_id='+type_id,
-                    type:'post',
-                    dataType:'json',
-                    success:function(res){
-                        layer.msg(res, {icon: 1,anim:5,});
-                        window.location.reload(); 
-                    }
-                });
-
+        var powerName = 'deleteProductType';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
             }else{
-                layer.alert('删除失败！', {icon: 1,title:'提示'});
-            }          
-        }, function(){
-            layer.msg('删除已取消！', {time: 1000,});
+                layer.confirm('删除该服务类型将删除其对应的全部信息，确定要删除吗？', {
+                    icon: 7,
+                    anim:5,
+                    title:'提示',
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    if(type_id){
+                        $.ajax({
+                            url:'__APP__/Goods/deleteProductType',
+                            data:'type_id='+type_id,
+                            type:'post',
+                            dataType:'json',
+                            success:function(res){
+                                layer.msg(res, {icon: 1,anim:5,});
+                                window.location.reload(); 
+                            }
+                        });
+                    }else{
+                        layer.alert('删除失败！', {icon: 5,title:'提示'});
+                    }          
+                });
+            }
         });
     }
 

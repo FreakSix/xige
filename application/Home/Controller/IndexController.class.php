@@ -5,7 +5,6 @@
 	class IndexController extends BaseController {
 		
 	    public function index(){
-	    	dump($_SESSION);exit;
 	    	$productTypeModel = D("XgProductType");
 	    	// 获取商品分类
 	    	$productType = $productTypeModel->getProductType();

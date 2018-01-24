@@ -111,6 +111,8 @@
 			//实例化分页类
 			$page = new \Think\Page($count,$pageSize);
 			$firstRow = $page->firstRow;
+			// 设置显示页码个数
+	 		$page->rollPage = 5;
 			//获取分页结果
 			$pageStr = $page->show();
 			//总页数
@@ -158,6 +160,8 @@
 			//实例化分页类
 			$page = new \Think\Page($count,$pageSize);
 			$firstRow = $page->firstRow;
+			// 设置显示页码个数
+	 		$page->rollPage = 5;
 			//获取分页结果
 			$pageStr = $page->show();
 			//总页数

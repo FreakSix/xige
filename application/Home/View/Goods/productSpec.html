@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>layui</title>
+  <title>产品详细规格信息管理</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -270,47 +270,73 @@
 
 <script type="text/javascript">
     function addProductSpec(){
-        layer.open({
-            type: 2,
-            title: '添加产品规格',
-            area: ['900px', '550px'],
-            content: '__APP__/Goods/addProductSpec',
+        var powerName = 'addProductSpec';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layer.open({
+                    type: 2,
+                    title: '添加产品规格',
+                    area: ['900px', '550px'],
+                    content: '__APP__/Goods/addProductSpec',
+                });
+            }
         });
     }
 
     function updateProductSpec(spec_id){
-        layer.open({
-            type: 2,
-            title: '修改产品规格',
-            area: ['900px', '550px'],
-            content: '__APP__/Goods/updateProductSpec/spec_id/'+spec_id,
+        var powerName = 'updateProductSpec';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layer.open({
+                    type: 2,
+                    title: '修改产品规格',
+                    area: ['900px', '550px'],
+                    content: '__APP__/Goods/updateProductSpec/spec_id/'+spec_id,
+                });
+            }
         });
+        
     }
 
     function deleteProductSpec(spec_id){
-        layer.confirm('您确定要删除该条规格信息？', {
-            icon: 3,
-            anim:5,
-            title:'提示',
-            btn: ['确定','取消'] //按钮
-        }, function(){
-            if(spec_id){
-                $.ajax({
-                    url:'__APP__/Goods/deleteProductSpec',
-                    data:'spec_id='+spec_id,
-                    type:'post',
-                    dataType:'json',
-                    success:function(res){
-                        layer.msg(res, {icon: 1,anim:5,});
-                        window.location.reload();
-                    }
-                });
+        var powerName = 'deleteProductSpec';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
             }else{
-                layer.alert('删除失败！', {icon: 1,title:'提示'});
-            }          
-        }, function(){
-            layer.msg('删除已取消！', {time: 1000,});
+                layer.confirm('您确定要删除该条规格信息？', {
+                    icon: 3,
+                    anim:5,
+                    title:'提示',
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    if(spec_id){
+                        $.ajax({
+                            url:'__APP__/Goods/deleteProductSpec',
+                            data:'spec_id='+spec_id,
+                            type:'post',
+                            dataType:'json',
+                            success:function(res){
+                                layer.msg(res, {icon: 1,anim:5,});
+                                window.location.reload();
+                            }
+                        });
+                    }else{
+                        layer.alert('删除失败！', {icon: 1,title:'提示'});
+                    }          
+                }, function(){
+                    layer.msg('删除已取消！', {time: 1000,});
+                });
+            }
         });
+        
     }
 </script>
 

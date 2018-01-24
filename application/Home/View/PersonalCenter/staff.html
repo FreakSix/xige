@@ -92,24 +92,6 @@
                                             </td>
                                         </tr>
                                         </foreach>
-                                        <!-- <tr class="xg-table-tr">
-                                            <td><img class="xg-staff-img" src="__PUBLIC__/images/user_default.png"></td>
-                                            <td>media</td>
-                                            <td>李四</td>
-                                            <td>销售专员</td>
-                                            <td>销售部</td>
-                                            <td>15862355126</td>
-                                            <td>否 <a href="javascript:;" onclick="createAccount()">[分配账号]</a></td>
-                                            <td>
-                                                <div class="am-btn-toolbar">
-                                                    <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateStaff()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteStaff()"><span class="am-icon-trash-o"></span> 删除</button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr> -->
-
                                     </tbody>
                                 </table>
                                 <div class="am-cf">
@@ -149,9 +131,7 @@
         function addStaff(){
             layer.open({
                 type: 2,
-                offset: '50px',
                 title: '添加员工信息',
-                shadeClose: true,
                 shade: 0.8,
                 area: ['40%', '80%'],
                 btn: ['关闭'],
@@ -162,9 +142,7 @@
         function updateStaff(id){
             layer.open({
                 type: 2,
-                offset: '50px',
                 title: '修改员工信息',
-                shadeClose: true,
                 shade: 0.8,
                 area: ['40%', '80%'],
                 btn: ['关闭'],
@@ -176,7 +154,6 @@
             layer.confirm('您确定要删除该条员工信息吗？', {
                 icon: 3,
                 anim:5,
-                offset: '200px',
                 title:'提示',
                 btn: ['确定','取消'] //按钮
             }, function(){
@@ -188,44 +165,21 @@
                         dataType:'json',
                         success:function(res){
                         	if(res == 1){
-                        		var tihsiContent = "删除该部门信息成功！";
+                                layer.msg("删除员工信息成功！", {icon: 1,anim:5,});
+                                window.location.reload(); 
                         	}else{
-                        		var tihsiContent = "删除该部门信息失败！";
+                                layer.alert("删除员工信息失败！", {
+                                    icon: 2,
+                                    anim:5,
+                                    title:'提示',
+                                    btn: ['确定'] //按钮
+                                });
                         	}
-                            layer.confirm(tihsiContent, {
-                                icon: 1,
-                                anim:5,
-                                offset: '200px',
-                                title:'提示',
-                                btn: ['确定'] //按钮
-                            }, function(){
-                                window.location.reload();       
-                            });
                         }
                     });
-
                 }else{
-                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                    layer.alert('删除失败！', {icon: 2,title:'提示'});
                 }          
-            }, function(){
-                layer.msg('删除已取消！', {
-                time: 2000, //20s后自动关闭
-                offset: '200px',
-                // title:'提示'
-                });
-            });
-        }
-        // 分配帐号页面
-        function createAccount(){
-            layer.open({
-                type: 2,
-                offset: '100px',
-                title: '修改职位信息',
-                shadeClose: true,
-                shade: 0.8,
-                area: ['40%', '70%'],
-                btn: ['关闭'],
-                content: '__APP__/PersonalCenter/createAccount' //iframe的url
             });
         }
         // 注销帐号提示
@@ -233,7 +187,6 @@
             layer.confirm('您确定要注销该员工的帐号吗？', {
                 icon: 3,
                 anim:5,
-                offset: '200px',
                 title:'提示',
                 btn: ['确定','取消'] //按钮
             }, function(){
@@ -246,30 +199,18 @@
                         success:function(res){
                         	if(res == 1){
                         		var tihsiContent = "注销该员工的帐号成功！";
+                                layer.msg("注销该员工的帐号成功！", {icon: 1,anim:5,});
+                                window.location.reload();
                         	}else{
                         		var tihsiContent = "注销该员工的帐号失败！";
+                                layer.alert("注销该员工的帐号失败！", {icon: 1,anim:5,title:'提示',});
                         	}
-                            layer.confirm(tihsiContent, {
-                                icon: 1,
-                                anim:5,
-                                offset: '200px',
-                                title:'提示',
-                                btn: ['确定'] //按钮
-                            }, function(){
-                                window.location.reload();       
-                            });
                         }
                     });
 
                 }else{
-                    layer.alert('注销失败！', {icon: 1,offset: '200px',title:'提示'});
+                    layer.alert('注销失败！', {icon:2,title:'提示'});
                 }          
-            }, function(){
-                layer.msg('注销已取消！', {
-                time: 2000, //20s后自动关闭
-                offset: '200px',
-                // title:'提示'
-                });
             });
         }
         //开通员工账号
@@ -277,7 +218,6 @@
             layer.confirm('您确定要开通该员工的帐号吗？', {
                 icon: 3,
                 anim:5,
-                offset: '200px',
                 title:'提示',
                 btn: ['确定','取消'] //按钮
             }, function(){
@@ -290,30 +230,17 @@
                         success:function(res){
                         	if(res == 1){
                         		var tihsiContent = "开通该员工的帐号成功！";
+                                layer.msg("开通该员工的帐号成功！", {icon: 1,anim:5,});
+                                window.location.reload(); 
                         	}else{
-                        		var tihsiContent = "开通该员工的帐号失败！";
+                                layer.alert("开通该员工的帐号失败！", {icon: 2,anim:5,title:'提示',});
                         	}
-                            layer.confirm(tihsiContent, {
-                                icon: 1,
-                                anim:5,
-                                offset: '200px',
-                                title:'提示',
-                                btn: ['确定'] //按钮
-                            }, function(){
-                                window.location.reload();       
-                            });
                         }
                     });
 
                 }else{
-                    layer.alert('开通失败！', {icon: 1,offset: '200px',title:'提示'});
+                    layer.alert('开通失败！', {icon:2,title:'提示'});
                 }          
-            }, function(){
-                layer.msg('开通已取消！', {
-                time: 2000, //20s后自动关闭
-                offset: '200px',
-                // title:'提示'
-                });
             });
         }
     </script>
