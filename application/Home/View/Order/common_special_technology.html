@@ -4,8 +4,9 @@
 
         <ul class="product_special_technology">
             <foreach name="specialTechnologyInfo" item="item" key="key">
-                <li class="xg-product-btn" id="product_special_technology_{$item.id}" name="product_special_technology" style="margin-right:10px;" value="{$item.id}" onclick="clickProductSpecialTechnology({$item.id})">{$item.name}</li>
+                <li class="xg-product-btn" id="product_special_technology_{$item.id}" name="product_special_technology" style="margin-right:10px;" value="{$item.id}" onclick="clickProductSpecialTechnology({$item.id},'{$item.name}')">{$item.name}</li>
                  <input type="hidden" value="" id="hide_special_technology_selected_{$item.id}" name="hide_special_technology_selected" /> 
+                 <input type="hidden" value="" id="hide_special_technology_selected_name_{$item.id}" name="hide_special_technology_selected_name" /> 
             </foreach>
         </ul>  
 

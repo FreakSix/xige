@@ -20,6 +20,8 @@
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css">
     <link rel="stylesheet" href="__PUBLIC__/css/daterangepicker.css">
     <script src="__PUBLIC__/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/css/layui/css/layui.css"  media="all">
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 
 </head>
 
@@ -78,10 +80,10 @@
                                 <select data-am-selected="{btnSize: 'sm'}" id="order_status" onchange="searchSubmit();">
                                     <option value="0">全部订单</option>
                                     <foreach name="orderStatusArr" item="v" key="k">
-                                        <if condition="$get['order_status'] == $v">
-                                            <option value="{$v}" selected="selected">{$k}</option>
+                                        <if condition="$get['order_status'] == $v['id']">
+                                            <option value="{$v.id}" selected="selected">{$v['status_name']}</option>
                                         <else/>
-                                            <option value="{$v}" >{$k}</option>
+                                            <option value="{$v.id}">{$v.status_name}</option>
                                         </if>
                                     </foreach>
                                 </select>
@@ -102,7 +104,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="am-u-sm-12 am-u-md-2" >
+                        <!-- <div class="am-u-sm-12 am-u-md-2" >
                             <div class="am-form-group" style="margin-left:30px;">
                                 搜索类型：
                                 <select data-am-selected="{btnSize: 'sm'}" id="input_type_value">
@@ -129,14 +131,25 @@
                                     </if>
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="am-u-sm-12 am-u-md-2">
-                            <div class="am-input-group am-input-group-sm">
-                                <input type="text" class="am-form-field" placeholder="请先选择搜索类型" value="{$get['search_value']}" id="search_value">
+                            <!-- <label class="am-u-sm-1 am-form-label">客户名称：</label> -->
+                            <div class="am-input-group am-input-group-sm searchinput">
+                                <input type="text" class="am-form-field user_loadq cz_top_input" placeholder="请输入客户名称" value="{$get['search_value']}" id="search_value" onkeyup="finds()">
+                                <ul class="searchmore" id="searchmore">
+                                </ul>
                                 <span class="am-input-group-btn">
                                     <button class="am-btn am-btn-success tpl-am-btn-success am-icon-search" type="button"  onclick="searchSubmit('input');"></button>
                                 </span>
+                                
+                                <div class="clearfloat"></div>
                             </div>
+                            <!-- <div class="am-input-group am-input-group-sm searchinput">
+                                <input  type="text"  class="user_loadq cz_top_input" style="width:169px;" >
+                                <ul class="searchmore" id="searchmore">
+                                </ul>
+                                <div class="clearfloat"></div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="am-g">
@@ -148,7 +161,7 @@
                                             <th class="table-check"><input type="checkbox" class="tpl-table-fz-check xg-select-box"></th>
                                             <th >序号</th>
                                             <th class="table-id">订单编号</th>
-                                            <th class="table-title">商品名称</th>
+                                            <!-- <th class="table-title">商品名称</th> -->
                                             <th class="table-cus">客户名称</th>
                                             <th class="table-type">成本总额</th>
                                             <th class="table-sum">成交总额</th>
@@ -164,48 +177,30 @@
                                     <tbody>
                                         <foreach name="productOrderInfo" item="v" key="k">
                                             <tr class="xg-table-tr">
-                                                <if condition="$v['order_status'] != 4 ">
-                                                    <td><input type="checkbox" value="{$v['id']}" name="order_id"></td>
-                                                    <td>{$k+1}</td>
-                                                    <td><a href="__APP__/Order/detail/id/{$v['id']}">{$v['order_id']}</a></td>
-                                                    <td>{$v['product_name']}</td>
-                                                    <td>{$v['customer_name']}</td>
-                                                    <td>{$v['cost_money']}</td>
-                                                    <td>{$v['end_money']}</td>
-                                                    <!-- <td>{$v['supplier_money']}</td> -->
-                                                    <!-- <td>{$v['customer_money']}</td> -->
-                                                    <td>{$v['customer_money']} [<a href="javascript:void(0)" onClick="customerMoneyInfo({$v['id']})">详情</a>] [<a href="javascript:void(0)" onClick="addCustomerMoney({$v['id']})">新增</a>]</td>
-                                                    <td>{$v['order_status_value']}</td>
-                                                    <td>{$v['money_status_value']}</td>
-                                                    <!-- <td class="am-hide-sm-only">{$v['manager_id']}</td> -->
-                                                    <td class="am-hide-sm-only">{$v['insert_time']}</td>
-                                                    <td>
-                                                        <div class="am-btn-toolbar">
-                                                            <div class="am-btn-group am-btn-group-xs">
-                                                                
-                                                                    <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateOrder({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                                    <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteOrder({$v['id']})"><span class="am-icon-trash-o"></span> 作废</button>
+                                                <td><input type="checkbox" value="{$v['id']}" name="order_id"></td>
+                                                <td>{$k+1}</td>
+                                                <td><a href="__APP__/Order/detail/id/{$v['id']}">{$v['order_id']}</a></td>
+                                                <!-- <td>{$v['product_name']}</td> -->
+                                                <td>{$v['customer_name']}</td>
+                                                <td>{$v['cost_money']}</td>
+                                                <td>{$v['order_money']}</td>
+                                                <!-- <td>{$v['supplier_money']}</td> -->
+                                                <!-- <td>{$v['customer_money']}</td> -->
+                                                <td>{$v['customer_money']} [<a href="javascript:void(0)" onClick="customerMoneyInfo({$v['id']})">详情</a>] [<a href="javascript:void(0)" onClick="addCustomerMoney({$v['id']})">新增</a>]</td>
+                                                <td>{$v['order_status_value']}</td>
+                                                <td>{$v['money_status_value']}</td>
+                                                <!-- <td class="am-hide-sm-only">{$v['manager_id']}</td> -->
+                                                <td class="am-hide-sm-only">{$v['insert_time']}</td>
+                                                <td>
+                                                    <div class="am-btn-toolbar">
+                                                        <div class="am-btn-group am-btn-group-xs">
+                                                            
+                                                                <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateOrder({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                                <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteOrder({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
 
-                                                            </div>
                                                         </div>
-                                                    </td>
-                                                <else/>
-                                                    <td></td>
-                                                    <td><span style="color:#CCC;font-size: 14px;">{$k+1}</span></td>
-                                                    <td><a href="__APP__/Order/detail/id/{$v['id']}"><span style="color:#CCC;font-size: 14px;">{$v['order_id']}</span></a></td>
-                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['product_name']}</span></td>
-                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['customer_name']}</span></td>
-                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['cost_money']}</span></td>
-                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['end_money']}</span></td>
-                                                    <!-- <td><span style="color:#CCC;font-size: 14px;">{$v['supplier_money']}</span></td> -->
-                                                    <!-- <td>{$v['customer_money']}</td> -->
-                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['customer_money']}</span> [<a href="#" onClick="addCustomerMoney({$v['id']})"><span style="color:#CCC;font-size: 14px;">详情</span></a>]</td>
-                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['order_status_value']}</span></td>
-                                                    <td><span style="color:#CCC;font-size: 14px;">{$v['money_status_value']}</span></td>
-                                                    <!-- <td class="am-hide-sm-only">{$v['manager_id']}</td> -->
-                                                    <td class="am-hide-sm-only"><span style="color:#CCC;font-size: 14px;">{$v['insert_time']}</span></td>
-                                                    <td> </td>
-                                                </if>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </foreach>
                                     </tbody>
@@ -261,16 +256,15 @@
     );
     //确定时间后搜索
     function searchSubmit(name){
-        // alert(name);
         var search_date_value = $("#hide_search_date").val();
         var order_status = $("#order_status").val();
         var money_status = $("#money_status").val();
-        var input_type_value = $("#input_type_value").val();
+        // var input_type_value = $("#input_type_value").val();
         var search_value = $.trim($("#search_value").val());
         // alert(search_date_value);
         if(name == 'date'){
             if(search_date_value == ''){
-                layer.alert("请选择日期！", {icon: 5,offset: '200px',});
+                layer.alert("请选择日期！", {icon: 5,});
                 return false;
             }
 
@@ -285,16 +279,27 @@
         
         
 
+        // if(name == 'input'){
+        //     if(input_type_value == 0){
+        //         search_value = 0;
+        //     }else{
+        //         if(search_value == ''){
+        //             layer.alert("搜索内容不能为空！", {icon: 5,});
+        //             $("#search_value").focus();
+        //             return false;
+        //         }
+        //     }
+            
+        // }else{
+        //     if(search_value == ''){
+        //         search_value = 0;
+        //     }
+        // }
+
         if(name == 'input'){
-            if(input_type_value == 0){
-                search_value = 0;
-            }else{
-                if(search_value == ''){
-                    layer.alert("搜索内容不能为空！", {icon: 5,offset: '200px',});
-                    $("#search_value").focus();
-                    return false;
+            if(search_value == ''){
+                    search_value = 0;
                 }
-            }
             
         }else{
             if(search_value == ''){
@@ -305,20 +310,23 @@
 
         
 
-        location.href='__APP__/Order/index/order_status/'+order_status+'/money_status/'+money_status+'/input_type_value/'+input_type_value+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
+        // location.href='__APP__/Order/index/order_status/'+order_status+'/money_status/'+money_status+'/input_type_value/'+input_type_value+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
+
+        location.href='__APP__/Order/index/order_status/'+order_status+'/money_status/'+money_status+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
     }
     // 新增订单
     function addOrder(){
-         layer.open({
-                    type: 2,
-                    offset: '20px',
-                    shadeClose : false,
-                    title: '新增订单',
-                    shade: 0.8,
-                    area: ['75%', '90%'],
-                    btn: ['关闭'],
-                    content: '__APP__/Order/addOrder' //iframe的url
-                });
+        location.href='__APP__/Order/addOrder';
+         // layer.open({
+         //            type: 2,
+         //            offset: '20px',
+         //            shadeClose : false,
+         //            title: '新增订单',
+         //            shade: 0.8,
+         //            area: ['75%', '90%'],
+         //            btn: ['关闭'],
+         //            content: '__APP__/Order/addOrder' //iframe的url
+         //        });
         
     }
     //客户付款详情
@@ -329,7 +337,6 @@
         layerIndexObject['A'] = layer.open({
                     type: 2,
                     closeBtn: 0,
-                    offset: '20px',
                     shadeClose : false,
                     title: '客户回款记录', 
                     shade: 0.8,
@@ -345,7 +352,6 @@
         // alert(id);
         layer.open({
                     type: 2,
-                    // offset: '20px',
                     shadeClose : false,
                     title: '客户回款记录', 
                     shade: 0.8,
@@ -358,17 +364,17 @@
 
     //修改订单信息
     function updateOrder(id){
-        layer.open({
-                    type: 2,
-                    offset: '20px',
-                    shadeClose : false,
-                    title: '修改订单', 
-                    shade: 0.8,
-                    area: ['75%', '90%'],
-                    btn: ['关闭'],
-                    content: '__APP__/Order/update/id/'+id, //iframe的url
+        location.href='__APP__/Order/update/id/'+id;
+        // layer.open({
+        //             type: 2,
+        //             shadeClose : false,
+        //             title: '修改订单', 
+        //             shade: 0.8,
+        //             area: ['75%', '90%'],
+        //             btn: ['关闭'],
+        //             content: '__APP__/Order/update/id/'+id, //iframe的url
 
-                });
+        //         });
     }
 
     //删除订单信息
@@ -376,7 +382,6 @@
         layer.confirm('您确定要删除该订单信息？', {
                 icon: 3,
                 anim:5,
-                offset: '200px',
                 title:'提示',
                 btn: ['确定','取消'] //按钮
             }, function(){
@@ -390,7 +395,6 @@
                             layer.confirm(res, {
                                 icon: 1,
                                 anim:5,
-                                offset: '200px',
                                 title:'提示',
                                 btn: ['确定'] //按钮
                             }, function(){
@@ -400,14 +404,14 @@
                     });
 
                 }else{
-                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                    layer.alert('删除失败！', {icon: 1,title:'提示'});
                 }          
             }, function(){
-                layer.msg('删除已取消！', {
-                time: 2000, //20s后自动关闭
-                offset: '200px',
-                // title:'提示'
-                });
+                // layer.msg('删除已取消！', {
+                //     time: 2000, //20s后自动关闭
+                //     
+                //     // title:'提示'
+                // });
             });
     }
     // 导出对账单（客户）
@@ -447,6 +451,81 @@
     //     // })
     //     // alert()
     // }
+
+    
+</script>
+
+<script type="text/javascript">
+    function finds(){
+        var search_value = $.trim($("#search_value").val());
+        // alert(search_value);
+        if(search_value.length >= 1){
+            $.post("__APP__/Order/searchCustomerInfo",{"search_value":search_value},function(res){
+                var item = '';
+                $(".searchmore").empty();//清空原来的ul
+                if(res !=null){
+                    // $.each(res,function(i,res){//循环加入到ul中去
+                    //     item = "<li>"+res+"<li>";
+                    //     $(".searchmore").append(item);
+                    // })
+                    $(".searchmore").html(res);;
+
+                    $(".searchmore").show();
+                }else{
+                    $(".searchmore").hide();
+                }
+            })
+        }else{
+            $(".searchmore").hide();
+        }
+
+        $(document).on("click", ".searchmore li", function(){
+            // $(".user_loadq").val(trim($(this).text()));
+            $("#search_value").val(trim($(this).text()));
+            $(".searchmore").hide();
+        });
+
+        // $(".searchinput").mouseleave(function(){
+        //     $(".searchmore").hide();
+        // })
+    }
+
+    function searchCustomerName(customer_name){
+        $("#search_value").val(customer_name);
+        $(".searchmore").empty();//清空原来的ul
+    }
+
+            // $(document).ready(function(){
+            //     $(".user_loadq").keyup(function(){//搜索
+            //         var uname = trim($(this).val());
+            //         if(uname.length >= 1){
+            //             $.getJSON('action/theaction.php?type=search&q='+uname,null,function (data) {
+            //                 var item;
+            //                 $(".searchmore").empty();//清空原来的ul
+            //                 if(data.res !=null){
+            //                     $.each(data.res,function(i,res){//循环加入到ul中去
+            //                         item = "<li>"+res+"<li>";
+            //                         $(".searchmore").append(item);
+            //                     })
+            //                     $(".searchmore").show();
+            //                 }else{
+            //                     $(".searchmore").hide();
+            //                 }
+            //             });
+            //         }else{
+            //             $(".searchmore").hide();
+            //         }
+            //     })
+            //     $(document).on("click", ".searchmore li", function(){
+            //         $(".user_loadq").val(trim($(this).text()));
+            //         $(".searchmore").hide();
+            //     });
+
+            //     $(".searchinput").mouseleave(function(){
+            //         $(".searchmore").hide();
+            //     })
+
+            // })
 
 </script>
 </body>

@@ -8,7 +8,7 @@
                 <ul>
                     <if condition="$item['spec'] != '' ">
                         <foreach name="parameterSpec[$key]['spec']" item="vv" key="kk">
-                            <li class="xg-product-btn" name="product_spec" id="product_spec_{$vv['id']}" style="margin-right:10px;" value="{$vv['id']}" onclick="selectProductSpec({$vv['id']},{$item['parameter']['id']})">{$vv['spec_value']}</li>
+                            <li class="xg-product-btn" name="product_spec" id="product_spec_{$vv['id']}" style="margin-right:10px;" value="{$vv['id']}" onclick="selectProductSpec({$vv['id']},{$item['parameter']['id']},'{$vv['spec_value']}')">{$vv['spec_value']}</li>
                         </foreach> 
                     <else/>
                         <li class="" style="font-size:18px;color:red;" value="">暂无，请先添加该规格信息</li>
@@ -17,6 +17,7 @@
             </div>
         </div>
         <input type="hidden" value="" id="hide_parameter_spec_value_{$item['parameter']['id']}" />
+        <input type="hidden" value="" id="hide_parameter_spec_name_value_{$item['parameter']['id']}" />
     </foreach>
 <else/>
     <div class="am-form-group">

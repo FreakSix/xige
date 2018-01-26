@@ -32,17 +32,18 @@
 				}
 				//如果有付款状态
 				if($get['money_status'] ){
-					$whereArr[] = "money_status = '".$get['money_status']."'";
+					$whereArr[] = "customer_money_status = '".$get['money_status']."'";
 				}
 				//如果有输入值搜索
 				if($get['search_value']){
-					if($get['input_type_value'] == 'customer'){
-						$whereArr[] = "customer_name like '%".$get['search_value']."%'";
-					}else if($get['input_type_value'] == 'supplier'){
-						$whereArr[] = "supplier_name like '%".$get['search_value']."%'";
-					}else{
-						$whereArr[] = "product_name like '%".$get['search_value']."%'";
-					}
+					// if($get['input_type_value'] == 'customer'){
+					// 	$whereArr[] = "customer_name like '%".$get['search_value']."%'";
+					// }else if($get['input_type_value'] == 'supplier'){
+					// 	$whereArr[] = "supplier_name like '%".$get['search_value']."%'";
+					// }else{
+					// 	$whereArr[] = "product_name like '%".$get['search_value']."%'";
+					// }
+					$whereArr[] = "customer_name like '%".$get['search_value']."%'";
 				}else{
 					$get['search_value'] = '';
 				}
@@ -50,12 +51,12 @@
 				$where = implode(' and ',$whereArr);
 				$condition['where'] = $where;
 			}
-			//排除已删除的订单
-			if(empty($condition['where'])){
-				$condition['where'] = "order_status != 9";
-			}else{
-				$condition['where'] = "order_status != 9 and  ".$condition['where'];
-			}
+			// //排除已删除的订单
+			// if(empty($condition['where'])){
+			// 	$condition['where'] = "order_status != 9";
+			// }else{
+			// 	$condition['where'] = "order_status != 9 and  ".$condition['where'];
+			// }
 			
 			//订单信息中符合条件的总记录数
 			$count = D("XgOrder")->getOrderCount($condition);
@@ -88,28 +89,19 @@
 					}
 					$productOrderInfo[$k]['cost_money'] = $order_cost_money;
 					//订单状态处理
-					if($v['order_status'] == 1){
-						$productOrderInfo[$k]['order_status_value'] = "生产中";
-					}
-					if($v['order_status'] == 2){
-						$productOrderInfo[$k]['order_status_value'] = "已发货";
-					}
-					if($v['order_status'] == 3){
-						$productOrderInfo[$k]['order_status_value'] = "已收货";
-					}
-					if($v['order_status'] == 4){
-						$productOrderInfo[$k]['order_status_value'] = "已作废";
-					}
+		    		$orderStatusInfo = D("XgOrderStatus")->getOrderStatusInfoById($v['order_status']);
+		    		$productOrderInfo[$k]['order_status_value'] = $orderStatusInfo['status_name'];
 					//客户付款状态处理
-					if($v['money_status'] == 1){
-						$productOrderInfo[$k]['money_status_value'] = "未付款";
+					if($v['customer_money_status'] == 1){
+						$productOrderInfo[$k]['money_status_value'] = "未回款";
 					}
-					if($v['money_status'] == 2){
-						$productOrderInfo[$k]['money_status_value'] = "部分付款";
+					if($v['customer_money_status'] == 2){
+						$productOrderInfo[$k]['money_status_value'] = "部分回款";
 					}
-					if($v['money_status'] == 3){
-						$productOrderInfo[$k]['money_status_value'] = "已付款";
+					if($v['customer_money_status'] == 3){
+						$productOrderInfo[$k]['money_status_value'] = "全额回款";
 					}
+					
 					//录入时间处理
 					$insertTime =  date("Y-m-d H:i:s",$v['add_time']);
 					$productOrderInfo[$k]['insert_time'] = $insertTime;
@@ -117,18 +109,14 @@
 			}
 
 			//订单状态下拉框数组
-			$orderStatusArr = array(
-					"生产中" => 1,
-					"已发货" => 2,
-					"已收货" => 3,
-					"已作废" => 4,
-				);
+			$orderStatusArr = D("XgOrderStatus")->getOrderStatusInfo();
 			//付款状态下拉框数组
 			$moneyStatusArr = array(
-					"未付款" => 1,
-					"部分付款" => 2,
-					"已付款" => 3,
+					"未回款" => 1,
+					"部分回款" => 2,
+					"全额回款" => 3,
 				);
+			// dump($orderStatusArr);
 
 			$this->assign("productOrderInfo",$productOrderInfo);
 			$this->assign("pageStr",$pageStr);
@@ -317,7 +305,7 @@
 			}
 		}
 
-		//添加订单商品信息
+		//新增订单时添加订单商品信息
 		public function addOrderProductInfo(){
 			$post=$_POST;
 			// dump($post);
@@ -368,6 +356,110 @@
 			}
 		}
 
+		//新增订单时添加订单商品信息
+		public function addOrderProductInfo_update(){
+			$post=$_POST;
+			// dump($post);
+			$data = array();
+			if(!empty($post)){
+				//获取产品分类名称
+				$productTypeInfo = D("XgProductType")->getProductName($post['product_type']);
+				$productTypeName = $productTypeInfo['0']['type_name'];
+				//获取产品名称
+				$productInfo = D("XgProductType")->getProductName($post['product_name']);
+				$productName = $productInfo['0']['type_name'];
+				//获取产品型号名称
+				$productModelInfo = D("XgProduct")->getProductById($post['product_model']);
+				$productModelName = $productModelInfo['0']['name'];
+				//产品规格字符串处理
+				$spec_arr = array();
+				$specStrInfo = rtrim($post['product_spec_id_str'],",");
+				$product_spec_arr = explode(",", $specStrInfo);
+
+				foreach ($product_spec_arr as $k => $v) {
+					$spec_arr[] = (int)$v;
+				}
+				sort($spec_arr);
+				$spec_str = implode(",",$spec_arr);
+
+				$data['order_id'] = $post['order_id'];
+				$data['order_num'] = $post['order_num'];
+				$data['product_type_id'] = $post['product_type'];
+				$data['product_type'] = $productTypeName;
+				$data['product_name_id'] = $post['product_name'];
+				$data['product_name'] = $productName;
+				$data['product_model_id'] = $post['product_model'];
+				$data['product_model'] = $productModelName;
+				$data['product_spec_id_str'] = $spec_str;
+				$data['special_technologyh_id_str'] = $post['special_technologyh_id_str'];
+				$data['supplier_id'] = $post['supplier_id'];
+				$data['supplier_name'] = $post['supplier_name'];
+				$data['num'] = $post['num']; 
+				$data['material_link'] = $post['product_material_link'];
+				$data['cost_money'] = $post['cost_money'];
+				$data['discount_money'] = $post['discount_money'];
+				$data['end_price'] = $post['end_price'];
+				$data['end_money'] = $post['end_money'];
+				$data['cost_price'] = $post['cost_price'];
+				$data['product_remarks'] = $post['product_remark'];
+				$data['add_time'] = time();
+
+				// dump($data);
+
+				$res = D("XgOrderProduct")->addOrderProductInfo($data);
+
+				//如果订单产品信息添加成功，则修改订单中的相应信息
+				if($res > 0){
+					//订单信息处理
+					$orderInfo = D("XgOrder")->getOrderInfoById($post['order_id']);
+
+					//订单产品信息
+					$condition = "order_id = ".$post['order_id'];
+					$orderProductInfo = D("XgOrderProduct")->getOrderProductInfo($condition);
+
+					//订单中的产品id串处理
+					if(!empty($orderProductInfo)){
+						// $order_product_id_arr = explode(",", $orderInfo['order_product_id']);
+						foreach ($orderProductInfo as $k => $v) {
+							// if($v != $post['order_product_id'] && $v != ''){
+							// 	$order_product_id_arr[] = $v;
+							// }
+							$order_product_id_arr[] = $v['id'];
+						}
+						$order_product_id_str = implode(",", $order_product_id_arr);
+					}
+
+					//订单的总价格处理
+					
+					if(!empty($orderProductInfo)){
+						foreach ($orderProductInfo as $kk => $vv) {
+							$orderMoney = $orderMoney + $vv['end_money'];
+						}
+					}else{
+						$orderMoney = 0;
+					}
+
+					//客户付款状态处理
+					if($orderInfo['customer_money'] >= $orderMoney){
+						$moneyStatus = 3;
+					}elseif (($orderInfo['customer_money'] < $orderMoney) && $orderMoney > 0 ) {
+						$moneyStatus = 2;
+					}else{
+						$moneyStatus = 1;
+					}
+
+					$orderData['order_product_id'] = $order_product_id_str;
+					$orderData['order_money'] = $orderMoney;
+					$orderData['customer_money_status'] = $moneyStatus;
+					$orderData['update_manager_name'] = $_SESSION['userInfo']['truename'];
+
+					$res_2 = D("XgOrder")->updateOrderInfo($orderData,$post['order_id']);
+				}
+				echo $res;
+
+			}
+		}
+
 		// 订单详情页
 		public function detail(){
 			// 左侧菜单
@@ -375,7 +467,6 @@
 			$this->assign("productType",$productType);
 
 	    	$orderInfo = D("XgOrder")->getOrderInfoById($_GET['id']);
-	    	// dump($orderInfo);
 	    	if(!empty($orderInfo)){
 	    		//交货日期处理
 	    		if(!empty($orderInfo['trade_time'])){
@@ -384,49 +475,67 @@
 	    			$tradeTime = '';
 	    		}
 				$orderInfo['trade_time_value'] = $tradeTime;
-				//商品规格信息处理
-				$productParameterSpecArr = explode(",", $orderInfo['product_spec_id_str']);
-				if(!empty($productParameterSpecArr)){
-					foreach ($productParameterSpecArr as $k => $v) {
-						$specInfo = D("XgProductSpec")->getSpecById($v);
-						//商品规格名称
-						$parameterName = D("XgProductParameter")->getProductParameterById($specInfo['0']['parameter_id']);
-						$specInfo['0']['parameter_name'] = $parameterName['0']['name'];
-						$orderInfo['parameter_spec_value'][] = $specInfo['0'];
-					}
-				}
-				//商品特殊工艺信息处理
-				$specialTechnologyhStr = '';
-				if(!empty($orderInfo['special_technologyh_id_str'])){
-					$productSpecialTechnologyhArr = explode(",", $orderInfo['special_technologyh_id_str']);
-					foreach ($productSpecialTechnologyhArr as $k => $v) {
-						$specialInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($v);
-						$specialTechnologyhStr .= $specialInfo['name']."&nbsp;&nbsp;&nbsp;&nbsp;";
-					}
-				}
-				$orderInfo['special_technology_value'] = $specialTechnologyhStr;
+
+				// //订单产品信息查询
+				// if(!empty($orderInfo['order_product_id'])){
+				// 	$order_product_id_arr = explode(",", $orderInfo['order_product_id']);
+				// 	foreach ($order_product_id_arr as $k => $v) {
+				// 		$orderProductInfo = D("XgOrderProduct")->getOrderProductInfoById($v);
+				// 		// dump($orderProductInfo);
+				// 		//供应商付款状态处理
+				// 		if($orderProductInfo['supplier_money_status'] == 1){
+				// 			$orderProductInfo['supplier_money_status_value'] = "未付款";
+				// 		}
+				// 		if($orderProductInfo['supplier_money_status'] == 2){
+				// 			$orderProductInfo['supplier_money_status_value'] = "部分付款";
+				// 		}
+				// 		if($orderProductInfo['supplier_money_status'] == 3){
+				// 			$orderProductInfo['supplier_money_status_value'] = "全额付款";
+				// 		}
+				// 		//商品规格信息处理
+				// 		$productParameterSpecArr = explode(",", $orderProductInfo['product_spec_id_str']);
+				// 		if(!empty($productParameterSpecArr)){
+				// 			foreach ($productParameterSpecArr as $kk => $vv) {
+				// 				$newSpecInfo[] = '';
+				// 				$specInfo = D("XgProductSpec")->getSpecById($vv);
+				// 				//商品规格名称
+				// 				$parameterName = D("XgProductParameter")->getProductParameterById($specInfo['0']['parameter_id']);
+				// 				$specInfo['0']['parameter_name'] = $parameterName['0']['name'];
+				// 				$newSpecInfo[$kk][$parameterName['0']['name']] = $specInfo['0'];
+
+				// 				$orderProductInfo['parameter_spec_value'][] = $specInfo['0'];
+				// 			}
+				// 		}
+				// 		$orderInfo['orderProductInfo'][$k] = $orderProductInfo;
+				// 		//商品特殊工艺信息处理
+				// 		$specialTechnologyhStr = '';
+				// 		if(!empty($orderProductInfo['special_technologyh_id_str'])){
+				// 			$productSpecialTechnologyhArr = explode(",", $orderProductInfo['special_technologyh_id_str']);
+				// 			foreach ($productSpecialTechnologyhArr as $kk => $vv) {
+				// 				$specialInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($vv);
+				// 				// dump($specialInfo);
+				// 				$specialTechnologyhStr .= $specialInfo['name']."&nbsp;&nbsp;&nbsp;&nbsp;";
+				// 			}
+				// 		}
+				// 		$orderInfo['orderProductInfo'][$k]['special_technology_value'] = $specialTechnologyhStr;
+				// 	}
+				// }
+
+				//
+				$orderInfo = $this->dellOrderProductInfo($orderInfo);
+				
 	    		//订单状态处理
-				if($orderInfo['order_status'] == 1){
-					$orderInfo['order_status_value'] = "生产中";
-				}
-				if($orderInfo['order_status'] == 2){
-					$orderInfo['order_status_value'] = "已发货";
-				}
-				if($orderInfo['order_status'] == 3){
-					$orderInfo['order_status_value'] = "已收货";
-				}
-				if($orderInfo['order_status'] == 4){
-					$orderInfo['order_status_value'] = "已作废";
-				}
+	    		$orderStatusInfo = D("XgOrderStatus")->getOrderStatusInfoById($orderInfo['order_status']);
+	    		$orderInfo['order_status_value'] = $orderStatusInfo['status_name'];
 				//客户付款状态处理
-				if($orderInfo['money_status'] == 1){
-					$orderInfo['money_status_value'] = "未付款";
+				if($orderInfo['customer_money_status'] == 1){
+					$orderInfo['money_status_value'] = "未回款";
 				}
-				if($orderInfo['money_status'] == 2){
-					$orderInfo['money_status_value'] = "部分付款";
+				if($orderInfo['customer_money_status'] == 2){
+					$orderInfo['money_status_value'] = "部分回款";
 				}
-				if($orderInfo['money_status'] == 3){
-					$orderInfo['money_status_value'] = "已付款";
+				if($orderInfo['customer_money_status'] == 3){
+					$orderInfo['money_status_value'] = "全额回款";
 				}
 				//录入时间处理
 				$insertTime =  date("Y-m-d H:i:s",$orderInfo['add_time']);
@@ -438,13 +547,7 @@
 		}
 		// 修改订单信息页面
 		public function update(){
-			$power = $this->isPower("bianjidingdan");
-			if($power == false){
-				echo "<script>";
-				echo "alert('您没有权限操作该功能！请联系管理员！')";
-				echo "</script>";
-				exit;
-			}
+			
 			$get = $_GET;
 			$post = $_POST;
 			// dump($get);
@@ -453,18 +556,25 @@
 				// dump($post);
 
 				$id = $post['order_id'];
+				//客户回款状态处理
+				$orderInfo = D("XgOrder")->getOrderInfoById($post['order_id']);
+				if($orderInfo['customer_money'] >= $post['order_money'] ){
+					$moneyStatus = 3;
+				}elseif (($orderInfo['customer_money'] < $post['order_money'] ) && $orderInfo['customer_money'] > 0 ) {
+					$moneyStatus = 2;
+				}else{
+					$moneyStatus = 1;
+				}
 
 				$data['trade_time'] = $post['trade_time'];
 				$data['linkman_name'] = $post['linkman_name'];
 				$data['linkman_tel'] = $post['linkman_phone'];
 				$data['link_address'] = $post['link_address'];
-				$data['cost_money'] = $post['cost_money'];
-				$data['end_money'] = $post['end_money'];
-				$data['material_link'] = $post['material_link'];
-				$data['money_status'] = $post['money_status'];
-				$data['customer_money'] = $post['customer_money'];
+				$data['order_money'] = $post['order_money'];
+				$data['customer_money_status'] = $moneyStatus;
 				$data['order_status'] = $post['order_status'];
-				$data['supplier_money'] = $post['supplier_money'];
+				$data['order_remarks'] = $post['order_remarks'];
+				$data['update_manager_name'] = $_SESSION['userInfo']['truename'];
 
 				$res = D("XgOrder")->updateOrderInfo($data,$id);
 
@@ -484,56 +594,34 @@
 					//根据客户信息查询出联系人信息
 					$customerLinkManInfo = D("XgCustomerLinkman")->getCustomerLinkInfo($orderInfo['customer_id']);
 					// dump($customerLinkManInfo);
-					//商品规格信息处理
-					$productParameterSpecArr = explode(",", $orderInfo['product_spec_id_str']);
-					if(!empty($productParameterSpecArr)){
-						// dump($productParameterSpecArr);
-						foreach ($productParameterSpecArr as $k => $v) {
-							$specInfo = D("XgProductSpec")->getSpecById($v);
-							//商品规格名称
-							$parameterName = D("XgProductParameter")->getProductParameterById($specInfo['0']['parameter_id']);
-							$specInfo['0']['parameter_name'] = $parameterName['0']['name'];
-							$orderInfo['parameter_spec_value'][] = $specInfo['0'];
-						}
-					}
-					//商品特殊工艺信息处理
-					$specialTechnologyhStr = '';
-					if(!empty($orderInfo['special_technologyh_id_str'])){
-						$productSpecialTechnologyhArr = explode(",", $orderInfo['special_technologyh_id_str']);
-						// dump($productParameterSpecArr);
-						foreach ($productSpecialTechnologyhArr as $k => $v) {
-							$specialInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($v);
-							$specialTechnologyhStr .= $specialInfo['name']."&nbsp;&nbsp;&nbsp;&nbsp;";
-						}
-					}
-					$orderInfo['special_technology_value'] = $specialTechnologyhStr;
+					//订单产品信息处理
+					$orderInfo = $this->dellOrderProductInfo($orderInfo);
+
 					//客户付款状态处理
-					if($orderInfo['money_status'] == 1){
-						$orderInfo['money_status_value'] = "未付款";
+					if($orderInfo['customer_money_status'] == 1){
+						$orderInfo['money_status_value'] = "未回款";
 					}
-					if($orderInfo['money_status'] == 2){
-						$orderInfo['money_status_value'] = "部分付款";
+					if($orderInfo['customer_money_status'] == 2){
+						$orderInfo['money_status_value'] = "部分回款";
 					}
-					if($orderInfo['money_status'] == 3){
-						$orderInfo['money_status_value'] = "已付款";
+					if($orderInfo['customer_money_status'] == 3){
+						$orderInfo['money_status_value'] = "全额回款"; 
 					}
+					//录入时间处理
+					$insertTime =  date("Y-m-d H:i:s",$orderInfo['add_time']);
+					$orderInfo['insert_time'] = $insertTime;
 					
 		    	}
 
 		    	//订单状态下拉框数组
-				$orderStatusArr = array(
-						"生产中" => 1,
-						"已发货" => 2,
-						"已收货" => 3,
-						"已作废" => 4,
-					);
+				$orderStatusArr = D("XgOrderStatus")->getOrderStatusInfo();
 				//付款状态下拉框数组
 				$moneyStatusArr = array(
-						"未付款" => 1,
-						"部分付款" => 2,
-						"已付款" => 3,
+						"未回款" => 1,
+						"部分回款" => 2,
+						"全额回款" => 3,
 					);
-				
+
 				$this->assign("orderInfo",$orderInfo);
 				$this->assign("customerLinkManInfo",$customerLinkManInfo);
 				$this->assign("orderStatusArr",$orderStatusArr);
@@ -553,10 +641,10 @@
 				exit;
 			}
 			$post = $_POST;
-			// $res = D("XgOrder")->deleteOrderInfoById($post['id']);
+			$res = D("XgOrder")->deleteOrderInfoById($post['id']);
 
-			$data['order_status'] = 4; 
-			$res = D("XgOrder")->updateOrderInfo($data,$post['id']);
+			// $data['order_status'] = 4; 
+			// $res = D("XgOrder")->updateOrderInfo($data,$post['id']);
 
 			if($res > 0){
 				$res_str = "删除成功！";
@@ -923,6 +1011,16 @@
 			}else{
 				$html = "<li class='xg-product-btn' value=''>暂无产品型号</li>";
 			}
+
+			//根据ID查询 产品名称信息
+			$productNameInfo = D("XgProductType")->getProduct($id);
+			if($productNameInfo['0']['special_tec_str'] != ''){
+				$special_tec_value = 2;
+			}else{
+				$special_tec_value = 1;
+			}
+
+			$html .= "<input type='hidden' value='".$special_tec_value."' id='hide_have_price_value' />";
 			echo $html;
 		}
 
@@ -1128,9 +1226,11 @@
 			//计算草考价格
 			if(empty($post['customer_level'])){
 				$customerInfo = D("XgCustomer")->getCustomerInfo($post['customer_id']);
+				// dump($customerInfo);
 				if(!empty($customerInfo)){
-					$customerLevel = D("XgCustomer")->getLevelInfoByLevel($customerInfo['rank']);
-					$levelDiscount = $customerLevel['level_discount'];
+					$customerLevel = D("XgCustomerLevel")->getLevelInfoById($customerInfo['level_id']);
+					// dump($customerLevel);
+					$levelDiscount = $customerLevel['level_price'];
 					
 					$discountMoneyVal = $levelDiscount*($post['product_num']*$post['product_cost_price']);
 					$discountMoney['money'] = $discountMoneyVal;
@@ -1158,8 +1258,12 @@
 		//根据分类ID判断该分类是否有特殊工艺
 		public function getProductSpecialTechnology($id){
 			$productTypeInfo = D("XgProductType")->getProduct($id);
-			if($productTypeInfo['0']['have_price'] == 2 ){
-				$specialTechnologyInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnology();
+			if($productTypeInfo['0']['special_tec_str'] != '' ){
+				$special_tec_arr = explode(",", $productTypeInfo['0']['special_tec_str']);
+				foreach ($special_tec_arr as $k => $v) {
+					$specialTechnologyInfo[] = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($v);
+				}
+				// $specialTechnologyInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnology();
 				// dump($specialTechnologyInfo);
 				if(!empty($specialTechnologyInfo)){
 					$this->assign("specialTechnologyInfo",$specialTechnologyInfo);
@@ -1172,13 +1276,7 @@
 
 		//新增订单中的客户回款弹窗页面
 		public function addCustomerMoney(){
-			$power = $this->isPower("xinzengkehuhuikuanjilu");
-			if($power == false){
-				echo "<script>";
-				echo "alert('您没有权限操作该功能！请联系管理员！')";
-				echo "</script>";
-				exit;
-			}
+			
 			//订单客户回款记录
 			$get = $_GET;
 
@@ -1199,6 +1297,7 @@
 				$data['customer_name'] = $orderInfo['customer_name'];
 				$data['money'] = $post['money'];
 				$data['remark'] = $post['remark'];
+				$data['manager_name'] = $_SESSION['userInfo']['truename'];
 				$data['add_time'] = time();
 
 				$res = D("XgCustomerAccount")->addCusromerAccountInfo($data);
@@ -1206,15 +1305,15 @@
 				if($res > 0){
 					//
 					$customerMoney = $orderInfo['customer_money'] + $post['money'];
-					if($customerMoney >= $orderInfo['end_money']){
+					if($customerMoney >= $orderInfo['order_money']){
 						$moneyStatus = 3;
-					}elseif (($customerMoney < $orderInfo['end_money']) && $customerMoney > 0 ) {
+					}elseif (($customerMoney < $orderInfo['order_money']) && $customerMoney > 0 ) {
 						$moneyStatus = 2;
 					}else{
 						$moneyStatus = 1;
 					}
 
-					$orderData['money_status'] = $moneyStatus;
+					$orderData['customer_money_status'] = $moneyStatus;
 					$orderData['customer_money'] = $customerMoney;
 
 					$res2 = D("XgOrder")->updateOrderInfo($orderData,$post['order_id']);
@@ -1314,15 +1413,15 @@
 					}
 				}
 
-				if($customerMoney >= $orderInfo['end_money']){
+				if($customerMoney >= $orderInfo['order_money']){
 					$moneyStatus = 3;
-				}elseif (($customerMoney < $orderInfo['end_money']) && $customerMoney > 0 ) {
+				}elseif (($customerMoney < $orderInfo['order_money']) && $customerMoney > 0 ) {
 					$moneyStatus = 2;
 				}else{
 					$moneyStatus = 1;
 				}
 
-				$orderData['money_status'] = $moneyStatus;
+				$orderData['customer_money_status'] = $moneyStatus;
 				$orderData['customer_money'] = $customerMoney;
 
 				$res2 = D("XgOrder")->updateOrderInfo($orderData,$oldCustomerAccount['order_id']);
@@ -1349,6 +1448,20 @@
 			$this->display("add_product_info");
 		}
 
+		//修改订单时添加商品信息弹窗页面
+		public function addProductInfo_update(){
+			$productTypeModel = D("XgProductType");
+			$productTypeFirst = $productTypeModel->getProductTypeByPid(0);
+			//全部产品名称
+			$condition['where'] = "pid > 0";
+			$productNameFirst = D("XgProductType")->getProductInfo($condition);
+			
+			$this->assign("productTypeFirst",$productTypeFirst);
+			$this->assign("productNameFirst",$productNameFirst);
+			$this->assign("get",$_GET);
+			$this->display("add_product_info_update");
+		}
+
 		//订单页面计算订单总价
 		public function getOrderAllMoney(){
 			$post = $_POST;
@@ -1364,6 +1477,348 @@
 
 			echo $allMoney;
 		}
+
+		//搜索获取客户信息
+		public function searchCustomerInfo(){
+			$post = $_POST;
+			$condition['where'] = "cname like '%".$post['search_value']."%'";
+			$customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+			// dump($customerInfo);
+
+			$html = "";
+			if(!empty($customerInfo)){
+				foreach($customerInfo as $k=>$v){
+					$html .= "<li class='xg-product-btn' style='margin-top:5px;' onclick=searchCustomerName('".$v['cname']."')>".$v['cname']."<li>";
+				}
+			}
+			echo $html;
+
+		}
+
+		//订单产品信息处理
+		public function dellOrderProductInfo($orderInfo){
+			//订单产品信息查询
+			if(!empty($orderInfo['order_product_id'])){
+				$order_product_id_arr = explode(",", $orderInfo['order_product_id']);
+				foreach ($order_product_id_arr as $k => $v) {
+					if($v != ''){
+						$orderProductInfo = D("XgOrderProduct")->getOrderProductInfoById($v);
+						//产品单位名称处理
+						$prductNameInfo = D("XgProductType")->getProduct($orderProductInfo['product_name_id']);
+						$orderProductInfo['product_unit'] = $prductNameInfo['0']['product_unit'];
+						//供应商付款状态处理
+						if($orderProductInfo['supplier_money_status'] == 1){
+							$orderProductInfo['supplier_money_status_value'] = "未付款";
+						}
+						if($orderProductInfo['supplier_money_status'] == 2){
+							$orderProductInfo['supplier_money_status_value'] = "部分付款";
+						}
+						if($orderProductInfo['supplier_money_status'] == 3){
+							$orderProductInfo['supplier_money_status_value'] = "全额付款";
+						}
+						//商品规格信息处理
+						$productParameterSpecArr = explode(",", $orderProductInfo['product_spec_id_str']);
+						if(!empty($productParameterSpecArr)){
+							foreach ($productParameterSpecArr as $kk => $vv) {
+								$newSpecInfo[] = '';
+								$specInfo = D("XgProductSpec")->getSpecById($vv);
+								//商品规格名称
+								$parameterName = D("XgProductParameter")->getProductParameterById($specInfo['0']['parameter_id']);
+								$specInfo['0']['parameter_name'] = $parameterName['0']['name'];
+								$newSpecInfo[$kk][$parameterName['0']['name']] = $specInfo['0'];
+
+								$orderProductInfo['parameter_spec_value'][] = $specInfo['0'];
+							}
+						}
+						$orderInfo['orderProductInfo'][$k] = $orderProductInfo;
+					
+						
+						//商品特殊工艺信息处理
+						$specialTechnologyhStr = '';
+						if(!empty($orderProductInfo['special_technologyh_id_str'])){
+							$productSpecialTechnologyhArr = explode(",", $orderProductInfo['special_technologyh_id_str']);
+							foreach ($productSpecialTechnologyhArr as $kk => $vv) {
+								$specialInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($vv);
+								// dump($specialInfo);
+								$specialTechnologyhStr .= $specialInfo['name']."&nbsp;&nbsp;&nbsp;&nbsp;";
+							}
+						}
+						$orderInfo['orderProductInfo'][$k]['special_technology_value'] = $specialTechnologyhStr;
+					}
+				}
+			}
+			// dump($orderInfo);
+
+			return $orderInfo;
+
+		}
+
+
+		//修改订单产品信息
+		public function updateOrderProductInfo(){
+			$post = $_POST;
+			if(!empty($post)){
+				$data['cost_money'] = $post['cost_money'];
+				$data['end_price'] = $post['end_price'];
+				$data['end_money'] = $post['end_money'];
+				$data['material_link'] = $post['material_link'];
+				$data['product_remarks'] = $post['product_remarks'];
+
+				$res = D("XgOrderProduct")->updateOrderProductInfo($data,$post['id']);
+
+				echo $res;
+			}
+		}
+
+		//订单产品中向供应商付款信息记录
+		public function supplierMoneyInfo(){
+			$get = $_GET;
+			$supplierMoneyInfo = D("XgSupplierAccount")->getSupplierAccountInfo($get['id']);
+
+			if(!empty($supplierMoneyInfo)){
+				foreach ($supplierMoneyInfo as $k => $v) {
+					//录入时间处理
+					$insertTime =  date("Y-m-d H:i:s",$v['add_time']);
+					$supplierMoneyInfo[$k]['insert_time'] = $insertTime;
+				}
+			}
+
+			$this->assign("supplierMoneyInfo",$supplierMoneyInfo); 
+			$this->assign("get",$get);
+			$this->display("supplier_money_info");
+		}
+
+		//新增订单产品的 向供应商付款 记录
+		public function addSupplierMoney(){
+			
+			//订单产品 向供应商付款记录
+			$get = $_GET;
+
+			$this->assign("get",$get);
+			$this->display("add_supplier_money");
+		}
+		
+		public function addSupplierMoneyInfo(){
+			$post = $_POST;
+			//根据订单ID查询出订单信息，取需要的数据如表
+			$orderInfo = D("XgOrder")->getOrderInfoById($post['order_id']);
+			//根据订单产品ID查询出订单产品信息，取需要的数据如表
+			$orderProductInfo = D("XgOrderProduct")->getOrderProductInfoById($post['order_product_id']);
+
+			if(!empty($orderInfo)){
+				$data['order_id'] = $post['order_id'];
+				$data['order_num'] = $orderInfo['order_id'];
+				$data['order_product_id'] = $post['order_product_id'];
+				$data['order_product_name'] = $orderProductInfo['product_name'];
+				$data['supplier_id'] = $orderProductInfo['supplier_name'];
+				$data['supplier_name'] = $orderProductInfo['supplier_name'];
+				$data['money'] = $post['money'];
+				$data['remark'] = $post['remark'];
+				$data['manager_name'] = $_SESSION['userInfo']['truename'];
+				$data['add_time'] = time();
+
+				$res = D("XgSupplierAccount")->addSupplierAccountInfo($data);
+				//如果数据添加成功，则对订单产品的 向供应商付款数据及回款状态进行修改
+				if($res > 0){
+					//
+					$supplierMoney = $orderProductInfo['supplier_money'] + $post['money'];
+					if($supplierMoney >= $orderProductInfo['end_money']){
+						$moneyStatus = 3;
+					}elseif (($supplierMoney < $orderProductInfo['end_money']) && $supplierMoney > 0 ) {
+						$moneyStatus = 2;
+					}else{
+						$moneyStatus = 1;
+					}
+
+					$orderProductData['supplier_money_status'] = $moneyStatus;
+					$orderProductData['supplier_money'] = $supplierMoney;
+
+					$res2 = D("XgOrderProduct")->updateOrderProductInfo($orderProductData,$post['order_product_id']);
+				}
+				echo $res;
+			}
+		}
+
+		//修改向供应商付款信息
+		public function updateSupplierMoneyInfo(){
+			$get = $_GET;
+			$post = $_POST;
+
+			if(!empty($post)){
+				//向供应商付款信息中的原信息
+				$oldSupplierAccount = D("XgSupplierAccount")->getSupplierAccountById($post['id']);
+
+				$data['money'] = $post['money'];
+				$data['remark'] = $post['remark'];
+				// dump($data);
+
+				$res = D("XgSupplierAccount")->updateSupplierAccountInfo($data,$post['id']);
+				//如果修改成功，则对订单产品中的 向供应商付款 数据及回款状态进行修改
+				if($res > 0 ){
+					//根据订单产品ID查询出订单产品信息，取需要的数据如表
+					$orderProductInfo = D("XgOrderProduct")->getOrderProductInfoById($oldSupplierAccount['order_product_id']);
+					//订单产品中对应的 向供应商的所有的付款金额
+					$allSupplierAccount = D('XgSupplierAccount')->getSupplierAccountInfo($oldSupplierAccount['order_product_id']);
+					// dump($allSupplierAccount); 
+					$supplierMoney = 0;
+					if(!empty($allSupplierAccount)){
+						foreach ($allSupplierAccount as $kk => $vv) {
+							$supplierMoney = $supplierMoney + $vv['money'];
+						}
+					}
+
+					if($supplierMoney >= $orderProductInfo['end_money']){
+						$moneyStatus = 3;
+					}elseif (($supplierMoney < $orderProductInfo['end_money']) && $supplierMoney > 0 ) {
+						$moneyStatus = 2;
+					}else{
+						$moneyStatus = 1;
+					}
+
+					$orderProductData['supplier_money_status'] = $moneyStatus;
+					$orderProductData['supplier_money'] = $supplierMoney;
+
+					$res2 = D("XgOrderProduct")->updateOrderProductInfo($orderProductData,$oldSupplierAccount['order_product_id']);
+				}
+				echo $res;
+
+			}else{
+				$supplierMoneyInfo = D("XgSupplierAccount")->getSupplierAccountById($get['id']);
+
+				$this->assign("supplierMoneyInfo",$supplierMoneyInfo); 
+				$this->assign("get",$get);
+				$this->display("update_supplier_money_info");
+			}
+		}
+
+		//删除向 供应商付款 的记录
+		public function deleteSupplierAccountInfo(){
+			$post = $_POST;
+			//向供应商付款信息中的原信息
+			$oldSupplierAccount = D("XgSupplierAccount")->getSupplierAccountById($post['id']);
+
+			$res = D("XgSupplierAccount")->deleteSupplierAccountInfoById($post['id']);
+
+			if($res > 0){
+				//根据订单产品ID查询出订单产品信息，取需要的数据如表
+				$orderProductInfo = D("XgOrderProduct")->getOrderProductInfoById($oldSupplierAccount['order_product_id']);
+				//订单产品中对应的 向供应商的所有的付款金额
+				$allSupplierAccount = D('XgSupplierAccount')->getSupplierAccountInfo($oldSupplierAccount['order_product_id']);
+				$supplierMoney = 0;
+				if(!empty($allSupplierAccount)){
+					foreach ($allSupplierAccount as $kk => $vv) {
+						$supplierMoney = $supplierMoney + $vv['money'];
+					}
+				}
+
+				if($supplierMoney >= $orderProductInfo['end_money']){
+					$moneyStatus = 3;
+				}elseif (($supplierMoney < $orderProductInfo['end_money']) && $supplierMoney > 0 ) {
+					$moneyStatus = 2;
+				}else{
+					$moneyStatus = 1;
+				}
+
+				$orderProductData['supplier_money_status'] = $moneyStatus;
+				$orderProductData['supplier_money'] = $supplierMoney;
+
+				$res2 = D("XgOrderProduct")->updateOrderProductInfo($orderProductData,$oldSupplierAccount['order_product_id']);
+
+				$res_str = "删除成功！";
+			}else{
+				$res_str = "删除失败！";
+			}
+			echo json_encode($res_str);
+		}
+
+		//删除订单中的产品信息
+		public function deleteOrderProduct(){
+
+			$post = $_POST;
+			$res = D("XgOrderProduct")->deleteOrderProductInfoById($post['order_product_id']);
+			// dump($res);
+			
+			//如果删除成功，则
+			if($res > 0){
+				//删除对应商品的向供应商付款记录
+				$res_1 = D("XgSupplierAccount")->deleteSupplierAccountInfoByOrderProductId($post['order_product_id']);
+				// dump($res_1);
+
+
+				//订单信息处理
+				$orderInfo = D("XgOrder")->getOrderInfoById($post['order_id']);
+				//订单中的产品id串处理
+				if(!empty($orderInfo['order_product_id'])){
+					$order_product_id_arr = explode(",", $orderInfo['order_product_id']);
+					// $new_order_product_id_arr[] = '';
+					foreach ($order_product_id_arr as $k => $v) {
+						if($v != $post['order_product_id']){
+							$new_order_product_id_arr[] = $v;
+						}
+					}
+					$order_product_id_str = implode(",", $new_order_product_id_arr);
+				}
+
+				//订单的总价格处理
+				//订单产品信息
+				$condition = "order_id = ".$post['order_id'];
+				$orderProductInfo = D("XgOrderProduct")->getOrderProductInfo($condition);
+				if(!empty($orderProductInfo)){
+					foreach ($orderProductInfo as $kk => $vv) {
+						$orderMoney = $orderMoney + $vv['end_money'];
+					}
+				}else{
+					$orderMoney = 0;
+				}
+
+				//客户付款状态处理
+				if($orderInfo['customer_money']>= $orderMoney ){
+					$moneyStatus = 3;
+				}elseif (($orderInfo['customer_money'] < $orderMoney ) && $orderInfo['customer_money'] > 0 ) {
+					$moneyStatus = 2;
+				}else{
+					$moneyStatus = 1;
+				}
+
+				$orderData['order_product_id'] = $order_product_id_str;
+				$orderData['order_money'] = $orderMoney;
+				$orderData['customer_money_status'] = $moneyStatus;
+				$orderData['update_manager_name'] = $_SESSION['userInfo']['truename'];
+
+				$res_2 = D("XgOrder")->updateOrderInfo($orderData,$post['order_id']);
+				// dump($res_2);
+
+				$res_str = "删除成功！";
+			}else{
+				$res_str = "删除失败！";
+			}
+			echo json_encode($res_str);
+
+		}
+
+
+		//修改订单时计算订单总价格
+		public function getOrderAllMoneyUpdate(){
+			$condition = "order_id = ".$_POST['order_id'];
+			$orderProductInfo = D("XgOrderProduct")->getOrderProductInfo($condition);
+			$orderMoney = 0;
+			if(!empty($orderProductInfo)){
+				foreach ($orderProductInfo as $k => $v) {
+					$orderMoney = $orderMoney + $v['end_money'];
+				}
+			}
+
+			echo $orderMoney;
+		}
+
+
+		//修改订单信息
+		public function updateOrder(){
+
+		}
+
+
+
 
 
 

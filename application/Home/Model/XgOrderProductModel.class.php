@@ -42,6 +42,11 @@
 			$res = M()->query($sql);
 			return $res;
 		}
+		//通过ID删除对应信息
+		public function deleteOrderProductInfoById($id){
+			$result = M("xg_order_product")->where("id = ".$id)->delete();
+			return $result;
+		}
 		
 		
 	}

@@ -32,7 +32,7 @@
                         <div class="am-u-sm-12">
                             <form class="am-form">
                                 <div class="am-form-group">
-                                    <label for="contact-department" class="am-u-sm-3 am-form-label">本次回款：</label>
+                                    <label for="contact-department" class="am-u-sm-3 am-form-label">本次付款：</label>
                                     <div class="am-u-sm-9" id="">
                                         <input type="text" name="money" id="money" value="">
                                     </div>
@@ -60,7 +60,7 @@
                             <form class="am-form">
                                  <div class="am-form-group">
                                     <div class="am-u-sm-10 am-u-sm-push-2">
-                                        <button type="button"  onclick="addCustomerMoney({$get['id']})" class="am-btn am-btn-primary">新增回款</button>
+                                        <button type="button"  onclick="addSupplierMoney({$get['order_id']},{$get['order_product_id']})" class="am-btn am-btn-primary">新增付款</button>
                                     </div>
                                 </div>
                             </form>
@@ -79,7 +79,7 @@
     <script src="__PUBLIC__/js/layer.js"></script>
     
     <script type="text/javascript">
-        function addCustomerMoney(order_id){
+        function addSupplierMoney(order_id,order_product_id){
             // alert(order_id);
             var money = $.trim($("#money").val());
             if(money == ''){
@@ -90,13 +90,12 @@
             var remark = $.trim($("#remark").val());
 
             //添加订单信息
-            $.post("__APP__/Order/addCustomerMoneyInfo",{"order_id":order_id,"money":money,"remark":remark},function(res){
+            $.post("__APP__/Order/addSupplierMoneyInfo",{"order_id":order_id,"order_product_id":order_product_id,"money":money,"remark":remark},function(res){
                     if(res > 0 ){
                         parent.layer.alert('添加成功！', {
                                                             icon: 1,
                                                             title:'提示',
                                                         });
-                        // parent.location.href='__APP__/Order/index';
                         //刷新订单页面
                         parent. location.reload();
                         

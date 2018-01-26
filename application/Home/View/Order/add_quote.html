@@ -189,28 +189,28 @@
             // alert(66666);
             var customer_name = $.trim($("#customer_name").val()); 
             if(customer_name == '' ){
-                layer.alert("请填写客户名称！", {icon: 5,offset: '200px',});
+                layer.alert("请填写客户名称！", {icon: 5,});
                 $("#customer_name").focus();
                 exit;
             }
 
             var customer_level = $("#customer_level_discount").val();
             if(customer_level == '' ){
-                layer.alert("请选择客户等级！", {icon: 5,offset: '200px',});
+                layer.alert("请选择客户等级！", {icon: 5,});
                 $("#customer_level_discount").focus();
                 exit;
             }
 
             var linkman_name = $.trim($("#linkman_name").val());
             if(linkman_name == '' ){
-                layer.alert("请填写联系人姓名！", {icon: 5,offset: '200px',});
+                layer.alert("请填写联系人姓名！", {icon: 5,});
                 $("#linkman_name").focus();
                 exit;
             }
 
             var linkman_phone = $.trim($("#linkman_phone").val());
             if(linkman_phone == '' ){
-                layer.alert("请填写联系人电话！", {icon: 5,offset: '200px',});
+                layer.alert("请填写联系人电话！", {icon: 5,});
                 $("#linkman_phone").focus();
                 exit;
             }
@@ -262,7 +262,7 @@
             var product_cost_price = $.trim($("#product_cost_price").val());
             if(hide_have_price_value == 2){
                 if(product_cost_price == ''){
-                    layer.alert("请输入成本单价！", {icon: 5,offset: '200px',});
+                    layer.alert("请输入成本单价！", {icon: 5,});
                     $("#product_cost_price").focus();
                     exit;
                 }
@@ -272,14 +272,14 @@
 
             var product_end_price_one = $.trim($("#end_product_price").val());
             if(product_end_price_one == '' ){
-                layer.alert("请输入单价！", {icon: 5,offset: '200px',}); 
+                layer.alert("请输入单价！", {icon: 5,}); 
                 $("#end_product_price").focus();
                 exit;
             }
 
             var product_end_price = $.trim($("#end_price").val());
             if(product_end_price == '' ){
-                layer.alert("请输入最终价格！", {icon: 5,offset: '200px',});
+                layer.alert("请输入最终价格！", {icon: 5,});
                 $("#end_price").focus();
                 exit;
             }
@@ -555,7 +555,7 @@
                 // product_technology();
                 var have_price_cost_price = $("#product_cost_price").val();
                 if(have_price_cost_price == ''){
-                    layer.alert("请输入产品成本单价！", {icon: 5,offset: '200px',});
+                    layer.alert("请输入产品成本单价！", {icon: 5,});
                     $("#product_cost_price").focus();
                     exit;
                 }
@@ -570,7 +570,7 @@
 
             var customer_level_discount = $("#customer_level_discount").val();
             if(customer_level_discount == ''){
-                layer.alert("请选择客户等级！", {icon: 5,offset: '200px',});
+                layer.alert("请选择客户等级！", {icon: 5,});
                     $("#customer_level_discount").focus();
                     exit;
             }
@@ -610,7 +610,7 @@
             
             if(product_cost_price == ''){
                 if(hide_have_price_value == 2){
-                    layer.alert("请输入产品成本单价！", {icon: 5,offset: '200px',});
+                    layer.alert("请输入产品成本单价！", {icon: 5,});
                     $("#product_cost_price").focus();
                     exit;
                 }
@@ -630,7 +630,7 @@
         function product_type_yz(){
             var product_type = $("#product_type").val();
             if(product_type == ''){
-                layer.alert("请选择产品分类！", {icon: 5,offset: '200px',});
+                layer.alert("请选择产品分类！", {icon: 5,});
                 $("#product_type").focus();
                 //重新对商品名称的内容进行渲染
                 var id = '';
@@ -645,7 +645,7 @@
         function product_name_yz(){
             var product_name = $("#product_name").val();
             if(product_name == ''){
-                layer.alert("请选择产品名称！", {icon: 5,offset: '200px',});
+                layer.alert("请选择产品名称！", {icon: 5,});
                 $("#product_name").focus();
                 exit;
             }
@@ -653,7 +653,7 @@
         function product_model_yz(){
             var product_model = $("#hide_product_model_value").val();
             if(product_model == ''){
-                layer.alert("请选择产品型号！", {icon: 5,offset: '200px',});
+                layer.alert("请选择产品型号！", {icon: 5,});
                 $("#product_model").focus();
                 exit;
             }
@@ -669,12 +669,12 @@
                     var product_spec = $("#hide_parameter_spec_value_"+post_parameter_arr[0]+"").val();
                     var product_paramerter_name = post_parameter_arr[1];
                     if(product_spec == ''){
-                        layer.alert("请选择"+product_paramerter_name+"！", {icon: 5,offset: '200px',});
+                        layer.alert("请选择"+product_paramerter_name+"！", {icon: 5,});
                         exit;
                     }
                 }
             }else{
-                layer.alert("请添加产品规格信息！", {icon: 5,offset: '200px',});
+                layer.alert("请添加产品规格信息！", {icon: 5,});
                 exit;
             }
         }
@@ -697,7 +697,7 @@
         function product_supplier_yz(){
             var product_supplier = $("#select_supplier_id").val();
             if(product_supplier == ''){
-                layer.alert("请选择供应商！", {icon: 5,offset: '200px',});
+                layer.alert("请选择供应商！", {icon: 5,});
                 $(".product_supplier").focus();
                 exit;
             }

@@ -69,6 +69,12 @@
 			$result = M()->query($sql);
 			return $result;
 		}
+		//第一条订单数据查询
+		public function getOrderInfoByOrder($condition){
+			$table = M("xg_order");
+			$result = $table->order("id ".$condition)->find();
+			return $result;
+		}
 		
 	}
 	
