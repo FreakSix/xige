@@ -137,12 +137,12 @@
 	 		$condition['limit']['pageSize'] = $pageSize;
 
 	 		$customerInfo = D("XgCustomer")->getCustomerInfos($condition);
-
-	 		return $data = [
+	 		
+	 		return $data[] = array(
 	 					"customerInfo" => $customerInfo,
 	 					"pageStr"      => $pageStr,
 	 					"search"	   => $search,
-	 			];
+	 			);
 		}
 		//客户详情页
 		public function details(){

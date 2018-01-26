@@ -452,6 +452,7 @@
 				$product['pid'] = $post['pid'];
 				$product['parameter_id_str'] = $post['parameter'];
 				$product['special_tec_str'] = $post['specialTec'];
+				$product['product_unit'] = $post['product_unit'];
 				$res = D("XgProductType")->addProductTypeInfo($product);
 
 				echo json_encode($res);
@@ -473,6 +474,7 @@
 				$product['pid'] = $post['pid'];
 				$product['parameter_id_str'] = $post['parameter'];
 				$product['special_tec_str'] = $post['specialTec'];
+				$product['product_unit'] = $post['product_unit'];
 				$res = D("XgProductType")->updateProductTypeInfo($product,$id);
 				echo json_encode($res);
 			}else{
