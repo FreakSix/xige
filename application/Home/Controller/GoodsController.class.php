@@ -334,7 +334,7 @@
 				// print_r($parameterIdArr);
 				$newParameterIdStr = implode(",",$parameterIdArr);
 				// print_r($newParameterIdStr);
-				$productId = $parameterIdStr = $product[$i]["id"];
+				$productId = $product[$i]["id"];
 				// print_r($productId);
 				$data['parameter_id_str'] = $newParameterIdStr;
 				// print_r($data);
@@ -347,9 +347,9 @@
 			//删除商品规格名称信息
 			$res_parameter = D("XgProductParameter")->deleteProductParameterById($post['parameter_id']);
 			if($res_parameter > 0 ){
-				$res_str = "删除成功！";
+				$res_str = 1;
 			}else{
-				$res_str = "删除失败！";
+				$res_str = 0;
 			}
 			echo json_encode($res_str); 
 		}
@@ -360,7 +360,7 @@
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
 			$get = $_GET;
-			//获取商品的分类
+			//获取服务类型
 			$productType = D("XgProductType")->getProductType();
 
 			$condition['where'] = "pid > 0 ";
@@ -390,10 +390,10 @@
 	 		$productInfo = D("XgProductType")->getProductInfo($condition);
 	 		// dump($productInfo);
 	 		foreach ($productInfo as $k => $v) {
-	 			//查询所属分类
+	 			//查询服务类型
 	 			$typeName = D("XgProductType")->getProductName($v['pid']);
 	 			$productInfo[$k]["type"] = $typeName["0"]["type_name"];
-	 			//查询商品规格信息
+	 			//查询产品规格信息
 	 			// $parameter_id_str = rtrim($v['parameter_id_str'], ',');
 				$productParameterInfo = D("XgProductParameter")->getProductParameterByIdWhereIn($v['parameter_id_str']);
 				// dump($productParameterInfo);
@@ -405,7 +405,16 @@
 	 				$parameter = rtrim($parameter,' / ');
 	 				$productInfo[$k]['parameter'] = $parameter;
 	 			}
-	 			// dump($parameter);
+	 			// 查询产品特殊工艺
+	 			$specialTec = D("XgProductSpecialTechnology")->getSpecialByWhereIdIn($v['special_tec_str']);
+	 			$specialTecInfo = "";
+	 			if(!empty($specialTec)){
+	 				foreach ($specialTec as $key => $value) {
+	 					$specialTecInfo .= $value['name']." / ";
+	 				}
+	 				$specialTecInfo = rtrim($specialTecInfo," / ");
+	 				$productInfo[$k]['specialTecInfo'] = $specialTecInfo;
+	 			}
 	 		}
 	 		// dump($productInfo);
 	 		// exit;
@@ -416,6 +425,18 @@
 
 			$this->display();
 		}
+		// 产品名称是否存在验证
+		public function checkProductName(){
+			if($_POST){
+				$name = $_POST['name'];
+				$result = D("XgProductType")->getProductByName($name);
+				if(empty($result)){
+					echo 1;
+				}else{
+					echo 0;
+				}
+			}
+		}
 		// 添加产品名称及其规格名称
 		public function addProductName(){
 			$post = $_POST;
@@ -423,16 +444,19 @@
 			$productTypeInfo = D("XgProductType")->getProductType();
 			//获取产品的全部规格类型
 			$productParameterInfo = D("XgProductParameter")->getProductParameter();
+			// 获取全部特殊工艺
+			$specialTecInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnology();
 
 			if(!empty($post)){
 				$product['type_name'] = $post['type_name'];
 				$product['pid'] = $post['pid'];
 				$product['parameter_id_str'] = $post['parameter'];
-				
+				$product['special_tec_str'] = $post['specialTec'];
 				$res = D("XgProductType")->addProductTypeInfo($product);
 
 				echo json_encode($res);
 			}else{
+				$this->assign("specialTecInfo",$specialTecInfo);
 				$this->assign("productTypeInfo",$productTypeInfo);
 				$this->assign("productParameterInfo",$productParameterInfo);
 
@@ -448,6 +472,7 @@
 				$product['type_name'] = $post['type_name'];
 				$product['pid'] = $post['pid'];
 				$product['parameter_id_str'] = $post['parameter'];
+				$product['special_tec_str'] = $post['specialTec'];
 				$res = D("XgProductType")->updateProductTypeInfo($product,$id);
 				echo json_encode($res);
 			}else{
@@ -456,12 +481,18 @@
 				//查询出对应的信息
 				$productTypeInfo = D("XgProductType")->getProduct($get['name_id']);
 				$selectParameter = explode(",", $productTypeInfo['0']['parameter_id_str']);
-				//查询商品规格的全部信息
+				// 当前产品的特殊工艺
+				$selectSpecialTec = explode(",", $productTypeInfo['0']['special_tec_str']);
+				//查询产品规格的全部信息
 				$productParameterInfo = D("XgProductParameter")->getProductParameter();
+				// 查询全部特殊工艺信息
+				$specialTecInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnology();
 				$this->assign("productType",$productType);
 				$this->assign("productTypeInfo",$productTypeInfo);
 				$this->assign("productParameterInfo",$productParameterInfo);
 				$this->assign("selectParameter",$selectParameter);
+				$this->assign("specialTecInfo",$specialTecInfo);
+				$this->assign("selectSpecialTec",$selectSpecialTec);
 				$this->display();
 			}
 		}
@@ -852,13 +883,13 @@
 
 				echo json_encode($res);
 			}else{
-				//商品名称
+				//产品名称
 				$productName = D("XgProductType")->getProduct($get['product']);
-				//商品分类
+				//服务类型
 				$productType = D("XgProductType")->getProduct($productName['0']['pid']);
-				//商品型号
+				//产品型号
 				$productModel = D("XgProduct")->getProductById($get['product_model']);
-				//商品规格信息处理
+				//产品规格信息处理
 				$spec_str = '';
 				$product_spec_arr = explode(",", $get["product_spec_str"]);
 
@@ -1038,6 +1069,96 @@
 				echo json_encode($res);
 				// return $res; 
 			}
+		}
+
+
+
+		// 产品特殊工艺页面
+		public function specialTechnology(){
+			$specialTec = D("XgProductSpecialTechnology")->getProductSpecialTechnology();
+			// dump($specialTec);exit;
+			$this->assign("specialTec",$specialTec);
+			$this->display();
+		}
+		// 验证产品特殊工艺名称是否已存在
+		public function checkSpecialTec(){
+			if($_POST){
+				$name = $_POST["name"];
+				$data = D("XgProductSpecialTechnology")->getSpecialTecByName($name);
+				if(empty($data)){
+					$res = 1;
+				}else{
+					$res = 0;
+				}
+				echo $res;
+			}
+		}
+		// 添加产品特殊工艺名称
+		public function addSpecialTec(){
+			$post = $_POST;
+			if(!empty($post)){
+				$tec['name'] = $post['name'];
+				$res = D("XgProductSpecialTechnology")->addSpecialTec($tec);
+				echo $res;
+			}else{
+				$this->display();
+			}
+		}
+		// 修改产品特殊工艺名称页面
+		public function updateSpecialTec(){
+			$get = $_GET;
+			if($get){
+				$id = $get["tec_id"];
+				$specialTecInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($id);
+				$this->assign("specialTecInfo",$specialTecInfo);
+				$this->display();
+			}
+		}
+		// 修改产品特殊工艺名称处理
+		public function updateSpecialTecHandle(){
+			$post = $_POST;
+			if(!empty($post)){
+				$id = $post['id'];
+				$data['name'] = $post['name'];
+				$res = D("XgProductSpecialTechnology")->updateSpecialTec($id,$data);
+				echo $res;
+			}
+		}
+		// 删除产品特殊工艺名称
+		public function deleteSpecialTec(){
+			$post = $_POST;
+			$id = $post['tec_id'];
+			// 查询有like $id 的产品信息
+			$productInfo = D("XgProductType")->getProductBySpecialTecId($id);
+			// print_r($productInfo);
+			$infoLength = count($productInfo);
+			// 逐一修改有该特殊工艺的产品信息里的特殊工艺字符串
+			if($infoLength >0){
+				for ($i=0; $i < $infoLength; $i++) { 
+					$specialTecIdStr = $productInfo[$i]["special_tec_str"];
+					$specialTecIdArr = explode(",", $specialTecIdStr);
+					foreach ($specialTecIdArr as $k => $v) {
+						if($v == $id){
+							unset($specialTecIdArr[$k]);
+						}
+					}
+					$newSpecialTecIdStr = implode(",", $specialTecIdArr);
+					$productId = $productInfo[$i]["id"];
+					// print_r($productId);
+					$data['special_tec_str'] = $newSpecialTecIdStr;
+					// print_r($data);
+					$res_product = D("XgProductType")->updateSpecialTecStr($productId,$data);
+					// dump($res_product);
+				}
+			}
+			// 删除产品特殊工艺名称
+			$res_2 = D("XgProductSpecialTechnology")->deleteSpecialTec($id);
+			if($res_2 > 0){
+				echo 1;
+			}else{
+				echo 0;
+			}
+
 		}
 
 	}

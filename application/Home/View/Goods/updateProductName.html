@@ -27,14 +27,12 @@
         </div>
         <div class="tpl-block ">
             <div class="am-g tpl-amazeui-form">
-                <div class="am-u-sm-12">
+                <div class="am-u-sm-12 am-u-md-10">
                     <form class="am-form am-form-horizontal">
                         <div class="contact">
                             <div class="am-form-group">
-                                <label class="am-u-sm-3 am-form-label" style="font-size:18px;">所属分类
-                                        <span id="sname_notice" style="color:#FF0000"> *</span> 
-                                </label>
-                                <div class="am-u-sm-7 am-u-end">
+                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">服务类型</label>
+                                <div class="am-u-sm-4 am-u-end">
                                     <select id="product_type" name="product_type" >
                                        <option value="" >请选择商品分类</option>
                                         <foreach name="productType" item="v">
@@ -48,18 +46,30 @@
                                 </div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-3 am-form-label" style="font-size:18px;">请输入商品名称
-                                    <span id="sname_notice" style="color:#FF0000"> *</span> 
-                                </label>
-                                <div class="am-u-sm-7 am-u-end">
+                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">请输入产品名称</label>
+                                <div class="am-u-sm-4 am-u-end">
                                     <input type="text" id="product_name" name="product_name" value="{$productTypeInfo['0']['type_name']}">
                                 </div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-3 am-form-label" style="font-size:18px;">请选择商品规格
-                                    <span id="sname_notice" style="color:#FF0000"> *</span> 
-                                </label>
-                                <div class="am-u-sm-9">
+                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">请选择产品特殊工艺</label>
+                                <div class="am-u-sm-8">
+                                    <foreach name="specialTecInfo" item="val">
+                                        <if condition="in_array($val['id'],$selectSpecialTec)">
+                                            <label class="am-checkbox-inline" style="font-size:16px;">
+                                                <input type="checkbox" id="specialTec" name="specialTec" value="{$val['id']}" checked="checked"> {$val['name']}
+                                            </label>
+                                        <else/>
+                                            <label class="am-checkbox-inline" style="font-size:16px;">
+                                                <input type="checkbox" id="specialTec" name="specialTec" value="{$val['id']}"> {$val['name']}
+                                            </label>
+                                        </if>
+                                    </foreach>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">请选择产品规格名称</label>
+                                <div class="am-u-sm-8">
                                     <foreach name="productParameterInfo" item="v">
                                         <?php if(in_array($v['id'],$selectParameter)){ ?>
                                             <label class="am-checkbox-inline" style="font-size:16px;">
@@ -105,14 +115,14 @@
             //选择商品类型验证
             var product_type = $("#product_type").val();
             if(product_type == ''){
-                parent.layer.msg('请选择商品类别！');
+                parent.layer.msg('请选择服务类型！');
                 $("#product_type").focus();
                 return false;
             }
             //添加商品名称验证
             var product_name = $("#product_name").val();
             if(product_name == ''){
-                parent.layer.msg('商品名称不能为空！');
+                parent.layer.msg('产品名称不能为空！');
                 $("#product_name").focus();
                 return false;
             }
@@ -124,33 +134,32 @@
                 }
             });
             if(parameter.length == 0){
-                parent.layer.msg('请选择商品规格！');
+                parent.layer.msg('请选择产品规格名称！');
                 $("#parameter").focus();
                 return false;
             }
             var parameter = parameter.join(',');
-
+            // 产品特殊工艺
+            var specialTec = [];
+            $("input[name=specialTec]").each(function(){
+                if(this.checked){
+                    specialTec.push($(this).val());
+                }
+            });
+            var specialTec = specialTec.join(',');
             $.ajax({
                 url:'__APP__/Goods/updateProductName',
                 type:'post',
-                data:'type_name='+product_name+'&pid='+product_type+'&parameter='+parameter+'&id='+id,
+                data:'type_name='+product_name+'&pid='+product_type+'&parameter='+parameter+'&id='+id+'&specialTec='+specialTec,
                 dataType:'json',
                 success:function(res){
                     if(res > 0 ){
-                        parent.layer.msg('修改成功！', {
-                                                            icon: 1,
-                                                            offset: '200px',
-                                                            title:'提示',
-                                                        });
+                        parent.layer.msg('修改成功！', {icon: 1,});
                         parent.location.href='__APP__/Goods/productName';
                         parent.layer.close(index);
 
                     }else{
-                        parent.layer.alert('修改失败！', {
-                                                            icon: 5,
-                                                            offset: '200px',
-                                                            title:'提示',
-                                                        });
+                        parent.layer.alert('修改失败！', {icon: 5,title:'提示',});
                         return false;
                     }
                 }

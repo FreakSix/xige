@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
   <link rel="stylesheet" href="__PUBLIC__/css/app.css" />
   <style>
-      .am-selected button { font-size: 14px; width: 130px; }
+      
   </style>
 </head>
 <body class="abc">
@@ -57,26 +57,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <if condition="$productParameterInfo eq ''">
-                                            <tr>
-                                                <td colspan="3" style="font-size: 16px; color: #f00">该产品的规格名称还未添加，请添加后再进行相关操作！</td>
-                                            </tr>
-                                        <else/>
-                                            <foreach name="productParameterInfo" item="v" key="k">
-                                                <tr class="xg-table-tr">
-                                                    <td>{$k+1}</td>
-                                                    <td>{$v['name']}</td>
-                                                    <td>
-                                                        <div class="am-btn-toolbar">
-                                                            <div class="am-btn-group am-btn-group-xs">
-                                                                <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onClick="updateProductParameter({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                                <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onClick="deleteProductParameter({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
-                                                            </div>
+                                        <foreach name="productParameterInfo" item="v" key="k">
+                                            <tr class="xg-table-tr">
+                                                <td>{$k+1}</td>
+                                                <td>{$v['name']}</td>
+                                                <td>
+                                                    <div class="am-btn-toolbar">
+                                                        <div class="am-btn-group am-btn-group-xs">
+                                                            <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onClick="updateProductParameter({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                            <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onClick="deleteProductParameter({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                            </foreach>
-                                        </if>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </foreach>
                                     </tbody>
                                 </table>
                                 <!-- <div class="am-cf">
@@ -152,8 +146,13 @@
                             type:'post',
                             dataType:'json',
                             success:function(res){
-                                layer.msg(res, {icon: 1,anim:5,});
-                                window.location.reload();
+                                if(res == 1){
+                                    layer.msg("删除产品规格名称成功！", {icon: 1,anim:5,});
+                                    window.location.reload();
+                                }else{
+                                    layer.alert('删除失败，请稍后重试！', {icon: 5,title:'提示'});
+                                }
+                                
                             }
                         });
                     }else{
