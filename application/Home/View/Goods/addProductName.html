@@ -49,6 +49,12 @@
                                     </div>
                                 </div>
                                 <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-form-label" style="font-size:18px;">请输入产品单位名称</label>
+                                    <div class="am-u-sm-4 am-u-end">
+                                        <input type="text" id="product_unit" name="product_unit">
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label" style="font-size:18px;">请选择产品特殊工艺</label>
                                     <div class="am-u-sm-8">
                                         <foreach name="specialTecInfo" item="val">
@@ -97,15 +103,22 @@
             //选择商品类型验证
             var product_type = $("#product_type").val();
             if(product_type == ''){
-                parent.layer.msg('请选择商品类别！',{time:1500});
+                parent.layer.msg('请选择服务类型！',{time:1500});
                 $("#product_type").focus();
                 return false;
             }
             //添加产品名称验证
             var product_name = $("#product_name").val();
             if(product_name == ''){
-                parent.layer.msg('商品名称不能为空！',{time:1500});
+                parent.layer.msg('产品名称不能为空！',{time:1500});
                 $("#product_name").focus();
+                return false;
+            }
+            // 添加产品单位名称验证
+            var product_unit = $("#product_unit").val();
+            if(product_unit == ''){
+                parent.layer.msg('产品单位名称不能为空！',{time:1500});
+                $("#product_unit").focus();
                 return false;
             }
             //选择商品规格验证
@@ -138,7 +151,7 @@
                         $.ajax({
                             url:'__APP__/Goods/addProductName',
                             type:'post',
-                            data:'type_name='+product_name+'&pid='+product_type+'&parameter='+parameter+'&specialTec='+specialTec,
+                            data:'type_name='+product_name+'&pid='+product_type+'&parameter='+parameter+'&specialTec='+specialTec+'&product_unit='+product_unit,
                             dataType:'json',
                             success:function(res){
                                 if(res > 0 ){
