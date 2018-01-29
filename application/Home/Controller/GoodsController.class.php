@@ -148,23 +148,23 @@
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
 			$get = $_GET;
-			//获取分类名称为印刷服务的分类
-			$condition['yinshua']['where'] = "pid = '0' and type_name = '印刷服务' ";
-			$yinshua = D("XgProductType")->getProductInfo($condition['yinshua']);
-			$yinshuaId = $yinshua['0']['id'];
+			// //获取分类名称为印刷服务的分类
+			// $condition['yinshua']['where'] = "pid = '0' and type_name = '印刷服务' ";
+			// $yinshua = D("XgProductType")->getProductInfo($condition['yinshua']);
+			// $yinshuaId = $yinshua['0']['id'];
 			//获取商品的分类
-			$condition['type']['where'] = "pid = '0' and id != ".$yinshuaId."";
+			$condition['type']['where'] = "	have_price = 1 ";
 			$productTypeInfo = D("XgProductType")->getProductInfo($condition['type']);
-			//获取全部商品名称
-			$condition['name']['where'] = "pid > 0  and pid != ".$yinshuaId."";
-			$productInfo = D("XgProductType")->getProductInfo($condition['name']);
+			// //获取全部商品名称
+			// $condition['name']['where'] = "pid > 0  and pid != ".$yinshuaId."";
+			// $productInfo = D("XgProductType")->getProductInfo($condition['name']);
 			//获取商品的型号
 			$productModelInfo = D("XgProduct")->getProductModelInfo();
 	 		
 			$this->assign("productSpecInfo",$productSpecInfo);
 			$this->assign("pageStr",$pageStr);
 			$this->assign("productTypeInfo",$productTypeInfo);
-			$this->assign("productInfo",$productInfo);
+			// $this->assign("productInfo",$productInfo);
 			$this->assign("productModelInfo",$productModelInfo);
 			$this->assign("productParameterInfo",$productParameterInfo);
 			$this->assign("search",$search);
@@ -523,9 +523,6 @@
 			$get = $_GET;
 			//获取商品的分类
 			$productTypeInfo = D("XgProductType")->getProductType();
-			//获取全部商品
-			$condition['product']['where'] = "pid > 0 ";
-			$productInfo = D("XgProductType")->getProductInfo($condition['product']);
 			// 条件搜索产品型号信息
 			if($get['product_type'] || $get['product']){
 				$search['product_type'] = $get['product_type'];
@@ -669,13 +666,7 @@
 			$get = $_GET;
 			//获取商品的分类
 			$productTypeInfo = D("XgProductType")->getProductType();
-			//获取全部商品名称
-			$condition['product']['where'] = "pid > 0 ";
-			$productInfo = D("XgProductType")->getProductInfo($condition['product']);
-			//获取商品的型号
-			$productModelInfo = D("XgProduct")->getProductModelInfo();
-			//获取商品的规格名
-			$productParameterInfo = D("XgProductParameter")->getProductParameter();
+			
 			// 条件搜索产品型号信息
 			if(!empty($get)){
 				$search['product_type'] = $get['product_type'];
