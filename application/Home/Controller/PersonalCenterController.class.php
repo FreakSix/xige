@@ -345,10 +345,10 @@
 			//获取所有的部门信息
 			$departArr = $departModel->getDepeartAll();	
 			//获取所有的职位信息
-// 			$dutyArr = $dutyModel->getDutyAll();
+			$dutyArr = $dutyModel->getDutyAll();
 			
 			$this->assign("departArr",$departArr);
-// 			$this->assign("dutyArr",$dutyArr);
+			$this->assign("dutyArr",$dutyArr);
 			$this->assign("managerInfo",$managerInfo);
 			$this->assign("departInfo",$departInfo);
 			$this->assign("dutyInfo",$dutyInfo);
@@ -362,7 +362,7 @@
 			$html = "";
 			if(!empty($dutyArr)){
 				foreach ($dutyArr as $k=>$v){
-					$html .= "<option value='".$v['id']."'>".$v['duty_name']."</option>";
+					$html .= "<option value='".$v['id']."' is_manager='".$v['is_manager']."'>".$v['duty_name']."</option>";
 				}
 			}
 			echo $html;
@@ -379,9 +379,14 @@
 			$data['email'] = $_REQUEST['email'];
 			$data['department_id'] = $_REQUEST['depart_id'];
 			$data['duty_id'] = $_REQUEST['duty_id'];
+			$is_manager = $_POST['is_manager'];
 			$managerModel = D("XgManager");
-			$res = $managerModel->addNewManager($data);
-			if($res){
+			$userId = $managerModel->addNewManager($data);
+			if($is_manager == 1){
+				$departModel = D("XgDepeartment");
+				$departModel->updateDepartManagerId($_REQUEST['depart_id'],$userId);
+			}
+			if($userId){
 				echo 1;
 			}else{
 				echo 0;
@@ -393,13 +398,33 @@
 		 */
 		public function saveEditManager(){
 			$id = $_REQUEST['id'];
+			$duty_id = $_REQUEST['duty_id'];
 			$data['truename'] = $_REQUEST['truename'];
 			$data['username'] = $_REQUEST['username'];
-			$data['password'] = "123456";
 			$data['tel'] = $_REQUEST['tel'];
 			$data['email'] = $_REQUEST['email'];
 			$data['department_id'] = $_REQUEST['depart_id'];
-			$data['duty_id'] = $_REQUEST['duty_id'];
+			$data['duty_id'] = $duty_id;
+			
+			$old_depart_id = $_REQUEST['old_depart_id'];
+			$old_duty_id = $_REQUEST['old_duty_id'];
+			$is_manager = $_REQUEST['is_manager'];
+			$old_is_manager = $_REQUEST['old_is_manager'];
+			if($old_duty_id != $duty_id){
+				$depeartModel = D("XgDepeartment");
+				if($is_manager == 1 && $old_is_manager == 0){
+					//直接修改depeartment的manager_id
+					$depeartModel->updateDepartManagerId($_REQUEST['depart_id'],$id);
+				}elseif($is_manager == 0 && $old_is_manager == 1){
+					//表明此时获取的职位不是管理员，但是之前该人所在的职位是当前部门的管理员
+					$depeartModel->updateDepartManagerId($old_depart_id,0);
+				}elseif($is_manager == 1 && $old_is_manager == 1){
+					//表明此时获取到的职位是管理员，之前该人所在的职位是当前部门的管理员
+					$depeartModel->updateDepartManagerId($_REQUEST['depart_id'],$id);
+					$depeartModel->updateDepartManagerId($old_depart_id,0);
+				}
+			}
+			
 			$managerModel = D("XgManager");
 			$res = $managerModel->updateEditManager($id,$data);
 			if($res){
@@ -493,6 +518,25 @@
 				echo 1;
 			}else{
 				echo 2;
+			}
+		}
+		/**
+		 * 当添加联系人的时候，若选中的职位是当前部门的负责人时，进行判断提示当前部门是否已经有负责人
+		 */
+		public function checkIsManager($depart_id){
+			$departModel = D("XgDepeartment");
+			$res = $departModel->getDepeartmentById($depart_id);
+			if(!empty($res)){
+				$is_manager = $res['manager_id'];
+				if($is_manager == '' || $is_manager == NUll){
+					echo 0;
+				}else{
+					$managerModel = D("XgManager");
+					$managerInfo = $managerModel->getManagerInfoById($is_manager);
+					echo $managerInfo['truename'];
+				}
+			}else{
+				echo 0;
 			}
 		}
 	}

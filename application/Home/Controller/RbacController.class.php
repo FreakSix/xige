@@ -113,6 +113,7 @@ class RbacController extends BaseController {
 	public function saveNewDyty(){
 		$data['duty_name'] = $_POST['duty_name'];
 		$data['depart_id'] = $_POST['depart_id'];
+		$data['is_manager'] = $_POST['is_manager'];
 		$data['total_person'] = 0;
 		$dutyModel = D("XgDuty");
 		$res = $dutyModel->addNewDuty($data);

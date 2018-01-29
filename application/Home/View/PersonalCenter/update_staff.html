@@ -35,9 +35,9 @@
                                 <select class="depart_option">
                                 <foreach name="departArr" item="item">
                                 <if condition="$item['id'] == $departInfo['id']">
-                                    <option value="{$item.id}" onclick="changeDutyOption(this)" selected ="selected ">{$item.depart_name}</option>
+                                    <option value="{$item.id}" onclick="changeDutyOption(this)" selected ="selected">{$item.depart_name}11</option>
                                 <else/>
-                                	 <option value="{$item.id}" onclick="changeDutyOption(this)">{$item.depart_name}</option>
+                                	 <option value="{$item.id}" onclick="changeDutyOption(this)">{$item.depart_name}22</option>
                                 </if>
                                 </foreach>
                                 </select>
@@ -47,7 +47,7 @@
                             <label class="am-u-sm-3 am-form-label">职位名称：</label>
                             <div class="am-u-sm-4 am-u-end">
                                 <select class="duty_option">
-                                    <option value="{$dutyInfo.id}">{$dutyInfo.duty_name}</option>
+                                    <option value="{$dutyInfo.id}"  is_manager="{$dutyInfo.is_manager}">{$dutyInfo.duty_name}</option>
                                 </select>
                             </div>
                         </div>
@@ -92,6 +92,7 @@
 	<input type="hidden" value="{$managerInfo.truename}" id="old_truename">
 	<input type="hidden" value="{$managerInfo.tel}" id="old_tel">
 	<input type="hidden" value="{$managerInfo.email}" id="old_email">
+	<input type="hidden" value="{$dutyInfo.is_manager}" id="old_is_manager">
 
     <script src="__PUBLIC__/js/jquery.min.js"></script>
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
@@ -119,6 +120,8 @@
 	    var truename = $("#truename").val();
 	    var tel = $("#tel").val();
 	    var email = $("#email").val();
+	    var is_manager = $(".duty_option").find("option:selected").attr("is_manager");
+	    var old_is_manager = $("#old_is_manager").val();
 	  	//用户名验证
        	if(username == ''){
            	parent.layer.msg('用户名不能为空！');
@@ -147,7 +150,24 @@
 	    	   alert("请修改内容之后在提交！");
 	    	   return false;
 	       }
-	       $.post("__APP__/PersonalCenter/saveEditManager",{"id":id,"depart_id":depart_id,"duty_id":duty_id,"username":username,"truename":truename,"tel":tel,"email":email},function(res){
+	       if((old_duty_id != duty_id) && is_manager == 1 ){
+	    	   $.post("__APP__/PersonalCenter/checkIsManager",{"depart_id":depart_id},function(res){
+	    		   if(res == 0 || res == ''){
+	    			   submitEditContent(id,depart_id,duty_id,username,truename,tel,email,is_manager,old_is_manager,old_duty_id,old_depart_id);
+	    		   }else{
+	    			   if(confirm("该部门已经由"+res+"负责，您确定要替换为"+truename+"吗？")){
+	    				   submitEditContent(id,depart_id,duty_id,username,truename,tel,email,is_manager,old_is_manager,old_duty_id,old_depart_id);
+	    			   }
+	    		   }
+	    	   })
+	       }else{
+	    	   submitEditContent(id,depart_id,duty_id,username,truename,tel,email,is_manager,old_is_manager,old_duty_id,old_depart_id);
+	       }
+	       
+	}
+	function submitEditContent(id,depart_id,duty_id,username,truename,tel,email,is_manager,old_is_manager,old_duty_id,old_depart_id){
+		$.post("__APP__/PersonalCenter/saveEditManager",{"id":id,"depart_id":depart_id,"duty_id":duty_id,"username":username,"truename":truename,"tel":tel,"email":email,"is_manager":is_manager,"old_is_manager":old_is_manager,"old_duty_id":old_duty_id,"old_depart_id":old_depart_id},function(res){
+	    	   alert(res);return false;
 	    	   if(res == 1){
 	    		   alert("修改员工信息成功！");
 	    		   closeLayer();

@@ -46,6 +46,18 @@
                                 <input type="text" value="" name="zhiweimingcheng">
                             </div>
                         </div>
+                         <div class="am-form-group" id="zhiweimingcheng_div">
+                            <label class="am-u-sm-3 am-form-label">职位类型：</label>
+                            <div class="am-u-sm-5 am-u-end">
+                            	<label class="am-radio-inline">
+                            		<input type="radio" value="0" name="zhiweimingcheng" checked> 部门员工 &nbsp;&nbsp;&nbsp;
+                            	</label>
+                            	<label class="am-radio-inline">
+                            		<input type="radio" value="1" name="zhiweimingcheng"> 部门负责人
+                            	</label>
+                                
+                            </div>
+                        </div>
                         <div class="am-form-group">
                             <div class="am-u-sm-10 am-u-sm-push-2">
                                 <button type="button" class="am-btn am-btn-primary" onclick="add_new_duty()">确认添加</button>
@@ -67,10 +79,11 @@
 	function add_new_duty(){
 		 var depart_id = $("#suoshubumen").val();
 		 var duty_name = $("input[name=zhiweimingcheng]").val();
+		 var is_manager = $('#zhiweimingcheng_div input[name="zhiweimingcheng"]:checked ').val();
 		 if(duty_name == ''){
 			 alert("请输入职位的名称！");return false;
 		 }
-		 $.post("__APP__/Rbac/saveNewDyty",{"depart_id":depart_id,"duty_name":duty_name},function(res){
+		 $.post("__APP__/Rbac/saveNewDyty",{"depart_id":depart_id,"duty_name":duty_name,"is_manager":is_manager},function(res){
 			 if(res == 1){
 				 alert("新添加职位成功！");
 			 }else{
