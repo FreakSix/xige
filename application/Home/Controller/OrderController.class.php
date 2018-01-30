@@ -916,7 +916,7 @@
 			}else{
 				//根据客户等级ID获取等级信息 
 				$customerLevelInfo = D("XgCustomerLevel")->getLevelInfoById($post['customer_level']);
-				$discountMoneyVal = $customerLevelInfo['level_discount']*($post['product_num']*$post['product_cost_price']);
+				$discountMoneyVal = $customerLevelInfo['level_price']*($post['product_num']*$post['product_cost_price']);
 				$discountMoney['money'] = $discountMoneyVal;
 				$discountMoney['money_1'] = "￥ ";
 				$discountMoney['money_2'] = " 元";
@@ -1584,6 +1584,9 @@
 				//录入时间处理
 				$insertTime =  date("Y-m-d H:i:s",$quoteInfo['add_time']);
 				$quoteInfo['insert_time'] = $insertTime;
+				//产品单位处理 
+				$productInfo = D("XgProductType")->getProduct($quoteInfo['product_name_id']);
+				$quoteInfo['product_unit'] = $productInfo['0']['product_unit'];
 	    	}
 	    	// dump($quoteInfo);
 
@@ -1709,6 +1712,9 @@
 						}
 					}
 					$quoteInfo['special_technology_value'] = $specialTechnologyhStr;
+					//产品单位处理 
+					$productInfo = D("XgProductType")->getProduct($quoteInfo['product_name_id']);
+					$quoteInfo['product_unit'] = $productInfo['0']['product_unit'];
 					
 		    	}
 		    	// dump($orderInfo);
