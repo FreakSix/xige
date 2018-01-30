@@ -1,48 +1,51 @@
 <div class="am-form-group" id="refer_history_order_div" name="refer_history_order_div">
     <label for="contact-department" class="am-u-sm-2 am-form-label">历史订单：</label>
-    <div class="am-u-sm-10" style="margin-bottom:10px;">
-
+    <div class="am-u-sm-10">
         <if condition="$productHistoryOrderInfo != null ">
             <foreach name="productHistoryOrderInfo" item="v" key="k">
-                <div class="am-u-sm-12">
-                    <div class="am-u-sm-12" style="margin-bottom:20px;">
-                        供应商：<span>{$v['supplier_name']}</span>&nbsp;&nbsp;
-                        客户：<span>{$v['customer_name']}</span>&nbsp;&nbsp;
-                        数量：<b style="color: #f00;">{$v['num']}</b>&nbsp;&nbsp;
-                        成本单价：<b style="color: #f00;">{$v['cost_price']}元</b>&nbsp;&nbsp;
-                        成交单价：<b style="color: #f00;">{$v['end_price']}元</b>
-                    </div>
+                <div>
+                    <label class="am-form-label" style="padding: 0">客户：</label>
+                        <span style="font-size: 16px">{$v['customer_name']}</span>&nbsp;&nbsp;
+                    <label class="am-form-label" style="padding: 0">供应商：</label>
+                        <span style="font-size: 16px">{$v['supplier_name']}</span>&nbsp;&nbsp;
+                    <label class="am-form-label" style="padding: 0">数量：</label>
+                        <span style="font-size: 16px">{$v['num']}</span>&nbsp;&nbsp;
+                    <label class="am-form-label" style="padding: 0">成本单价：</label>
+                        <b style="font-size: 16px;">{$v['cost_price']}元</b>&nbsp;&nbsp;
+                    <label class="am-form-label" style="padding: 0">成交单价：</label>
+                        <b style="font-size: 16px;">{$v['end_price']}元</b>
                 </div>
             </foreach>
         <else/>
             <div class="am-u-sm-10">
                 <!-- <b style='color: #f00;'>该产品暂无历史订单！</b> -->
-                <span style="color: #f00;">该产品暂无历史订单！</span>
+                <span style="color: #f00;">历史订单中暂无该产品交易信息！</span>
             </div> 
         </if>
     </div>
-    
 </div>
 <div class="am-form-group" id="refer_history_quote_div" name="refer_history_quote_div">
     <label for="contact-department" class="am-u-sm-2 am-form-label">历史报价：</label>
-    <div class="am-u-sm-10" style="margin-bottom:10px;">
-
+    <div class="am-u-sm-10">
         <if condition="$productHistoryQuoteInfo != null ">
             <foreach name="productHistoryQuoteInfo" item="v" key="k">
-                <div class="am-u-sm-12">
-                    <div class="am-u-sm-12" style="margin-bottom:20px;">
-                        客户：<span>{$v['customer_name']}</span>&nbsp;&nbsp;
-                        供应商：<span>{$v['supplier_name']}</span>&nbsp;&nbsp;
-                        数量：<b style="color: #f00;">{$v['num']}</b>&nbsp;&nbsp;
-                        成本单价：<b style="color: #f00;">{$v['cost_price']}元</b>&nbsp;&nbsp;
-                        报价：<b style="color: #f00;">{$v['end_money']}元</b>
-                    </div>
+                <div style="margin-bottom:5px;font-size: 16px">
+                    <label class="am-form-label" style="padding: 0">报价客户：</label>
+                        <span style="font-size: 16px">{$v['customer_name']}</span>&nbsp;&nbsp;
+                    <label class="am-form-label" style="padding: 0">供应商：</label>
+                        <span style="font-size: 16px">{$v['supplier_name']}</span>&nbsp;&nbsp;
+                    <label class="am-form-label" style="padding: 0">数量：</label>
+                        <span style="font-size: 16px">{$v['num']}</span>&nbsp;&nbsp;
+                    <label class="am-form-label" style="padding: 0">报出单价：</label>
+                        <b style="font-size: 16px;">{$v['end_price']}元</b>&nbsp;&nbsp;
+                    <label class="am-form-label" style="padding: 0">报出总价：</label>
+                        <b style="font-size: 16px;">{$v['end_money']}元</b>
                 </div>
             </foreach>
         <else/>
             <div class="am-u-sm-10">
                 <!-- <b style='color: #f00;'>该产品暂无历史订单！</b> -->
-                <span style="color: #f00;">该产品暂无历史报价记录！</span> 
+                <span style="color: #f00;">历史报价记录暂无该产品报价信息！</span> 
             </div> 
         </if>
 

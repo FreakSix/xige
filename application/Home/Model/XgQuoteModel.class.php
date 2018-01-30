@@ -2,6 +2,12 @@
 	namespace Home\Model;
 	use Think\Model;
 	class XgQuoteModel extends Model {
+		// 获取全部报价记录信息
+		public function getAllQuote(){
+			$sql = "select * from xg_quote";
+			$result = M()->query($sql);
+			return $result;
+		}
 		//根据搜索信息查出商品的价格
 		public function getProductQuoteInfo($condition){
 			$sql = "select * from xg_quote where {$condition}";

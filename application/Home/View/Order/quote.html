@@ -66,20 +66,28 @@
                         </div>
                         <div class="am-u-sm-5 am-u-md-5" >
                             <div class="am-form-group" style="margin-left:30px;text-align: right;">
-                                <span style="font-size: 16px; vertical-align: middle;">搜索类型：</span>
+                                <span style="font-size: 16px; vertical-align: middle;">搜索条件：</span>
                                 <select data-am-selected="{btnSize: 'sm'}" id="input_type_value">
-                                    <if condition="$get['input_type_value'] == customer ">
+                                    <if condition="$get['input_type_value'] == manager_name ">
                                         <option value="0" >请选择条件</option>
-                                        <option value="product">商品名称</option>
+                                        <option value="product">产品名称</option>
+                                        <option value="customer">客户名称</option>
+                                        <option value="manager_name" selected="selected">录入人</option>
+                                    <elseif condition="$get['input_type_value'] == customer"/>
+                                        <option value="0" >请选择条件</option>
+                                        <option value="product">产品名称</option>
                                         <option value="customer" selected="selected">客户名称</option>
+                                        <option value="manager_name">录入人</option>
                                     <elseif condition="$get['input_type_value'] == product " />
                                         <option value="0" >请选择条件</option>
-                                        <option value="product" selected="selected">商品名称</option>
+                                        <option value="product" selected="selected">产品名称</option>
                                         <option value="customer">客户名称</option>
+                                        <option value="manager_name">录入人</option>
                                     <else/>
                                         <option value="0" selected="selected">请选择条件</option>
-                                        <option value="product">商品名称</option>
+                                        <option value="product">产品名称</option>
                                         <option value="customer">客户名称</option>
+                                        <option value="manager_name">录入人</option>
                                     </if>
                                 </select>
                             </div>
@@ -99,13 +107,13 @@
                                 <table class="am-table am-table-striped am-table-hover table-main">
                                     <thead>
                                         <tr>
-                                            <th class=""><input type="checkbox" class="tpl-table-fz-check xg-select-box"></th>
+                                            <!-- <th class=""><input type="checkbox" class="tpl-table-fz-check xg-select-box"></th> -->
                                             <th >序号</th>
                                             <th class="">客户名称</th>
                                             <th class="">客户等级</th>
                                             <th class="">联系人姓名</th>
                                             <th class="">联系人电话</th>
-                                            <th class="">商品名称</th>
+                                            <th class="">产品名称</th>
                                             <th class="">数量</th>
                                             <th class="">单价</th>
                                             <th class="">总价</th>
@@ -117,7 +125,7 @@
                                     <tbody>
                                         <foreach name="productQuoteInfo" item="v" key="k">
                                             <tr class="xg-table-tr">
-                                                <td><input type="checkbox" value="{$v['id']}" name="quote_id"></td>
+                                                <!-- <td><input type="checkbox" value="{$v['id']}" name="quote_id"></td> -->
                                                  <td>{$k+1}</td> 
                                                 <td><a href="__APP__/Order/quoteDetail/id/{$v['id']}">{$v['customer_name']}</a></td>
                                                 <td>{$v['level_name']}</td>
@@ -146,8 +154,8 @@
                                     <div class="am-u-sm-4 am-u-md-4">
                                         <div class="am-btn-toolbar">
                                             <div class="am-btn-group am-btn-group-xs">
-                                                <button type="button" onclick="exportAllQuote()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 导出全部</button>
-                                                <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出选中</button>
+                                                <button type="button" onclick="exportAllQuote()" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-save"></span> 导出当前全部数据</button>
+                                                <!-- <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出选中</button> -->
                                             </div>
                                         </div>
                                     </div>
@@ -185,9 +193,9 @@
             endDate: moment(),
             opens:'left'
     },function(start, end) {
-            $('#daterange-btn span').html(start.format('YYYY-MM-DD') + ' 到 ' + end.format('YYYY-MM-DD'));
+            $('#daterange-btn span').html(start.format('YYYY-MM-DD') + ' To ' + end.format('YYYY-MM-DD'));
 
-            $("#hide_search_date").val(start.format('YYYY-MM-DD') + "To" + end.format('YYYY-MM-DD'));
+            $("#hide_search_date").val(start.format('YYYY-MM-DD') + " To " + end.format('YYYY-MM-DD'));
             // alert(start.format('YYYYMMDD') + " " + end.format('YYYYMMDD'));
     });
 
@@ -296,13 +304,25 @@
 
     // 导出检索出来的全部报价记录
     function exportAllQuote(){
+        // 日期
         var search_date_value = $("#hide_search_date").val();
-        alert(search_date_value);
+        // 搜索条件
         var input_type_value = $("#input_type_value").val();
-        alert(input_type_value);
+        // 搜索内容
         var search_value = $.trim($("#search_value").val());
-        alert(search_value);
-        return false;
+        if(search_date_value == ""){
+            search_date_value =0;
+        }
+        // alert(search_date_value);
+        if(input_type_value == 0){
+            search_value = 0;
+        }
+        // alert(input_type_value);
+        if(search_value == ""){
+            search_value = 0;
+        }
+        // alert(search_value);
+        // return false;
         window.location="__APP__/Order/exportQuote/input_type_value/"+input_type_value+"/search_value/"+search_value+"/search_date_value/"+search_date_value;
     }
 

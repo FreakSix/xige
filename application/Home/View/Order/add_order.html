@@ -17,9 +17,11 @@
     <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
     <link rel="stylesheet" href="__PUBLIC__/css/app.css">
     <style>
+        h4 { margin: .5rem 0; }
+        hr { margin: 0; }
+        .am-form-group .am-form-label { width: 120px }
     </style>
 </head>
-
 <body data-type="generalComponents" class="abc">
     <!-- 网站头部 -->
     <header class="am-topbar am-topbar-inverse admin-header">
@@ -27,7 +29,7 @@
     </header>
     <div class="tpl-page-container tpl-page-header-fixed">
         <!-- 左侧菜单栏 -->
-        <div class="tpl-left-nav tpl-left-nav-hover" nav="supplier">
+        <div class="tpl-left-nav tpl-left-nav-hover xg-left-nav" nav="order">
             <include file="Public:menu"/>
         </div>
         <!-- 右侧主要内容 -->
@@ -51,7 +53,7 @@
                         <div class="am-u-sm-12 am-u-md-9">
                             <form class="am-form am-form-horizontal">
                                 <!-- 公司信息 -->
-                                <h5>客户信息</h5>
+                                <h4>客户信息</h4>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">客户名称：</label>
                                     <div class="am-u-sm-5">
@@ -64,7 +66,7 @@
                                         </select>
                                     </div>
                                     <label for="user-name" class="am-u-sm-2 am-form-label">交货日期：</label>
-                                    <div class="am-u-sm-3" id="trade_time_div">
+                                    <div class="am-u-sm-3 am-u-end" id="trade_time_div">
                                         <input type="text" id="trade_time" class="am-form-field" placeholder="交货日期" data-am-datepicker readonly required />
                                     </div>
                                 </div>
@@ -77,36 +79,32 @@
                                         </select>
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">联系电话：</label>
-                                    <div class="am-u-sm-3">
+                                    <div class="am-u-sm-3 am-u-end">
                                         <input type="text" value=" " name="lxr_phone" id="lxr_phone">
                                     </div>
                                 </div>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">收货地址：</label>
-                                    <div class="am-u-sm-10">
+                                    <div class="am-u-sm-10 am-u-end">
                                         <input type="text"  name="lxr_address" id="lxr_address" value="" />
                                     </div>
                                 </div>
                                 <hr/>
                                 <!-- 商品信息 -->
                                 <div class="am-form-group">
-                                    <div class="am-u-sm-2">
-                                         <h5>商品信息</h5>
+                                    <div class="am-u-sm-2" style="width: 120px">
+                                         <h4>产品信息</h4>
                                     </div>
-                                    <div class="am-u-sm-10">
-                                        <button type="button" class="am-btn am-btn-default" onclick="addProductInfo()">添加商品信息</button>
+                                    <div class="am-u-sm-2 am-u-end" style="margin-top: 5px">
+                                        <button type="button" class="am-btn am-btn-xs am-btn-success" onclick="addProductInfo()"><span class="am-icon-plus"></span> 添加商品</button>
                                     </div>
-
                                     <input type="hidden" value="1" id="add_tr_id" />
-                                
                                 </div>
-
                                 <div class="am-form-group">
-                                    <div class="am-u-sm-2">
+                                    <div class="am-u-sm-1">
                                     </div>
-                                    <div class="am-u-sm-10">
-                                    
-                                <table class="am-table am-table-striped am-table-hover table-main">
+                                    <div class="am-u-sm-11">
+                                        <table class="am-table am-table-striped am-table-hover table-main">
                                             <thead>
                                                 <tr>
                                                     <th>商品</th>
@@ -115,9 +113,8 @@
                                                     <th>数量</th>
                                                     <th>成本单价</th>
                                                     <th>销售单价</th>
-                                                    <th>实际成交总价</th>
-                                                    <!-- <th>备注</th> -->
-                                                    <th class="table-set">操作</th>
+                                                    <th>成交总价</th>
+                                                    <th>操作</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="add_product_info_tr">
@@ -126,14 +123,11 @@
                                         </table>
                                         </div>
                                 </div>
-
-
                                 <hr/>
-
-                                <h5>订单基本信息</h5>
+                                <h4>订单基本信息</h4>
                                 <div class="am-form-group">
                                     <label for="contact-department" class="am-u-sm-2 am-form-label">订单总价：</label>
-                                    <div class="am-u-sm-2">
+                                    <div class="am-u-sm-1">
                                         <button type="button"  onclick="getOrderAllMoney()" class="am-btn am-btn-default">自动计算</button>
                                     </div>
                                     <div class="am-u-sm-3 am-u-end" id="order_all_money">
@@ -147,9 +141,7 @@
                                         <input type="text" name="order_remarks" id="order_remarks" value=''   >
                                     </div> 
                                 </div>
-                                
                                 <hr/>
-
                                 <div class="am-form-group">
                                     <div class="am-u-sm-10 am-u-sm-push-2">
                                         <button type="button"  onclick="addOrder()" class="am-btn am-btn-primary">提交订单</button>
@@ -193,7 +185,7 @@
         });
         var order_product_id = order_product_id_arr.join(',');
         if(order_product_id == '' ){
-            layer.alert("请选择商品信息！", {icon: 5,});
+            layer.alert("请选择产品信息！", {icon: 5,});
             exit;
         }
         // alert(order_product_id);

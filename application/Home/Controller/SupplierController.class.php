@@ -110,14 +110,6 @@
 
 		// 添加供应商信息
 		public function addSupplier(){
-			// 权限验证
-			$power = $this->isPower("addSupplier");
-			if($power == false){
-				echo "<script>";
-				echo "alert('您没有权限操作该功能！请联系管理员！')";
-				echo "</script>";
-				exit;
-			}
 			// 左侧菜单
 			$productTypeModel = D("XgProductType");
 	    	// 获取商品分类
@@ -130,8 +122,6 @@
 	    		$productType[$k]["productMenu"] = $productMenu;
 	    	}
 	    	$this->assign("productType",$productType);
-
-
 			//获取省份信息
 			$province = $this->getProvince("0");
 			$this->assign("province",$province);
@@ -152,11 +142,14 @@
 	    	}
 	    	// dump($productType);
 	    	$this->assign("productType",$productType);
+			$this -> display("add_supplier");
+		}
+		public function addSupplierHandle(){
 			//接收post传值
 			$post = $_POST;
 			if(!empty($_POST)){
 				// dump(sizeof($post["checkbox"]));
-				// dump($post);exit;
+				// print_r($_POST);exit;
 
 				// dump($post['checkbox']);exit;
 				// 添加供应商基本信息
@@ -187,13 +180,6 @@
 					if($supplierIdStr[0]["supplier_id_str"] == ""){
 						$supplierIdStr = $data;
 						$result = D("XgProductType")->updateSupplierIdStr($id,$supplierIdStr);
-						// dump($supplierIdStr);
-						// dump($result);
-						// if($result){
-						// 	echo "<script>alert('供应商ID添加成功');</script>";
-						// }else{
-						// 	echo "wtf";
-						// }
 					}else{
 						$supplierIdStr = $supplierIdStr[0]["supplier_id_str"].",".$data;
 						$result = D("XgProductType")->updateSupplierIdStr($id,$supplierIdStr);
@@ -226,13 +212,11 @@
 				
 				}
 				if($res_1&&$res_2){
-					$this->redirect("Supplier/index");
+					echo 1;
 				}else{
-					echo "<script>javascript:history.back(-1);</script>";
+					echo 0;
 				}
 					
-			}else{
-				$this -> display("add_supplier");
 			}
 		}
 
@@ -249,7 +233,7 @@
 	 		}else{
 	 			$res = 2;
 	 		}
-	 			echo json_encode($res);
+	 			echo $res;exit;
 		}
 
 		// 供应商详细信息

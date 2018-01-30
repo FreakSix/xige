@@ -286,7 +286,6 @@
 
             //添加报价记录
             $.post("__APP__/Order/addQuoteInfo",{"customer_name":customer_name,"customer_level":customer_level,"linkman_name":linkman_name,"linkman_tel":linkman_phone,"remark":remark,"product_type_id":product_type_id,"product_name_id":product_name_id,"product_model_id":product_model_id,"product_spec_id_str":product_spec_str,"special_technologyh_id_str":special_techmology_str,"supplier_id":product_supplier_id,"supplier_name":product_supplier_name,"num":product_num,"discount_money":product_discount_money,"end_price":product_end_price_one,"end_money":product_end_price,"cost_price":product_cost_price},function(res){
-                    alert($res);return false;
                     if(res > 0 ){
                         parent.layer.msg('报价记录添加成功！', {icon: 1,});
                         parent.location.href='__APP__/Order/quote';

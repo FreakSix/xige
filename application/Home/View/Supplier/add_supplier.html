@@ -52,7 +52,7 @@
                 <div class="tpl-block ">
                     <div class="am-g tpl-amazeui-form">
                         <div class="am-u-sm-12 am-u-lg-10">
-                            <form class="am-form am-form-horizontal" action="__APP__/Supplier/addSupplier" method="post" enctype="multipart/form-data">
+                            <form class="am-form am-form-horizontal" method="post" enctype="multipart/form-data">
                                 <!-- 公司信息 -->
                                 <h4>公司信息</h4>
                                 <div class="am-form-group">
@@ -169,7 +169,7 @@
                                 <hr/>
                                 <div class="am-form-group" style="margin-top: 1rem">
                                     <div class="am-u-sm-10 am-u-sm-push-2">
-                                        <button id="submit" type="submit" class="am-btn am-btn-primary">确认添加</button>
+                                        <button id="submit" type="button" class="am-btn am-btn-primary">确认添加</button>
                                     </div>
                                 </div>
                             </form>
@@ -184,117 +184,6 @@
 <script src="__PUBLIC__/js/app.js"></script>
 <script src="__PUBLIC__/js/plus.js"></script>
 <script src="__PUBLIC__/layer/layer.js"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-        // 输入框失去焦点时验证
-        // 供应商名称失去焦点时验证
-        $("#supplier_name").blur(function(){
-            var sname = $("#supplier_name").val();
-            if(sname == ''){
-                $("#name_notice").html("请填写供应商名称！");
-            }else{
-                $.ajax({
-                    "url":"__APP__/Supplier/checkSname", //发送ajax请求的地址
-                    "type":"post",     //以post形式发送数据
-                    "data":"sname="+sname,  
-                    "success":function(response){
-                         if(response==1){
-                             $("#name_notice").html("供应商名称已存在！");
-                         }else if(response==2){
-                             $("#name_notice").html("");
-                         }
-                    }
-                });
-            }
-        });
-        // 所在地区验证
-        $("#supplier_area").blur(function(){
-            var pro = $("#supplier_pro").val();
-            var city = $("#supplier_city").val();
-            var area = $("#supplier_area").val();
-            if(pro==0 && city==0 && area==0){
-                $("#address_notice").html("请选择供应商所在地区！");
-            }else if(pro==0 || city==0 || area==0){
-                $("#address_notice").html("请填全供应商所在地区！");
-            }else{
-                $("#address_notice").html("");
-            }
-        });
-        // 街道
-        $("#supplier_street").blur(function(){
-            if(($("#supplier_street").val()) == ""){
-                $("#street_notice").html("请填写供应商具体街道信息！");
-            }else{
-                $("#street_notice").html("");
-            }
-        });
-        $("#link_name").blur(function(){
-            if(($("#link_name").val()) == ""){
-                $("#linkman_notice").html("请填写联系人姓名！");
-            }else{
-                $("#linkman_notice").html("");
-            }
-        })
-        // 提交时进行信息验证
-        $("#submit").click(function(){
-            // 判断供应商名称
-            var supplierName = $("#supplier_name").val();
-            if(supplierName == ""){
-                layer.msg("请输入供应商名称！",{icon:7,time:2000});
-                $("#name_notice").html("请填写供应商名称！");
-                $("#supplier_name").focus();
-            }else{
-                $.ajax({
-                    "url":"__APP__/Supplier/checkSname", //发送ajax请求的地址
-                    "type":"post",     //以post形式发送数据
-                    "data":"sname="+supplierName,     
-                    "success":function(response){
-                         if(response==1){
-                             $("#name_notice").html("供应商名称已存在！");
-                             $("#supplier_name").focus();
-                         }else if(response==2){
-                             $("#name_notice").html("");
-                         }
-                    }
-                });
-            }
-            var pro = $("#supplier_pro").val();
-            var city = $("#supplier_city").val();
-            var area = $("#supplier_area").val();
-            // alert($("#supplier_pro").val());
-            // alert($("#supplier_city").val());
-            // alert($("#supplier_area").val());
-            if(pro==0 && city==0 && area==0){
-                $("#address_notice").html("请选择供应商所在地区！");
-            }else if(pro==0 || city==0 || area==0){
-                $("#address_notice").html("请填全供应商所在地区！");
-            }
-            var street = $("#supplier_street").val();
-            if(street == ""){
-                $("#street_notice").html("请填写供应商具体街道信息！");
-            }
-            var product = $("input[type='checkbox']:checked").length;
-            if(product == 0){
-                $("#product_notice").html("请选择供应商可做产品！");
-            }
-            var linkman = $("#link_name").val();
-            if(linkman == ""){
-                $("#linkman_notice").html("请填写联系人姓名！");
-                return false;
-            }
-        })
-    });
-    function addStyle(id){
-        // alert($(".xg-product-select-"+id).hasClass("xg-product-selected"));
-        // if($(".xg-product-select-"+id).hasClass("xg-product-selected")){
-        //     $(".xg-product-select-"+id).removeClass("xg-product-selected");
-        // }else{
-        //     $(".xg-product-select-"+id).addClass("xg-product-selected");
-        // }
-        
-    }
-</script>
-
 <!-- 公司所在地址详细信息联动查询 -->
 <script type="text/javascript">
     //已有的地址信息修改
@@ -372,5 +261,135 @@
       })
     }
 </script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        
+        // 输入框失去焦点时验证
+        // 供应商名称失去焦点时验证
+        $("#supplier_name").blur(function(){
+            var sname = $("#supplier_name").val();
+            if(sname == ''){
+                $("#name_notice").html("请填写供应商名称！");
+            }else{
+                $.ajax({
+                    "url":"__APP__/Supplier/checkSname", //发送ajax请求的地址
+                    "type":"post",     //以post形式发送数据
+                    "data":"sname="+sname,  
+                    "success":function(response){
+                         if(response==1){
+                             $("#name_notice").html("供应商名称已存在！");
+                         }else if(response==2){
+                             $("#name_notice").html("");
+                         }
+                    }
+                });
+            }
+        });
+        // 所在地区验证
+        $("#supplier_area").blur(function(){
+            var pro = $("#supplier_pro").val();
+            var city = $("#supplier_city").val();
+            var area = $("#supplier_area").val();
+            if(pro==0 && city==0 && area==0){
+                $("#address_notice").html("请选择供应商所在地区！");
+            }else if(pro==0 || city==0 || area==0){
+                $("#address_notice").html("请填全供应商所在地区！");
+            }else{
+                $("#address_notice").html("");
+            }
+        });
+        // 街道
+        $("#supplier_street").blur(function(){
+            if(($("#supplier_street").val()) == ""){
+                $("#street_notice").html("请填写供应商具体街道信息！");
+            }else{
+                $("#street_notice").html("");
+            }
+        });
+        $("#link_name").blur(function(){
+            if(($("#link_name").val()) == ""){
+                $("#linkman_notice").html("请填写联系人姓名！");
+            }else{
+                $("#linkman_notice").html("");
+            }
+        })
+        // 提交时进行信息验证
+        $("#submit").click(function(){
+
+            // 判断供应商名称
+            var supplierName = $("#supplier_name").val();
+            if(supplierName == ""){
+                layer.msg("请输入供应商名称！",{icon:7,time:2000});
+                $("#name_notice").html("请填写供应商名称！");
+                $("#supplier_name").focus();
+            }else{
+                
+            }
+            var pro = $("#supplier_pro").val();
+            var city = $("#supplier_city").val();
+            var area = $("#supplier_area").val();
+            // alert($("#supplier_pro").val());
+            // alert($("#supplier_city").val());
+            // alert($("#supplier_area").val());
+            if(pro==0 && city==0 && area==0){
+                $("#address_notice").html("请选择供应商所在地区！");
+            }else if(pro==0 || city==0 || area==0){
+                $("#address_notice").html("请填全供应商所在地区！");
+            }
+            var street = $("#supplier_street").val();
+            if(street == ""){
+                $("#street_notice").html("请填写供应商具体街道信息！");
+            }
+            var product = $("input[type='checkbox']:checked").length;
+            if(product == 0){
+                $("#product_notice").html("请选择供应商可做产品！");
+            }
+            var linkman = $("#link_name").val();
+            if(linkman == ""){
+                $("#linkman_notice").html("请填写联系人姓名！");
+                return false;
+            }
+            var data=$('form').serialize();
+            $.ajax({
+                "url":"__APP__/Supplier/checkSname",
+                "type":"post",
+                "data":"sname="+supplierName, 
+                "success":function(response){
+                    if(response==1){
+                        layer.msg("供应商名称已存在，请修改",{icon:7,time:2000});
+                        $("#name_notice").html("供应商名称已存在！");
+                        $("#supplier_name").focus();
+                        exit;
+                    }else if(response==2){
+                         $.ajax({
+                            'url':"__APP__/Supplier/addSupplierHandle",
+                            'type':'post',
+                            'data': data,
+                            success:function(res){
+                                if(res == 1){
+                                    layer.msg("添加供应商信息成功！",{icon:1});
+                                    window.location.href="__APP__/Supplier/index";
+                                }else{
+                                    layer.alert("添加供应商信息失败，请稍后重试！",{icon:2,title:'提示'});
+                                }
+                            }
+                        })
+                    }
+                }
+            });
+        });
+    });
+    function addStyle(id){
+        // alert($(".xg-product-select-"+id).hasClass("xg-product-selected"));
+        // if($(".xg-product-select-"+id).hasClass("xg-product-selected")){
+        //     $(".xg-product-select-"+id).removeClass("xg-product-selected");
+        // }else{
+        //     $(".xg-product-select-"+id).addClass("xg-product-selected");
+        // }
+        
+    }
+</script>
+
+
 </body>
 </html>

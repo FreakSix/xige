@@ -20,8 +20,6 @@
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css">
     <link rel="stylesheet" href="__PUBLIC__/css/daterangepicker.css">
     <script src="__PUBLIC__/js/jquery.min.js"></script>
-    <link rel="stylesheet" href="__PUBLIC__/css/layui/css/layui.css"  media="all">
-  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 
 </head>
 
@@ -62,19 +60,18 @@
                                     <input type="hidden" value="{$get['search_date_value']}" id="hide_search_date" />
 
                                 </div>
-                            
                         </div>
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
-                        <div class="am-u-sm-12 am-u-md-4">
+                        <div class="am-u-sm-1" style="min-width: 110px;">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
                                     <button type="button" onclick="addOrder()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增订单</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="am-u-sm-12 am-u-md-2">
+                        <div class="am-u-sm-2 xg-search-condition">
                             <div class="am-form-group">
                                 订单状态： 
                                 <select data-am-selected="{btnSize: 'sm'}" id="order_status" onchange="searchSubmit();">
@@ -89,7 +86,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="am-u-sm-12 am-u-md-2">
+                        <div class="am-u-sm-2 xg-search-condition">
                             <div class="am-form-group">
                                 客户付款状态：
                                 <select data-am-selected="{btnSize: 'sm'}" id="money_status" onchange="searchSubmit();">
@@ -132,17 +129,16 @@
                                 </select>
                             </div>
                         </div> -->
-                        <div class="am-u-sm-12 am-u-md-2">
-                            <!-- <label class="am-u-sm-1 am-form-label">客户名称：</label> -->
-                            <div class="am-input-group am-input-group-sm searchinput">
-                                <input type="text" class="am-form-field user_loadq cz_top_input" placeholder="请输入客户名称" value="{$get['search_value']}" id="search_value" onkeyup="finds()">
+                        <div class="am-u-sm-3 xg-search-condition" style="min-width: 320px!important">
+                            <div class="xg-search-input">
+                                <input style=" " type="text" class="" placeholder="请输入客户名称" value="{$get['search_value']}" id="search_value" onkeyup="finds()">
+                            </div>
+                            <span class="" style="border-radius: 0 5px 5px 0; float: left;">
+                                <button style="border-radius: 0 5px 5px 0; " class="am-btn am-btn-success tpl-am-btn-success am-icon-search" type="button"  onclick="searchSubmit('input');"></button>
+                            </span>
+                            <div class="xg-search-menu">
                                 <ul class="searchmore" id="searchmore">
                                 </ul>
-                                <span class="am-input-group-btn">
-                                    <button class="am-btn am-btn-success tpl-am-btn-success am-icon-search" type="button"  onclick="searchSubmit('input');"></button>
-                                </span>
-                                
-                                <div class="clearfloat"></div>
                             </div>
                             <!-- <div class="am-input-group am-input-group-sm searchinput">
                                 <input  type="text"  class="user_loadq cz_top_input" style="width:169px;" >
@@ -451,11 +447,18 @@
     //     // })
     //     // alert()
     // }
-
-    
 </script>
 
 <script type="text/javascript">
+    var inputWidth = $(".xg-search-input").width();
+    var menuWidth = inputWidth+2;
+    $(".xg-search-menu").width(menuWidth);
+    $(".xg-search-input input").focus(function(){
+        $(".xg-search-input").addClass("xg-search-input-active");
+    });
+    $(".xg-search-input input").blur(function(){
+        $(".xg-search-input").removeClass("xg-search-input-active");
+    });
     function finds(){
         var search_value = $.trim($("#search_value").val());
         // alert(search_value);
@@ -463,7 +466,7 @@
             $.post("__APP__/Order/searchCustomerInfo",{"search_value":search_value},function(res){
                 var item = '';
                 $(".searchmore").empty();//清空原来的ul
-                if(res !=null){
+                if(res != ""){
                     // $.each(res,function(i,res){//循环加入到ul中去
                     //     item = "<li>"+res+"<li>";
                     //     $(".searchmore").append(item);
@@ -526,8 +529,6 @@
             //     })
 
             // })
-
 </script>
 </body>
-
 </html>

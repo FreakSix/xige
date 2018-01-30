@@ -6,7 +6,7 @@
 	class LoginController extends Controller{
 		
 		public function index(){
-			print_r($_SESSION);
+			// print_r($_SESSION);
 			$this -> display();
 		}
 		

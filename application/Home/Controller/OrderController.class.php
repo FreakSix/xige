@@ -254,8 +254,7 @@
 			// $this->assign("parameterStr",$parameterStr);
 
 			$this->display("add_order");
-		}
-		
+		}		
 		//添加订单信息
 		public function addOrderInfo(){
 			$post=$_POST;
@@ -304,7 +303,6 @@
 
 			}
 		}
-
 		//新增订单时添加订单商品信息
 		public function addOrderProductInfo(){
 			$post=$_POST;
@@ -634,299 +632,12 @@
 
 		//删除订单信息（修改订单状态为4）
 		public function deleteOrderInfo(){
-			$power = $this->isPower("dingdanzuofei");
-			if($power == false){
-				$res_str = "您没有权限操作此功能，请联系管理员！";
-				echo json_encode($res_str);
-				exit;
-			}
 			$post = $_POST;
 			$res = D("XgOrder")->deleteOrderInfoById($post['id']);
 
 			// $data['order_status'] = 4; 
 			// $res = D("XgOrder")->updateOrderInfo($data,$post['id']);
 
-			if($res > 0){
-				$res_str = "删除成功！";
-			}else{
-				$res_str = "删除失败！";
-			}
-			echo json_encode($res_str);
-		}
-
-
-
-
-
-		// 报价记录首页
-		public function quote(){
-			// 左侧菜单
-			$productType = $this->menu();
-			$this->assign("productType",$productType);
-			$get = $_GET;
-			// dump($get);
-			$condition = array();
-			if(!empty($get)){
-				//如果有时间
-				if($get['search_date_value'] ){
-					// dump($get);
-					$dateTimeArr = explode("To", $get['search_date_value']);
-					// dump($dateTimeArr);exit;
-					// foreach ($dateTimeArr as $k => $v) {
-					// 	$str = str_replace('年','-',$v);
-					// 	$str = str_replace('月','-',$str);
-					// 	$str = rtrim($str,"日");
-					// 	$dateTimeArr_2[] = $str;
-					// }
-					$startTime = strtotime($dateTimeArr['0']);
-					$endTime = (strtotime($dateTimeArr['1'])) + 86400;
-
-					$whereArr[] = "add_time >= '".$startTime."' and add_time < '".$endTime."'";
-				}else{
-					$get['search_date_value'] = '';
-				}
-				//如果有输入值搜索
-				if($get['search_value']){
-					if($get['input_type_value'] == 'customer'){
-						$whereArr[] = "customer_name like '%".$get['search_value']."%'";
-						// $condition['where'] = "rank = ".$post['customer_level']." and cname like '%".$post['search_content']."%'";
-					}else if($get['input_type_value'] == 'supplier'){
-						$whereArr[] = "supplier_name like '%".$get['search_value']."%'";
-					}else{
-						$whereArr[] = "product_name like '%".$get['search_value']."%'";
-					}
-				}else{
-					$get['search_value'] = '';
-				}
-
-				$where = implode(' and ',$whereArr);
-				// dump($where);
-				$condition['where'] = $where;
-			}
-			
-			//订单信息中符合条件的总记录数
-			$count = D("XgQuote")->getQuoteCount($condition);
-			// dump($count);
-	 		$pageSize = 15;
-	 		//实例化分页类
-	 		$page = new \Think\Page($count,$pageSize);
-	 		//获取起始位置
-	 		$firstRow = $page->firstRow;
-	 		// 设置显示页码个数
-	 		$page->rollPage = 5;
-	 		//获取分页结果
-	 		$pageStr = $page->show();
-	 		//总页数
-	 		$totalPage = $page->totalPages;
-	 		
-	 		//查询商品名称
-	 		$condition['order'] = "id desc";
-	 		$condition['limit']['firstRow'] = $firstRow;
-	 		$condition['limit']['pageSize'] = $pageSize;
-
-			$productQuoteInfo = D("XgQuote")->quoteInfo($condition);
-			// dump($productOrderInfo);
-
-			if(!empty($productQuoteInfo)){
-				foreach ($productQuoteInfo as $k => $v) {
-					//客户等级处理
-					$customerLevelInfo = D("XgCustomerLevel")->getLevelInfoById($v['customer_level_id']);
-					$productQuoteInfo[$k]['level_name'] = $customerLevelInfo['name'];
-					//录入时间处理
-					$insertTime =  date("Y-m-d H:i:s",$v['add_time']);
-					$productQuoteInfo[$k]['insert_time'] = $insertTime;
-				}
-			}
-			
-			$this->assign("productQuoteInfo",$productQuoteInfo);
-			$this->assign("pageStr",$pageStr);
-			$this->assign("get",$get);
-
-			$this -> display("quote");
-		}
-
-		public function quoteDetail(){
-			// 左侧菜单
-			$productType = $this->menu();
-			$this->assign("productType",$productType);
-
-			//报价记录详情
-			$quoteInfo = D("XgQuote")->getQuoteInfoById($_GET['id']);
-			// dump($quoteInfo);
-			if(!empty($quoteInfo)){
-	    		//客户等级处理
-	    		$customerLevelInfo = D("XgCustomerLevel")->getLevelInfoById($quoteInfo['customer_level_id']);
-				$quoteInfo['customer_level_name'] = $customerLevelInfo['name'];
-				//商品规格信息处理
-				$productParameterSpecArr = explode(",", $quoteInfo['product_spec_id_str']);
-				if(!empty($productParameterSpecArr)){
-					// dump($productParameterSpecArr);
-					foreach ($productParameterSpecArr as $k => $v) {
-						$specInfo = D("XgProductSpec")->getSpecById($v);
-						//商品规格名称
-						$parameterName = D("XgProductParameter")->getProductParameterById($specInfo['0']['parameter_id']);
-						$specInfo['0']['parameter_name'] = $parameterName['0']['name'];
-						$quoteInfo['parameter_spec_value'][] = $specInfo['0'];
-					}
-				}
-				//商品特殊工艺信息处理
-				$specialTechnologyhStr = '';
-				if(!empty($quoteInfo['special_technologyh_id_str'])){
-					$productSpecialTechnologyhArr = explode(",", $quoteInfo['special_technologyh_id_str']);
-					// dump($productParameterSpecArr);
-					foreach ($productSpecialTechnologyhArr as $k => $v) {
-						$specialInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($v);
-						$specialTechnologyhStr .= $specialInfo['name']."&nbsp;&nbsp;&nbsp;&nbsp;";
-					}
-				}
-				$quoteInfo['special_technology_value'] = $specialTechnologyhStr;
-	    		
-				//录入时间处理
-				$insertTime =  date("Y-m-d H:i:s",$quoteInfo['add_time']);
-				$quoteInfo['insert_time'] = $insertTime;
-	    	}
-	    	// dump($quoteInfo);
-
-			$this->assign("quoteInfo",$quoteInfo);
-			$this->display("quote_detail");
-		}
-
-		// 新增报价记录页面
-		public function addQuote(){
-			//客户等级信息
-			$customerLevelInfo = D("XgCustomer")->getCustomerLevelInfo();
-			// dump($customerLevelInfo);
-			//全部产品分类
-			$productTypeInfo = D("XgProductType")->getProductType();
-			//全部产品名称
-			$condition['where'] = "pid > 0";
-			$productNameInfo = D("XgProductType")->getProductInfo($condition);
-
-			$this->assign("customerLevelInfo",$customerLevelInfo);
-			$this->assign("productTypeInfo",$productTypeInfo);
-			$this->assign("productNameInfo",$productNameInfo);
-			$this->display("add_quote");
-		}
-		//添加订单信息
-		public function addQuoteInfo(){
-			$post=$_POST;
-			dump($post);exit;
-			$data = array();
-			if(!empty($post)){
-				//获取产品分类名称
-				$productTypeInfo = D("XgProductType")->getProductName($post['product_type_id']);
-				$productTypeName = $productTypeInfo['0']['type_name'];
-				//获取产品名称
-				$productInfo = D("XgProductType")->getProductName($post['product_name_id']);
-				$productName = $productInfo['0']['type_name'];
-				//获取产品型号名称
-				$productModelInfo = D("XgProduct")->getProductById($post['product_model_id']);
-				$productModelName = $productModelInfo['0']['name'];
-				//产品规格字符串处理
-				$spec_arr = array();
-				$specStrInfo = rtrim($post['product_spec_id_str'],",");
-				$product_spec_arr = explode(",", $specStrInfo);
-
-				foreach ($product_spec_arr as $k => $v) {
-					$spec_arr[] = (int)$v;
-				}
-				sort($spec_arr);
-				$spec_str = implode(",",$spec_arr);
-
-				$data['customer_name'] = $post['customer_name'];
-				$data['customer_level_id'] = $post['customer_level'];
-				$data['linkman_name'] = $post['linkman_name'];
-				$data['linkman_tel'] = $post['linkman_tel'];
-				$data['remark'] = $post['remark'];
-				$data['product_type_id'] = $post['product_type_id'];
-				$data['product_type'] = $productTypeName;
-				$data['product_name_id'] = $post['product_name_id'];
-				$data['product_name'] = $productName;
-				$data['product_model_id'] = $post['product_model_id'];
-				$data['product_model'] = $productModelName;
-				$data['product_spec_id_str'] = $spec_str;
-				$data['special_technologyh_id_str'] = $post['special_technologyh_id_str'];
-				$data['supplier_id'] = $post['supplier_id'];
-				$data['supplier_name'] = $post['supplier_name'];
-				$data['num'] = $post['num']; 
-				$data['cost_price'] = $post['cost_price'];
-				$data['discount_money'] = $post['discount_money'];
-				$data['end_price'] = $post['end_price'];
-				$data['end_money'] = $post['end_money'];
-				$data['add_time'] = time();
-				$data['manager_name'] = $_SESSION['userInfo']['truename'];
-				// dump($data);
-				$res = D("XgQuote")->addQuoteInfo($data);
-				echo $res;
-
-			}
-		}
-
-		//修改报价记录信息
-		public function updateQuote(){
-			$get = $_GET;
-			$post = $_POST;
-			// dump($get);
-
-			if(!empty($post)){
-				// dump($post);
-				$id = $post['quote_id'];
-
-				$data['customer_name'] = $post['customer_name'];
-				$data['customer_level_id'] = $post['customer_level'];
-				$data['linkman_name'] = $post['linkman_name'];
-				$data['linkman_tel'] = $post['linkman_phone'];
-				$data['remark'] = $post['remark'];
-				$data['end_price'] = $post['end_price'];
-				$data['end_money'] = $post['end_money'];
-				$res = D("XgQuote")->updateQuoteInfo($data,$id);
-
-				echo json_encode($res);
-
-			}else{
-				$quoteInfo = D("XgQuote")->getQuoteInfoById($_GET['id']);
-		    	// dump($orderInfo);
-		    	if(!empty($quoteInfo)){
-					//客户等级信息
-					$customerLevelInfo = D("XgCustomerLevel")->getCustomerLevelInfo();;
-					//商品规格信息处理
-					$productParameterSpecArr = explode(",", $quoteInfo['product_spec_id_str']);
-					if(!empty($productParameterSpecArr)){
-						// dump($productParameterSpecArr);
-						foreach ($productParameterSpecArr as $k => $v) {
-							$specInfo = D("XgProductSpec")->getSpecById($v);
-							//商品规格名称
-							$parameterName = D("XgProductParameter")->getProductParameterById($specInfo['0']['parameter_id']);
-							$specInfo['0']['parameter_name'] = $parameterName['0']['name'];
-							$quoteInfo['parameter_spec_value'][] = $specInfo['0'];
-						}
-					}
-					//商品特殊工艺信息处理
-					$specialTechnologyhStr = '';
-					if(!empty($quoteInfo['special_technologyh_id_str'])){
-						$productSpecialTechnologyhArr = explode(",", $quoteInfo['special_technologyh_id_str']);
-						// dump($productParameterSpecArr);
-						foreach ($productSpecialTechnologyhArr as $k => $v) {
-							$specialInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($v);
-							$specialTechnologyhStr .= $specialInfo['name']."&nbsp;&nbsp;&nbsp;&nbsp;";
-						}
-					}
-					$quoteInfo['special_technology_value'] = $specialTechnologyhStr;
-					
-		    	}
-		    	// dump($orderInfo);
-				
-				$this->assign("quoteInfo",$quoteInfo);
-				$this->assign("customerLevelInfo",$customerLevelInfo);
-
-				$this -> display("update_quote");
-			}
-		}
-
-		//删除报价记录信息
-		public function deleteQuoteInfo(){
-			$post = $_POST;
-			$res = D("XgQuote")->deleteQuoteInfoById($post['id']);
 			if($res > 0){
 				$res_str = "删除成功！";
 			}else{
@@ -947,12 +658,7 @@
 			}
 			echo $html;
 		}
-
-		// 导出检索出的全部报价记录
-		public function exportQuote(){
-			dump($_GET);exit;
-		}
-
+		
 
 		/**
 		 * 根据客户的信息获取联系人的信息
@@ -1222,7 +928,6 @@
 		//商品参考报价信息
 		public function getOrderReferInfoMoney(){
 			$post=$_POST;
-
 			//计算草考价格
 			if(empty($post['customer_level'])){
 				$customerInfo = D("XgCustomer")->getCustomerInfo($post['customer_id']);
@@ -1253,8 +958,6 @@
 			$this->assign("discountMoney",$discountMoney);
 			$this->display("common_order_refer_info_money");
 		}
-
-
 		//根据分类ID判断该分类是否有特殊工艺
 		public function getProductSpecialTechnology($id){
 			$productTypeInfo = D("XgProductType")->getProduct($id);
@@ -1270,26 +973,19 @@
 					$this->display("common_special_technology");
 				}
 			}
-
 		}
-
-
 		//新增订单中的客户回款弹窗页面
 		public function addCustomerMoney(){
-			
 			//订单客户回款记录
 			$get = $_GET;
-
 			$this->assign("get",$get);
 			$this->display("add_customer_money");
 		}
-
 		//新增订单中的客户回款信息
 		public function addCustomerMoneyInfo(){
 			$post = $_POST;
 			//根据订单ID查询出订单信息，取需要的数据如表
 			$orderInfo = D("XgOrder")->getOrderInfoById($post['order_id']);
-
 			if(!empty($orderInfo)){
 				$data['order_id'] = $post['order_id'];
 				$data['order_num'] = $orderInfo['order_id'];
@@ -1321,7 +1017,6 @@
 				echo $res;
 			}
 		}
-
 		//订单中的客户回款详情 
 		public function customerMoneyInfo(){
 			//订单客户回款记录
@@ -1340,7 +1035,6 @@
 			$this->assign("get",$get);
 			$this->display("customer_money_info");
 		}
-
 		//修改客户回款记录 
 		public function updateCustomerMoneyInfo(){
 			//订单客户回款记录
@@ -1391,9 +1085,7 @@
 				$this->assign("get",$get);
 				$this->display("update_customer_money_info");
 			}
-			
 		}
-
 		public function deleteCustomerAccountInfo(){
 			$post = $_POST;
 			//客户回款信息中的原信息
@@ -1432,8 +1124,6 @@
 			}
 			echo json_encode($res_str);
 		}
-
-
 		//新增订单时添加商品信息弹窗页面
 		public function addProductInfo(){
 			$productTypeModel = D("XgProductType");
@@ -1447,7 +1137,6 @@
 			$this->assign("get",$_GET);
 			$this->display("add_product_info");
 		}
-
 		//修改订单时添加商品信息弹窗页面
 		public function addProductInfo_update(){
 			$productTypeModel = D("XgProductType");
@@ -1461,7 +1150,6 @@
 			$this->assign("get",$_GET);
 			$this->display("add_product_info_update");
 		}
-
 		//订单页面计算订单总价
 		public function getOrderAllMoney(){
 			$post = $_POST;
@@ -1477,7 +1165,6 @@
 
 			echo $allMoney;
 		}
-
 		//搜索获取客户信息
 		public function searchCustomerInfo(){
 			$post = $_POST;
@@ -1488,13 +1175,12 @@
 			$html = "";
 			if(!empty($customerInfo)){
 				foreach($customerInfo as $k=>$v){
-					$html .= "<li class='xg-product-btn' style='margin-top:5px;' onclick=searchCustomerName('".$v['cname']."')>".$v['cname']."<li>";
+					$html .= "<li onclick=searchCustomerName('".$v['cname']."')>".$v['cname']."<li>";
 				}
 			}
 			echo $html;
 
 		}
-
 		//订单产品信息处理
 		public function dellOrderProductInfo($orderInfo){
 			//订单产品信息查询
@@ -1552,8 +1238,6 @@
 			return $orderInfo;
 
 		}
-
-
 		//修改订单产品信息
 		public function updateOrderProductInfo(){
 			$post = $_POST;
@@ -1795,8 +1479,6 @@
 			echo json_encode($res_str);
 
 		}
-
-
 		//修改订单时计算订单总价格
 		public function getOrderAllMoneyUpdate(){
 			$condition = "order_id = ".$_POST['order_id'];
@@ -1810,13 +1492,485 @@
 
 			echo $orderMoney;
 		}
-
-
 		//修改订单信息
 		public function updateOrder(){
 
 		}
 
+
+		 
+		// 报价记录首页
+		public function quote(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+			$get = $_GET;
+			// dump($get);
+			$condition = array();
+			if(!empty($get)){
+				//如果有时间
+				if($get['search_date_value'] ){
+					// dump($get);
+					$dateTimeArr = explode("To", $get['search_date_value']);
+					$startTime = strtotime($dateTimeArr['0']);
+					$endTime = (strtotime($dateTimeArr['1'])) + 86400;
+
+					$whereArr[] = "add_time >= '".$startTime."' and add_time < '".$endTime."'";
+				}else{
+					$get['search_date_value'] = '';
+				}
+				//如果有输入值搜索
+				if($get['search_value']){
+					if($get['input_type_value'] == 'customer'){
+						$whereArr[] = "customer_name like '%".$get['search_value']."%'";
+						// $condition['where'] = "rank = ".$post['customer_level']." and cname like '%".$post['search_content']."%'";
+					}else if($get['input_type_value'] == 'supplier'){
+						$whereArr[] = "supplier_name like '%".$get['search_value']."%'";
+					}else if($get['input_type_value'] == 'product'){
+						$whereArr[] = "product_name like '%".$get['search_value']."%'";
+					}else{
+						$whereArr[] = "manager_name like '%".$get['search_value']."%'";
+					}
+				}else{
+					$get['search_value'] = '';
+				}
+
+				$where = implode(' and ',$whereArr);
+				// dump($where);
+				$condition['where'] = $where;
+			}
+			
+			//订单信息中符合条件的总记录数
+			$count = D("XgQuote")->getQuoteCount($condition);
+			// dump($count);
+	 		$pageSize = 15;
+	 		//实例化分页类
+	 		$page = new \Think\Page($count,$pageSize);
+	 		//获取起始位置
+	 		$firstRow = $page->firstRow;
+	 		// 设置显示页码个数
+	 		$page->rollPage = 5;
+	 		//获取分页结果
+	 		$pageStr = $page->show();
+	 		//总页数
+	 		$totalPage = $page->totalPages;
+	 		
+	 		//查询商品名称
+	 		$condition['order'] = "id desc";
+	 		$condition['limit']['firstRow'] = $firstRow;
+	 		$condition['limit']['pageSize'] = $pageSize;
+
+			$productQuoteInfo = D("XgQuote")->quoteInfo($condition);
+			// dump($productOrderInfo);
+			if(!empty($productQuoteInfo)){
+				foreach ($productQuoteInfo as $k => $v) {
+					//客户等级处理
+					$customerLevelInfo = D("XgCustomerLevel")->getLevelInfoById($v['customer_level_id']);
+					$productQuoteInfo[$k]['level_name'] = $customerLevelInfo['name'];
+					//录入时间处理
+					$insertTime =  date("Y-m-d H:i:s",$v['add_time']);
+					$productQuoteInfo[$k]['insert_time'] = $insertTime;
+				}
+			}
+			$this->assign("productQuoteInfo",$productQuoteInfo);
+			$this->assign("pageStr",$pageStr);
+			$this->assign("get",$get);
+
+			$this -> display("quote");
+		}
+		public function quoteDetail(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
+			//报价记录详情
+			$quoteInfo = D("XgQuote")->getQuoteInfoById($_GET['id']);
+			// dump($quoteInfo);
+			if(!empty($quoteInfo)){
+	    		//客户等级处理
+	    		$customerLevelInfo = D("XgCustomerLevel")->getLevelInfoById($quoteInfo['customer_level_id']);
+				$quoteInfo['customer_level_name'] = $customerLevelInfo['name'];
+				//商品规格信息处理
+				$productParameterSpecArr = explode(",", $quoteInfo['product_spec_id_str']);
+				if(!empty($productParameterSpecArr)){
+					// dump($productParameterSpecArr);
+					foreach ($productParameterSpecArr as $k => $v) {
+						$specInfo = D("XgProductSpec")->getSpecById($v);
+						//商品规格名称
+						$parameterName = D("XgProductParameter")->getProductParameterById($specInfo['0']['parameter_id']);
+						$specInfo['0']['parameter_name'] = $parameterName['0']['name'];
+						$quoteInfo['parameter_spec_value'][] = $specInfo['0'];
+					}
+				}
+				//商品特殊工艺信息处理
+				$specialTechnologyhStr = '';
+				if(!empty($quoteInfo['special_technologyh_id_str'])){
+					$productSpecialTechnologyhArr = explode(",", $quoteInfo['special_technologyh_id_str']);
+					// dump($productParameterSpecArr);
+					foreach ($productSpecialTechnologyhArr as $k => $v) {
+						$specialInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($v);
+						$specialTechnologyhStr .= $specialInfo['name']."&nbsp;&nbsp;&nbsp;&nbsp;";
+					}
+				}
+				$quoteInfo['special_technology_value'] = $specialTechnologyhStr;
+	    		
+				//录入时间处理
+				$insertTime =  date("Y-m-d H:i:s",$quoteInfo['add_time']);
+				$quoteInfo['insert_time'] = $insertTime;
+	    	}
+	    	// dump($quoteInfo);
+
+			$this->assign("quoteInfo",$quoteInfo);
+			$this->display("quote_detail");
+		}
+		// 新增报价记录页面
+		public function addQuote(){
+			//客户等级信息
+			$customerLevelInfo = D("XgCustomer")->getCustomerLevelInfo();
+			// dump($customerLevelInfo);
+			//全部产品分类
+			$productTypeInfo = D("XgProductType")->getProductType();
+			//全部产品名称
+			$condition['where'] = "pid > 0";
+			$productNameInfo = D("XgProductType")->getProductInfo($condition);
+
+			$this->assign("customerLevelInfo",$customerLevelInfo);
+			$this->assign("productTypeInfo",$productTypeInfo);
+			$this->assign("productNameInfo",$productNameInfo);
+			$this->display("add_quote");
+		}
+		//添加报价记录信息处理
+		public function addQuoteInfo(){
+			$post=$_POST;
+			$data = array();
+			if(!empty($post)){
+				//获取产品分类名称
+				$productTypeInfo = D("XgProductType")->getProductName($post['product_type_id']);
+				$productTypeName = $productTypeInfo['0']['type_name'];
+				//获取产品名称
+				$productInfo = D("XgProductType")->getProductName($post['product_name_id']);
+				$productName = $productInfo['0']['type_name'];
+				//获取产品型号名称
+				$productModelInfo = D("XgProduct")->getProductById($post['product_model_id']);
+				$productModelName = $productModelInfo['0']['name'];
+				//产品规格字符串处理
+				$spec_arr = array();
+				$specStrInfo = rtrim($post['product_spec_id_str'],",");
+				$product_spec_arr = explode(",", $specStrInfo);
+
+				foreach ($product_spec_arr as $k => $v) {
+					$spec_arr[] = (int)$v;
+				}
+				sort($spec_arr);
+				$spec_str = implode(",",$spec_arr);
+
+				$data['customer_name'] = $post['customer_name'];
+				$data['customer_level_id'] = $post['customer_level'];
+				$data['linkman_name'] = $post['linkman_name'];
+				$data['linkman_tel'] = $post['linkman_tel'];
+				$data['remark'] = $post['remark'];
+				$data['product_type_id'] = $post['product_type_id'];
+				$data['product_type'] = $productTypeName;
+				$data['product_name_id'] = $post['product_name_id'];
+				$data['product_name'] = $productName;
+				$data['product_model_id'] = $post['product_model_id'];
+				$data['product_model'] = $productModelName;
+				$data['product_spec_id_str'] = $spec_str;
+				$data['special_technologyh_id_str'] = $post['special_technologyh_id_str'];
+				$data['supplier_id'] = $post['supplier_id'];
+				$data['supplier_name'] = $post['supplier_name'];
+				$data['num'] = $post['num']; 
+				$data['cost_price'] = $post['cost_price'];
+				$data['discount_money'] = $post['discount_money'];
+				$data['end_price'] = $post['end_price'];
+				$data['end_money'] = $post['end_money'];
+				$data['add_time'] = time();
+				$data['manager_name'] = $_SESSION['userInfo']['truename'];
+				// dump($data);
+				$res = D("XgQuote")->addQuoteInfo($data);
+				echo $res;
+
+			}
+		}
+		//修改报价记录信息
+		public function updateQuote(){
+			$get = $_GET;
+			$post = $_POST;
+			// dump($get);
+
+			if(!empty($post)){
+				// dump($post);
+				$id = $post['quote_id'];
+
+				$data['customer_name'] = $post['customer_name'];
+				$data['customer_level_id'] = $post['customer_level'];
+				$data['linkman_name'] = $post['linkman_name'];
+				$data['linkman_tel'] = $post['linkman_phone'];
+				$data['remark'] = $post['remark'];
+				$data['end_price'] = $post['end_price'];
+				$data['end_money'] = $post['end_money'];
+				$res = D("XgQuote")->updateQuoteInfo($data,$id);
+
+				echo json_encode($res);
+
+			}else{
+				$quoteInfo = D("XgQuote")->getQuoteInfoById($_GET['id']);
+		    	// dump($orderInfo);
+		    	if(!empty($quoteInfo)){
+					//客户等级信息
+					$customerLevelInfo = D("XgCustomerLevel")->getCustomerLevelInfo();;
+					//商品规格信息处理
+					$productParameterSpecArr = explode(",", $quoteInfo['product_spec_id_str']);
+					if(!empty($productParameterSpecArr)){
+						// dump($productParameterSpecArr);
+						foreach ($productParameterSpecArr as $k => $v) {
+							$specInfo = D("XgProductSpec")->getSpecById($v);
+							//商品规格名称
+							$parameterName = D("XgProductParameter")->getProductParameterById($specInfo['0']['parameter_id']);
+							$specInfo['0']['parameter_name'] = $parameterName['0']['name'];
+							$quoteInfo['parameter_spec_value'][] = $specInfo['0'];
+						}
+					}
+					//商品特殊工艺信息处理
+					$specialTechnologyhStr = '';
+					if(!empty($quoteInfo['special_technologyh_id_str'])){
+						$productSpecialTechnologyhArr = explode(",", $quoteInfo['special_technologyh_id_str']);
+						// dump($productParameterSpecArr);
+						foreach ($productSpecialTechnologyhArr as $k => $v) {
+							$specialInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($v);
+							$specialTechnologyhStr .= $specialInfo['name']."&nbsp;&nbsp;&nbsp;&nbsp;";
+						}
+					}
+					$quoteInfo['special_technology_value'] = $specialTechnologyhStr;
+					
+		    	}
+		    	// dump($orderInfo);
+				
+				$this->assign("quoteInfo",$quoteInfo);
+				$this->assign("customerLevelInfo",$customerLevelInfo);
+
+				$this -> display("update_quote");
+			}
+		}
+		//删除报价记录信息
+		public function deleteQuoteInfo(){
+			$post = $_POST;
+			$res = D("XgQuote")->deleteQuoteInfoById($post['id']);
+			if($res > 0){
+				$res_str = "删除成功！";
+			}else{
+				$res_str = "删除失败！";
+			}
+			echo json_encode($res_str);
+		}
+		// 获取需要导出的数据
+		public function exportQuote(){
+			$get = $_GET;
+			//dump($_GET);
+			$date = $get['search_date_value'];
+			$searchCondition = $get['input_type_value'];
+			$searchValue = $get['search_value'];
+			// dump($date);
+			// dump($searchCondition);
+			// dump($searchValue);
+			// dump($data=="");
+			// dump($searchCondition=="");
+			// dump($searchValue=="");
+			if(!empty($get)){
+				if($date=='' && $searchCondition=='' && $searchValue==''){
+					$quoteInfo = D("XgQuote")->getAllQuote();
+					// dump($quoteInfo);
+				}else{
+					//如果有时间
+					if($get['search_date_value'] ){
+						// dump($get);
+						$dateTimeArr = explode("To", $get['search_date_value']);
+						$startTime = strtotime($dateTimeArr['0']);
+						$endTime = (strtotime($dateTimeArr['1'])) + 86400;
+
+						$whereArr[] = "add_time >= '".$startTime."' and add_time < '".$endTime."'";
+					}else{
+						$get['search_date_value'] = '';
+					}
+					//如果有输入值搜索
+					if($get['search_value']){
+						if($get['input_type_value'] == 'customer'){
+							$whereArr[] = "customer_name like '%".$get['search_value']."%'";
+						}else if($get['input_type_value'] == 'supplier'){
+							$whereArr[] = "supplier_name like '%".$get['search_value']."%'";
+						}else if($get['input_type_value'] == 'product'){
+							$whereArr[] = "product_name like '%".$get['search_value']."%'";
+						}else{
+							$whereArr[] = "manager_name like '%".$get['search_value']."%'";
+						}
+					}else{
+						$get['search_value'] = '';
+					}
+					$where = implode(' and ',$whereArr);
+					// dump($where);
+					$condition['where'] = $where;
+					$quoteInfo = D("XgQuote")->quoteInfo($condition);
+					// dump($quoteInfo);
+				}
+				if($quoteInfo){
+					foreach ($quoteInfo as $k => $v) {
+						$specIdArr = explode(",", $v["product_spec_id_str"]);
+						if(!empty($specIdArr)){
+							// dump($productParameterSpecArr);
+							$specDetail = '';
+							foreach ($specIdArr as $key => $value) {
+								$specInfo = D("XgProductSpec")->getSpecById($value);
+								// dump($specInfo);
+								//商品规格名称
+								$parameterName = D("XgProductParameter")->getProductParameterById($specInfo['0']['parameter_id']);
+								// dump($parameterName);
+								$specInfo['0']['parameter_name'] = $parameterName['0']['name'];
+								$specDetail[] = $parameterName['0']['name'].":".$specInfo['0']['spec_value'];
+							}
+							// dump($specDetail);
+							$specDetailStr = implode(" / ", $specDetail);
+							// dump($specDetailStr);
+							// dump($k);
+							$quoteInfo[$k]["specDetail"] = $specDetailStr;
+							// dump($v['spec_detail']);
+							// dump($quoteInfo);
+							// exit;
+						}
+						// dump($quoteInfo);
+						// dump($quoteInfo[$k]);
+						// dump($v);exit;
+						$month = date("Y-m",$v['add_time']);
+						$exportInfo[$month][$k]['time'] = date("m-d H:i",$v['add_time']);
+						$exportInfo[$month][$k]['customer_name'] = $v['customer_name'];
+						$exportInfo[$month][$k]['product_info'] = $v['product_name']." / ".$v['product_model']." / ".$specDetailStr;
+						$exportInfo[$month][$k]['product_unit'] = $v['product_unit'];
+						$exportInfo[$month][$k]['num'] = $v['num'];
+						$exportInfo[$month][$k]['end_price'] = $v['end_price'];
+						$exportInfo[$month][$k]['end_money'] = $v['end_money'];
+						$exportInfo[$month][$k]['linkman_name'] = $v['linkman_name'];
+						$exportInfo[$month][$k]['linkman_tel'] = $v['linkman_tel'];
+						$exportInfo[$month][$k]['manager_name'] = $v['manager_name'];
+						// $exportInfo['month'] = date("m",$v['add_time']);
+						// $exportInfo[$k]['customer_name'] = $v['customer_name'];
+						// dump($exportInfo);
+						
+
+					}
+					// dump($quoteInfo);
+					// dump($exportInfo);exit;
+					$this->exportHandle($exportInfo);
+				}
+			}
+		}
+		// 导出处理
+		public function exportHandle($exportInfo){
+			// ob_end_clean();
+			// ob_start();
+			// import("Org.Util.PHPExcel");
+			// import("Org.Util.PHPExcel.IOFactory",'','.php');
+	  		// import("Org.Util.PHPExcel.Writer.Excel5",'','.php');
+	  		// import("Org.Util.PHPExcel.Writer.Excel2007",'','.php');
+			vendor("PHPExcel.PHPExcel");
+			// vendor("PHPExcel.PHPExcel.Writer.Excel5");
+			// vendor("PHPExcel.PHPExcel.IOFactory.php");
+			$objPHPExcel = new \PHPExcel();
+			$objSheet = $objPHPExcel->getActiveSheet();
+			$objSheet->setTitle("报价记录信息");
+			$objSheet->getDefaultStyle()->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);   // 设置excel文件默认水平垂直方向居中
+			$objSheet->getDefaultStyle()->getFont()->setName("微软雅黑")->setSize(10);   // 设置默认字体和大小
+			$objSheet->mergeCells("A1:K1");
+			$objSheet->getStyle("A1")->getFont()->setSize(18)->setBold(True);   // 设置字体大小并加粗
+			$objSheet->setCellValue("A1","报价记录信息汇总");
+
+			$objSheet->getStyle("2")->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objSheet->mergeCells("A2:K2");
+			$objSheet->setCellValue("A2","制作单位： 北京细格广告传媒有限公司");
+			$objSheet->getStyle("3")->getAlignment()->setWrapText(true);   // 设置自动换行，需要在输出数据中加换行符"\n"
+			$objSheet->getColumnDimension('A')->setAutoSize(true);   // 设置宽度自适应
+			$objSheet->getColumnDimension('B')->setWidth("30");
+			$objSheet->getColumnDimension('C')->setAutoSize(true);
+			$objSheet->getColumnDimension('D')->setAutoSize(true);
+			$objSheet->getColumnDimension('E')->setAutoSize(true);
+			$objSheet->getColumnDimension('F')->setAutoSize(true);
+			$objSheet->getColumnDimension('G')->setAutoSize(true);
+			$objSheet->getColumnDimension('H')->setAutoSize(true);
+			$objSheet->getColumnDimension('I')->setAutoSize(true);
+			$objSheet->getColumnDimension('J')->setAutoSize(true);
+			$objSheet->getColumnDimension('K')->setWidth("40");
+			$objSheet->getStyle('I')->getNumberFormat()->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+
+			$objSheet->getStyle("A3:K3")->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('C0C0C0');
+			$objSheet->setCellValue("A3","日期Date")
+					 ->setCellValue("B3","客户名称Name")
+					 ->setCellValue("C3","项目说明Content")
+					 ->setCellValue("D3","单位\nUnit")
+					 ->setCellValue("E3","数量\nNumber")
+					 ->setCellValue("F3","单价（元）\nPrice")
+					 ->setCellValue("G3","总价（元）\nTotal")
+					 ->setCellValue("H3","联系人\nContact")
+					 ->setCellValue("I3","联系方式\nTel")
+					 ->setCellValue("J3","录入人\nEditor")
+					 ->setCellValue("K3","备注Remark");
+			$i = 4;
+			$j = 5;
+			foreach($exportInfo as $key => $value){
+				$n = sizeof($exportInfo[$key]);
+				// dump($value);
+				$objSheet->getStyle($i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$objSheet->getStyle($i)->getFont()->setSize(10)->setBold(True);
+				$objSheet->getStyle("A".$i.":K".$i)->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('E6B8B7');
+				$objSheet->mergeCells("A".$i.":K".$i);
+				$objSheet->setCellValue("A".$i,$key);
+				foreach ($value as $k => $v) {
+					$objSheet->setCellValue("A".$j,$v["time"])
+							 ->setCellValue("B".$j,$v["customer_name"])
+							 ->setCellValue("C".$j,$v["product_info"])
+							 ->setCellValue("D".$j,$v["product_unit"])
+							 ->setCellValue("E".$j,$v["num"])
+							 ->setCellValue("F".$j,$v["end_price"])
+							 ->setCellValue("G".$j,$v["end_money"])
+							 ->setCellValue("H".$j,$v["linkman_name"])
+							 ->setCellValue("I".$j,$v["linkman_tel"])
+							 ->setCellValue("J".$j,$v["manager_name"])
+							 ->setCellValue("K".$j," ");
+					$j++;
+				}
+				$i = $j;
+				$j = $i+1;
+			}
+			$end = $i-1;  //最后一行
+			// 边框样式
+			$borderStyle = array(
+				'borders'=>array(
+					'allborders'=>array(
+						'style' => \PHPExcel_Style_Border::BORDER_THIN,   //系边框
+						'color' => array('rgb' => '#000'),
+					),
+				),
+			);
+			$objSheet->getStyle("A1:K".$end)->applyFromArray($borderStyle);
+			header('Content-Type: application/vnd.ms-excel');
+			header('Content-Disposition: attachment;filename="geigemianzi.xls"');
+			header('Cache-Control: max-age=0');
+			$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+			// $objWriter = new \PHPExcel_Writer_Excel5($objPHPExcel);
+			$objWriter->save('php://output');
+			exit;
+			
+			// header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+			// header('Content-Disposition: attachment;filename="报价记录统计.xlsx"');   // 设置输出文件的名称
+			// header('Cache-Control: max-age=0');   // 禁止缓存
+			// $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			// $objWriter->save("php://output");
+
+			// $name='example_export.xlsx';
+			// header('Content-Type: application/vnd.ms-excel');
+			// header('Content-Disposition: attachment; filename='.$name);
+			// header('Cache-Control: max-age=0');
+			// import("Org.Util.PHPExcel.IOFactory");
+			// $ExcelWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+			// $ExcelWriter->save('php://output');
+		}
 
 
 
