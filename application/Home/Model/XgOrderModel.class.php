@@ -2,6 +2,12 @@
 	namespace Home\Model;
 	use Think\Model;
 	class XgOrderModel extends Model {
+		// 获取全部订单的部分数据
+		public function getAllOrder(){
+			$sql = "select order_id,customer_name,order_money,customer_money,order_remarks,add_time from xg_order";
+			$result = M()->query($sql);
+			return $result;
+		}
 		//根据搜索信息查出商品的价格
 		public function getProductOrderInfo($condition){
 			$sql = "select * from xg_order where {$condition}";
