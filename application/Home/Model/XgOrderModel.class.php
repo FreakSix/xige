@@ -81,12 +81,12 @@
 			$result = $table->order("id ".$condition)->find();
 			return $result;
 		}
-		//根据id进行in条件查询
-		public function getProductParameterByIdWhereIn($id){
-			$sql = "select * from xg_product_parameter where id in (".$id.")";
-			$typeArr = M()->query($sql);
-			return $typeArr;
-		}
+		// //根据id进行in条件查询
+		// public function getProductParameterByIdWhereIn($id){
+		// 	$sql = "select * from xg_product_parameter where id in (".$id.")";
+		// 	$typeArr = M()->query($sql);
+		// 	return $typeArr;
+		// }
 		
 	}
 	
