@@ -21,7 +21,7 @@
 </head>
 
 <body data-type="generalComponents">
-    <div class="tpl-portlet-components xg-layer-size">
+    <div class="tpl-portlet-components">
         <div class="tpl-block ">
             <div class="am-g tpl-amazeui-form">
                 <div class="am-u-sm-12">
@@ -45,7 +45,7 @@
                             <div class="am-u-sm-4 am-u-end">
                                 <select class="duty_option">
                                 <foreach name="firstDepartDutyInfo" item="duty_item">
-                                    <option value="{$duty_item.id}">{$duty_item.duty_name}</option>
+                                    <option value="{$duty_item.id}" is_manager="{$duty_item.is_manager}">{$duty_item.duty_name}</option>
                                 </foreach>
                                 </select>
                             </div>
@@ -106,6 +106,7 @@
 	   var truename = $("#truename").val();
 	   var tel = $("#tel").val();
 	   var email = $("#email").val();
+	   var is_manager = $(".duty_option").find("option:selected").attr("is_manager");
 	   //用户名验证
        if(username == ''){
            parent.layer.msg('用户名不能为空！');
@@ -130,8 +131,23 @@
            $("#email").focus();
            return false;
        }
-       $.post("__APP__/PersonalCenter/saveNewAddManager",{"depart_id":depart_id,"duty_id":duty_id,"username":username,"truename":truename,"tel":tel,"email":email},function(res){
-    	   if(res == 1){
+       if(is_manager == 1){
+    	   $.post("__APP__/PersonalCenter/checkIsManager",{"depart_id":depart_id},function(res){
+    		   if(res == 0 || res == ''){
+    			   submitDataToAdd_new_manager(depart_id,duty_id,username,truename,tel,email,is_manager);
+    		   }else{
+    			   if(confirm("该部门已经由"+res+"负责，您确定要替换为"+truename+"吗？")){
+    				   submitDataToAdd_new_manager(depart_id,duty_id,username,truename,tel,email,is_manager);
+    			   }
+    		   }
+    	   })
+       }else{
+    	   submitDataToAdd_new_manager(depart_id,duty_id,username,truename,tel,email,is_manager);
+       }
+   }
+   function submitDataToAdd_new_manager(depart_id,duty_id,username,truename,tel,email,is_manager){
+	   $.post("__APP__/PersonalCenter/saveNewAddManager",{"depart_id":depart_id,"duty_id":duty_id,"username":username,"truename":truename,"tel":tel,"email":email,"is_manager":is_manager},function(res){
+		   if(res == 1){
     		   alert("添加员工信息成功!");
     		   closeLayer();
     	   }else{

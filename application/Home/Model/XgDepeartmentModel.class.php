@@ -43,4 +43,14 @@
 			$result = M("xg_depeartment")->where("id = ".$id)->delete();
 			return $result;
 		}
+		
+		/**
+		 * 修改部门的负责人id
+		 */
+		public function updateDepartManagerId($depart_id,$managerId){
+			$sql = "update xg_depeartment set manager_id = {$managerId} where id = {$depart_id}";
+			echo $sql;
+			$result = M()->execute($sql);
+			return $result;
+		}
 	}

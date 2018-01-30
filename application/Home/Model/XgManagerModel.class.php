@@ -49,7 +49,8 @@
 			$feilds=array_keys($data);
 			$sql="insert into xg_manager (".implode(',',$feilds).") values('".implode("','",$data)."')";
 			$result = M()->execute($sql);
-			return $result;
+			$userId = M()->getLastInsID();
+			return $userId;
 		}
 		//保存修改的员工信息
 		public function updateEditManager($id,$data){
