@@ -154,7 +154,7 @@
                                     <div class="am-u-sm-4 am-u-md-4">
                                         <div class="am-btn-toolbar">
                                             <div class="am-btn-group am-btn-group-xs">
-                                                <button type="button" onclick="exportAllQuote()" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-save"></span> 导出当前全部数据</button>
+                                                <button type="button" onclick="exportAllQuote()" class="am-btn am-btn-default am-btn-primary"><span class="am-icon-save"></span>导出当前全部数据</button>
                                                 <!-- <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出选中</button> -->
                                             </div>
                                         </div>
@@ -195,7 +195,7 @@
     },function(start, end) {
             $('#daterange-btn span').html(start.format('YYYY-MM-DD') + ' To ' + end.format('YYYY-MM-DD'));
 
-            $("#hide_search_date").val(start.format('YYYY-MM-DD') + " To " + end.format('YYYY-MM-DD'));
+            $("#hide_search_date").val(start.format('YYYY-MM-DD') + "To" + end.format('YYYY-MM-DD'));
             // alert(start.format('YYYYMMDD') + " " + end.format('YYYYMMDD'));
     });
 
@@ -313,16 +313,12 @@
         if(search_date_value == ""){
             search_date_value =0;
         }
-        // alert(search_date_value);
         if(input_type_value == 0){
             search_value = 0;
         }
-        // alert(input_type_value);
         if(search_value == ""){
             search_value = 0;
         }
-        // alert(search_value);
-        // return false;
         window.location="__APP__/Order/exportQuote/input_type_value/"+input_type_value+"/search_value/"+search_value+"/search_date_value/"+search_date_value;
     }
 

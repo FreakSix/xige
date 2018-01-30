@@ -12,6 +12,11 @@
 			$orderProductInfo = M("xg_order_product")->where("id = ".$id)->find();
 			return $orderProductInfo; 
 		}
+		// 根据订单编号查询订单产品信息
+		public function getProductInfoByOrderNum($order_num){
+			$result = M("xg_order_product")->where("order_num = ".$order_num)->getField("order_num,product_name,product_model,product_spec_id_str,special_technologyh_id_str,");
+			return $result;
+		}
 		//修改订单商品信息
 		public function updateOrderProductInfo($data,$id){
 			$res = M("xg_order_product")->where("id = ".$id)->save($data);

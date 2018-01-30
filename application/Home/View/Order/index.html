@@ -203,12 +203,20 @@
                                 </table>
                                 <div class="am-cf">
                                     <div class="am-u-sm-12 am-u-md-4">
-                                        <div class="am-btn-toolbar">
+                                        <div class="am-dropdown xg-export-option" data-am-dropdown="{boundary: '.am-topbar'}">
+                                            <button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm am-dropdown-toggle" data-am-dropdown-toggle>导出对账单 <span class="am-icon-caret-down"></span></button>
+                                            <ul class="am-dropdown-content">
+                                              <li><a href="javascript:;" onclick="exportOrder('all')">导出检索出的全部数据（客户）</a></li>
+                                              <li><a href="javascript:;" onclick="exportOrder('selected')">导出选中的数据（客户）</a></li>
+                                              <li><a href="javascript:;" onclick="exportOrder('supplier')">导出对账单（供应商）</a></li>
+                                            </ul>
+                                          </div>
+                                        <!-- <div class="am-btn-toolbar">
                                             <div class="am-btn-group am-btn-group-xs">
                                                 <button type="button" onclick="exportOrderForC()" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出对账单（客户）</button>
                                                 <button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-save"></span> 导出对账单（供应商）</button>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="am-fr">
                                         {$pageStr}
@@ -244,9 +252,9 @@
             endDate: moment().endOf('month')
         },
         function(start, end) {
-            $('#daterange-btn span').html(start.format('YYYY年MMMD日') + ' - ' + end.format('YYYY年MMMD日'));
+            $('#daterange-btn span').html(start.format('YYYY-MM-DD') + ' To ' + end.format('YYYY-MM-DD'));
 
-            $("#hide_search_date").val(start.format('YYYY年MMMD日') + "-" + end.format('YYYY年MMMD日'));
+            $("#hide_search_date").val(start.format('YYYY-MM-DD') + "To" + end.format('YYYY-MM-DD'));
             // alert(start.format('YYYYMMDD') + " " + end.format('YYYYMMDD'));
         }
     );
@@ -411,42 +419,40 @@
             });
     }
     // 导出对账单（客户）
-    // function exportOrderForC(){
-    //     var inputs = $(".xg-table-tr").find("input[type='checkbox']");
-    //     // var checkbox = $
-    //     // alert($("input:checkbox[name='order_id']:checked").length);
-    //     if($("input:checkbox[name='order_id']:checked").length == 0){
-    //         // alert("请选择要导出的数据！");
-    //         layer.msg("请选择要导出的数据！",{time:1500});
-    //     }else{
-    //         var order_id_str = "";
-    //         $("input:checkbox[name='order_id']:checked").each(function(){
-    //             order_id_str+=$(this).val()+",";
-    //         })
-    //         // alert(order_id_str);
-    //         $.ajax({
-    //             url : "__APP__/Order/exportOrderForC",
-    //             type : "post",
-    //             data : "order_id_str="+order_id_str,
-    //             success:function(res){
-    //                 location.href="__APP__/Order/exportOrderForC()";
-    //             }
-    //             error:function(res){
-    //                 // alert(res);return false;
-    //                 if(res == 1){
-    //                     layer.alert("不能同时导出多个客户的数据，请选择一个客户的数据进行导出",{icon:5,title:"提示"});
-    //                 }else if(res == 2){
-    //                     layer.alert("导出失败，请稍后重试",{icon:2,title:"提示"});
-    //                 }
-    //             }
-    //         });
-    //     }
-
-    //     // inputs.each(function(){
-    //     //     alert($(this).prop("checked"));
-    //     // })
-    //     // alert()
-    // }
+    function exportOrder(type){
+        if(type=="all"){
+            var order_status = $("#order_status").val();
+            var money_status = $("#money_status").val();
+            var search_value = $.trim($("#search_value").val());
+            var search_date_value = $("#hide_search_date").val();
+            if(search_date_value == ""){
+                search_date_value=0;
+            }
+            if(order_status == ""){
+                order_status=0;
+            }
+            if(money_status == ""){
+                money_status=0;
+            }
+            if(search_value == ""){
+                search_value=0;
+            }
+            location.href="__APP__/Order/exportOrder/type/"+type+"/order_status/"+order_status+"/money_status/"+money_status+"/search_value/"+search_value+"/search_date_value/"+search_date_value;
+        }else if($type=="selected"){
+            var inputs = $(".xg-table-tr").find("input[type='checkbox']");
+            if($("input:checkbox[name='order_id']:checked").length == 0){
+                layer.msg("请先选择要导出的数据！",{time:1500});
+            }else{
+                var order_id_str = "";
+                $("input:checkbox[name='order_id']:checked").each(function(){
+                    order_id_str+=$(this).val()+",";
+                });
+                location.href="__APP__/Order/exportOrder/type/"+type+"/order_id_str/"+order_id_str;
+            }
+        }else if($type=="supplier"){
+            alert(1);
+        }
+    }
 </script>
 
 <script type="text/javascript">

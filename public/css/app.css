@@ -2230,6 +2230,10 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 .xg-search-menu ul li { padding-left: 5px; height: 25px; line-height: 25px;}
 .xg-search-menu ul:hover { cursor: pointer; }
 .xg-search-menu ul li:hover { background: #EFEFEF; cursor: pointer; }
+.xg-export-option button { margin: 0; }
+.xg-export-option ul { width: 200px;color: #000;line-height: 15px }
+.xg-export-option ul li:hover { background: #F8F8F8 }
+.xg-export-option ul li a { display: block; }
 @media screen and (min-width: 1400px) {
     .tpl-content-wrapper {
         

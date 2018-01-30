@@ -12,15 +12,9 @@
 			if(!empty($get)){
 				//如果有时间
 				if($get['search_date_value'] ){
-					$dateTimeArr = explode("-", $get['search_date_value']);
-					foreach ($dateTimeArr as $k => $v) {
-						$str = str_replace('年','-',$v);
-						$str = str_replace('月','-',$str);
-						$str = rtrim($str,"日");
-						$dateTimeArr_2[] = $str;
-					}
-					$startTime = strtotime($dateTimeArr_2['0']);
-					$endTime = (strtotime($dateTimeArr_2['1'])) + 86400;
+					$dateTimeArr = explode("To", $get['search_date_value']);
+					$startTime = strtotime($dateTimeArr['0']);
+					$endTime = (strtotime($dateTimeArr['1'])) + 86400;
 
 					$whereArr[] = "add_time >= '".$startTime."' and add_time < '".$endTime."'";
 				}else{
@@ -51,12 +45,6 @@
 				$where = implode(' and ',$whereArr);
 				$condition['where'] = $where;
 			}
-			// //排除已删除的订单
-			// if(empty($condition['where'])){
-			// 	$condition['where'] = "order_status != 9";
-			// }else{
-			// 	$condition['where'] = "order_status != 9 and  ".$condition['where'];
-			// }
 			
 			//订单信息中符合条件的总记录数
 			$count = D("XgOrder")->getOrderCount($condition);
@@ -126,78 +114,49 @@
 
 			$this -> display();
 		}
-		// 导出订货单（客户）
-		// public function exportOrderForC(){
-		// 	$post = $_POST;
-		// 	$order_id_str = rtrim($post["order_id_str"],",");   //去除字符串最后的","
-		// 	$order_id_arr = explode(",", $order_id_str);   //将字符串转化为数组
-		// 	// echo $order_id_str;
-		// 	// dump($order_id_arr);
-		// 	foreach ($order_id_arr as $k => $v) {
-		// 		$id = $v;
-		// 		$customer_id[] = D("XgOrder")->getCustomerIdById($id);
-		// 	}
-		// 	$customerId = $this->array_unique_fb($customer_id);
-		// 	$customerIdNum = count($customerId);
-		// 	if($customerIdNum > 1){
-		// 		echo 1;
-		// 	}else{
-				
-		// 		foreach ($order_id_arr as $key => $val) {
-		// 			$id = $val;
-		// 			$data[] = D("XgOrder")->getInfoById($id);
-		// 		}
-		// 		foreach ($data as $k => $v) {
-		// 			$exportData[] = $v[0];
-		// 		}
-		// 		print_r($exportData);
-		// 		import("Org.Util.PHPExcel");
-		// 		$objPHPExcel = new \PHPExcel();   // 实例化PHPExcel类
-		// 		$objSheet = $objPHPExcel->getActiveSheet();   // 获取当前活动Sheet
-		// 		$objSheet->setTitle($exportData[0]['customer_name']);
-		// 		$objSheet->mergeCells("A1:G1");   // 合并单元格
-		// 		$objSheet->setCellValue("A1","产品明细表");
-		// 		$objSheet->getStyle("A1")->getFont()->setSize(20)->setBold(True);
-		// 		$objSheet->setCellValue("A2","订单编号")
-		// 				->setCellValue("B2","时间")
-		// 				->setCellValue("C2","商品名称")
-		// 				->setCellValue("D2","数量")
-		// 				->setCellValue("E2","单价")
-		// 				->setCellValue("F2","小计")
-		// 				->setCellValue("G2","备注");
-		// 		$j = 3;
-		// 		foreach ($exportData as $k => $v) {
-		// 			$objSheet->setCellValue("A".$j,$v['order_id'])
-		// 					->setCellValue("B".$j,date("Y-m-d",$v['add_time']))
-		// 					->setCellValue("C".$j,$v['product_model'])
-		// 					->setCellValue("D".$j,$v['num'])
-		// 					->setCellValue("E".$j,$v['end_price'])
-		// 					->setCellValue('F'.$j,$v['end_money']);
-		// 			$j++;
-		// 		}
-		// 		$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
-		// 		$this->browser_export("Excel2007","对账单(".$exportData[0]['customer_name'].").xlsx");
-		// 		$objWriter->save("php://output");
-				
 
-
-		// 	}
-		// }
-		// // 判断输出的excel格式
-		// function browser_export($type,$filename){
-		// 	if($type == "Excel05"){
-		// 		header('Content-Type: application/vnd.ms-excel');
-		// 	}else{
-		// 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		// 	}
-		// 	header('Content-Disposition: attachment;filename="'.$filename.'"');   // 设置输出文件的名称
-		// 	header('Cache-Control: max-age=0');   // 禁止缓存
-		// }
+		// 获取对账单（客户）信息
+		public function exportOrder(){
+			$get = $_GET;
+			$type = $get["type"];
+			$orderStatus = $get["order_status"];
+			$moneyStatus = $get["money_status"];
+			$searchValue = $get["search_value"];
+			$dateValue = $get["search_date_value"];
+			if(!empty($get)){
+				// 如果条件全为空，查询全部信息
+				if($orderStatus==0 && $moneyStatus==0 &&  $searchValue==0 && $dateValue==0){
+					$orderInfo = D("XgOrder")->getAllOrder();
+					// dump($orderInfo);exit;
+					foreach ($orderInfo as $key => $value) {
+						$productInfo[] = D("XgOrderProduct")->getProductInfoByOrderNum($value['order_id']);
+					}
+					dump($productInfo);
+				}
+				//如果有时间
+				if($dateValue){
+					$dateTimeArr = explode("To", $get['search_date_value']);
+					$startTime = strtotime($dateTimeArr['0']);
+					$endTime = (strtotime($dateTimeArr['1'])) + 86400;
+					$whereArr[] = "add_time >= '".$startTime."' and add_time < '".$endTime."'";
+				}
+				//如果有订单状态
+				if($orderStatus){
+					$whereArr[] = "order_status = '".$get['order_status']."'";
+				}
+				//如果有付款状态
+				if($moneyStatus){
+					$whereArr[] = "customer_money_status = '".$get['money_status']."'";
+				}
+				//如果有输入值搜索
+				if($searchValue){
+					$whereArr[] = "customer_name like '%".$get['search_value']."%'";
+				}
+				$where = implode(' and ',$whereArr);
+				$condition['where'] = $where;
+			}
+		}
 		
-		// // 导出订货单（供应商）
-		// public function exportOrderForS(){
-
-		// }
 		// 新增订单页面
 		public function addOrder(){
 			$customerModel = D("XgCustomer");
