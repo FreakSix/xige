@@ -265,10 +265,18 @@
 				$today =  date("Y-m-d",time());
 				$todayDate = str_replace('-','',$today);
 				$condition['where'] = "order_id like '".$todayDate."%'";
-				$todayOrderNum = D("XgOrder")->getOrderCount($condition);
+				$condition['order'] = "id desc";
+				$condition['limit']['firstRow'] = 0;
+				$condition['limit']['pageSize'] = 1;
 
-				$todayDate = (int)$todayDate*1000;
-				$order_id = $todayDate+($todayOrderNum+1);
+				$lastTodayOrderInfo = D("XgOrder")->orderInfo($condition);
+				if(!empty($lastTodayOrderInfo)){
+					$order_id = $lastTodayOrderInfo['0']['order_id'] + 1;
+				}else{
+					$todayDate = (int)$todayDate*1000;
+					$order_id = $todayDate+1;
+				}
+				
 				//获取客户名称
 				$customerInfo = D("XgCustomer")->getCustomerInfo($post['customer_id']);
 				$customerName = $customerInfo['cname'];
@@ -1294,7 +1302,7 @@
 				$data['order_num'] = $orderInfo['order_id'];
 				$data['order_product_id'] = $post['order_product_id'];
 				$data['order_product_name'] = $orderProductInfo['product_name'];
-				$data['supplier_id'] = $orderProductInfo['supplier_name'];
+				$data['supplier_id'] = $orderProductInfo['supplier_id'];
 				$data['supplier_name'] = $orderProductInfo['supplier_name'];
 				$data['money'] = $post['money'];
 				$data['remark'] = $post['remark'];
