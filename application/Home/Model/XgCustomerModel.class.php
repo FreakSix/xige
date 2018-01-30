@@ -92,5 +92,12 @@
 			return $totalCount;
 		}
 
+		//第一条数据查询
+		public function getCustomerInfoByOrder($condition){
+			$table = M("xg_customer");
+			$result = $table->order("id ".$condition)->find();
+			return $result;
+		}
+
 		
 	}

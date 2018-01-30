@@ -31,6 +31,23 @@
 			$result = M("xg_customer_account")->where("id = ".$id)->delete();
 			return $result;
 		}
+		//第一条客户回款数据查询
+		public function getCustomerAccountInfoByOrder($condition){
+			$table = M("xg_customer_account");
+			$result = $table->order("id ".$condition)->find();
+			return $result;
+		}
+		//条件查询客户回款信息
+		public function customerAccountInfo($condition){ 
+			$query = M("xg_customer_account");
+			if($condition['where']){
+				$query = $query->where($condition['where']);
+			}
+
+			$result = $query->select();
+			return $result;
+		
+		}
 
 
 		

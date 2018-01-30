@@ -37,6 +37,23 @@
 			$result = M("xg_supplier_account")->where("order_product_id = ".$order_product_id)->delete();
 			return $result;
 		}
+		//第一条数据查询
+		public function getSupplierAccountInfoByOrder($condition){
+			$table = M("xg_supplier_account");
+			$result = $table->order("id ".$condition)->find();
+			return $result;
+		}
+		//条件查询支付信息
+		public function supplierAccountInfo($condition){ 
+			$query = M("xg_supplier_account");
+			if($condition['where']){
+				$query = $query->where($condition['where']);
+			}
+
+			$result = $query->select();
+			return $result;
+		
+		}
 
 
 		

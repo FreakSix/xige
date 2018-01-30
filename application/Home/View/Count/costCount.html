@@ -48,14 +48,18 @@
                         <div class="am-u-sm-12 ">
                             <!-- <div class="am-btn-toolbar"> -->
                                 <div class="am-btn-group am-btn-group-xs">
-                                    
                                     <if condition="$get['type'] == months ">
-                                        
-                                        <button type="button" id="years" class="am-btn am-btn-default " onClick="customerCountType('years')">按月统计</button>
-                                        <button type="button" id="months" class="am-btn am-btn-default am-btn-danger " onClick="customerCountType('months')">按日统计</button>
+                                        <button type="button" id="years" class="am-btn am-btn-default " onClick="customerCountType('years')">按年统计</button>
+                                        <button type="button" id="months" class="am-btn am-btn-default am-btn-danger " onClick="customerCountType('months')">按月统计</button>
+                                        <button type="button" id="days" class="am-btn am-btn-default " onClick="customerCountType('days')">按天统计</button>
+                                    <elseif condition="$get['type'] == days " />
+                                        <button type="button" id="years" class="am-btn am-btn-default " onClick="customerCountType('years')">按年统计</button>
+                                        <button type="button" id="months" class="am-btn am-btn-default " onClick="customerCountType('months')">按月统计</button>
+                                        <button type="button" id="days" class="am-btn am-btn-default am-btn-danger" onClick="customerCountType('days')">按天统计</button>
                                     <else/>
-                                        <button type="button" id="years" class="am-btn am-btn-default am-btn-danger " onClick="customerCountType('years')">按月统计</button>
-                                        <button type="button" id="months" class="am-btn am-btn-default " onClick="customerCountType('months')">按日统计</button>
+                                        <button type="button" id="years" class="am-btn am-btn-default  am-btn-danger" onClick="customerCountType('years')">按年统计</button>
+                                        <button type="button" id="months" class="am-btn am-btn-default " onClick="customerCountType('months')">按月统计</button>
+                                        <button type="button" id="days" class="am-btn am-btn-default" onClick="customerCountType('days')">按天统计</button>
                                     </if>
                                     
                                 </div>
@@ -104,33 +108,42 @@
                                         </if>
                                     </foreach>
                                 </select>
-                                  <span class="am-form-caret"></span>
-                                </div>
+                                <span class="am-form-caret"></span>
+                            </div>
                         </div>
-
                         <div class="am-u-sm-7 ">
-                            <!-- <div class="am-btn-toolbar"> -->
+
+                            <if condition="$get['type'] == days ">
                                 <div class="am-btn-group am-btn-group-xs"> 
                                     选择日期：
                                 </div>
-                                <if condition="$get['type'] == months ">
-                                    <div class="am-btn-group am-btn-group-xs"> 
-                                        <input type="text" id="search_date" class="am-form-field" value="{$get['search_date']}" data-am-datepicker="{format: 'yyyy-mm', viewMode: 'months', minViewMode: 'months'}" placeholder="年份日历" data-am-datepicker readonly/>
-                                    </div>
-                                <else/>
-                                    <div class="am-btn-group am-btn-group-xs">
-                                        <input type="text" id="search_date" class="am-form-field" value="{$get['search_date']}" data-am-datepicker="{format: 'yyyy-', viewMode: 'years', minViewMode: 'years'}" placeholder="年份日历" data-am-datepicker readonly/>
-                                    </div>
-                                </if>
+                                <div class="am-btn-group am-btn-group-xs"> 
+                                    <input type="text" id="search_date" class="am-form-field" value="{$get['search_date']}" data-am-datepicker="{format: 'yyyy-mm', viewMode: 'months', minViewMode: 'months'}" placeholder="年份日历" data-am-datepicker readonly/>
+                                </div>
                                 <button type="button" class="am-btn am-btn-primary " onClick="submitSearch()">确定</button>
+                            <elseif condition="$get['type'] == months " />
+                                <div class="am-btn-group am-btn-group-xs"> 
+                                    选择日期：
+                                </div>
+                                <div class="am-btn-group am-btn-group-xs">
+                                    <input type="text" id="search_date" class="am-form-field" value="{$get['search_date']}" data-am-datepicker="{format: 'yyyy ', viewMode: 'years', minViewMode: 'years'}" placeholder="年份日历" data-am-datepicker readonly/>
+                                </div>
+                                <button type="button" class="am-btn am-btn-primary " onClick="submitSearch()">确定</button>
+                            <else/>
+                                
+                            </if>
+                                
+                        </div>
+                        <div class="am-u-sm-12 ">
+                            
+
+                        </div>
+                        <div class="am-u-sm-12 " style="margin-top:20px;">
+                            <!-- <div class="am-btn-toolbar"> -->
+                                <div id="main" style="height:600px;"></div> 
                             <!-- </div> -->
                         </div>
-                        <!-- <div class="am-u-sm-12 " style="margin-top:20px;width:100%;height:600px;overflow-x:auto;overflow-y:hidden;">
-                                <div id="main" style="height:600px;width:2400px"></div> 
-                        </div> -->
-                        <div class="am-u-sm-12 " style="margin-top:20px;">
-                                <div id="main" style="height:600px;"></div> 
-                        </div>
+                    <!-- </div> -->
                 </div>
 
 
@@ -158,18 +171,30 @@
         function submitSearch(value){
             var type = $("#hide_search_date_type").val();
             // alert(type);
-            var search_date = $("#search_date").val();
-            if(search_date == ''){
-                layer.alert("请选择日期！", {icon: 5,offset: '200px',});
-                return false;
+            // var search_date = $("#search_date").val();
+            var search_date = $.trim($("#search_date").val());
+
+           if(type == 'years'){
+                search_date = 0;
+            }else{
+                if(search_date == ''){
+                     layer.alert("请选择日期！", {icon: 5,offset: '200px',});
+                    return false;
+                }
             }
 
-            if(value == 'product_type'){
+            if(value == ' '){
                 var product_type = $("#product_type").val();
                 var product_name = 0;
             }else{
-                var product_type = $("#product_type").val();
-                var product_name = $("#product_name").val();
+                if(value == 'product_type'){
+                    var product_type = $("#product_type").val();
+                    var product_name = 0;
+                }else{
+                    var product_type = $("#product_type").val();
+                    var product_name = $("#product_name").val();
+                }
+                
             }
             // alert(customer_level);
 

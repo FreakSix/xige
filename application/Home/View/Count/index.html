@@ -35,13 +35,13 @@
         </div>
         <!-- 右侧主要内容 -->
         <div class="tpl-content-wrapper">
-            <div class="tpl-content-page-title">
+            <!-- <div class="tpl-content-page-title">
                 Amaze UI 表单
-            </div>
+            </div> -->
             <ol class="am-breadcrumb">
                 <li><a href="#" class="am-icon-home">首页</a></li>
-                <li><a href="#">表单</a></li>
-                <li class="am-active">Amaze UI 表单</li>
+                <li><a href="#">数据统计</a></li>
+                <li class="am-active">基本信息统计</li>
             </ol>
             <div class="tpl-portlet-components">
                 <div class="row">
@@ -51,10 +51,10 @@
                                 <i class="am-icon-user-plus"></i>
                             </div>
                             <div class="details">
-                                <div class="number"> 1349 </div>
+                                <div class="number"> {$customerNum} </div>
                                 <div class="desc"> 本月新增客户数 </div>
                             </div>
-                            <a class="more" href="#"> 查看更多客户数信息
+                            <a class="more" href="__APP__/Count/customerCount"> 查看更多客户数信息
                                 <i class="m-icon-swapright m-icon-white"></i>
                             </a>
                         </div>
@@ -65,10 +65,10 @@
                                 <i class="am-icon-cny"></i>
                             </div>
                             <div class="details">
-                                <div class="number"> ￥15600 </div>
+                                <div class="number"> ￥{$debtMoney} </div>
                                 <div class="desc"> 截止目前客户欠款金额 </div>
                             </div>
-                            <a class="more" href="#"> 查看更多客户欠款情况
+                            <a class="more" href="__APP__/Count/orderCustomerMoneyCount"> 查看更多客户欠款情况
                         <i class="m-icon-swapright m-icon-white"></i>
                     </a>
                         </div>
@@ -79,10 +79,10 @@
                                 <i class="am-icon-star"></i>
                             </div>
                             <div class="details">
-                                <div class="number"> ￥12000 </div>
+                                <div class="number"> ￥{$money} </div>
                                 <div class="desc"> 本月销售额 </div>
                             </div>
-                            <a class="more" href="#"> 查看更多销售额信息
+                            <a class="more" href="__APP__/Count/costCount"> 查看更多销售额信息
                         <i class="m-icon-swapright m-icon-white"></i>
                     </a>
                         </div>
