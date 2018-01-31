@@ -46,7 +46,7 @@
                                 <table class="am-table am-table-striped am-table-hover table-main">
                                     <thead>
                                         <tr>
-                                            <th class="">时间</th>
+                                            <th class="">事件时间</th>
                                             <th class="">发布人</th>
                                             <th class="">发布内容</th>
                                             <th class="">发布时间</th>
@@ -54,35 +54,22 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
-                                        <tr class="xg-table-tr">
-                                            <td>2017-12-31</td>
-                                            <td>张三</td>
-                                            <td>将产品送到鹏润大厦</td>
-                                            <td>2017-12-20</td>
-                                            <td>
-                                                <div class="am-btn-toolbar">
-                                                    <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updatePublicMemo()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletePublicMemo()"><span class="am-icon-trash-o"></span> 删除</button>
+                                        <foreach name="publicMemoInfo" item="v" key="k">
+                                            <tr class="xg-table-tr">
+                                                <td>{$v['memo_time_value']}</td>
+                                                <td>{$v['manager_name']}</td>
+                                                <td>{$v['memo_event']}</td>
+                                                <td>{$v['edit_time_value']}</td>
+                                                <td>
+                                                    <div class="am-btn-toolbar">
+                                                        <div class="am-btn-group am-btn-group-xs">
+                                                            <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updatePublicMemo({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                            <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletePublicMemo({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class="xg-table-tr">
-                                            <td>2017-12-31</td>
-                                            <td>张三</td>
-                                            <td>将产品送到鹏润大厦</td>
-                                            <td>2017-12-20</td>
-                                            <td>
-                                                <div class="am-btn-toolbar">
-                                                    <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updatePublicMemo()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletePublicMemo()"><span class="am-icon-trash-o"></span> 删除</button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
+                                        </foreach>
 
                                     </tbody>
                                 </table>
@@ -107,26 +94,49 @@
     <script src="__PUBLIC__/layer/layer.js"></script>
     <script type="text/javascript">
         // 修改职位页面
-        function updatePublicMemo(){
+        function updatePublicMemo(id){
             layer.open({
                 type: 2,
-                offset: '50px',
+                // offset: '50px',
                 title: '修改公共备忘录信息',
                 shadeClose: true,
                 shade: 0.8,
-                area: ['60%', '90%'],
+                area: ['50%', '70%'],
                 btn: ['关闭'],
-                content: '__APP__/PersonalCenter/updatePublicMemo' //iframe的url
+                content: '__APP__/PersonalCenter/updatePublicMemo/id/'+id //iframe的url
             });
         }
         // 删除职位信息提示
-        function deletePublicMemo(){
+        function deletePublicMemo(id){
             layer.confirm('您确定要删除这条公共备忘录信息吗？', {
                 icon: 3,
                 anim:5,
-                offset: '200px',
                 title:'提示',
                 btn: ['确定','取消'] //按钮
+            }, function(){
+                if(id){
+                    $.ajax({
+                        url:'__APP__/PersonalCenter/deletePublicMemoInfo',
+                        data:'id='+id,
+                        type:'post',
+                        dataType:'json',
+                        success:function(res){
+                            layer.confirm(res, {
+                                icon: 1,
+                                anim:5,
+                                title:'提示',
+                                btn: ['确定'] //按钮
+                            }, function(){
+                                window.location.reload();       
+                            });
+                        }
+                    });
+
+                }else{
+                    layer.alert('删除失败！', {icon: 1,title:'提示'});
+                }          
+            }, function(){
+                
             });
         }
     </script>

@@ -35,6 +35,28 @@
 			$result = $table->where("id = ".$id)->delete();
 			return $result;
 		}
+		//条件查询备忘录信息
+		public function publicMemoInfo($condition){ 
+			$query = M("xg_public_memo");
+			if($condition['where']){
+				$query = $query->where($condition['where']);
+			}
+			if($condition['order']){
+				$query = $query->order($condition['order']);
+			}
+			if($condition['limit']){
+				$query = $query->limit($condition['limit']['firstRow'],$condition['limit']['pageSize']);
+			}
+
+			$result = $query->select();
+			return $result;
+		
+		}
+		//符合条件的备忘录总数
+		public function getPublicMemoCount($condition){
+			$totalCount = M("xg_public_memo")->where($condition['where'])->count();
+			return $totalCount;
+		}
 	}
 
  ?>

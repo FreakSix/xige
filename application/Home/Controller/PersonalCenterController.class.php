@@ -6,17 +6,19 @@
 	class PersonalCenterController extends BaseController{
 		
 		public function index(){
-			$userInfo = $_SESSION['userInfo'];
+			$userInfo2 = $_SESSION['userInfo'];
+			//从数据库获取用户信息
+			$userInfo = D("XgManager")->getManagerInfoById($userInfo2['id']);
 			//获取部门
-			if($userInfo['department_id'] != 0){
+			if($userInfo2['department_id'] != 0){
 				$depeartModel = D("XgDepeartment");
-				$depeart = $depeartModel->getDepeartmentById($userInfo['department_id']);
+				$depeart = $depeartModel->getDepeartmentById($userInfo2['department_id']);
 			}else{
 				$depeart = "";
 			}
 			//获取职位
 			$dutyModel = D("XgDuty");
-			$duty = $dutyModel->getDutyById($userInfo['duty_id']);
+			$duty = $dutyModel->getDutyById($userInfo2['duty_id']);
 			
 			$this->assign("depeart",$depeart);
 			$this->assign("duty",$duty);
@@ -31,11 +33,53 @@
 			$email = $_GET['email'];
 			$tel = $_GET['tel'];
 			$id = $_GET['id'];
-			$this->assign("username",$username);
-			$this->assign("email",$email);
-			$this->assign("tel",$tel);
-			$this->assign("id",$id);
-			$this->display("update_user_info");
+			$getimagename = $_GET['getimagename'];
+
+			$post = $_POST;
+			if(!empty($post)){
+        		$imagename="";
+				if($_FILES){
+					$upload = new \Think\Upload();
+					//设置	
+					$upload->mimes=array("image/gif","image/png","image/jpeg");
+					$upload->autoSub = false;
+					$upload->rootPath = "./public/";
+					$upload->savePath = "/images/personalPic/";
+					//上传
+					$imageRs = $upload->upload();
+					// var_dump($imageRs);exit;
+					$imagename = $imageRs['upload']['savename'];
+				}
+
+				if($imagename != ""){
+					$personalData['imagename']=$imagename;
+				}
+				$personalData['username']=$post['user_name'];
+				$personalData['email']=$post['email'];
+				$personalData['tel']=$post['tel'];
+
+				$res = D("XgManager")->updateEditManager($_GET['id'],$personalData);
+
+				if($post['user_name'] != $_SESSION['userInfo']['username']){
+					if($res == 1){
+						echo json_encode(3); //修改用户名后重新登录
+					}else{
+						echo json_encode(2); //修改失败
+					}
+				}else{
+					if($res == 1){
+						echo json_encode(1); //修改成功
+					}else{
+						echo json_encode(2); //修改失败
+					}
+				}
+				
+			}else{
+				$userInfo = D("XgManager")->getManagerInfoById($id);
+
+				$this->assign("userInfo",$userInfo);
+				$this->display("update_user_info");
+			}
 		}
 
 		// 修改密码页面
@@ -207,11 +251,74 @@
 		}
 		// 公共备忘录管理页面
 		public function publicMemo(){
+			$count = D("XgPublicMemo")->getPublicMemoCount();
+			$pageSize = 15;
+	 		//实例化分页类
+	 		$page = new \Think\Page($count,$pageSize);
+	 		//获取起始位置
+	 		$firstRow = $page->firstRow;
+	 		// 设置显示页码个数
+	 		$page->rollPage = 5;
+	 		//获取分页结果
+	 		$pageStr = $page->show();
+	 		//总页数
+	 		$totalPage = $page->totalPages;
+	 		
+	 		//查询商品名称
+	 		$condition['order'] = "id desc";
+	 		$condition['limit']['firstRow'] = $firstRow;
+	 		$condition['limit']['pageSize'] = $pageSize;
+
+			$publicMemoInfo = D("XgPublicMemo")->publicMemoInfo($condition);
+			if(!empty($publicMemoInfo)){
+				foreach ($publicMemoInfo as $k => $v) {
+					//事件时间处理
+					$memoTime =  date("Y-m-d",$v['memo_time']);
+					$publicMemoInfo[$k]['memo_time_value'] = $memoTime;
+					//发布时间处理
+					$editTime =  date("Y-m-d H:i:s",$v['edit_time']);
+					$publicMemoInfo[$k]['edit_time_value'] = $editTime;
+				}
+			}
+
+			$this->assign("pageStr",$pageStr);
+			$this->assign("publicMemoInfo",$publicMemoInfo);
 			$this->display("public_memo");
 		}
 		// 修改公共备忘录信息页面
 		public function updatePublicMemo(){
-			$this->display("update_public_memo");
+			$get = $_GET;
+			$post = $_POST;
+
+			if(!empty($post)){
+		    	$data["memo_time"] = strtotime($post["memo_time"]);
+		    	$data["memo_event"] = $post["memo_event"];
+		    	$data["memo_level"] = $post["memo_level"];
+
+		    	$res = D("XgPublicMemo")->updatePublicMemo($post['id'],$data);
+		    	echo $res;
+			}else{
+				$publicMemoInfo = D("XgPublicMemo")->getPublicMemoById($get['id']);
+				//事件时间处理
+				$memoTime =  date("Y-m-d",$publicMemoInfo['memo_time']);
+				$publicMemoInfo['memo_time_value'] = $memoTime;
+
+				$this->assign("publicMemoInfo",$publicMemoInfo);
+				$this->display("update_public_memo");
+			}
+		}
+
+		//删除公共备忘录信息
+		public function deletePublicMemoInfo(){
+			$post = $_POST;
+			$res = D("XgPublicMemo")->deletePublicMemo($post['id']);
+
+			if($res > 0){
+				$res_str = "删除成功！";
+			}else{
+				$res_str = "删除失败！";
+			}
+			echo json_encode($res_str);
 		}
 		
 		
