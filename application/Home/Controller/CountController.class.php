@@ -21,36 +21,105 @@
 		 	$customerNum = D("XgCustomer")->getCustomerCount($condition['customer']);
 
 
-		 	//截止目前客户欠款金额
+		 	//截止目前 （累计）客户    销售额   回款    欠款
 		 	$debtMoneyEndTime = time();
 		 	$condition['debtMoney']['where'] = "add_time <= '".$debtMoneyEndTime."' ";
 		 	
-			$orderInfo = D("XgOrder")->orderInfo($condition['debtMoney']);
+			$orderInfoAll = D("XgOrder")->orderInfo($condition['debtMoney']);
 
-			$debtMoney = 0;		//客户欠款
-			if(!empty($orderInfo)){
-				foreach ($orderInfo as $k => $v) {
-					$debtMoney = $debtMoney + ((float)$v["order_money"] - (float)$v["customer_money"]);
+			$moneyAll = 0;		//销售额
+			$customerMoneyAll = 0;  //客户回款
+			$customerDebtMoneyAll = 0;		//客户欠款
+			if(!empty($orderInfoAll)){
+				foreach ($orderInfoAll as $k => $v) {
+					// $debtMoney = $debtMoney + ((float)$v["order_money"] - (float)$v["customer_money"]);
+					$moneyAll = $moneyAll + (float)$v["order_money"];
+					$customerMoneyAll = $customerMoneyAll + (float)$v["customer_money"];
+					$customerDebtMoneyAll = $customerDebtMoneyAll + ((float)$v["order_money"] - (float)$v["customer_money"]); 
 				}
 			}
+			$data['moneyAll'] = $moneyAll;
+			$data['customerMoneyAll'] = $customerMoneyAll;
+			$data['customerDebtMoneyAll'] = $customerDebtMoneyAll;
 
 
-		 	//本月销售额
+
+		 	//客户 本月   销售额   回款    欠款
 		 	$condition['money']['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
 		 	$orderInfo = D("XgOrder")->orderInfo($condition['money']);
 			$money = 0;		//销售额
+			$customerMoney = 0;  //客户回款
+			$customerDebtMoney = 0;		//客户欠款
 			if(!empty($orderInfo)){
 				foreach ($orderInfo as $k => $v) {
 					$money = $money + (float)$v["order_money"];
+					$customerMoney = $customerMoney + (float)$v["customer_money"];
+					$customerDebtMoney = $customerDebtMoney + ((float)$v["order_money"] - (float)$v["customer_money"]); 
+				}
+			}
+			$data['money'] = $money;
+			$data['customerMoney'] = $customerMoney;
+			$data['customerDebtMoney'] = $customerDebtMoney;
+
+
+
+
+			//供应商    本月   支出金额、   未付金额
+			$supplierAccountInfo = D("XgSupplierAccount")->supplierAccountInfo($condition['money']);
+			$supplierMoney = 0;    //支出
+			
+			if(!empty($supplierAccountInfo)){
+				foreach ($supplierAccountInfo as $k => $v) {
+					$supplierMoney = $supplierMoney + (float)$v["money"];
+					// $supplierDebtMoney = $supplierDebtMoney + ((float)$v["order_money"] - (float)$v["customer_money"]); 
 				}
 			}
 
+			$condition['orderProductSupplier']['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and order_id != '' and order_num != '' ";
+			// $condition['orderProductSupplier']['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
+			$orderProductInfo = D("XgOrderProduct")->orderProductInfo($condition['orderProductSupplier']);
 
+			$toSupplierCostMoney = 0;		//给供应商的成本
+			if(!empty($orderProductInfo)){
+				foreach ($orderProductInfo as $kk => $vv) {
+					$toSupplierCostMoney = $toSupplierCostMoney + (float)$vv["cost_money"];
+				}
+			}
+			$supplierDebtMoney = $toSupplierCostMoney - $supplierMoney;		//未付
+
+			$data['supplierMoney'] = $supplierMoney;
+			$data['supplierDebtMoney'] = $supplierDebtMoney;
+
+
+
+			//供应商    累积      支出金额、  未付金额
+			// $condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
+			// 		$orderInfo = D("XgOrder")->orderInfo($condition);
+
+			$supplierMoneyAll = 0;  //向供应商付款
+			$supplierDebtMoneyAll = 0;		//欠供应商金额
+			if(!empty($orderInfoAll)){
+				foreach ($orderInfoAll as $k => $v) {
+					//获取该订单的产品信息
+					$condition['orderProduct'] = "order_id = ".$v['id']."";
+
+					$orderProductInfoSupplier = D("XgOrderProduct")->getOrderProductInfo($condition['orderProduct']);
+					if(!empty($orderProductInfoSupplier)){
+						foreach ($orderProductInfoSupplier as $kk => $vv) {
+							$supplierMoneyAll = $supplierMoneyAll + (float)$vv["supplier_money"];
+							$supplierDebtMoneyAll = $supplierDebtMoneyAll + ((float)$vv["end_money"] - (float)$vv["supplier_money"]);
+						}
+					}
+				}
+			}
+			$data['supplierMoneyAll'] = $supplierMoneyAll;
+			$data['supplierDebtMoneyAll'] = $supplierDebtMoneyAll;
 
 
 		 	$this->assign("customerNum",$customerNum);
 		 	$this->assign("debtMoney",$debtMoney);
 		 	$this->assign("money",$money);
+		 	$this->assign("data",$data);
 			$this -> display();
 		}
 
