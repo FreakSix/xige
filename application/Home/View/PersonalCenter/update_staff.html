@@ -35,12 +35,13 @@
                                 <if condition="$managerInfo['highest'] eq 1">
                                     超级管理员不属于任何部门
                                 <else/>
-                                    <select class="depart_option">
+                                    <select class="depart_option" data-am-selected="{btnWidth:'260px',maxHeight: 200,searchBox: 1}" onchange="changeDutyOption();">
+                                        <option value="0" >选择部门</option>
                                         <foreach name="departArr" item="item">
                                         <if condition="$item['id'] == $departInfo['id']">
-                                            <option value="{$item.id}" onclick="changeDutyOption(this)" selected ="selected">{$item.depart_name}</option>
+                                            <option value="{$item.id}" selected ="selected">{$item.depart_name}</option>
                                         <else/>
-                                        	 <option value="{$item.id}" onclick="changeDutyOption(this)">{$item.depart_name}</option>
+                                        	 <option value="{$item.id}" >{$item.depart_name}</option>
                                         </if>
                                         </foreach>
                                     </select>
@@ -50,8 +51,15 @@
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label">职位名称：</label>
                             <div class="am-u-sm-4 am-u-end">
-                                <select class="duty_option">
-                                    <option value="{$dutyInfo.id}"  is_manager="{$dutyInfo.is_manager}">{$dutyInfo.duty_name}</option>
+                                <select class="duty_option" data-am-selected="{btnWidth:'260px',maxHeight: 200,searchBox: 1}">
+                                    <!-- <option value="{$dutyInfo.id}"  is_manager="{$dutyInfo.is_manager}">{$dutyInfo.duty_name}</option> -->
+                                    <foreach name="dutyInfo" item="item">
+                                        <if condition="$item['id'] == $managerInfo['duty_id']">
+                                            <option value="{$item.id}" is_manager="{$item.is_manager}" selected ="selected">{$item.duty_name}</option>
+                                        <else/>
+                                             <option value="{$item.id}" is_manager="{$item.is_manager}">{$item.duty_name}</option>
+                                        </if>
+                                    </foreach>
                                 </select>
                             </div>
                         </div>
@@ -104,8 +112,8 @@
     <script src="__PUBLIC__/js/layer.js"></script>
 
 <script type="text/javascript">
-	function changeDutyOption(obj){
-	   var depart_id = $(obj).val();
+	function changeDutyOption(){
+	   var depart_id = $(".depart_option").val();
 	   $.post("__APP__/PersonalCenter/GetDifDutyByDepartId",{"depart_id":depart_id},function(res){
 		   $(".duty_option").html('');
 		   $(".duty_option").html(res);
@@ -126,7 +134,20 @@
 	    var email = $("#email").val();
 	    var is_manager = $(".duty_option").find("option:selected").attr("is_manager");
 	    var old_is_manager = $("#old_is_manager").val();
-	  	//用户名验证
+	  	
+        //所属部门验证
+        if(depart_id == 0){
+           parent.layer.msg('请选择所属部门！');
+           $(".depart_option").focus();
+           return false;
+        }
+        //职位名称验证
+        if(duty_id == 0){
+           parent.layer.msg('请选择职位名称！');
+           $(".duty_option").focus();
+           return false;
+        }
+        //用户名验证
        	if(username == ''){
            	parent.layer.msg('用户名不能为空！');
            	$("#username").focus();
@@ -171,7 +192,8 @@
 	}
 	function submitEditContent(id,depart_id,duty_id,username,truename,tel,email,is_manager,old_is_manager,old_duty_id,old_depart_id){
 		$.post("__APP__/PersonalCenter/saveEditManager",{"id":id,"depart_id":depart_id,"duty_id":duty_id,"username":username,"truename":truename,"tel":tel,"email":email,"is_manager":is_manager,"old_is_manager":old_is_manager,"old_duty_id":old_duty_id,"old_depart_id":old_depart_id},function(res){
-	    	   alert(res);return false;
+	    	   // alert(res);
+               // return false;
 	    	   if(res == 1){
 	    		   alert("修改员工信息成功！");
 	    		   closeLayer();

@@ -32,21 +32,28 @@
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label">所属部门：</label>
                             <div class="am-u-sm-4 am-u-end">
-                                <select class="depart_option">
+                                <!-- <select class="depart_option">
                                 <foreach name="departArr" item="item">
                                     <option value="{$item.id}" onclick="changeDutyOption(this)">{$item.depart_name}</option>
                                 </foreach>
-                                    <!-- <option>销售部</option> -->
+                                    <option>销售部</option>
+                                </select> -->
+                                <select class="depart_option" data-am-selected="{btnWidth:'200px',maxHeight: 200,searchBox: 1}" onchange="changeDutyOption();">
+                                    <option value="0" >选择部门</option>
+                                    <foreach name="departArr" item="v">
+                                        <option value="{$v['id']}" >{$v['depart_name']}</option>
+                                    </foreach>
                                 </select>
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label">职位名称：</label>
                             <div class="am-u-sm-4 am-u-end">
-                                <select class="duty_option">
-                                <foreach name="firstDepartDutyInfo" item="duty_item">
+                                <select class="duty_option" data-am-selected="{btnWidth:'200px',maxHeight: 200,searchBox: 1}">
+                                <!-- <foreach name="firstDepartDutyInfo" item="duty_item">
                                     <option value="{$duty_item.id}" is_manager="{$duty_item.is_manager}">{$duty_item.duty_name}</option>
-                                </foreach>
+                                </foreach> -->
+                                    <option value="0" is_manager=" " >选择职位</option>
                                 </select>
                             </div>
                         </div>
@@ -92,8 +99,9 @@
     <script src="__PUBLIC__/js/layer.js"></script>
 
 <script type="text/javascript">
-   function changeDutyOption(obj){
-	   var depart_id = $(obj).val();
+   function changeDutyOption(){
+	   // var depart_id = $(obj).val();
+       var depart_id = $(".depart_option").val();
 	   $.post("__APP__/PersonalCenter/GetDifDutyByDepartId",{"depart_id":depart_id},function(res){
 		   $(".duty_option").html('');
 		   $(".duty_option").html(res);
@@ -107,7 +115,20 @@
 	   var tel = $("#tel").val();
 	   var email = $("#email").val();
 	   var is_manager = $(".duty_option").find("option:selected").attr("is_manager");
-	   //用户名验证
+	   
+       //所属部门验证
+       if(depart_id == 0){
+           parent.layer.msg('请选择所属部门！');
+           $(".depart_option").focus();
+           return false;
+       }
+       //职位名称验证
+       if(duty_id == 0){
+           parent.layer.msg('请选择职位名称！');
+           $(".duty_option").focus();
+           return false;
+       }
+       //用户名验证
        if(username == ''){
            parent.layer.msg('用户名不能为空！');
            $("#username").focus();

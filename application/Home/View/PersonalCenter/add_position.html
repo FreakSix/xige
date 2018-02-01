@@ -32,7 +32,8 @@
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label">所属部门：</label>
                             <div class="am-u-sm-5 am-u-end">
-                                <select id="suoshubumen">
+                                <select id="suoshubumen" data-am-selected="{btnWidth:'340px',maxHeight: 200,searchBox: 1}">
+                                <option value="0">所属部门</option>
                                 <foreach name="depeartArr" item="item" >
                                     <option value="{$item.id}">{$item.depart_name}</option>
                                  </foreach>
@@ -78,6 +79,13 @@
 <script type="text/javascript">
 	function add_new_duty(){
 		 var depart_id = $("#suoshubumen").val();
+         //所属部门验证
+        if(depart_id == 0){
+           parent.layer.msg('请选择所属部门！');
+           $(".depart_option").focus();
+           return false;
+        }
+        
 		 var duty_name = $("input[name=zhiweimingcheng]").val();
 		 var is_manager = $('#zhiweimingcheng_div input[name="zhiweimingcheng"]:checked ').val();
 		 if(duty_name == ''){

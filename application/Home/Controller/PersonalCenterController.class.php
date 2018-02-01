@@ -40,14 +40,14 @@
         		$imagename="";
 				if($_FILES){
 					$upload = new \Think\Upload();
-					//设置	
+					//设置
 					$upload->mimes=array("image/gif","image/png","image/jpeg");
 					$upload->autoSub = false;
 					$upload->rootPath = "./public/";
 					$upload->savePath = "/images/personalPic/";
 					//上传
 					$imageRs = $upload->upload();
-					// var_dump($imageRs);exit;
+					// var_dump($_FILES);exit; 
 					$imagename = $imageRs['upload']['savename'];
 				}
 
@@ -59,6 +59,7 @@
 				$personalData['username']=$post['user_name'];
 				$personalData['email']=$post['email'];
 				$personalData['tel']=$post['tel'];
+				// var_dump($personalData);exit;
 
 				$res = D("XgManager")->updateEditManager($_GET['id'],$personalData);
 
@@ -460,7 +461,7 @@
 			//获取该员工的部门信息
 			$departInfo = $departModel->getDepeartmentById($managerInfo['department_id']);
 			//获取该员工的职位信息
-			$dutyInfo = $dutyModel->getDutyById($managerInfo['duty_id']); 
+			$dutyInfo = $dutyModel->getDutyByDepartId($managerInfo['department_id']); 
 			//获取所有的部门信息
 			$departArr = $departModel->getDepeartAll();	
 			//获取所有的职位信息
@@ -478,7 +479,7 @@
 			$depart_id = $_REQUEST['depart_id'];
 			$dutyModel = D("XgDuty");
 			$dutyArr = $dutyModel->getDutyByDepartId($depart_id);
-			$html = "";
+			$html = "<option value='0' is_manager=' '> 选择职位 </option>";
 			if(!empty($dutyArr)){
 				foreach ($dutyArr as $k=>$v){
 					$html .= "<option value='".$v['id']."' is_manager='".$v['is_manager']."'>".$v['duty_name']."</option>";
