@@ -248,6 +248,7 @@
 			}
 
 		}
+
 		// 客户对账单导出处理
 		public function exportOrderHandle($exportInfo,$num,$allMoney,$allPayment,$allArrear){
 			vendor("PHPExcel.PHPExcel");
@@ -388,6 +389,11 @@
 			header('Cache-Control: max-age=0');
 			$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 			$objWriter->save('php://output');
+		}
+
+		public function exportProduct(){
+
+			$this->display("export_product");
 		}
 
 		// 新增订单页面
