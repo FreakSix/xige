@@ -1401,7 +1401,7 @@
 			$html = "";
 			if(!empty($customerInfo)){
 				foreach($customerInfo as $k=>$v){
-					$html .= "<li onclick=searchCustomerName('".$v['cname']."')>".$v['cname']."<li>";
+					$html .= "<li onclick=searchCustomerName('".$v['cname']."')>".$v['cname']."</li>";
 				}
 			}
 			echo $html;
