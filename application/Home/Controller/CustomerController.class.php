@@ -22,7 +22,7 @@
 			if(!empty($customerInfo)){
 				foreach ($customerInfo as $k => $v) {
 					//得到客户等级名称
-					$levelInfo = $level->where("level = ".$v["rank"])->find();
+					$levelInfo = $level->where("id = ".$v["level_id"])->find();
 					$customerInfo[$k]["level_name"] = $levelInfo["name"];
 					//得到省份名称
 					if($v["local_procode"] != 0){
@@ -69,7 +69,7 @@
 		public function search($get,$post){
 		
 	 		if($get['level']){
-	 			$condition['where'] = "rank = ".$get['level']."";
+	 			$condition['where'] = "level_id = ".$get['level']."";
 
 	 			$search['rank'] = $get['level'];
 	 		}else{

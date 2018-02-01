@@ -53,10 +53,10 @@
                                 <select data-am-selected="{btnSize: 'sm'}"id="customer_level" name="customer_level" onchange="changeLevelInfo();">
                                     <option value="0" checked="checked">全部客户</option>
                                     <foreach name="rank" item="v">
-                                        <if condition="$search['rank'] == $v['level']">
-                                            <option value="{$v[level]}" selected="selected">{$v['name']}</option>
+                                        <if condition="$search['rank'] == $v['id']">
+                                            <option value="{$v[id]}" selected="selected">{$v['name']}</option>
                                         <else/>
-                                            <option value="{$v['level']}" >{$v['name']}</option>
+                                            <option value="{$v['id']}" >{$v['name']}</option>
                                         </if>
                                     </foreach>
                                 </select>

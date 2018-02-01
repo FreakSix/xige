@@ -63,12 +63,22 @@
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">联系人：</label>
                                     <div class="am-u-sm-5">
-                                        <select id="linkman_name">
+                                        <!-- <select id="linkman_name">
                                             <foreach name="customerLinkManInfo" item="v" key="k">
                                                 <if condition="$orderInfo['linkman_name'] == $v['name']">
                                                     <option value="{$v['id']}" selected="selected" onclick="getLinkmanPhone({$v['id']})" >{$v['name']}</option>
                                                 <else/>
                                                     <option value="{$v['id']}" onclick="getLinkmanPhone({$v['id']})" >{$v['name']}</option>
+                                                </if>
+                                            </foreach>
+                                        </select> -->
+                                        <select id="doc-select-1" class="lxr_select" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}" onchange="getLinkmanPhone()">
+                                            <option value="0">请选择联系人</option>
+                                            <foreach name="customerLinkManInfo" item="v" key="k">
+                                                <if condition="$orderInfo['linkman_name'] == $v['name']">
+                                                    <option value="{$v['id']}" selected="selected" >{$v['name']}</option>
+                                                <else/>
+                                                    <option value="{$v['id']}" >{$v['name']}</option>
                                                 </if>
                                             </foreach>
                                         </select>
@@ -235,7 +245,7 @@
 
                                                         <div class="am-form-group">
                                                             <div class="am-u-sm-10 am-u-sm-push-2">
-                                                                <button type="button"  onclick="updateProduct({$v['id']})" class="am-btn am-btn-primary">确认修改</button>
+                                                                <button type="button"  onclick="updateProduct({$orderInfo['id']},{$v['id']})" class="am-btn am-btn-primary">确认修改</button>
                                                             </div>
                                                         </div>
 
@@ -341,7 +351,7 @@
 
         function updateOrder(order_id){
             var trade_time = $("#trade_time").val();
-            var lxr_name = $("#linkman_name").val();
+            var lxr_name = $(".lxr_select").val();
             var lxr_phone = $.trim($("#linkman_phone").val());
             if(lxr_phone == '' ){
                 layer.alert("联系电话不能为空！", {icon: 5,});
@@ -385,7 +395,8 @@
 
         }
 
-        function getLinkmanPhone(id){
+        function getLinkmanPhone(){
+            var id = $(".lxr_select").val();
             // alert(id);
             $.post("__APP__/Order/getTelByLxrId",{"lxr_id":id},function(res){
                 var data = eval("(" + res + ")");
@@ -395,8 +406,8 @@
         }
 
         //修改产品信息
-        function updateProduct(order_product_id){
-            alert(order_product_id);
+        function updateProduct(order_id,order_product_id){
+            // alert(order_product_id);
             var cost_money = $.trim($("#cost_money_"+order_product_id).val());
             if(cost_money == '' ){
                 layer.alert("请输入成本总价！", {icon: 5,});
@@ -418,8 +429,8 @@
             var material_link = $.trim($("#material_link_"+order_product_id).val());
             var product_remarks = $.trim($("#product_remarks_"+order_product_id).val());
 
-            //修改订单产品信息
-            $.post("__APP__/Order/updateOrderProductInfo",{"id":order_product_id,"cost_money":cost_money,"end_price":end_price,"end_money":end_money,"material_link":material_link,"product_remarks":product_remarks},function(res){
+            //修改订单产品信息 
+            $.post("__APP__/Order/updateOrderProductInfo",{"order_id":order_id,"id":order_product_id,"cost_money":cost_money,"end_price":end_price,"end_money":end_money,"material_link":material_link,"product_remarks":product_remarks},function(res){
                     if(res > 0 ){
                         layer.alert('修改成功！', {
                                                             icon: 1,

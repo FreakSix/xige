@@ -480,12 +480,15 @@
 				$customerName = $customerInfo['cname'];
 				//对交货日期进行处理
 				$trade_time = strtotime($post['trade_time']);
+				//获取联系人姓名
+				$customerLinkmanInfo = D("XgCustomerLinkman")->getCustomerLinkInfoByid($post['linkman_name']);
+				$linkmanName = $customerLinkmanInfo['name'];
 
 				$data['order_id']= $order_id;
 				$data['customer_id'] = $post['customer_id'];
 				$data['customer_name'] = $customerName;
 				$data['trade_time'] = $trade_time;
-				$data['linkman_name'] = $post['linkman_name'];
+				$data['linkman_name'] = $linkmanName;
 				$data['linkman_tel'] = $post['linkman_tel'];
 				$data['link_address'] = $post['link_address'];
 				$data['order_product_id'] = $post['order_product_id'];
@@ -751,6 +754,9 @@
 		}
 		// 修改订单信息页面
 		public function update(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
 			
 			$get = $_GET;
 			$post = $_POST;
@@ -769,10 +775,15 @@
 				}else{
 					$moneyStatus = 1;
 				}
+				//对交货日期进行处理
+				$trade_time = strtotime($post['trade_time']);
+				//获取联系人姓名
+				$customerLinkmanInfo = D("XgCustomerLinkman")->getCustomerLinkInfoByid($post['linkman_name']);
+				$linkmanName = $customerLinkmanInfo['name'];
 
-				$data['trade_time'] = $post['trade_time'];
-				$data['linkman_name'] = $post['linkman_name'];
-				$data['linkman_tel'] = $post['linkman_phone'];
+				$data['trade_time'] = $trade_time;
+				$data['linkman_name'] = $linkmanName;
+				$data['linkman_tel'] = $post['linkman_tel'];
 				$data['link_address'] = $post['link_address'];
 				$data['order_money'] = $post['order_money'];
 				$data['customer_money_status'] = $moneyStatus;
@@ -856,10 +867,11 @@
 		public function getProductNameInfoAll(){
 			$condition['where'] = "pid > 0";
 			$productNameInfo = D("XgProductType")->getProductInfo($condition);
-			$html = '<option value="">请选择产品名称</option>';
+			$html = '<option value="0">请选择产品名称</option>';
 			if(!empty($productNameInfo)){
 				foreach($productNameInfo as $k=>$v){
-					$html .= " <option value='".$v['id']."' onclick='getProductModel(".$v['id'].")'>".$v['type_name']."</option>";
+					// $html .= " <option value='".$v['id']."' onclick='getProductModel(".$v['id'].")'>".$v['type_name']."</option>";
+					$html .= " <option value='".$v['id']."' >".$v['type_name']."</option>";
 				}
 			}
 			echo $html;
@@ -873,10 +885,10 @@
 		public function getLxrByCustomerId($customer_id){
 			$customerLinkManModel = D("XgCustomerLinkman");
 			$customerLxrArr = $customerLinkManModel->getCustomerLinkInfo($customer_id);
-			$html = "<option value=''>请选择联系人</option>";
+			$html = "<option value='0'>请选择联系人</option>";
 			if(!empty($customerLxrArr)){
 				foreach ($customerLxrArr as $k=>$v){
-					$html.= "<option value='".$v['name']."' class='lxr_each' onclick='getLxrByCustomerId(".$v['id'].")'>".$v['name']."</option>";
+					$html.= "<option value='".$v['id']."' class='lxr_each'>".$v['name']."</option>";
 				}
 			}
 			echo $html;
@@ -900,10 +912,10 @@
 		public function getProductNameByProductType($id){
 			$productTypeModel = D("XgProductType");
 			$productTypeFirst = $productTypeModel->getProductTypeByPid($id);
-			$html = "<option value='' onclick='getProductModel(0)'>请选择产品名称</option>";
+			$html = "<option value='0' >请选择产品名称</option>";
 			if(!empty($productTypeFirst)){
 				foreach($productTypeFirst as $k=>$v){
-					$html .= " <option value='".$v['id']."' onclick=getProductModel('".$v['id']."','".$v['type_name']."')>".$v['type_name']."</option>";
+					$html .= " <option value='".$v['id']."' >".$v['type_name']."</option>";
 				}
 			}
 			echo $html;
@@ -1064,6 +1076,14 @@
 					}
 				}
 			}
+			// dump($selectSupplierInfo);
+			if(!empty($selectSupplierInfo)){
+				foreach ($selectSupplierInfo as $kk => $vv) {
+					if($vv['price'] == ''){
+						$selectSupplierInfo[$kk]['price'] = 0;
+					}
+				}
+			}
 
 			$this->assign("selectSupplierInfo",$selectSupplierInfo);
 			$this->assign("post",$post);
@@ -1148,7 +1168,7 @@
 					$discountMoney['money_1'] = "￥ ";
 					$discountMoney['money_2'] = " 元";
 				}else{
-					$discountMoney['money'] = "请输入该产品的成本单价！";
+					$discountMoney['money'] = "请选择客户信息！";
 					$discountMoney['money_1'] = " ";
 					$discountMoney['money_2'] = " ";
 				}
@@ -1455,7 +1475,37 @@
 				$data['product_remarks'] = $post['product_remarks'];
 
 				$res = D("XgOrderProduct")->updateOrderProductInfo($data,$post['id']);
+				if($res > 0){
+					//订单信息处理
+					$orderInfo = D("XgOrder")->getOrderInfoById($post['order_id']);
 
+					//订单的总价格处理
+					//订单产品信息
+					$condition = "order_id = ".$post['order_id'];
+					$orderProductInfo = D("XgOrderProduct")->getOrderProductInfo($condition);
+					if(!empty($orderProductInfo)){
+						foreach ($orderProductInfo as $kk => $vv) {
+							$orderMoney = $orderMoney + $vv['end_money'];
+						}
+					}else{
+						$orderMoney = 0;
+					}
+
+					//客户付款状态处理
+					if($orderInfo['customer_money']>= $orderMoney ){
+						$moneyStatus = 3;
+					}elseif (($orderInfo['customer_money'] < $orderMoney ) && $orderInfo['customer_money'] > 0 ) {
+						$moneyStatus = 2;
+					}else{
+						$moneyStatus = 1;
+					}
+
+					$orderData['order_money'] = $orderMoney;
+					$orderData['customer_money_status'] = $moneyStatus;
+					$orderData['update_manager_name'] = $_SESSION['userInfo']['truename'];
+
+					$res_2 = D("XgOrder")->updateOrderInfo($orderData,$post['order_id']);
+				}
 				echo $res;
 			}
 		}
@@ -2174,6 +2224,15 @@
 			// import("Org.Util.PHPExcel.IOFactory");
 			// $ExcelWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 			// $ExcelWriter->save('php://output');
+		}
+
+
+
+		//获取产品名字并返回给页面
+		public function getProductNameOne(){
+			$productInfo = D("XgProductType")->getProductName($_POST['id']);
+
+			echo $productInfo['0']['type_name'];
 		}
 
 

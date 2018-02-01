@@ -31,30 +31,55 @@
                         <div class="am-form-group">
                             <label for="contact-name" class="am-u-sm-2 am-form-label">服务类型：</label>
                             <div class="am-u-sm-4">
-                                <select id="doc-select-1" class="product_type">
+                                <!-- <select id="doc-select-1" class="product_type">
                                     <option value="">请选择服务类型</option>
 	                                <if condition="$productTypeFirst != ''">
 		                                <foreach name="productTypeFirst" item="item" key="key">
 		                                    <option value="{$item.id}" onclick="getProductName({$item.id},{$item.have_price})">{$item.type_name}</option>
 		                                </foreach>
 	                                </if>
+                                </select> -->
+                                <select id="product_type" name="product_type" class="product_type" onchange="getProductName()" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}" >
+                                    <option value="0" checked="checked">全部服务</option>
+                                    <if condition="$productTypeFirst != ''">
+                                        <foreach name="productTypeFirst" item="v">
+                                            <option value="{$v['id']}" >{$v['type_name']}</option>
+                                        </foreach>
+                                    </if>
                                 </select>
+
+                                <!-- 在循环一次产品服务，把下拉框中需要的值放在隐藏域中 -->
+                                <input type="hidden" value="0" id="hide_item_have_price_0" />
+                                <if condition="$productTypeFirst != ''">
+                                    <foreach name="productTypeFirst" item="v">
+                                        <input type="hidden" value="{$v.have_price}" id="hide_item_have_price_{$v.id}" />
+                                    </foreach>
+                                </if>
+
 
                                 <input type="hidden" value="" id="hide_have_price_value_2" /> 
                             </div>
                             <label for="contact-name" class="am-u-sm-2 am-form-label">产品名称：</label>
                             <div class="am-u-sm-4">
-                                <select id="doc-select-1" class="product_name">
+                                <!-- <select id="doc-select-1" class="product_name">
                                     <option value="">请选择产品名称</option>
                                     <if condition="$productNameFirst != ''">
                                         <foreach name="productNameFirst" item="item" key="key">
                                             <option value="{$item.id}" onclick="getProductModel('{$item.id}','{$item.type_name}')">{$item.type_name}</option>
                                         </foreach>
                                     </if>
+                                </select> -->
+                                <select id="product_name" class="product_name" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}" onchange="getProductModel()">
+                                    <option value="0" checked="checked">请选择产品名称</option>
+                                    <if condition="$productNameFirst != ''">
+                                        <foreach name="productNameFirst" item="item" key="key">
+                                            <option value="{$item.id}">{$item.type_name}</option>
+                                        </foreach>
+                                    </if>
                                 </select>
                             </div>
                             <input type="hidden" value="{$productNameFirst['0'][pid]}" id="hide_product_type_value" />
-                            <input type="hidden" value="" id="hide_product_name_value" />
+                            <input type="hidden" value=" " id="hide_product_name_value" />
                         </div>
                         <div class="am-form-group">
                             <label for="contact-wechat" class="am-u-sm-2 am-form-label">产品型号：</label>
@@ -328,11 +353,14 @@
             });
         }
 
-        function getProductName(id,have_price){
+        function getProductName(){
             // alert(id);
             // alert(have_price);
             //将商品名称的隐藏域中的值清除
-            $("#hide_product_name_value").val("");
+            $("#hide_product_name_value").val(" ");
+
+            var id = $("#product_type").val();
+            var have_price = $("#hide_item_have_price_"+id).val();
             //重新渲染与价格有关的信息
             rand_info();
             //把判断该分类商品是否有报价的判断数据存入隐藏域中
@@ -362,10 +390,22 @@
 
         }
 
-        function getProductModel(id,product_name){
-            // alert(product_name);
-            //将商品名称放入隐藏域中
-            $("#hide_product_name_value").val(product_name);
+        function getProductModel(){
+            var id = $("#product_name").val();
+            var product_name_value = ' ';
+            //获取产品名称
+            $.post("__APP__/Order/getProductNameOne",{"id":id},function(res_2){
+                    if(res_2 == ''){
+                        product_name_value = ' ';
+                    }else{
+                        product_name_value = res_2;
+                    }
+                    //将商品名称放入隐藏域中
+                    $("#hide_product_name_value").val(product_name_value);
+                })
+
+            // //将商品名称放入隐藏域中
+            // $("#hide_product_name_value").val(product_name_value);
             //验证是否选择了产品分类
             product_type();
             $("#hide_product_name_id").val(id);
@@ -569,7 +609,7 @@
             var have_price_value_2 = $("#hide_have_price_value_2").val();
             var price_value = '';
             if(have_price_value_2 == 1 ){
-                if(price == undefined){
+                if(price == 0){
                     var price_value = '';
                     var price_html = "<div class='am-u-sm-2'> <span style='font-size:16px;color:#f00;'>暂无价格</span> </div> <input type='hidden' value='"+price_value+"' id='product_cost_price' />";
                 }else{
@@ -737,22 +777,23 @@
 
         //对选项内容进行验证
         function product_type(){
-            var product_type = $(".product_type").val();
-            if(product_type == ''){
-                layer.alert("请选择产品分类！", {icon: 5,});
+            var product_type = $("#product_type").val();
+            if(product_type == 0 ){
+                layer.alert("请选择服务类型！", {icon: 5,});
                 $(".product_type").focus();
-                //重新对商品名称的内容进行渲染
-                var product_type_id = $("#hide_product_type_value").val();
-                $.post("__APP__/Order/getProductNameByProductType",{"id":product_type_id},function(res){
-                    $(".product_name").html('');
-                    $(".product_name").html(res);
-                })
+                // //重新对商品名称的内容进行渲染
+                // var product_type_id = $("#hide_product_type_value").val();
+                // $.post("__APP__/Order/getProductNameByProductType",{"id":product_type_id},function(res){
+                //     $(".product_name").html('');
+                //     $(".product_name").html(res);
+                // })
                 exit;
+                // return false;
             }
         }
         function product_name(){
             var product_name = $(".product_name").val();
-            if(product_name == ''){
+            if(product_name == 0  || product_name == ''){
                 layer.alert("请选择产品名称！", {icon: 5,});
                 $(".product_name").focus();
                 exit;
