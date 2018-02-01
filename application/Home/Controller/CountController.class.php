@@ -57,6 +57,10 @@
 
 		//实际回款金额
 		public function customerMoneyCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
 			$get=$_GET;
 
 			$where = $this->getConditionInfo($get);
@@ -166,6 +170,10 @@
 
 		//实际支付金额
 		public function supplierMoneyCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
 			$get=$_GET;
 
 			// $where = $this->getConditionInfo($get);
@@ -278,6 +286,10 @@
 
 		//订单回款金额
 		public function orderCustomerMoneyCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
 			$get=$_GET;
 
 			$where = $this->getConditionInfo($get);
@@ -407,6 +419,10 @@
 
 		//订单支付金额
 		public function orderSupplierMoneyCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
 			$get=$_GET;
 
 			// $where = $this->getConditionInfo($get);
@@ -659,6 +675,10 @@
 
 		//成本利润销售额
 		public function costCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
 			$get=$_GET;
 
 			$where = $this->getConditionInfo($get);
@@ -825,6 +845,10 @@
 
 		//交易客户数
 		public function transactionCustomerCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
 			$get=$_GET;
 
 			if($get['type'] == 'days'){
@@ -936,6 +960,10 @@
 
 		//新增客户数
 		public function customerCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
 			$get=$_GET;
 
 			if($get['type'] == 'days'){
@@ -1023,6 +1051,10 @@
 
 		//客户订单数与交易额
 		public function customerOrderAndTransactionCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
 			$get=$_GET;
 
 			$where = $this->getConditionInfo($get);
@@ -1146,6 +1178,10 @@
 
 		//客户订单数排行
 		public function customerOrderCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
 			//所有客户信息
 			$customerInfo = D("XgCustomer")->getCustomerInfos();
 			// dump($customerInfo);
@@ -1180,6 +1216,10 @@
 
 		//客户交易额排行
 		public function customerTransactionCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
 			//所有客户信息
 			$customerInfo = D("XgCustomer")->getCustomerInfos();
 			// dump($customerInfo);
@@ -1220,6 +1260,9 @@
 
 		//成交产品总数
 		public function productCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
 
 			$get=$_GET;
 
@@ -1370,6 +1413,10 @@
 
 		//产品销售额排行
 		public function productMoneyCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
 			//所有产品信息
 			$condition['where'] = "pid > 0";
 			$productInfo = D("XgProductType")->getProductInfo($condition);
@@ -1409,6 +1456,10 @@
 
 		//产品销量排行
 		public function productNumCount(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+
 			//所有产品信息
 			$condition['where'] = "pid > 0";
 			$productInfo = D("XgProductType")->getProductInfo($condition);
@@ -1455,6 +1506,10 @@
 
 		//交易金额排行
 		public function supplierTransactiontMoneyNum(){
+			// 左侧菜单
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
+			
 			//所有供应商信息
 			$supplierInfo = D("XgSupplier")->supplierInfo();
 			// dump($supplierInfo);
