@@ -89,6 +89,7 @@
 			//时间，姓名，使用设备，登录IP，IP归属地
 			//此处暂时未处理IP的归属地，后期添加
 			session_start();
+			$userInfo['session_start_time'] = time();
 			$_SESSION["userInfo"] = $userInfo;
 			//获取该用户的职位，根据职位获取该职位对应的所有操作权限
 			$duty_id = $_SESSION["userInfo"]['duty_id'];

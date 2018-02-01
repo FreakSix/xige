@@ -48,7 +48,7 @@
                         <div class="am-u-sm-3 am-u-lg-3">
                             <div class="am-form-group" > 
                                 <span style="font-size: 16px;vertical-align: middle;">按服务类型搜索：</span>
-                                <select id="product_type" name="product_type" onchange="changeProductTypeInfo()" data-am-selected="{maxHeight: 370}" >
+                                <select id="product_type" name="product_type" onchange="changeProductTypeInfo()"  data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}">
                                     <option value="0" checked="checked">全部服务</option>
                                     <foreach name="productTypeInfo" item="v">
                                     <if condition="$search['product_type'] == $v['id']">

@@ -53,12 +53,24 @@
 
 				if($imagename != ""){
 					$personalData['imagename']=$imagename;
+					//修改_SESSION 的值
+					$_SESSION['userInfo']['imagename'] = $imagename;
 				}
 				$personalData['username']=$post['user_name'];
 				$personalData['email']=$post['email'];
 				$personalData['tel']=$post['tel'];
 
 				$res = D("XgManager")->updateEditManager($_GET['id'],$personalData);
+
+				//修改_SESSION 的值
+				if($res == 1){
+					if($post['email']){
+						$_SESSION['userInfo']['email'] = $post['email'];
+					}
+					if($post['tel']){
+						$_SESSION['userInfo']['tel'] = $post['tel'];
+					}
+				}
 
 				if($post['user_name'] != $_SESSION['userInfo']['username']){
 					if($res == 1){

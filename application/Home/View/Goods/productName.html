@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>layui</title>
+  <title>产品名称管理</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -44,9 +44,9 @@
                         <div class="am-u-sm-3 am-u-lg-3 am-u-end">
                             <div class="am-form-group" > 
                                 <span style="font-size: 16px;vertical-align: middle;">按服务类型搜索：</span>
-                                <select id="product_type" name="product_type" data-am-selected="{maxHeight: 370}" onchange="changeProductTypeInfo();">
+                                <select id="product_type" name="product_type" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}" onchange="changeProductTypeInfo();">
                                     <option value="0" checked="checked">全部服务</option>
-                                    <foreach name="productType" item="v">
+                                    <foreach name="productType_2" item="v">
                                         <if condition="$product_type_id == $v['id']">
                                            <option value="{$v[id]}" selected="selected">{$v['type_name']}</option>
                                         <else/>

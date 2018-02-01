@@ -69,7 +69,7 @@
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">所在区域<span id="important" style="color:#FF0000">*</span></label>
                                     <div class="am-u-sm-3"> 
-                                        <select id="supplier_pro" name="supplier_pro" onchange="getCityInfo();">
+                                        <select id="supplier_pro" name="supplier_pro" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}" onchange="getCityInfo();">
                                             <option value="0" >请选择省</option>
                                             <foreach name="province" item="v">
                                                 <if condition="$supplierInfo['supplier_pro_id'] == $v['code']">
@@ -82,7 +82,7 @@
                                         <span id="address_notice" style="color:#FF0000;font-size: 14px"></span>
                                     </div>
                                     <div class="am-u-sm-3">
-                                        <select id="supplier_city" name="supplier_city" onchange="getAreaInfo();">
+                                        <select id="supplier_city" name="supplier_city" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}" onchange="getAreaInfo();">
                                             <option value="0" checked="checked">请选择市</option>
                                             <foreach name="city" item="v">
                                                 <if condition="$supplierInfo['supplier_city_id'] == $v['code']">
@@ -94,7 +94,7 @@
                                         </select> 
                                     </div>
                                     <div class="am-u-sm-3"> 
-                                        <select id="supplier_area" name="supplier_area" >
+                                        <select id="supplier_area" name="supplier_area" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}" >
                                             <option value="0" checked="checked">请选择区</option>
                                             <foreach name="area" item="v">
                                                 <if condition="$supplierInfo['supplier_area_id'] == $v['code']">

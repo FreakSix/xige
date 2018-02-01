@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>修改产品规格</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,8 +36,8 @@
                                         <span id="sname_notice" style="color:#FF0000"> *</span> 
                                 </label>
                                 <div class="am-u-sm-8">
-                                    <select id="product_type" name="product_type" onchange="getProductNameInfo();">
-                                       <option value="" >请选择服务类型</option>
+                                    <select id="product_type" name="product_type" data-am-selected="{btnWidth:'200px',maxHeight: 100,searchBox: 1}" onchange="getProductNameInfo();">
+                                       <option value="0" >请选择服务类型</option>
                                         <foreach name="productTypeInfo" item="v">
                                             <if condition="$productSpecInfo['0']['product_type_id'] == $v['id']">
                                                 <option value="{$v[id]}" selected="selected">{$v['type_name']}</option>
@@ -53,8 +53,8 @@
                                         <span id="sname_notice" style="color:#FF0000"> *</span> 
                                 </label>
                                 <div class="am-u-sm-8">
-                                    <select id="product" name="product" onchange="changeProductNameInfo();" >
-                                       <option value="" >请选择产品名称</option>
+                                    <select id="product" name="product" data-am-selected="{btnWidth:'200px',maxHeight: 100,searchBox: 1}" onchange="changeProductNameInfo();" >
+                                       <option value="0" >请选择产品名称</option>
                                         <foreach name="productNameInfo" item="v">
                                             <if condition="$productSpecInfo['0']['product_id'] == $v['id']">
                                                 <option value="{$v[id]}" selected="selected">{$v['type_name']}</option>
@@ -70,8 +70,8 @@
                                         <span id="sname_notice" style="color:#FF0000"> *</span> 
                                 </label>
                                 <div class="am-u-sm-8">
-                                    <select id="product_model" name="product_model" >
-                                       <option value="" >请选择产品型号</option>
+                                    <select id="product_model" name="product_model" data-am-selected="{btnWidth:'200px',maxHeight: 100,searchBox: 1}" >
+                                       <option value="0" >请选择产品型号</option>
                                         <foreach name="productModelInfo" item="v">
                                             <if condition="$productSpecInfo['0']['product_model_id'] == $v['id']">
                                                 <option value="{$v[id]}" selected="selected">{$v['name']}</option>
@@ -87,7 +87,7 @@
                                         <span id="sname_notice" style="color:#FF0000"> *</span> 
                                 </label>
                                 <div class="am-u-sm-8">
-                                    <select id="product_parameter" name="product_parameter" >
+                                    <select id="product_parameter" name="product_parameter" data-am-selected="{btnWidth:'200px',maxHeight: 100,searchBox: 1}" >
                                        <option value="" >请选择规格名称</option>
                                         <foreach name="productParameterInfo" item="v">
                                             

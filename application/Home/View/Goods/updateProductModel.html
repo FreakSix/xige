@@ -36,8 +36,8 @@
                                         <span id="sname_notice" style="color:#FF0000"> *</span> 
                                 </label>
                                 <div class="am-u-sm-8">
-                                    <select id="product_type" name="product_type" onchange="getProductNameInfo();">
-                                       <option value="" >请选择服务类型</option>
+                                    <select id="product_type" name="product_type" data-am-selected="{btnWidth:'200px',maxHeight: 100,searchBox: 1}"onchange="getProductNameInfo();">
+                                       <option value="0" >请选择服务类型</option>
                                         <foreach name="productType" item="v">
                                             <if condition="$productTypeId['0']['pid'] == $v['id']">
                                                 <option value="{$v[id]}" selected="selected">{$v['type_name']}</option>
@@ -53,8 +53,8 @@
                                         <span id="sname_notice" style="color:#FF0000"> *</span> 
                                 </label>
                                 <div class="am-u-sm-8">
-                                    <select id="product" name="product" >
-                                       <option value="" >请选择产品名称</option>
+                                    <select id="product" name="product" data-am-selected="{btnWidth:'200px',maxHeight: 100,searchBox: 1}">
+                                       <option value="0" >请选择产品名称</option>
                                         <foreach name="productNameInfo" item="v">
                                             <option value="{$v['id']}" >{$v['type_name']}</option>
                                             <if condition="$productModelInfo['0']['pid'] == $v['id']">

@@ -8,7 +8,7 @@
     <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
         <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
             <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                <span class="tpl-header-list-user-nick"><?php echo $_SESSION["userInfo"]["truename"] ?></span><span class="tpl-header-list-user-ico"> <img src="__PUBLIC__/img/user01.png"></span>
+                <span class="tpl-header-list-user-nick"><?php echo $_SESSION["userInfo"]["truename"] ?></span><span class="tpl-header-list-user-ico"> <img src="__PUBLIC__/images/personalPic/<?php echo $_SESSION['userInfo']['imagename'] ?>"></span>
             </a>
             <ul class="am-dropdown-content">
                 <li><a href="__APP__/PersonalCenter/index"><span class="am-icon-user"></span> 个人中心</a></li>

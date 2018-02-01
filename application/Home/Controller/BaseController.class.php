@@ -11,6 +11,18 @@
 				$this->redirect('Login/index');
 			}
 		}
+		public function __construct(){
+		    parent::__construct();
+		    
+		    $SESSION_OPTIONS = C("SESSION_OPTIONS");
+
+		    //判断会话是否过期
+		    if ((time() - $_SESSION['userInfo']['session_start_time']) > $SESSION_OPTIONS['expire'] ) {
+		        session_unset();
+		        session_destroy();//真正的销毁在这里！
+		        $this->redirect('Login/index');
+		    }
+		}
 		//查询省份信息
 		public function getProvince($procode){
 	 		$province = M("xg_province");

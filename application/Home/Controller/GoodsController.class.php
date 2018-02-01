@@ -361,7 +361,7 @@
 			$this->assign("productType",$productType);
 			$get = $_GET;
 			//获取服务类型
-			$productType = D("XgProductType")->getProductType();
+			$productType_2 = D("XgProductType")->getProductType();
 
 			$condition['where'] = "pid > 0 ";
 			$product_type_id = $get['product_type'];
@@ -420,7 +420,7 @@
 	 		// exit;
 			$this->assign("productInfo",$productInfo);
 			$this->assign("pageStr",$pageStr);
-			$this->assign("productType",$productType);
+			$this->assign("productType_2",$productType_2);
 			$this->assign("product_type_id",$product_type_id);
 
 			$this->display();

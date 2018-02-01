@@ -67,9 +67,9 @@
                         <h4>商品信息</h4>
                         <div class="am-form-group">
                             <label for="contact-name" class="am-u-sm-2 am-form-label">产品分类：</label>
-                            <div class="am-u-sm-2">
-                                <select id="product_type">
-                                    <option value="" onclick="getProductName(0,0)">请选择产品分类</option>
+                            <div class="am-u-sm-2" >
+                                <select id="product_type" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}">
+                                    <option value="0" onclick="getProductName(0,0)">请选择产品分类</option>
                                     <if condition="$productTypeInfo != ''">
                                         <foreach name="productTypeInfo" item="item" key="key">
                                             <option value="{$item.id}" onclick="getProductName({$item.id},{$item.have_price})">{$item.type_name}</option>
@@ -82,8 +82,8 @@
                             </div>
                             <label for="contact-name" class="am-u-sm-2 am-form-label">产品名称：</label>
                             <div class="am-u-sm-4 am-u-end">
-                                <select id="product_name">
-                                    <option value="" onclick="getProductModel(0)">请选择产品名称</option>
+                                <select id="product_name" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}">
+                                    <option value="0" onclick="getProductModel(0)">请选择产品名称</option>
                                     <if condition="$productNameInfo != ''">
                                         <foreach name="productNameInfo" item="item" key="key">
                                             <option value="{$item.id}" onclick="getProductModel({$item.id})">{$item.type_name}</option>

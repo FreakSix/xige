@@ -101,7 +101,7 @@
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">所在区域<span style="color:#FF0000"> *</span></label>
                                     <div class="am-u-sm-2"> 
-                                        <select id="customer_pro" name="province_name" onchange="getCityInfos2();">
+                                        <select id="customer_pro" name="province_name" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}" onchange="getCityInfos2();">
                                             <option value="0" >请选择省</option>
                                             <foreach name="province" item="v">
                                             <if condition="$post['province_name'] == $v['code']">
@@ -114,7 +114,7 @@
                                         <span id="address_notice" style="color:#f00;font-size: 14px"></span>
                                     </div>
                                     <div class="am-u-sm-2">
-                                        <select id="customer_city" name="city_name" onchange="getAreaInfos2();">
+                                        <select id="customer_city" name="city_name" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}" onchange="getAreaInfos2();">
                                             <option value="0" checked="checked">请选择市</option>
                                             <foreach name="city" item="v">
                                             <if condition="$post['city_name'] == $v['code']">
@@ -126,7 +126,7 @@
                                         </select> 
                                     </div>
                                     <div class="am-u-sm-2"> 
-                                        <select id="customer_area" name="area_name" >
+                                        <select id="customer_area" name="area_name" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}" >
                                             <option value="0" checked="checked">请选择区</option>
                                             <foreach name="area" item="v">
                                             <if condition="$post['area_name'] == $v['code']">

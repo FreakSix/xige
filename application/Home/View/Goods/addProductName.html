@@ -34,8 +34,8 @@
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label" style="font-size:18px;">服务类型</label>
                                     <div class="am-u-sm-4 am-u-end">
-                                        <select id="product_type" name="product_type" >
-                                           <option value="" >请选择商品分类</option>
+                                        <select id="product_type" name="product_type" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}">
+                                           <option value="0" >请选择商品分类</option>
                                             <foreach name="productTypeInfo" item="v">
                                                 <option value="{$v['id']}" >{$v['type_name']}</option>
                                             </foreach>
