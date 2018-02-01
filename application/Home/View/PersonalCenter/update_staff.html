@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
-    <meta name="description" content="这是一个 index 页面">
-    <meta name="keywords" content="index">
+    <title>修改员工信息</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
@@ -32,15 +32,19 @@
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label">所属部门：</label>
                             <div class="am-u-sm-4 am-u-end">
-                                <select class="depart_option">
-                                <foreach name="departArr" item="item">
-                                <if condition="$item['id'] == $departInfo['id']">
-                                    <option value="{$item.id}" onclick="changeDutyOption(this)" selected ="selected">{$item.depart_name}11</option>
+                                <if condition="$managerInfo['highest'] eq 1">
+                                    超级管理员不属于任何部门
                                 <else/>
-                                	 <option value="{$item.id}" onclick="changeDutyOption(this)">{$item.depart_name}22</option>
+                                    <select class="depart_option">
+                                        <foreach name="departArr" item="item">
+                                        <if condition="$item['id'] == $departInfo['id']">
+                                            <option value="{$item.id}" onclick="changeDutyOption(this)" selected ="selected">{$item.depart_name}</option>
+                                        <else/>
+                                        	 <option value="{$item.id}" onclick="changeDutyOption(this)">{$item.depart_name}</option>
+                                        </if>
+                                        </foreach>
+                                    </select>
                                 </if>
-                                </foreach>
-                                </select>
                             </div>
                         </div>
                         <div class="am-form-group">

@@ -16,7 +16,7 @@
 		 */
 		public function checkedUser(){
 			$user = $_POST['user'];
-			$pass = $_POST['pass'];
+			$pass = md5($_POST['pass']);
 			$code = $_POST['code'];
 			$trueCode = $_SESSION['trueCode'];
 			if($code != $trueCode){
@@ -34,6 +34,7 @@
 			//现根据用户名获取信息
 			$manageModel = D("XgManager");
 			$userInfo = $manageModel->getManageInfoByUsername($user);
+			// dump($userInfo);exit;
 			//若$userinfo 为空的时候继续根据电话号码吗在获取一次
 			if(!empty($userInfo)){
 				if($userInfo['state'] == 1){
@@ -50,22 +51,27 @@
 				}
 			}else{
 				$userInfo = $manageModel->getManageInfoByTel($user);
-				if($userInfo['state'] == 1){
-					if(!empty($userInfo)){
-						if($userInfo['password'] == $pass){
-							$loginType = "tel";
-							$this->addLoginLogs($userInfo,$loginType);
-							echo 0;   //电话登录成功
+				if(!empty($userInfo)){
+					if($userInfo['state'] == 1){
+						if(!empty($userInfo)){
+							if($userInfo['password'] == $pass){
+								$loginType = "tel";
+								$this->addLoginLogs($userInfo,$loginType);
+								echo 0;   //电话登录成功
+							}else{
+								echo 1;    //电话登录，信息存在，但是密码错误
+							}
 						}else{
-							echo 1;    //电话登录，信息存在，但是密码错误
+							echo 1;   //输入的用户不存在
 						}
 					}else{
-						echo 2;   //输入的用户不存在
+						//帐号被注销
+						echo 4;
 					}
 				}else{
-					//帐号被注销
-					echo 4;
+					echo 1;
 				}
+				
 			}
 			
 		}
@@ -108,6 +114,9 @@
 			$data['operate_system'] = $this->getOperateSystem();
 			$loginLogsModel = D("XgLoginLogs");
 			$re = $loginLogsModel->addLoginLogs($data);
+			// 将session_id存到当前登录用户的信息中
+			$sessionId = session_id();
+			D("XgManager")->updateSessionId($sessionId,$data["user_id"]);
 		}
 		
 		/**

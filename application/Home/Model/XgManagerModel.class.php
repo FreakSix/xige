@@ -80,4 +80,16 @@
 			$result = M()->execute($sql);
 			return $result;
 		}
+		// 修改sessionId
+		public function updateSessionId($sessionId,$id){
+			$sql = "update xg_manager set session_id = '{$sessionId}' where id = {$id}";
+			$result = M()->execute($sql);
+			return $result;
+		}
+		// 获取sessionId
+		public function getSessionId($id){
+			$sql = "select session_id from xg_manager where id = {$id}";
+			$result = M()->query($sql);
+			return $result;
+		}
 	}

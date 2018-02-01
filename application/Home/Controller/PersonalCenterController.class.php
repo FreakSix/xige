@@ -104,8 +104,8 @@
 		public function saveUserPwdNew(){
 			$userInfo = $_SESSION['userInfo'];
 			$id = $_POST['id'];
-			$old_pwd = $_POST['old_pwd'];
-			$new_pwd = $_POST['new_pwd'];
+			$old_pwd = md5($_POST['old_pwd']);
+			$new_pwd = md5($_POST['new_pwd']);
 			if($old_pwd == $userInfo['password']){
 				$managerModel = D("XgManager");
 				$res = $managerModel->updatePassword($id,$new_pwd);
@@ -493,7 +493,7 @@
 		public function saveNewAddManager(){
 			$data['truename'] = $_REQUEST['truename'];
 			$data['username'] = $_REQUEST['username'];
-			$data['password'] = "123456";
+			$data['password'] = md5("123456");
 			$data['tel'] = $_REQUEST['tel'];
 			$data['email'] = $_REQUEST['email'];
 			$data['department_id'] = $_REQUEST['depart_id'];

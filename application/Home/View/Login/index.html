@@ -62,6 +62,7 @@
 
   <script src="__PUBLIC__/js/amazeui.min.js"></script>
   <script src="__PUBLIC__/js/app.js"></script>
+  <script src="__PUBLIC__/js/layer.js"></script>
 </body>
 
 </html>
@@ -72,22 +73,25 @@
 		var pass = $("input[name=pass]").val();
 		var code = $(".code").val();
 		if(user == ''){
-			alert ("请输入应户名！");return false;
+			layer.msg ("请输入应户名！",{icon:7,offset:'200px',time:'2000'});
+			$("input[name=user]").focus();
+			return false;
 		}
 		if(pass == ""){
-			alert("请输入登录密码！");return false;
+			layer.msg ("请输入登录密码！",{icon:7,offset:'200px',time:'2000'});
+			$("input[name=pass]").focus();
+			return false;
 		}
 		if(code == ''){
-			alert("请输入验证码！");return false;
+			layer.msg ("请输入验证码！",{icon:7,offset:'200px',time:'2000'});
+			$(".code").focus();
+			return false;
 		}
 		$.post("__APP__/Login/checkedUser",{"user":user,"pass":pass,"code":code},function(data){
 			if(data == 0){
 				window.location = "__APP__/Index/index";
 			}else if (data == 1){
-				alert("密码错误！");
-				window.location.reload();
-			}else if(data == 2){
-				alert("用户名不存在！");
+				alert("用户名或密码错误！");
 				window.location.reload();
 			}else if(data ==3){
 				alert("验证码错误！");

@@ -10,6 +10,16 @@
 			if(!isset($_SESSION['userInfo'])) {
 				$this->redirect('Login/index');
 			}
+			// dump($_SESSION);
+			$id = $_SESSION["userInfo"]["id"];
+			// dump($id);
+			$data = D("XgManager")->getSessionId($id);
+			$sessionId = $data["0"]["session_id"];
+			if($sessionId != session_id()){
+				session_destroy();
+				echo "<script>alert('您的帐号已在其他地方登录，您已被迫退出系统！');</script>";
+				echo "<script>location.href='".U("Login/index")."'</script>";
+			}
 		}
 		public function __construct(){
 		    parent::__construct();

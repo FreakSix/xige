@@ -32,15 +32,19 @@
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label">所属部门：</label>
                             <div class="am-u-sm-5 am-u-end">
-                                <select id="depart_select">
-	                                <foreach name="all_depart" item="item">
-	                                	<if condition="$depart_id eq $item.id">
-	                                    	<option value="{$item.id}"  selected="selected">{$item.depart_name}</option>
-	                                    <else />
-	                                    	<option value="{$item.id}">{$item.depart_name}</option>
-	                                    </if>
-	                                </foreach>
-                                </select>
+                                <if condition="$depart_id == '0'">
+                                    超级管理员
+                                <else/>
+                                    <select id="depart_select">
+    	                                <foreach name="all_depart" item="item">
+    	                                	<if condition="$depart_id eq $item.id">
+    	                                    	<option value="{$item.id}"  selected="selected">{$item.depart_name}</option>
+    	                                    <else />
+    	                                    	<option value="{$item.id}">{$item.depart_name}</option>
+    	                                    </if>
+    	                                </foreach>
+                                    </select>
+                                </if>
                             </div>
                         </div>
                         <div class="am-form-group">
