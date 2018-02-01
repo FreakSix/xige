@@ -124,39 +124,272 @@
 			$searchValue = $get["search_value"];
 			$dateValue = $get["search_date_value"];
 			if(!empty($get)){
-				// 如果条件全为空，查询全部信息
-				if($orderStatus==0 && $moneyStatus==0 &&  $searchValue==0 && $dateValue==0){
-					$orderInfo = D("XgOrder")->getAllOrder();
-					// dump($orderInfo);exit;
-					foreach ($orderInfo as $key => $value) {
-						$productInfo[] = D("XgOrderProduct")->getProductInfoByOrderNum($value['order_id']);
+				// 判断是导出全部还是导出选中
+				if($type=="all"){
+					// 如果条件全为空，查询全部信息
+					if($orderStatus==0 && $moneyStatus==0 &&  $searchValue==0 && $dateValue==0){
+						$orderInfo = D("XgOrder")->getAllOrder();
+						// dump($orderInfo);exit;
+					}else{
+						//如果有时间
+						if($dateValue){
+							$dateTimeArr = explode("To", $get['search_date_value']);
+							$startTime = strtotime($dateTimeArr['0']);
+							$endTime = (strtotime($dateTimeArr['1'])) + 86400;
+							$whereArr[] = "add_time >= '".$startTime."' and add_time < '".$endTime."'";
+						}
+						//如果有订单状态
+						if($orderStatus){
+							$whereArr[] = "order_status = '".$get['order_status']."'";
+						}
+						//如果有付款状态
+						if($moneyStatus){
+							$whereArr[] = "customer_money_status = '".$get['money_status']."'";
+						}
+						//如果有输入值搜索
+						if($searchValue){
+							$whereArr[] = "customer_name like '%".$get['search_value']."%'";
+						}
+						$where = implode(' and ',$whereArr);
+						$condition['where'] = $where;
+						$orderInfo = D("XgOrder")->orderInfo($condition);
+						// dump($orderInfo);
 					}
-					dump($productInfo);
+				}else if($type=="selected"){
+					$orderIdStr = rtrim($get["order_id_str"],",");
+					$orderIdArr = explode(",", $orderIdStr);
+					sort($orderIdArr);   // 讲数组变成从小到大排列
+					for ($i=0; $i < sizeof($orderIdArr); $i++) { 
+						$orderDate = D("XgOrder")->getOrderInfoById($orderIdArr[$i]);
+						$orderInfo[] = $orderDate;
+					}
 				}
-				//如果有时间
-				if($dateValue){
-					$dateTimeArr = explode("To", $get['search_date_value']);
-					$startTime = strtotime($dateTimeArr['0']);
-					$endTime = (strtotime($dateTimeArr['1'])) + 86400;
-					$whereArr[] = "add_time >= '".$startTime."' and add_time < '".$endTime."'";
+				
+				// dump($orderInfo);exit;
+				if($orderInfo){
+					// 根据订单编号获取产品信息
+					foreach ($orderInfo as $key => $value) {
+						$orderCustomerInfo[$value['customer_name']] = $value['customer_name'];
+						$productInfo = D("XgOrderProduct")->getProductInfoByOrderNum($value['order_id']);
+						// dump($productInfo);
+						// dump(sizeof($productInfo));
+						
+						for ($i=0; $i < sizeof($productInfo); $i++) { 
+							// 获取和整理规格信息
+							$specIdArr = explode(",", $productInfo[$i]["product_spec_id_str"]);
+							// dump($specIdArr);
+							$specDetail = "";
+							foreach ($specIdArr as $keySpec => $sia) {
+								// 规格数据
+								$specInfo = D("XgProductSpec")->getSpecById($sia);
+								// dump($specInfo);
+								// 规格数据对应的规格名称
+								$parameterName = D("XgProductParameter")->getProductParameterById($specInfo['0']['parameter_id']);
+								// dump($parameterName);
+								$specDetail[] = $parameterName['0']['name'].":".$specInfo['0']['spec_value'];
+							}
+							$specDetailStr = implode(" / ", $specDetail);
+							// dump($specDetailStr);
+							// $productInfo[$i]["product_spec_info"] = $specDetailStr;
+							// 获取和整理特殊工艺信息
+							$specialTecIdArr = explode(",", $productInfo[$i]["special_technologyh_id_str"]);
+							// dump($specialTecIdArr);
+							$specialTecDetail = "";
+							foreach ($specialTecIdArr as $keyTec => $stia) {
+								// 特殊工艺数据
+								$specialTecInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($stia);
+								// dump($specialTecInfo);
+								$specialTecDetail[] = $specialTecInfo["name"];
+							}
+							// dump($specialTecDetail);
+							$specialTecDetailStr = implode(",", $specialTecDetail);
+							// dump($specialTecDetailStr);
+							// $productInfo[$i]["special_tec_info"] = $specialTecDetailStr;
+							// 获取产品单位
+							$unitInfo = D("XgProductType")->getProduct($productInfo[$i]['product_name_id']);
+							$productUnit = $unitInfo["0"]["product_unit"];
+							$productInfo[$i]['product_unit'] = $productUnit;
+							// 整和产品名称及规格
+							if($specialTecDetailStr == ""){
+								$productInfo[$i]["product_detail"] = $productInfo[$i]["product_name"]." / ".$productInfo[$i]["product_model"]." / ".$specDetailStr;
+							}else{
+								$productInfo[$i]["product_detail"] = $productInfo[$i]["product_name"]." / ".$productInfo[$i]["product_model"]." / ".$specDetailStr." / 特殊工艺:".$specialTecDetailStr;
+							}
+							
+
+						}
+						// 每个订单的欠款
+						$customerArrear = (float)$value["order_money"]-(float)$value["customer_money"];
+						// 计算全部订单总额，总回款，总欠款
+						$allMoney = $allMoney+(float)$value["order_money"];
+						$allPayment = $allPayment+(float)$value["customer_money"];
+						$allArrear = $allArrear+(float)$customerArrear;
+						// 整理需要导出的数据
+						// dump($customerArrear);
+						$exportInfo[$key]["order_id"] = $value["order_id"];
+						$exportInfo[$key]["add_time"] = date("m-d H:i",$value["add_time"]);
+						$exportInfo[$key]["customer_name"] = $value["customer_name"];
+						$exportInfo[$key]["order_money"] = $value["order_money"];
+						$exportInfo[$key]["customer_money"] = $value["customer_money"];
+						$exportInfo[$key]["customer_arrear"] = $customerArrear;
+						$exportInfo[$key]["remark"] = $value["order_remarks"];
+						$exportInfo[$key]["product_info"] = $productInfo;
+					}
+					// dump($productInfo);
+					// dump($exportInfo);exit;
+					// dump($orderCustomerInfo);
+					// dump(count($orderCustomerInfo));
+					// 共多少客户
+					$num = count($orderCustomerInfo);
+					// dump($orderInfo); exit;
+					$this->exportOrderHandle($exportInfo,$num,$allMoney,$allPayment,$allArrear);
 				}
-				//如果有订单状态
-				if($orderStatus){
-					$whereArr[] = "order_status = '".$get['order_status']."'";
-				}
-				//如果有付款状态
-				if($moneyStatus){
-					$whereArr[] = "customer_money_status = '".$get['money_status']."'";
-				}
-				//如果有输入值搜索
-				if($searchValue){
-					$whereArr[] = "customer_name like '%".$get['search_value']."%'";
-				}
-				$where = implode(' and ',$whereArr);
-				$condition['where'] = $where;
+				
 			}
+
 		}
-		
+		// 客户对账单导出处理
+		public function exportOrderHandle($exportInfo,$num,$allMoney,$allPayment,$allArrear){
+			vendor("PHPExcel.PHPExcel");
+			$objPHPExcel = new \PHPExcel();
+			$objSheet = $objPHPExcel->getActiveSheet();
+			$objSheet->setTitle("对账单");
+			$objSheet->getDefaultStyle()->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);   // 设置excel文件默认水平垂直方向居中
+			$objSheet->getDefaultStyle()->getFont()->setName("微软雅黑")->setSize(10);   // 设置默认字体和大小
+			$objSheet->mergeCells("A1:J1");
+			$objSheet->getStyle("A1")->getFont()->setSize(18)->setBold(True);   // 设置字体大小并加粗
+			$objSheet->setCellValue("A1","对账单");
+
+			$objSheet->getStyle("2")->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objSheet->mergeCells("A2:J2");
+			$objSheet->setCellValue("A2","制作单位： 北京细格广告传媒有限公司");
+			$objSheet->getStyle("3")->getAlignment()->setWrapText(true);   // 设置自动换行，需要在输出数据中加换行符"\n"
+			$objSheet->getColumnDimension('A')->setWidth("12");   // 设置宽度自适应
+			$objSheet->getColumnDimension('B')->setAutoSize(true);
+			$objSheet->getColumnDimension('C')->setAutoSize(true);
+			$objSheet->getColumnDimension('D')->setAutoSize(true);
+			$objSheet->getColumnDimension('E')->setAutoSize(true);
+			$objSheet->getColumnDimension('F')->setAutoSize(true);
+			$objSheet->getColumnDimension('G')->setAutoSize(true);
+			$objSheet->getColumnDimension('H')->setAutoSize(true);
+			$objSheet->getColumnDimension('I')->setAutoSize(true);
+			$objSheet->getColumnDimension('J')->setWidth("40");
+			$objSheet->getStyle('I')->getNumberFormat()->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+
+			$objSheet->getStyle("A3:J3")->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('C0C0C0');
+			$objSheet->setCellValue("A3","订单编号\nId")
+					 ->setCellValue("B3","项目说明Content")
+					 ->setCellValue("C3","单位\nUnit")
+					 ->setCellValue("D3","数量\nNumber")
+					 ->setCellValue("E3","单价（元）\nPrice")
+					 ->setCellValue("F3","产品总价（元）\nProduct Total")
+					 ->setCellValue("G3","订单总价（元）\nOrder Total")
+					 ->setCellValue("H3","回款（元）\nPayment")
+					 ->setCellValue("I3","欠款（元）\nArrears")
+					 ->setCellValue("J3","备注Remark");
+			$i = 4;
+			$j = 5;
+			$orderEnd = 0;
+			if($num>1){
+				// 多客户导出
+				foreach($exportInfo as $key => $value){
+					$productNum = sizeof($value["product_info"]);
+					$orderEnd = $i+$productNum;
+					// dump($productNum);exit;
+					$objSheet->getStyle($i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+					$objSheet->getStyle($i)->getFont()->setSize(10)->setBold(True);
+					$objSheet->getStyle("A".$i.":J".$i)->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('E6B8B7');
+					$objSheet->mergeCells("A".$i.":J".$i);
+					$objSheet->setCellValue("A".$i,"客户名称：".$value["customer_name"]);
+					$objSheet->mergeCells("A".$j.":A".$orderEnd);
+					$objSheet->mergeCells("G".$j.":G".$orderEnd);
+					$objSheet->mergeCells("H".$j.":H".$orderEnd);
+					$objSheet->mergeCells("I".$j.":I".$orderEnd);
+					$objSheet->mergeCells("J".$j.":J".$orderEnd);
+					// 订单信息
+					$objSheet->setCellValue("A".$j,$value["order_id"])
+							 ->setCellValue("G".$j,$value["order_money"])
+							 ->setCellValue("H".$j,$value["customer_money"])
+							 ->setCellValue("I".$j,$value["customer_arrear"])
+							 ->setCellValue("J".$j,$value["remark"]);
+					// 订单内产品信息
+					foreach ($value["product_info"] as $k => $v){
+						$objSheet->setCellValue("B".$j,$v["product_detail"])
+								 ->setCellValue("C".$j,$v["product_unit"])
+								 ->setCellValue("D".$j,$v["num"])
+								 ->setCellValue("E".$j,$v["end_price"])
+								 ->setCellValue("F".$j,$v["end_money"]);
+						$j++;
+					}
+					$i = $j;
+					$j = $i+1;
+				}
+			}else{
+				// 单客户导出
+				foreach($exportInfo as $key => $value){
+					$productNum = sizeof($value["product_info"]);
+					$orderEnd = $j+$productNum-1;
+					// dump($productNum);exit;
+					$objSheet->getStyle("4")->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+					$objSheet->getStyle("4")->getFont()->setSize(10)->setBold(True);
+					$objSheet->getStyle("A4:J4")->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('E6B8B7');
+					$objSheet->mergeCells("A4:J4");
+					$objSheet->setCellValue("A4","客户名称：".$value["customer_name"]);
+					$objSheet->mergeCells("A".$j.":A".$orderEnd);
+					$objSheet->mergeCells("G".$j.":G".$orderEnd);
+					$objSheet->mergeCells("H".$j.":H".$orderEnd);
+					$objSheet->mergeCells("I".$j.":I".$orderEnd);
+					$objSheet->mergeCells("J".$j.":J".$orderEnd);
+					// 订单信息
+					$objSheet->setCellValue("A".$j,$value["order_id"])
+							 ->setCellValue("G".$j,$value["order_money"])
+							 ->setCellValue("H".$j,$value["customer_money"])
+							 ->setCellValue("I".$j,$value["customer_arrear"])
+							 ->setCellValue("J".$j,$value["remark"]);
+					// 订单内产品信息
+					foreach ($value["product_info"] as $k => $v){
+						$objSheet->setCellValue("B".$j,$v["product_detail"])
+								 ->setCellValue("C".$j,$v["product_unit"])
+								 ->setCellValue("D".$j,$v["num"])
+								 ->setCellValue("E".$j,$v["end_price"])
+								 ->setCellValue("F".$j,$v["end_money"]);
+						$j++;
+					}
+				}
+				$i = $j;
+				$j = $i+1;
+			}
+			$objSheet->mergeCells("A".$i.":F".$i);
+			$objSheet->getStyle("A".$i)->getFont()->setSize(14)->setBold(True);
+			$objSheet->getStyle("G".$i.":J".$i)->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('C0C0C0');
+			$objSheet->setCellValue("A".$i,"合计")
+					 ->setCellValue("G".$i,$allMoney)
+					 ->setCellValue("H".$i,$allPayment)
+					 ->setCellValue("I".$i,$allArrear);
+			$objSheet->mergeCells("A".$j.":J".$j);
+			$objSheet->getRowDimension($j)->setRowHeight("30");
+			$objSheet->getStyle("A".$j)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$objSheet->getStyle("A".$j)->getFont()->setSize(10)->setBold(True);
+			$objSheet->setCellValue("A".$j,"备注：");
+
+			// exit;
+			// 边框样式
+			$borderStyle = array(
+				'borders'=>array(
+					'allborders'=>array(
+						'style' => \PHPExcel_Style_Border::BORDER_THIN,   //系边框
+						'color' => array('rgb' => '#000'),
+					),
+				),
+			);
+			$objSheet->getStyle("A1:J".$j)->applyFromArray($borderStyle);
+			header('Content-Type: application/vnd.ms-excel');
+			header('Content-Disposition: attachment;filename="对账单.xls"');
+			header('Cache-Control: max-age=0');
+			$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+			$objWriter->save('php://output');
+		}
+
 		// 新增订单页面
 		public function addOrder(){
 			$customerModel = D("XgCustomer");
@@ -1545,6 +1778,7 @@
 
 			$this -> display("quote");
 		}
+		// 报价详情
 		public function quoteDetail(){
 			// 左侧菜单
 			$productType = $this->menu();
@@ -1739,20 +1973,12 @@
 		// 获取需要导出的数据
 		public function exportQuote(){
 			$get = $_GET;
-			//dump($_GET);
 			$date = $get['search_date_value'];
 			$searchCondition = $get['input_type_value'];
 			$searchValue = $get['search_value'];
-			// dump($date);
-			// dump($searchCondition);
-			// dump($searchValue);
-			// dump($data=="");
-			// dump($searchCondition=="");
-			// dump($searchValue=="");
 			if(!empty($get)){
 				if($date=='' && $searchCondition=='' && $searchValue==''){
 					$quoteInfo = D("XgQuote")->getAllQuote();
-					// dump($quoteInfo);
 				}else{
 					//如果有时间
 					if($get['search_date_value'] ){
@@ -1783,54 +2009,53 @@
 					// dump($where);
 					$condition['where'] = $where;
 					$quoteInfo = D("XgQuote")->quoteInfo($condition);
-					// dump($quoteInfo);
+					// dump($quoteInfo);exit;
 				}
 				if($quoteInfo){
 					foreach ($quoteInfo as $k => $v) {
+						// 获取产品规格信息
 						$specIdArr = explode(",", $v["product_spec_id_str"]);
 						if(!empty($specIdArr)){
-							// dump($productParameterSpecArr);
 							$specDetail = '';
 							foreach ($specIdArr as $key => $value) {
 								$specInfo = D("XgProductSpec")->getSpecById($value);
-								// dump($specInfo);
 								//商品规格名称
 								$parameterName = D("XgProductParameter")->getProductParameterById($specInfo['0']['parameter_id']);
-								// dump($parameterName);
 								$specInfo['0']['parameter_name'] = $parameterName['0']['name'];
 								$specDetail[] = $parameterName['0']['name'].":".$specInfo['0']['spec_value'];
 							}
-							// dump($specDetail);
 							$specDetailStr = implode(" / ", $specDetail);
-							// dump($specDetailStr);
-							// dump($k);
 							$quoteInfo[$k]["specDetail"] = $specDetailStr;
-							// dump($v['spec_detail']);
-							// dump($quoteInfo);
-							// exit;
 						}
-						// dump($quoteInfo);
-						// dump($quoteInfo[$k]);
-						// dump($v);exit;
+						// 获取产品单位
+						$productInfo = D("XgProductType")->getProduct($v['product_name_id']);
+						$productUnit = $productInfo["0"]["product_unit"];
+						// 获取产品特殊工艺名称
+						$specialTecIdArr = explode(",", $v['special_technologyh_id_str']);
+						$ArrLength = sizeof($specialTecIdArr);
+						$specialTecName = "";
+						for ($i=0; $i < $ArrLength; $i++) { 
+							$specialTecArr = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($specialTecIdArr[$i]);
+							$specialTecName[] = $specialTecArr['name'];
+						}
+						$specialTecInfo = implode(",", $specialTecName);
+						// 整理需要导出的数据
 						$month = date("Y-m",$v['add_time']);
 						$exportInfo[$month][$k]['time'] = date("m-d H:i",$v['add_time']);
 						$exportInfo[$month][$k]['customer_name'] = $v['customer_name'];
-						$exportInfo[$month][$k]['product_info'] = $v['product_name']." / ".$v['product_model']." / ".$specDetailStr;
-						$exportInfo[$month][$k]['product_unit'] = $v['product_unit'];
+						if($specialTecInfo == ""){
+							$exportInfo[$month][$k]['product_info'] = $v['product_name']." / ".$v['product_model']." / ".$specDetailStr;
+						}else{
+							$exportInfo[$month][$k]['product_info'] = $v['product_name']." / ".$v['product_model']." / ".$specDetailStr." / 特殊工艺:".$specialTecInfo;
+						}
+						$exportInfo[$month][$k]['product_unit'] = $productUnit;
 						$exportInfo[$month][$k]['num'] = $v['num'];
 						$exportInfo[$month][$k]['end_price'] = $v['end_price'];
 						$exportInfo[$month][$k]['end_money'] = $v['end_money'];
 						$exportInfo[$month][$k]['linkman_name'] = $v['linkman_name'];
 						$exportInfo[$month][$k]['linkman_tel'] = $v['linkman_tel'];
 						$exportInfo[$month][$k]['manager_name'] = $v['manager_name'];
-						// $exportInfo['month'] = date("m",$v['add_time']);
-						// $exportInfo[$k]['customer_name'] = $v['customer_name'];
-						// dump($exportInfo);
-						
-
 					}
-					// dump($quoteInfo);
-					// dump($exportInfo);exit;
 					$this->exportHandle($exportInfo);
 				}
 			}

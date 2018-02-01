@@ -14,7 +14,8 @@
 		}
 		// 根据订单编号查询订单产品信息
 		public function getProductInfoByOrderNum($order_num){
-			$result = M("xg_order_product")->where("order_num = ".$order_num)->getField("order_num,product_name,product_model,product_spec_id_str,special_technologyh_id_str,");
+			$sql = "select order_num,product_name_id,product_name,product_model,product_spec_id_str,special_technologyh_id_str,num,end_price,end_money from xg_order_product where order_num=".$order_num;
+			$result = M()->query($sql);
 			return $result;
 		}
 		//修改订单商品信息

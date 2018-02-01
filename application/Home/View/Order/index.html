@@ -438,7 +438,7 @@
                 search_value=0;
             }
             location.href="__APP__/Order/exportOrder/type/"+type+"/order_status/"+order_status+"/money_status/"+money_status+"/search_value/"+search_value+"/search_date_value/"+search_date_value;
-        }else if($type=="selected"){
+        }else if(type=="selected"){
             var inputs = $(".xg-table-tr").find("input[type='checkbox']");
             if($("input:checkbox[name='order_id']:checked").length == 0){
                 layer.msg("请先选择要导出的数据！",{time:1500});
@@ -449,7 +449,7 @@
                 });
                 location.href="__APP__/Order/exportOrder/type/"+type+"/order_id_str/"+order_id_str;
             }
-        }else if($type=="supplier"){
+        }else if(type=="supplier"){
             alert(1);
         }
     }
