@@ -57,12 +57,13 @@
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">客户名称：</label>
                                     <div class="am-u-sm-5">
-                                        <select id="doc-select" class="customer_name">
-                                        <foreach name="customerList" item="item" key="key" >
-                                        <if condition="$item['cname']!=''">
-                                            <option value="{$item['id']}" class="customer_each">{$item['cname']}</option>
-                                        </if>
-                                        </foreach>
+                                        <select id="doc-select" class="customer_name" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}"onchange="selectCustomerInfo()">
+                                            <option value="0">客户名称</option>
+                                            <foreach name="customerList" item="item" key="key" >
+                                                <if condition="$item['cname']!=''">
+                                                    <option value="{$item['id']}" class="customer_each">{$item['cname']}</option>
+                                                </if>
+                                            </foreach>
                                         </select>
                                     </div>
                                     <label for="user-name" class="am-u-sm-2 am-form-label">交货日期：</label>
@@ -74,8 +75,8 @@
                                     <label class="am-u-sm-2 am-form-label">联系人：</label>
                                     <div class="am-u-sm-5">
 
-                                        <select id="doc-select-1" class="lxr_select">
-                                            <option value="">请选择联系人</option>
+                                        <select id="doc-select-1" class="lxr_select" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}" onchange="getLxrByCustomerId()">
+                                            <option value="0">请选择联系人</option>
                                         </select>
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">联系电话：</label>
@@ -220,8 +221,9 @@
         
     }
 
-   $(".customer_each").click(function(){
-        var customer_id = $(this).val();
+
+    function selectCustomerInfo(){
+        var customer_id = $(".customer_name").val();
         $.post("__APP__/Order/getLxrByCustomerId",{"customer_id":customer_id},function(res){
             $(".lxr_select").html();
             $(".lxr_select").html(res);
@@ -230,9 +232,11 @@
 
         //移除原来的参考信息
         removeRrferInfo();
+    }
 
-    })
-    function getLxrByCustomerId(lxr_id){
+    function getLxrByCustomerId(){
+        var lxr_id = $(".lxr_select").val();
+
         $.post("__APP__/Order/getTelByLxrId",{"lxr_id":lxr_id},function(res){
             var data = eval("(" + res + ")");
             $("input[name=lxr_phone]").val(data.phone);
@@ -291,7 +295,7 @@
     //客户信息验证
     function customer_name_yz(){
         var customer_id_value = $(".customer_name").val();
-        if(customer_id_value == ''){
+        if(customer_id_value == 0){
             layer.alert("请选择客户名称！", {icon: 5,});
             $(".customer_name").focus();
             exit;
@@ -307,7 +311,7 @@
     // }
     function lxr_name_yz(){
         var lxr_name_value = $(".lxr_select").val();
-        if(lxr_name_value == ''){
+        if(lxr_name_value == 0){
             layer.alert("请选择联系人！", {icon: 5,});
             $(".lxr_select").focus();
             exit;

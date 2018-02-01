@@ -47,7 +47,7 @@
 				$time = time();
 				$customers['cname']=$post['customer_name'];
 				$customers['type_id']=$post['customer_type'];
-				$customers['rank']=$post['rank'];
+				$customers['level_id']=$post['rank'];
 				$customers['local_procode']=$post['province_name'];
 				$customers['local_citycode']=$post['city_name'];
 				$customers['local_areacode']=$post['area_name'];

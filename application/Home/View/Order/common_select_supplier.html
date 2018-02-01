@@ -33,7 +33,7 @@
                             <ul>
                                 <li class="xg-product-btn" value="{$v.supplier_id}" onclick="clickSupplierInfo({$v.supplier_id},'{$v.supplier_name}',{$v.price})">{$v.supplier_name}&nbsp;&nbsp;&nbsp;&nbsp;
                                     <if condition="$post['have_price'] == '1' ">
-                                        <if condition="$v.price != '' ">
+                                        <if condition="$v.price != 0 ">
                                             <span style="font-size:18px;color: #f00;"> {$v.price}元</span> 
                                         <else/>
                                             <span style="font-size:18px;color: #f00;"> 暂无价格</span> 

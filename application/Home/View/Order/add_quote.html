@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>新建订单-细格订单管理系统</title>
+    <title>新增报价记录</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -66,27 +66,46 @@
                         <!-- 联系人信息 -->
                         <h4>商品信息</h4>
                         <div class="am-form-group">
-                            <label for="contact-name" class="am-u-sm-2 am-form-label">产品分类：</label>
+                            <label for="contact-name" class="am-u-sm-2 am-form-label">服务类型：</label>
                             <div class="am-u-sm-2" >
-                                <select id="product_type" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}">
-                                    <option value="0" onclick="getProductName(0,0)">请选择产品分类</option>
+                                <!-- <select id="product_type" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}" onchange="getProductName()">
+                                    <option value="0">请选择产品分类</option>
+                                    <input type="hidden" value="0" id="hide_item_have_price_0" />
                                     <if condition="$productTypeInfo != ''">
                                         <foreach name="productTypeInfo" item="item" key="key">
-                                            <option value="{$item.id}" onclick="getProductName({$item.id},{$item.have_price})">{$item.type_name}</option>
+                                            <option value="{$item.id}">{$item.type_name}</option>
+                                            <input type="hidden" value="{$item.have_price}" id="hide_item_have_price_{$item.id}" />
+                                        </foreach>
+                                    </if>
+                                </select> -->
+                                <select id="product_type" name="product_type" onchange="getProductName()" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}" >
+                                    <option value="0" checked="checked">全部服务</option>
+                                    <if condition="$productTypeInfo != ''">
+                                        <foreach name="productTypeInfo" item="v">
+                                            <option value="{$v['id']}" >{$v['type_name']}</option>
                                         </foreach>
                                     </if>
                                 </select>
+
+                                <!-- 在循环一次产品服务，把下拉框中需要的值放在隐藏域中 -->
+                                <input type="hidden" value="0" id="hide_item_have_price_0" />
+                                <if condition="$productTypeInfo != ''">
+                                    <foreach name="productTypeInfo" item="v">
+                                        <input type="hidden" value="{$v.have_price}" id="hide_item_have_price_{$v.id}" />
+                                    </foreach>
+                                </if>
+
 
                                 <input type="hidden" value="" id="hide_have_price_value_2" />
 
                             </div>
                             <label for="contact-name" class="am-u-sm-2 am-form-label">产品名称：</label>
                             <div class="am-u-sm-4 am-u-end">
-                                <select id="product_name" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}">
-                                    <option value="0" onclick="getProductModel(0)">请选择产品名称</option>
+                                <select id="product_name" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}" onchange="getProductModel()">
+                                    <option value="0" checked="checked">请选择产品名称</option>
                                     <if condition="$productNameInfo != ''">
                                         <foreach name="productNameInfo" item="item" key="key">
-                                            <option value="{$item.id}" onclick="getProductModel({$item.id})">{$item.type_name}</option>
+                                            <option value="{$item.id}">{$item.type_name}</option>
                                         </foreach>
                                     </if>
                                 </select>
@@ -314,7 +333,10 @@
 
         }
 
-        function getProductName(id,have_price){
+        function getProductName(){
+            var id = $("#product_type").val();
+            var have_price = $("#hide_item_have_price_"+id).val();
+
             rand_info();
 
             if(id != 0 ){
@@ -352,7 +374,8 @@
 
         }
 
-        function getProductModel(id){
+        function getProductModel(){
+            var id = $("#product_name").val();
             //验证是否选择了产品分类
             product_type_yz();
 
