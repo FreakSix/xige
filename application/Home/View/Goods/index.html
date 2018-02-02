@@ -101,7 +101,7 @@
                             <div class="goods-name">
                                 <ul class="goods-name-detail zhizhang">
                                     <foreach name="productSpecialTec" item="v" key="k">
-                                        <li class="select-box" id="special_tec_{$v['id']}"><a href="javascript:void(0);" onclick="changeSpecialTec({$v['id']})">{$v['name']}</a></li>
+                                        <li class="select-box special_tec_li " id="special_tec_{$v['id']}"><a href="javascript:void(0);" onclick="changeSpecialTec({$v['id']})">{$v['name']}</a></li>
                                     </foreach>
                                 </ul>
                             </div>
@@ -141,7 +141,9 @@
 function changeProductModel(model_id){
     //点击的时候控制边框样式
     $("#product_model_"+model_id).css({"border":"2px solid red","background-color":"#ccc"}).siblings('li').css({"border":"0px solid red","background-color":"white"});
-    // $("#product_model_"+model_id).css("background-color","green").siblings('li').css("border","0px");
+    
+    // 清除特殊工艺边框
+    $(".special_tec_li").css({"border":"0px solid red","background-color":"white"});
     //将该商品的型号放入影藏域中
     $("#hide_product_model").val(model_id);
     //重新渲染商品型号对应的规格和供应商信息
@@ -176,7 +178,7 @@ function changeSupplier(supplier_id){
 }
 
 function changeSpecialTec(id){
-     //点击的时候控制边框样式
+    //点击的时候控制边框样式
     $("#special_tec_"+id).css({"border":"2px solid red","background-color":"#ccc"}).siblings('li').css({"border":"0px solid red","background-color":"white"});
     // $("#hide_product_supplier").val(supplier_id);
 }
