@@ -37,7 +37,7 @@
                         </div>
                         <div class="am-form-group">
                             <div class="am-u-sm-10 am-u-sm-push-2">
-                                <button type="button" class="am-btn am-btn-primary" onclick="add_new_depeart()">确认添加</button>
+                                <button type="button" class="am-btn am-btn-primary" onclick="add_new_depart()">确认添加</button>
                             </div>
                         </div>
                     </form>
@@ -52,16 +52,40 @@
     <script src="__PUBLIC__/js/layer.js"></script>
 
 <script type="text/javascript">
-	function add_new_depeart(){
+	function add_new_depart(){
 		var depart_name = $("input[name=department_name]").val();
-		$.post("__APP__/PersonalCenter/saveNewAddDepartment",{"depart_name":depart_name},function(res){
-			if(res == 1){
-				layer.msg("添加部门成功！",{icon:1});
-				closeLayer(); 
-			}else{
-				layer.alert("添加部门失败！"{icon:5,title:'提示',btn:['确定']});
-			}
-		})
+        if(depart_name == ""){
+            layer.msg("请填写部门名称！",{icon:7,time:1500});
+            $("input[name=department_name]").focus();
+            return false;
+        }
+        $.ajax({
+            "url":"__APP__/PersonalCenter/checkDepartName",
+            "type":"post",
+            "data":"depart_name="+depart_name,
+            success:function(response){
+                // alert(response);return false;
+                if(response==0){
+                    layer.alert("部门名称已存在！",{icon:7,title:'提示'});
+                    return false;
+                }else{
+                    $.ajax({
+                        "url":"__APP__/PersonalCenter/saveNewAddDepartment",
+                        "type":"post",
+                        "data":"depart_name="+depart_name,
+                        success:function(res){
+                            if(res == 1){
+                                layer.msg("添加部门成功！",{icon:1});
+                                closeLayer(); 
+                            }else{
+                                layer.alert("添加部门失败！",{icon:7,title:'提示',btn:['确定']});
+                            }
+                        }
+                    })
+                }
+            }
+        });
+		
 	} 
 	function closeLayer(){
 		var index=parent.layer.getFrameIndex(window.name);

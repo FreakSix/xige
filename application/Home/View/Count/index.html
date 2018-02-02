@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
     <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
     <link rel="stylesheet" href="__PUBLIC__/css/app.css">
-    <script src="__PUBLIC__/js/echarts.min.js"></script>
 
     <style type="text/css">
         .outer{width:500px;height:500px;border:solid red ;overflow-x:auto;overflow-y:hidden;} 
@@ -30,20 +29,16 @@
     </header>
     <div class="tpl-page-container tpl-page-header-fixed">
         <!-- 左侧菜单栏 -->
-        <div class="tpl-left-nav tpl-left-nav-hover xg-left-nav" nav="indexCount">
+        <div class="tpl-left-nav tpl-left-nav-hover xg-left-nav" nav="countIndex">
             <include file="Public:menu"/>
         </div>
         <!-- 右侧主要内容 -->
         <div class="tpl-content-wrapper">
-            <!-- <div class="tpl-content-page-title">
-                Amaze UI 表单
-            </div> -->
             <ol class="am-breadcrumb">
                 <li><a href="#" class="am-icon-home">首页</a></li>
                 <li><a href="#">数据统计</a></li>
                 <li class="am-active">基本信息统计</li>
             </ol>
-            <div class="row"  data-type="index" id="eeeee">
                 <div class="am-u-md-6 am-u-sm-12 row-mb">
                     <div class="tpl-portlet">
                         <div class="tpl-portlet-title">
@@ -51,123 +46,97 @@
                                 <span>客户基本信息</span>
                             </div>
                         </div>
-                        <div id="wrapper" class="wrapper">
-                            <div id="scroller" class="scroller">
-
-                                <!-- 当月销售金额、当月回款金额、当月欠款金额、累积销售金额、累积回款金额、累积欠款金额 -->
-
-
-                                <div class="row">
-                                    <div class="am-u-lg-4 am-u-md-6 am-u-sm-12">
-                                        <div class="dashboard-stat blue">
-                                            <div class="visual">
-                                                <i class="am-icon-user-plus"></i>
-                                            </div>
-                                            <div class="details">
-                                                <div class="number"> {$data.money} </div>
-                                                <div class="desc"> 本月销售金额 </div>
-                                            </div>
-                                            <a class="more" href="__APP__/Count/costCount"> 查看更多销售金额信息
-                                                <i class="m-icon-swapright m-icon-white"></i>
-                                            </a>
-                                        </div>
+                        <!-- 当月销售金额、当月回款金额、当月欠款金额、累积销售金额、累积回款金额、累积欠款金额 -->
+                        <div class="row">
+                            <div class="am-u-lg-4 am-u-md-6 am-u-sm-12">
+                                <div class="dashboard-stat blue">
+                                    <div class="visual">
+                                        <i class="am-icon-user-plus"></i>
                                     </div>
-                                    <div class="am-u-lg-4 am-u-md-6 am-u-sm-12">
-                                        <div class="dashboard-stat red">
-                                            <div class="visual">
-                                                <i class="am-icon-cny"></i>
-                                            </div>
-                                            <div class="details">
-                                                <div class="number"> ￥{$data.customerMoney} </div>
-                                                <div class="desc"> 本月回款金额 </div>
-                                            </div>
-                                            <a class="more" href="__APP__/Count/orderCustomerMoneyCount"> 查看更多回款金额情况
-                                                <i class="m-icon-swapright m-icon-white"></i>
-                                            </a>
-                                        </div>
+                                    <div class="details">
+                                        <div class="number"> ￥{$data.money} </div>
+                                        <div class="desc"> 本月销售金额 </div>
                                     </div>
-                                    <div class="am-u-lg-4 am-u-md-6 am-u-sm-12">
-                                        <div class="dashboard-stat green">
-                                            <div class="visual">
-                                                <i class="am-icon-star"></i>
-                                            </div>
-                                            <div class="details">
-                                                <div class="number"> ￥{$data.customerDebtMoney} </div>
-                                                <div class="desc"> 本月欠款金额 </div>
-                                            </div>
-                                            <a class="more" href="__APP__/Count/orderCustomerMoneyCount"> 查看更多欠款金额信息
-                                                <i class="m-icon-swapright m-icon-white"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <!-- <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
-                                        <div class="dashboard-stat purple">
-                                            <div class="visual">
-                                                <i class="am-icon-android"></i>
-                                            </div>
-                                            <div class="details">
-                                                <div class="number"> 786 </div>
-                                                <div class="desc"> 安卓设备 </div>
-                                            </div>
-                                            <a class="more" href="#"> 查看更多
-                                                <i class="m-icon-swapright m-icon-white"></i>
-                                            </a>
-                                        </div>
-                                    </div> -->
+                                    <a class="more" href="__APP__/Count/costCount"> 查看更多销售金额信息
+                                        <i class="m-icon-swapright m-icon-white"></i>
+                                    </a>
                                 </div>
-
-                                <div class="row">
-                                    <div class="am-u-lg-4 am-u-md-6 am-u-sm-12">
-                                        <div class="dashboard-stat blue">
-                                            <div class="visual">
-                                                <i class="am-icon-user-plus"></i>
-                                            </div>
-                                            <div class="details">
-                                                <div class="number"> {$data.moneyAll} </div>
-                                                <div class="desc"> 累积销售金额 </div>
-                                            </div>
-                                            <a class="more" href="__APP__/Count/costCount"> 查看更多销售金额信息
-                                                <i class="m-icon-swapright m-icon-white"></i>
-                                            </a>
-                                        </div>
+                            </div>
+                            <div class="am-u-lg-4 am-u-md-6 am-u-sm-12">
+                                <div class="dashboard-stat red">
+                                    <div class="visual">
+                                        <i class="am-icon-cny"></i>
                                     </div>
-                                    <div class="am-u-lg-4 am-u-md-6 am-u-sm-12">
-                                        <div class="dashboard-stat red">
-                                            <div class="visual">
-                                                <i class="am-icon-cny"></i>
-                                            </div>
-                                            <div class="details">
-                                                <div class="number"> ￥{$data.customerMoneyAll} </div>
-                                                <div class="desc"> 累积回款金额 </div>
-                                            </div>
-                                            <a class="more" href="__APP__/Count/orderCustomerMoneyCount"> 查看更多回款金额情况
-                                                <i class="m-icon-swapright m-icon-white"></i>
-                                            </a>
-                                        </div>
+                                    <div class="details">
+                                        <div class="number"> ￥{$data.customerMoney} </div>
+                                        <div class="desc"> 本月回款金额 </div>
                                     </div>
-                                    <div class="am-u-lg-4 am-u-md-6 am-u-sm-12">
-                                        <div class="dashboard-stat green">
-                                            <div class="visual">
-                                                <i class="am-icon-star"></i>
-                                            </div>
-                                            <div class="details">
-                                                <div class="number"> ￥{$data.customerDebtMoneyAll} </div>
-                                                <div class="desc"> 累积欠款金额 </div>
-                                            </div>
-                                            <a class="more" href="__APP__/Count/orderCustomerMoneyCount"> 查看更多欠款金额信息
-                                                <i class="m-icon-swapright m-icon-white"></i>
-                                            </a>
-                                        </div>
-                                    </div>
+                                    <a class="more" href="__APP__/Count/orderCustomerMoneyCount"> 查看更多回款金额情况
+                                        <i class="m-icon-swapright m-icon-white"></i>
+                                    </a>
                                 </div>
-
-
+                            </div>
+                            <div class="am-u-lg-4 am-u-md-6 am-u-sm-12">
+                                <div class="dashboard-stat green">
+                                    <div class="visual">
+                                        <i class="am-icon-star"></i>
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> ￥{$data.customerDebtMoney} </div>
+                                        <div class="desc"> 本月欠款金额 </div>
+                                    </div>
+                                    <a class="more" href="__APP__/Count/orderCustomerMoneyCount"> 查看更多欠款金额信息
+                                        <i class="m-icon-swapright m-icon-white"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="am-u-lg-4 am-u-md-6 am-u-sm-12">
+                                <div class="dashboard-stat blue">
+                                    <div class="visual">
+                                        <i class="am-icon-user-plus"></i>
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> ￥{$data.moneyAll} </div>
+                                        <div class="desc"> 累积销售金额 </div>
+                                    </div>
+                                    <a class="more" href="__APP__/Count/costCount"> 查看更多销售金额信息
+                                        <i class="m-icon-swapright m-icon-white"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="am-u-lg-4 am-u-md-6 am-u-sm-12">
+                                <div class="dashboard-stat red">
+                                    <div class="visual">
+                                        <i class="am-icon-cny"></i>
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> ￥{$data.customerMoneyAll} </div>
+                                        <div class="desc"> 累积回款金额 </div>
+                                    </div>
+                                    <a class="more" href="__APP__/Count/orderCustomerMoneyCount"> 查看更多回款金额情况
+                                        <i class="m-icon-swapright m-icon-white"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="am-u-lg-4 am-u-md-6 am-u-sm-12">
+                                <div class="dashboard-stat green">
+                                    <div class="visual">
+                                        <i class="am-icon-star"></i>
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> ￥{$data.customerDebtMoneyAll} </div>
+                                        <div class="desc"> 累积欠款金额 </div>
+                                    </div>
+                                    <a class="more" href="__APP__/Count/orderCustomerMoneyCount"> 查看更多欠款金额信息
+                                        <i class="m-icon-swapright m-icon-white"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
                 <div class="am-u-md-6 am-u-sm-12 row-mb">
                     <div class="tpl-portlet">
                         <div class="tpl-portlet-title">
@@ -175,96 +144,74 @@
                                 <span>供应商基本信息</span>
                             </div>
                         </div>
-
-                        <div class="am-tabs tpl-index-tabs" data-am-tabs>
-                            <div class="am-tabs-bd">
-                                <div class="am-tab-panel am-fade am-in am-active" id="tab1">
-                                    <div id="wrapperA" class="wrapper">
-                                        <div id="scroller" class="scroller">
-                                            
-                                            <!-- 当月支出金额、当月未付金额、累积支出金额、累积未付金额 -->
-
-
-                                            <div class="row">
-                                                <div class="am-u-lg-6 am-u-md-6 am-u-sm-12">
-                                                    <div class="dashboard-stat blue">
-                                                        <div class="visual">
-                                                            <i class="am-icon-user-plus"></i>
-                                                        </div>
-                                                        <div class="details">
-                                                            <div class="number"> {$data.supplierMoney} </div>
-                                                            <div class="desc"> 本月支出金额 </div>
-                                                        </div>
-                                                        <a class="more" href="__APP__/Count/supplierMoneyCount"> 查看更多支出金额信息
-                                                            <i class="m-icon-swapright m-icon-white"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="am-u-lg-6 am-u-md-6 am-u-sm-12">
-                                                    <div class="dashboard-stat red">
-                                                        <div class="visual">
-                                                            <i class="am-icon-cny"></i>
-                                                        </div>
-                                                        <div class="details">
-                                                            <div class="number"> ￥{$data.supplierDebtMoney} </div>
-                                                            <div class="desc"> 本月未付金额 </div>
-                                                        </div>
-                                                        <a class="more" href="__APP__/Count/supplierMoneyCount"> 查看更多未付金额情况
-                                                            <i class="m-icon-swapright m-icon-white"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-                                            <div class="row">
-                                                <div class="am-u-lg-6 am-u-md-6 am-u-sm-12">
-                                                    <div class="dashboard-stat blue">
-                                                        <div class="visual">
-                                                            <i class="am-icon-user-plus"></i>
-                                                        </div>
-                                                        <div class="details">
-                                                            <div class="number"> {$data.supplierMoneyAll} </div>
-                                                            <div class="desc"> 累积支出金额 </div>
-                                                        </div>
-                                                        <a class="more" href="__APP__/Count/orderSupplierMoneyCount"> 查看更多支出金额信息
-                                                            <i class="m-icon-swapright m-icon-white"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="am-u-lg-6 am-u-md-6 am-u-sm-12">
-                                                    <div class="dashboard-stat red">
-                                                        <div class="visual">
-                                                            <i class="am-icon-cny"></i>
-                                                        </div>
-                                                        <div class="details">
-                                                            <div class="number"> ￥{$data.supplierDebtMoneyAll} </div>
-                                                            <div class="desc"> 累积未付金额 </div>
-                                                        </div>
-                                                        <a class="more" href="__APP__/Count/orderSupplierMoneyCount"> 查看更多未付金额情况
-                                                            <i class="m-icon-swapright m-icon-white"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                
-                                            </div>
-
-
-                                        </div>
+                        <!-- 当月支出金额、当月未付金额、累积支出金额、累积未付金额 -->
+                        <div class="row">
+                            <div class="am-u-lg-6 am-u-md-6 am-u-sm-12">
+                                <div class="dashboard-stat blue">
+                                    <div class="visual">
+                                        <i class="am-icon-user-plus"></i>
                                     </div>
+                                    <div class="details">
+                                        <div class="number"> ￥{$data.supplierMoney} </div>
+                                        <div class="desc"> 本月支出金额 </div>
+                                    </div>
+                                    <a class="more" href="__APP__/Count/supplierMoneyCount"> 查看更多支出金额信息
+                                        <i class="m-icon-swapright m-icon-white"></i>
+                                    </a>
                                 </div>
-                                
+                            </div>
+                            <div class="am-u-lg-6 am-u-md-6 am-u-sm-12">
+                                <div class="dashboard-stat red">
+                                    <div class="visual">
+                                        <i class="am-icon-cny"></i>
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> ￥{$data.supplierDebtMoney} </div>
+                                        <div class="desc"> 本月未付金额 </div>
+                                    </div>
+                                    <a class="more" href="__APP__/Count/supplierMoneyCount"> 查看更多未付金额情况
+                                        <i class="m-icon-swapright m-icon-white"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="am-u-lg-6 am-u-md-6 am-u-sm-12">
+                                <div class="dashboard-stat blue">
+                                    <div class="visual">
+                                        <i class="am-icon-user-plus"></i>
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> ￥{$data.supplierMoneyAll} </div>
+                                        <div class="desc"> 累积支出金额 </div>
+                                    </div>
+                                    <a class="more" href="__APP__/Count/orderSupplierMoneyCount"> 查看更多支出金额信息
+                                        <i class="m-icon-swapright m-icon-white"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="am-u-lg-6 am-u-md-6 am-u-sm-12">
+                                <div class="dashboard-stat red">
+                                    <div class="visual">
+                                        <i class="am-icon-cny"></i>
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> ￥{$data.supplierDebtMoneyAll} </div>
+                                        <div class="desc"> 累积未付金额 </div>
+                                    </div>
+                                    <a class="more" href="__APP__/Count/orderSupplierMoneyCount"> 查看更多未付金额情况
+                                        <i class="m-icon-swapright m-icon-white"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
     <script src="__PUBLIC__/js/jquery.min.js"></script>
-    <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
+    <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/plus.js"></script>
 </body>
 

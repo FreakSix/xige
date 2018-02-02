@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>添加员工</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -61,6 +61,7 @@
                             <label class="am-u-sm-3 am-form-label">用户名：</label>
                             <div class="am-u-sm-5 am-u-end">
                                 <input type="text" value="" name="usernname" id="username">
+                                <span style="color: #f00; font-size: 12px">用户名一定要由英文字母组成！</span>
                             </div>
                         </div>
                         <div class="am-form-group">
@@ -142,13 +143,13 @@
        }
        //联系人电话验证
        if(tel == ''){
-           parent.layer.msg('联系人电话不能为空！');
+           parent.layer.msg('员工电话不能为空！');
            $("#tel").focus();
            return false;
        }
        //验证邮箱
        if(email == ''){
-           parent.layer.msg('联系人电话不能为空！');
+           parent.layer.msg('员工邮箱不能为空！');
            $("#email").focus();
            return false;
        }
@@ -166,16 +167,29 @@
     	   submitDataToAdd_new_manager(depart_id,duty_id,username,truename,tel,email,is_manager);
        }
    }
-   function submitDataToAdd_new_manager(depart_id,duty_id,username,truename,tel,email,is_manager){
-	   $.post("__APP__/PersonalCenter/saveNewAddManager",{"depart_id":depart_id,"duty_id":duty_id,"username":username,"truename":truename,"tel":tel,"email":email,"is_manager":is_manager},function(res){
-		   if(res == 1){
-    		   alert("添加员工信息成功!");
-    		   closeLayer();
-    	   }else{
-    		   alert("添加员工信息失败！");
-    	   }
-       })
-   }
+    function submitDataToAdd_new_manager(depart_id,duty_id,username,truename,tel,email,is_manager){
+        $.ajax({
+            url:"__APP__/PersonalCenter/saveNewAddManager",
+            type:"post",
+            data:{
+                depart_id:depart_id,
+                duty_id:duty_id,
+                username:username,
+                truename:truename,
+                tel:tel,
+                email:email,
+                is_manager:is_manager,
+            },
+            success:function(res){
+                if(res==1){
+                    layer.msg("添加员工信息成功！",{icon:1});
+                    closeLayer();
+                }else{
+                    layer.alert("添加员工信息失败！",{icon:7,title:"提示"});
+                }
+            }
+        });
+    }
    function closeLayer(){
 		var index=parent.layer.getFrameIndex(window.name);
 		parent.layer.close(index);

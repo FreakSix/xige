@@ -246,9 +246,7 @@
 				}
 				
 			}
-
 		}
-
 		// 客户对账单导出处理
 		public function exportOrderHandle($exportInfo,$num,$allMoney,$allPayment,$allArrear){
 			vendor("PHPExcel.PHPExcel");
@@ -383,17 +381,462 @@
 					),
 				),
 			);
+			$fileName = "客户对账单".date("mdHi",time()).".xls";
 			$objSheet->getStyle("A1:J".$j)->applyFromArray($borderStyle);
 			header('Content-Type: application/vnd.ms-excel');
-			header('Content-Disposition: attachment;filename="对账单.xls"');
+			header('Content-Disposition: attachment;filename='.$fileName);
 			header('Cache-Control: max-age=0');
 			$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 			$objWriter->save('php://output');
 		}
-
+		// 导出订货单（供应商）页面
 		public function exportProduct(){
+			$get = $_GET;
+			// dump($get);
+			$condition = array();
+			if(!empty($get)){
+				//如果有时间
+				if($get['search_date_value'] ){
+					// dump($get);
+					$dateTimeArr = explode("To", $get['search_date_value']);
+					$startTime = strtotime($dateTimeArr['0']);
+					$endTime = (strtotime($dateTimeArr['1'])) + 86400;
 
+					$whereArr[] = "add_time >= '".$startTime."' and add_time < '".$endTime."'";
+				}else{
+					$get['search_date_value'] = '';
+				}
+				// 如果有付款状态
+				if($get['money_status'] ){
+					$whereArr[] = "supplier_money_status = '".$get['money_status']."'";
+				}
+				//如果有输入值搜索
+				if($get['search_value']){
+					if($get['input_type_value'] == 'supplier'){
+						$whereArr[] = "supplier_name = '".$get['search_value']."'";
+					}else if($get['input_type_value'] == 'product'){
+						$whereArr[] = "product_name = '".$get['search_value']."'";
+					}
+				}else{
+					$get['search_value'] = '';
+				}
+
+				$where = implode(' and ',$whereArr);
+				$condition['where'] = $where;
+			}
+			
+			//符合条件的总记录数
+			$count = D("XgOrderProduct")->getOrderProductCount($condition);
+			// dump($count);
+	 		$pageSize = 15;
+	 		//实例化分页类
+	 		$page = new \Think\Page($count,$pageSize);
+	 		//获取起始位置
+	 		$firstRow = $page->firstRow;
+	 		// 设置显示页码个数
+	 		$page->rollPage = 5;
+	 		//获取分页结果
+	 		$pageStr = $page->show();
+	 		//总页数
+	 		$totalPage = $page->totalPages;
+	 		
+	 		//查询商品名称
+	 		$condition['order'] = "id desc";
+	 		$condition['limit']['firstRow'] = $firstRow;
+	 		$condition['limit']['pageSize'] = $pageSize;
+
+			$orderProductInfo = D("XgOrderProduct")->orderProductInfo($condition);
+			// dump($productOrderInfo);
+			if(!empty($orderProductInfo)){
+				foreach ($orderProductInfo as $k => $v) {
+					//付款状态处理
+					if($v['supplier_money_status'] == 1){
+						$supplier_money_status_value = "未付款";
+					}elseif ($v['supplier_money_status'] == 2) {
+						$supplier_money_status_value = "部分付款";
+					}else{
+						$supplier_money_status_value = "全额付款";
+					}					
+					$orderProductInfo[$k]['supplier_money_status_value'] = $supplier_money_status_value;
+					
+				}
+			}
+			$this->assign("orderProductInfo",$orderProductInfo);
+			$this->assign("pageStr",$pageStr);
+			$this->assign("get",$get);
 			$this->display("export_product");
+		}
+		// 导出订货单（供应商）页面的搜索信息
+		public function searchInputInfo(){
+			$post = $_POST;
+			$typeValue = $post["input_type_value"];
+			$html = "";
+
+			if($typeValue == "0"){
+				$html = "<li>请先选择搜索类型</li>";
+			}else{
+				if($typeValue == "product"){
+					$condition['where'] = "product_name like '%".$post['search_value']."%'";
+					$productInfo = D("XgOrderProduct")->orderProductInfo($condition);
+
+					if(!empty($productInfo)){
+						foreach($productInfo as $k=>$v){
+							$newProductInfos[$v['product_name']] = $v['product_name'];
+							// $html .= "<li onclick=searchCustomerName('".$v['product_name']."')>".$v['product_name']."</li>";
+						}
+					}
+				}else if($typeValue == "supplier"){
+					$condition['where'] = "supplier_name like '%".$post['search_value']."%'";
+					$productInfo = D("XgOrderProduct")->orderProductInfo($condition);
+
+					if(!empty($productInfo)){
+						foreach($productInfo as $k=>$v){
+							$newProductInfos[$v['supplier_name']] = $v['supplier_name'];
+							// $html .= "<li onclick=searchCustomerName('".$v['supplier_name']."')>".$v['supplier_name']."</li>";
+						}
+					}
+				}
+
+				if(!empty($newProductInfos)){
+					foreach ($newProductInfos as $kk => $vv) {
+						$html .= "<li onclick=searchCustomerName('".$vv."')>".$vv."</li>";
+					}
+				}else{
+					$html = "<li>没有相关搜索内容</li>";
+				}
+			}
+			// dump($html);exit;
+
+			echo $html;
+		}
+		// 导出对账单（供应商）信息处理
+		public function exportProductForS(){
+			$get = $_GET;
+			// dump($get);
+			$type = $get["type"];
+			$dateValue = $get["search_date_value"];
+			$moneyStatus = $get["money_status"];
+			$inputTypeValue = $get["input_type_value"];
+			$searchValue = $get["search_value"];
+			
+			if(!empty($get)){
+				// 导出全部
+				if($type == "all"){
+					if($dateValue=="0" && $moneyStatus=="0" && $searchValue=="0"){
+						$orderProductInfo = D("XgOrderProduct")->getAllOrderProduct();
+					}else{
+						$condition = array();
+						//如果有时间
+						if($get['search_date_value']){
+							// dump($get);
+							$dateTimeArr = explode("To", $get['search_date_value']);
+							$startTime = strtotime($dateTimeArr['0']);
+							$endTime = (strtotime($dateTimeArr['1'])) + 86400;
+
+							$whereArr[] = "add_time >= '".$startTime."' and add_time < '".$endTime."'";
+						}else{
+							$get['search_date_value'] = '';
+						}
+						// 如果有付款状态
+						if($get['money_status'] ){
+							$whereArr[] = "supplier_money_status = '".$get['money_status']."'";
+						}
+						//如果有输入值搜索
+						if($get['search_value']){
+							if($get['input_type_value'] == 'supplier'){
+								$whereArr[] = "supplier_name = '".$get['search_value']."'";
+							}else if($get['input_type_value'] == 'product'){
+								$whereArr[] = "product_name = '".$get['search_value']."'";
+							}
+						}else{
+							$get['search_value'] = '';
+						}
+						$where = implode(' and ',$whereArr);
+						$condition['where'] = $where;
+						$orderProductInfo = D("XgOrderProduct")->orderProductInfo($condition);
+					}
+				}else if($type=="selected"){
+					$productIdStr = rtrim($get["product_id_str"],",");
+					$productIdArr = explode(",", $productIdStr);
+					sort($productIdArr);   // 讲数组变成从小到大排列
+					for ($i=0; $i < sizeof($productIdArr); $i++) { 
+						$orderProductDate = D("XgOrderProduct")->getOrderProductById($productIdArr[$i]);
+						$orderProductInfo[] = $orderProductDate;
+					}
+				}
+				// dump($orderProductInfo);
+				if($orderProductInfo){
+					foreach ($orderProductInfo as $key => $value) {
+						// 将供应商单独放在一个数组，以便获取供应商数量
+						$productSupplierInfo[$value['supplier_name']] = $value['supplier_name'];
+						// 获取和整理产品规格信息
+						$specIdArr = explode(",", $value["product_spec_id_str"]);
+						if(!empty($specIdArr)){
+							$specDetail = "";
+							foreach ($specIdArr as $k => $v) {
+								// 产品规格数据
+								$specInfo = D("XgProductSpec")->getSpecById($v);
+								// 产品规格名称
+								$parameterName = D("XgProductParameter")->getProductParameterById($specInfo["0"]["parameter_id"]);
+								$specDetail[] = $parameterName["0"]["name"].":".$specInfo["0"]["spec_value"];
+							}
+							$specDetailStr = implode(" / ", $specDetail);
+						}
+						// 获取产品单位
+						$productInfo = D("XgProductType")->getProduct($value["product_name_id"]);
+						$productUnit = $productInfo["0"]["product_unit"];
+						// 获取产品特殊工艺名称
+						$specialTecIdArr = explode(",",$value["special_technologyh_id_str"]);
+						$arrLength = sizeof($specialTecIdArr);
+						$specialTecName = "";
+						for ($i=0; $i < arrLength; $i++) { 
+							$specialTecArr = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($specialTecIdArr[$i]);
+							$specialTecName[] = $specialTecArr["name"];
+						}
+						$specialTecInfo = implode(",", $specialTecName);
+						// 将所有价格有关的数据转换成float类型
+						$cost = (float)$value["cost_money"];
+						$payment = (float)$value["supplier_money"];
+						$arrear = $cost-$payment;
+						// 整理需要导出的数据
+						$month = date("Y-m",$value["add_time"]);
+						$exportProductInfo[$month][$key]["time"] = date("m-d H:i",$value["add_time"]);
+						$exportProductInfo[$month][$key]["supplier_name"] = $value["supplier_name"];
+						if($specialTecInfo == ""){
+							$exportProductInfo[$month][$key]["product_info"] = $value["product_name"]." / ".$value["product_model"]." / ".$specDetailStr;
+						}else{
+							$exportProductInfo[$month][$key]["product_info"] = $value["product_name"]." / ".$value["product_model"]." / ".$specDetailStr." / 特殊工艺：".$specialTecInfo;
+						}
+						$exportProductInfo[$month][$key]["product_unit"] = $productUnit;
+						$exportProductInfo[$month][$key]["num"] = $value["num"];
+						$exportProductInfo[$month][$key]["cost_price"] = $value["cost_price"];
+						$exportProductInfo[$month][$key]["cost_money"] = $cost;
+						$exportProductInfo[$month][$key]["payment"] = $payment;
+						$exportProductInfo[$month][$key]["arrear"] = $arrear;
+						$exportProductInfo[$month][$key]["remark"] = $value["product_remarks"];
+						// 整理每月的产品总价，付款，欠款
+						// $monthCost[$month][] = (float)$value["cost_money"];
+						$monthCost[$month] = $monthCost[$month] + (float)$value["cost_money"];
+						$monthPayment[$month] = $monthPayment[$month] + (float)$value["supplier_money"];
+						$monthArrear[$month] = $monthArrear[$month] + ((float)$value["cost_money"] - (float)$value["supplier_money"]);
+
+						$monthTotal[$month]["month_cost"] = $monthCost[$month];
+						$monthTotal[$month]["month_payment"] = $monthPayment[$month];
+						$monthTotal[$month]["month_arrear"] = $monthArrear[$month];
+
+						// 整理产品总价，付款，欠款
+						$allCost = $allCost + (float)$value["cost_money"];
+						$allPayment = $allPayment + (float)$value["supplier_money"];
+						$allArrear = $allArrear + ((float)$value["cost_money"] - (float)$value["supplier_money"]);
+					}
+					$allTotal["all_cost"] = $allCost;
+					$allTotal["all_payment"] = $allPayment;
+					$allTotal["all_arrear"] = $allArrear;
+					
+					// dump($monthTotal);
+					// dump($allTotal);
+					// 获取供应商数量
+					$supplierNum = sizeof($productSupplierInfo);
+					// 执行导出
+					if($supplierNum>1){
+						$this->exportProductHandelForMore($exportProductInfo,$monthTotal,$allTotal);
+					}else if($supplierNum==1){
+						foreach ($productSupplierInfo as $keyy => $ps) {
+							$supplierName = $ps;
+						}
+						$this->exportProductHandelForOne($exportProductInfo,$supplierName,$monthTotal,$allTotal);
+						
+					}
+				}
+			}
+		}
+		// 导出对账单（多个供应商）处理
+		public function exportProductHandelForMore($exportProductInfo,$monthTotal,$allTotal){
+			vendor("PHPExcel.PHPExcel");
+			$objPHPExcel = new \PHPExcel();
+			$objSheet = $objPHPExcel->getActiveSheet();
+			$objSheet->setTitle("对账单（供应商）");
+			$objSheet->getDefaultStyle()->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);   // 设置excel文件默认水平垂直方向居中
+			$objSheet->getDefaultStyle()->getFont()->setName("微软雅黑")->setSize(10);   // 设置默认字体和大小
+			$objSheet->mergeCells("A1:J1");
+			$objSheet->getStyle("A1")->getFont()->setSize(18)->setBold(True);   // 设置字体大小并加粗
+			$objSheet->setCellValue("A1","对账单（供应商）");
+
+			$objSheet->getStyle("2")->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objSheet->mergeCells("A2:J2");
+			$objSheet->setCellValue("A2","制作单位： 北京细格广告传媒有限公司");
+			$objSheet->getStyle("3")->getAlignment()->setWrapText(true);   // 设置自动换行，需要在输出数据中加换行符"\n"
+			$objSheet->getColumnDimension('A')->setAutoSize(true);   // 设置宽度自适应
+			$objSheet->getColumnDimension('B')->setWidth("30");
+			$objSheet->getColumnDimension('C')->setAutoSize(true);
+			$objSheet->getColumnDimension('D')->setAutoSize(true);
+			$objSheet->getColumnDimension('E')->setAutoSize(true);
+			$objSheet->getColumnDimension('F')->setAutoSize(true);
+			$objSheet->getColumnDimension('G')->setAutoSize(true);
+			$objSheet->getColumnDimension('H')->setAutoSize(true);
+			$objSheet->getColumnDimension('I')->setAutoSize(true);
+			$objSheet->getColumnDimension('J')->setWidth("40");
+			$objSheet->getStyle('I')->getNumberFormat()->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+
+			$objSheet->getStyle("A3:J3")->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('C0C0C0');
+			$objSheet->setCellValue("A3","日期Date")
+					 ->setCellValue("B3","供应商名称\nName")
+					 ->setCellValue("C3","项目说明Content")
+					 ->setCellValue("D3","单位\nUnit")
+					 ->setCellValue("E3","数量\nNumber")
+					 ->setCellValue("F3","单价（元）\nPrice")
+					 ->setCellValue("G3","成本总价（元）\nTotal Cost")
+					 ->setCellValue("H3","已支付（元）\nPaid")
+					 ->setCellValue("I3","欠款（元）\nArrears")
+					 ->setCellValue("J3","备注Remark");
+			$i = 4;
+			$j = 5;
+			foreach($exportProductInfo as $key => $value){
+				// dump($value);
+				$objSheet->getStyle($i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$objSheet->getStyle($i)->getFont()->setSize(10)->setBold(True);
+				$objSheet->getStyle("A".$i.":J".$i)->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('E6B8B7');
+				$objSheet->mergeCells("A".$i.":J".$i);
+				$objSheet->setCellValue("A".$i,$key);
+				foreach ($value as $k => $v) {
+					$objSheet->setCellValue("A".$j,$v["time"])
+							 ->setCellValue("B".$j,$v["supplier_name"])
+							 ->setCellValue("C".$j,$v["product_info"])
+							 ->setCellValue("D".$j,$v["product_unit"])
+							 ->setCellValue("E".$j,$v["num"])
+							 ->setCellValue("F".$j,$v["cost_price"])
+							 ->setCellValue("G".$j,$v["cost_money"])
+							 ->setCellValue("H".$j,$v["payment"])
+							 ->setCellValue("I".$j,$v["arrear"])
+							 ->setCellValue("J".$j," ");
+					$j++;
+				}
+				$objSheet->mergeCells("A".$j.":F".$j);
+				$objSheet->getStyle("A".$j)->getFont()->setSize(12)->setBold(True);
+				$objSheet->getStyle("G".$j.":I".$j)->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('C0C0C0');
+				$objSheet->setCellValue("A".$j,"小计")
+						 ->setCellValue("G".$j,$monthTotal[$key]["month_cost"])
+						 ->setCellValue("H".$j,$monthTotal[$key]["month_payment"])
+						 ->setCellValue("I".$j,$monthTotal[$key]["month_arrear"]);
+				$i = $j+1;
+				$j = $i+1;
+			}
+			$objSheet->mergeCells("A".$i.":F".$i);
+			$objSheet->getStyle("A".$i)->getFont()->setSize(14)->setBold(True);
+			$objSheet->getStyle("G".$i.":I".$i)->getFont()->setSize(12)->setBold(True);
+			$objSheet->getStyle("G".$i.":I".$i)->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFFF00');
+			$objSheet->setCellValue("A".$i,"合计")
+					 ->setCellValue("G".$i,$allTotal["all_cost"])
+					 ->setCellValue("H".$i,$allTotal["all_payment"])
+					 ->setCellValue("I".$i,$allTotal["all_arrear"]);
+			// 边框样式
+			$borderStyle = array(
+				'borders'=>array(
+					'allborders'=>array(
+						'style' => \PHPExcel_Style_Border::BORDER_THIN,   //系边框
+						'color' => array('rgb' => '#000'),
+					),
+				),
+			);
+			$objSheet->getStyle("A1:J".$i)->applyFromArray($borderStyle);
+			$fileName = "供应商对账单".date("mdHi",time()).".xls";
+			header('Content-Type: application/vnd.ms-excel');
+			header('Content-Disposition: attachment;filename='.$fileName);
+			header('Cache-Control: max-age=0');
+			$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+			$objWriter->save('php://output');
+		}
+		// 导出对账单（单个供应商）处理
+		public function exportProductHandelForOne($exportProductInfo,$supplierName,$monthTotal,$allTotal){
+			vendor("PHPExcel.PHPExcel");
+			$objPHPExcel = new \PHPExcel();
+			$objSheet = $objPHPExcel->getActiveSheet();
+			$objSheet->setTitle("对账单（供应商）");
+			$objSheet->getDefaultStyle()->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);   // 设置excel文件默认水平垂直方向居中
+			$objSheet->getDefaultStyle()->getFont()->setName("微软雅黑")->setSize(10);   // 设置默认字体和大小
+			$objSheet->mergeCells("A1:I1");
+			$objSheet->getStyle("A1")->getFont()->setSize(18)->setBold(True);   // 设置字体大小并加粗
+			$objSheet->setCellValue("A1",$supplierName."对账单");
+
+			$objSheet->getStyle("2")->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objSheet->mergeCells("A2:I2");
+			$objSheet->setCellValue("A2","制作单位： 北京细格广告传媒有限公司");
+			$objSheet->getStyle("3")->getAlignment()->setWrapText(true);   // 设置自动换行，需要在输出数据中加换行符"\n"
+			$objSheet->getColumnDimension('A')->setAutoSize(true);   // 设置宽度自适应
+			$objSheet->getColumnDimension('B')->setAutoSize(true);
+			$objSheet->getColumnDimension('C')->setAutoSize(true);
+			$objSheet->getColumnDimension('D')->setAutoSize(true);
+			$objSheet->getColumnDimension('E')->setAutoSize(true);
+			$objSheet->getColumnDimension('F')->setAutoSize(true);
+			$objSheet->getColumnDimension('G')->setAutoSize(true);
+			$objSheet->getColumnDimension('H')->setAutoSize(true);
+			$objSheet->getColumnDimension('I')->setWidth("40");
+
+			$objSheet->getStyle("A3:I3")->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('C0C0C0');
+			$objSheet->setCellValue("A3","日期Date")
+					 ->setCellValue("B3","项目说明Content")
+					 ->setCellValue("C3","单位\nUnit")
+					 ->setCellValue("D3","数量\nNumber")
+					 ->setCellValue("E3","单价（元）\nPrice")
+					 ->setCellValue("F3","成本总价（元）\nTotal Cost")
+					 ->setCellValue("G3","已支付（元）\nPaid")
+					 ->setCellValue("H3","欠款（元）\nArrears")
+					 ->setCellValue("I3","备注Remark");
+			$i = 4;
+			$j = 5;
+			foreach($exportProductInfo as $key => $value){
+				// dump($value);
+				$objSheet->getStyle($i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$objSheet->getStyle($i)->getFont()->setSize(10)->setBold(True);
+				$objSheet->getStyle("A".$i.":I".$i)->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('E6B8B7');
+				$objSheet->mergeCells("A".$i.":I".$i);
+				$objSheet->setCellValue("A".$i,$key);
+				foreach ($value as $k => $v) {
+					$objSheet->setCellValue("A".$j,$v["time"])
+							 ->setCellValue("B".$j,$v["product_info"])
+							 ->setCellValue("C".$j,$v["product_unit"])
+							 ->setCellValue("D".$j,$v["num"])
+							 ->setCellValue("E".$j,$v["cost_price"])
+							 ->setCellValue("F".$j,$v["cost_money"])
+							 ->setCellValue("G".$j,$v["payment"])
+							 ->setCellValue("H".$j,$v["arrear"])
+							 ->setCellValue("I".$j," ");
+					$j++;
+				}
+				$objSheet->mergeCells("A".$j.":E".$j);
+				$objSheet->getStyle("A".$j)->getFont()->setSize(12)->setBold(True);
+				$objSheet->getStyle("F".$j.":H".$j)->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('C0C0C0');
+				$objSheet->setCellValue("A".$j,"小计")
+						 ->setCellValue("F".$j,$monthTotal[$key]["month_cost"])
+						 ->setCellValue("G".$j,$monthTotal[$key]["month_payment"])
+						 ->setCellValue("H".$j,$monthTotal[$key]["month_arrear"]);
+				$i = $j+1;
+				$j = $i+1;
+			}
+			$objSheet->mergeCells("A".$i.":E".$i);
+			$objSheet->getStyle("A".$i)->getFont()->setSize(14)->setBold(True);
+			$objSheet->getStyle("F".$i.":H".$i)->getFont()->setSize(12)->setBold(True);
+			$objSheet->getStyle("F".$i.":H".$i)->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFFF00');
+			$objSheet->setCellValue("A".$i,"合计")
+					 ->setCellValue("F".$i,$allTotal["all_cost"])
+					 ->setCellValue("G".$i,$allTotal["all_payment"])
+					 ->setCellValue("H".$i,$allTotal["all_arrear"]);
+			// 边框样式
+			$borderStyle = array(
+				'borders'=>array(
+					'allborders'=>array(
+						'style' => \PHPExcel_Style_Border::BORDER_THIN,   //系边框
+						'color' => array('rgb' => '#000'),
+					),
+				),
+			);
+			$fileName = "供应商对账单".date("mdHi",time()).".xls";
+			$objSheet->getStyle("A1:I".$i)->applyFromArray($borderStyle);
+			header('Content-Type: application/vnd.ms-excel');
+			header('Content-Disposition: attachment;filename='.$fileName);
+			header('Cache-Control: max-age=0');
+			$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+			$objWriter->save('php://output');
 		}
 
 		// 新增订单页面
@@ -856,11 +1299,11 @@
 			// $res = D("XgOrder")->updateOrderInfo($data,$post['id']);
 
 			if($res > 0){
-				$res_str = "删除成功！";
+				$res = 1;
 			}else{
-				$res_str = "删除失败！";
+				$res = 0;
 			}
-			echo json_encode($res_str);
+			echo json_encode($res);
 		}
 
 		//获得全部的产品名称信息
@@ -1473,7 +1916,6 @@
 				$data['end_money'] = $post['end_money'];
 				$data['material_link'] = $post['material_link'];
 				$data['product_remarks'] = $post['product_remarks'];
-
 				$res = D("XgOrderProduct")->updateOrderProductInfo($data,$post['id']);
 				if($res > 0){
 					//订单信息处理
@@ -2020,11 +2462,11 @@
 			$post = $_POST;
 			$res = D("XgQuote")->deleteQuoteInfoById($post['id']);
 			if($res > 0){
-				$res_str = "删除成功！";
+				$res = 1;
 			}else{
-				$res_str = "删除失败！";
+				$res = 0;
 			}
-			echo json_encode($res_str);
+			echo json_encode($res);
 		}
 		// 获取需要导出的数据
 		public function exportQuote(){
@@ -2202,9 +2644,10 @@
 					),
 				),
 			);
+			$fileName = "报价记录".date("mdHi",time()).".xls";
 			$objSheet->getStyle("A1:K".$end)->applyFromArray($borderStyle);
 			header('Content-Type: application/vnd.ms-excel');
-			header('Content-Disposition: attachment;filename="geigemianzi.xls"');
+			header('Content-Disposition: attachment;filename='.$fileName);
 			header('Cache-Control: max-age=0');
 			$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 			// $objWriter = new \PHPExcel_Writer_Excel5($objPHPExcel);
@@ -2233,6 +2676,20 @@
 			$productInfo = D("XgProductType")->getProductName($_POST['id']);
 
 			echo $productInfo['0']['type_name'];
+		}
+
+
+		//删除订单中的产品时 判断该订单的产品数量是否大于一
+		public function checkOrderProductNum(){
+			$orderProductInfo = D("XgOrder")->getOrderInfoById($_POST['order_id']);
+			$orderProductIdArr = explode(",", $orderProductInfo['order_product_id']);
+			
+			if(count($orderProductIdArr) > 1){
+				echo 2;		//产品信息大于一条，可以删除
+			}else{
+				echo 1;		//不能删除
+			}
+
 		}
 
 

@@ -46,11 +46,13 @@
 		
 		//添加新用户
 		public function addNewManager($data){
-			$feilds=array_keys($data);
-			$sql="insert into xg_manager (".implode(',',$feilds).") values('".implode("','",$data)."')";
-			$result = M()->execute($sql);
-			$userId = M()->getLastInsID();
-			return $userId;
+			// $feilds=array_keys($data);
+			// $sql="insert into xg_manager (".implode(',',$feilds).") values('".implode("','",$data)."')";
+			// $result = M()->execute($sql);
+			// $userId = M()->getLastInsID();
+			// return $userId;
+			$result =M("xg_manager")->data($data)->add();
+			return $result;
 		}
 		//保存修改的员工信息
 		public function updateEditManager($id,$data){

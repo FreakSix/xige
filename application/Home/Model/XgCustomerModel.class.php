@@ -34,9 +34,9 @@
 		public function getCustomerLevelInfo($level){
 			$customer_level = M("xg_customer_level");
 			if($level){
-				$result = $customer_level->where("level = ".$level)->order("level asc")->find();
+				$result = $customer_level->where("id = ".$level)->order("id asc")->find();
 			}else{
-				$result = $customer_level->order("level asc")->select();
+				$result = $customer_level->order("id asc")->select();
 			}
 			return $result;
 		}

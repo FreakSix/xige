@@ -88,9 +88,9 @@
                                 <option value="0">全部客户</option>
                                 <foreach name="csutomerInfo" item="v" key="k">
                                     <if condition="$get['customer_level'] == $v['id']">
-                                        <option value="{$v['level']}" selected="selected">{$v['name']}</option>
+                                        <option value="{$v['id']}" selected="selected">{$v['name']}</option>
                                     <else/>
-                                        <option value="{$v['level']}" >{$v['name']}</option>
+                                        <option value="{$v['id']}" >{$v['name']}</option>
                                     </if>
                                 </foreach>
                             </select>

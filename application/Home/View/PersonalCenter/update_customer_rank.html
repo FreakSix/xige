@@ -38,7 +38,7 @@
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label">客户等级系数：</label>
                             <div class="am-u-sm-5 am-u-end">
-                                <input type="text" value="{$levelInfo.level}" name="department_name" id="level_level">
+                                <input type="text" value="{$levelInfo.level_price}" name="department_name" id="level_level">
                             </div>
                         </div>
                         <div class="am-form-group">
@@ -75,6 +75,7 @@
     		level_level = "";
     	}
     	$.post("__APP__/PersonalCenter/saveEditLevel",{"id":id,"level_name":level_name,"level_level":level_level},function(res){
+            alert(res);return false;
     		if(res == 1){
     			alert("修改客户登记信息成功！");
     			closeLayer();

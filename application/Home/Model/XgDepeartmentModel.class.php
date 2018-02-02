@@ -6,15 +6,18 @@
 		
 		public $trueTableName = "xg_depeartment";
 
-		//查询单条客户信息
+		//查询单条部门信息
 		public function getDepeartmentById($id){
 			$result = M("xg_depeartment")->where("id = ".$id)->find();
 			return $result;
 		}
-
-		/**
-		 * 查询所有的部门
-		 */
+		// 通过depart_name查询部门信息
+		public function getDepartByName($depart_name){
+			$sql = "select * from xg_depeartment where depart_name = '".$depart_name."'";
+			$result = M()->query($sql);
+			return $result;
+		}
+		// 查询所有的部门
 		public function getDepeartAll(){
 			$result = M("xg_depeartment")->select();
 			return $result;
@@ -49,7 +52,6 @@
 		 */
 		public function updateDepartManagerId($depart_id,$managerId){
 			$sql = "update xg_depeartment set manager_id = {$managerId} where id = {$depart_id}";
-			echo $sql;
 			$result = M()->execute($sql);
 			return $result;
 		}

@@ -61,4 +61,9 @@
 			$result = M("xg_duty")->where("depart_id = ".$deaprt_id)->select();
 			return $result;
 		}
+		// 删除职位信息
+		public function deleteDuty($id){
+			$result = M("xg_duty")->where("id = ".$id)->delete();
+			return $result;
+		}
 	}

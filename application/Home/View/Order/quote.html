@@ -241,20 +241,35 @@
 
     // 新增报价记录
     function addQuote(){
-        layer.open({
-            type: 2,
-            shadeClose : false,
-            title: '新增报价',
-            shade: 0.8,
-            area: ['75%', '90%'],
-            btn: ['关闭'],
-            content: '__APP__/Order/addQuote' //iframe的url
+        var powerName = 'addQuote';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layer.open({
+                    type: 2,
+                    shadeClose : false,
+                    title: '新增报价',
+                    shade: 0.8,
+                    area: ['75%', '90%'],
+                    btn: ['关闭'],
+                    content: '__APP__/Order/addQuote' //iframe的url
+                });
+            }
         });
+        
     }
 
     //修改报价记录信息
     function updateQuote(id){
-        layer.open({
+        var powerName = 'updateQuote';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layer.open({
                     type: 2,
                     shadeClose : false,
                     title: '修改报价记录', 
@@ -264,62 +279,77 @@
                     content: '__APP__/Order/updateQuote/id/'+id, //iframe的url
 
                 });
+            }
+        });
+        
     }
 
     //删除报价记录信息
     function deleteQuote(id){
-        layer.confirm('您确定要删除该条报价记录吗？', {
-                icon: 3,
-                anim:5,
-                title:'提示',
-                btn: ['确定','取消'] //按钮
-            }, function(){
-                if(id){
-                    $.ajax({
-                        url:'__APP__/Order/deleteQuoteInfo',
-                        data:'id='+id,
-                        type:'post',
-                        dataType:'json',
-                        success:function(res){
-                            layer.confirm(res, {
-                                icon: 1,
-                                anim:5,
-                                title:'提示',
-                                btn: ['确定'] //按钮
-                            }, function(){
-                                window.location.reload();       
-                            });
-                        }
-                    });
+        var powerName = 'deleteQuote';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layer.confirm('您确定要删除该条报价记录吗？', {
+                    icon: 3,
+                    anim:5,
+                    title:'提示',
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    if(id){
+                        $.ajax({
+                            url:'__APP__/Order/deleteQuoteInfo',
+                            data:'id='+id,
+                            type:'post',
+                            dataType:'json',
+                            success:function(res){
+                                if(res == 1){
+                                    layer.msg("删除成功！", {icon: 1});
+                                    window.location.reload();
+                                }else if(res == 0){
+                                    layer.alert("删除失败！",{icon:7,title:"提示"});
+                                }
+                            }
+                        });
 
-                }else{
-                    layer.alert('删除失败！', {icon: 1,title:'提示'});
-                }          
-            }, function(){
-                layer.msg('删除已取消！', {
-                time: 1000,
+                    }else{
+                        layer.alert('删除失败！', {icon: 7,title:'提示'});
+                    }          
                 });
-            });
+            }
+        });
+        
     }
 
     // 导出检索出来的全部报价记录
     function exportAllQuote(){
-        // 日期
-        var search_date_value = $("#hide_search_date").val();
-        // 搜索条件
-        var input_type_value = $("#input_type_value").val();
-        // 搜索内容
-        var search_value = $.trim($("#search_value").val());
-        if(search_date_value == ""){
-            search_date_value =0;
-        }
-        if(input_type_value == 0){
-            search_value = 0;
-        }
-        if(search_value == ""){
-            search_value = 0;
-        }
-        window.location="__APP__/Order/exportQuote/input_type_value/"+input_type_value+"/search_value/"+search_value+"/search_date_value/"+search_date_value;
+        var powerName = 'exportQuote';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                // 日期
+                var search_date_value = $("#hide_search_date").val();
+                // 搜索条件
+                var input_type_value = $("#input_type_value").val();
+                // 搜索内容
+                var search_value = $.trim($("#search_value").val());
+                if(search_date_value == ""){
+                    search_date_value =0;
+                }
+                if(input_type_value == 0){
+                    search_value = 0;
+                }
+                if(search_value == ""){
+                    search_value = 0;
+                }
+                window.location="__APP__/Order/exportQuote/input_type_value/"+input_type_value+"/search_value/"+search_value+"/search_date_value/"+search_date_value;
+            }
+        });
+        
     }
 
 </script>

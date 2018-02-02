@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>职位与权限管理</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,8 +35,6 @@
                 <li><a href="__APP__/PersonalCenter">个人中心</a></li>
                 <li class="am-active">权限管理</li>
             </ol>
-            <!-- 部门信息 -->
-            <!-- 职位信息 -->
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
                     <div class="caption font-green bold">职位信息</div>
@@ -58,7 +56,7 @@
                                     <thead>
                                         <tr>
                                             <th class="">职位名称</th>
-                                            <th class="">员工数</th>
+                                            <!-- <th class="">员工数</th> -->
                                             <th class="">所属部门</th>
                                             <th class="">权限管理</th>
                                             <th class="">操作</th>
@@ -68,34 +66,19 @@
                                         <foreach name="list" item="item" key="key">
 	                                        <tr class="xg-table-tr">
 	                                            <td>{$item.duty_name}</td>
-	                                            <td>{$item.totla_person}</td>
+	                                            <!-- <td>{$item.totla_person}</td> -->
 	                                            <td>{$item.depart}</td>
 	                                            <td><a href="javascript:void(0);" onclick="access({$item.id})">权限管理</a></td>
 	                                            <td>
 	                                                <div class="am-btn-toolbar">
 	                                                    <div class="am-btn-group am-btn-group-xs">
 	                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updatePosition({$item.id},{$item.depart_id})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-	                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletePosition()"><span class="am-icon-trash-o"></span> 删除</button>
+	                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletePosition({$item.id})"><span class="am-icon-trash-o"></span> 删除</button>
 	                                                    </div>
 	                                                </div>
 	                                            </td>
 	                                        </tr>
                                         </foreach>
-                                        <!-- <tr class="xg-table-tr">
-                                            <td>销售专员</td>
-                                            <td>2</td>
-                                            <td>销售部</td>
-                                            <td><a href="javascript:;" onclick="access()">权限管理</a></td>
-                                            <td>
-                                                <div class="am-btn-toolbar">
-                                                    <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updatePosition()"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deletePosition()"><span class="am-icon-trash-o"></span> 删除</button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr> -->
-
                                     </tbody>
                                 </table>
                                 <div class="am-cf">
@@ -145,13 +128,30 @@
             });
         }
         // 删除职位信息提示
-        function deletePosition(){
+        function deletePosition(id){
             layer.confirm('您确定要删除该条职位信息吗？', {
                 icon: 3,
                 anim:5,
-                offset: '200px',
                 title:'提示',
                 btn: ['确定','取消'] //按钮
+            }, function(){
+                if(id){
+                    $.ajax({
+                        url:'__APP__/Rbac/deleteDuty',
+                        data:'id='+id,
+                        type:'post',
+                        success:function(res){
+                            if(res == 1){
+                                layer.msg("删除职位信息成功！", {icon: 1,anim:5,});
+                                window.location.reload(); 
+                            }else{
+                                layer.alert("删除职位信息失败！", {icon: 7,title:'提示',});
+                            }
+                        }
+                    });
+                }else{
+                    layer.alert('删除失败！', {icon: 7,title:'提示'});
+                }          
             });
         }
         // 权限管理页面

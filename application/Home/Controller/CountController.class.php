@@ -1053,7 +1053,7 @@
 					if($get['customer_level'] == 0){
 						$condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."'";
 					}else{
-						$condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."' and rank = ".$get['customer_level']." ";
+						$condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."' and level_id = ".$get['customer_level']." ";
 					}
 					
 					$customerNum = D("XgCustomer")->getCustomerCount($condition);
@@ -1079,7 +1079,7 @@
 					if($get['customer_level'] == 0){
 						$condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."'";
 					}else{
-						$condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."' and rank = ".$get['customer_level']." ";
+						$condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."' and level_id = ".$get['customer_level']." ";
 					}
 					$customerNum = D("XgCustomer")->getCustomerCount($condition);
 					$data['num'][] = $customerNum;
@@ -1099,7 +1099,7 @@
 					if($get['customer_level'] == 0){
 						$condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."'";
 					}else{
-						$condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."' and rank = ".$get['customer_level']." ";
+						$condition['where'] = "ctime >= '".$starTime."' and ctime < '".$endTime."' and level_id = ".$get['customer_level']." ";
 					}
 					$customerNum = D("XgCustomer")->getCustomerCount($condition);
 					$data['num'][] = $customerNum;

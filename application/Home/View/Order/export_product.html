@@ -1,0 +1,321 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>导出对账单（供应商）</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="__PUBLIC__/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="__PUBLIC__/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/app.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/boot.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/daterangepicker.css">
+    <style>
+    </style>
+</head>
+
+<body data-type="generalComponents">
+    <div class="tpl-portlet-components xg-layer-lg-size">
+        <div class="portlet-title">
+            <div class="caption font-green bold">成交产品列表</div>
+            <div class="tpl-portlet-input tpl-fz-ml" style="margin-right: 50px;">
+                <div class="form-group">
+                    <div class="input-group">
+                        <button type="button" class="btn btn-default " id="daterange-btn">
+                        <span>
+                            <if condition="$get['search_date_value'] != '' ">
+                                {$get['search_date_value']}
+                            <else/>
+                                <i class="fa fa-calendar"></i> 日期选择
+                            </if>
+                        </span>
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <button type="button" onclick="searchSubmit('date')" class="am-btn pull-right am-btn-success"> 确定</button>
+                    </div>
+                    <input type="hidden" value="{$get['search_date_value']}" id="hide_search_date" />
+                </div>
+            </div>
+        </div>
+        <div class="tpl-block">
+            <div class="am-g">
+                <div class="am-u-sm-2">
+                    <div class="am-btn-toolbar" style="min-width: 180px;">
+                        <div class="am-btn-group am-btn-group-xs">
+                            <button type="button" onclick="exportProductForS('all')" class="am-btn am-btn-default am-btn-success"><span class="am-icon-save"></span> 导出全部</button>
+                            <button type="button" onclick="exportProductForS('selected')" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出选中</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-sm-2 xg-search-condition">
+                    <div class="am-form-group">
+                        <span style="font-size: 16px; vertical-align: middle;">付款状态：</span>
+                        <select data-am-selected="{btnSize: 'sm'}" id="money_status" onchange="searchSubmit();">
+                            <if condition="$get['money_status'] == 3 ">
+                                <option value="0" >全部</option>
+                                <option value="1">未付款</option>
+                                <option value="2">部分付款</option>
+                                <option value="3" selected="selected">全额付款</option>
+                            <elseif condition="$get['money_status'] == 2 " />
+                                <option value="0" >全部</option>
+                                <option value="1">未付款</option>
+                                <option value="2" selected="selected">部分付款</option>
+                                <option value="3">全额付款</option>
+                            <elseif condition="$get['money_status'] == 1 " />
+                                <option value="0" >全部</option>
+                                <option value="1" selected="selected">未付款</option>
+                                <option value="2">部分付款</option>
+                                <option value="supplier">全额付款</option>
+                            <else/>
+                                <option value="0" selected="selected">全部</option>
+                                <option value="1">未付款</option>
+                                <option value="2">部分付款</option>
+                                <option value="3">全额付款</option>
+                            </if>
+                        </select>
+                    </div>
+                </div>
+                <div class="am-u-sm-4" style="min-width: 250px;float: left;">
+                    <div class="am-form-group" style="margin-left:30px;text-align: right;">
+                        <span style="font-size: 16px; vertical-align: middle;">搜索条件：</span>
+                        <select data-am-selected="{btnSize: 'sm'}" id="input_type_value">
+                            <if condition="$get['input_type_value'] == supplier ">
+                                <option value="0" >请选择条件</option>
+                                <option value="product">产品名称</option>
+                                <option value="supplier" selected="selected">供应商名称</option>
+                            <elseif condition="$get['input_type_value'] == product " />
+                                <option value="0" >请选择条件</option>
+                                <option value="product" selected="selected">产品名称</option>
+                                <option value="supplier">供应商名称</option>
+                            <else/>
+                                <option value="0" selected="selected">请选择条件</option>
+                                <option value="product">产品名称</option>
+                                <option value="supplier">供应商名称</option>
+                            </if>
+                        </select>
+                    </div>
+                </div>
+                <div class="am-u-sm-4 xg-search-condition" style="min-width: 320px!important">
+                    <div class="xg-search-input">
+                        <input style=" " type="text" class="" placeholder="请输入搜索内容" value="{$get['search_value']}" id="search_value" onkeyup="finds()">
+                    </div>
+                    <span class="" style="border-radius: 0 5px 5px 0; float: left;">
+                        <button style="border-radius: 0 5px 5px 0; " class="am-btn am-btn-success tpl-am-btn-success am-icon-search" type="button"  onclick="searchSubmit('input');"></button>
+                    </span>
+                    <div class="xg-search-menu">
+                        <ul class="searchmore" id="searchmore">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="am-g">
+                <div class="am-u-sm-12">
+                    <form class="am-form">
+                        <table class="am-table am-table-striped am-table-hover table-main">
+                            <thead>
+                                <tr>
+                                    <th class="table-check"><input type="checkbox" class="tpl-table-fz-check xg-select-box"></th>
+                                    <th>序号</th>
+                                    <th>订单编号</th>
+                                    <th>供应商</th>
+                                    <th>产品名称</th>
+                                    <th>数量</th>
+                                    <th>单价</th>
+                                    <th>成本总价</th>
+                                    <th>付款金额</th>
+                                    <th>付款状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <foreach name="orderProductInfo" item="v" key="k">
+                                    <tr class="xg-table-tr">
+                                        <td><input type="checkbox" value="{$v['id']}" name="product_id"></td>
+                                        <td>{$k+1}</td>
+                                        <td>{$v['order_num']}</td>
+                                        <td>{$v['supplier_name']}</td>
+                                        <td>{$v['product_name']}</td>
+                                        <td>{$v['num']}</td>
+                                        <td>{$v['cost_price']}</td>
+                                        <td>{$v['cost_money']}</td>
+                                        <td>{$v['supplier_money']}</td>
+                                        <td>{$v['supplier_money_status_value']}</td>
+                                    </tr>
+                                </foreach>
+                            </tbody>
+                        </table>
+                        <div class="am-cf">
+                            <div class="am-fr">
+                                {$pageStr}
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <div class="tpl-alert"></div>
+    </div>
+
+    <script src="__PUBLIC__/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/js/amazeui.min.js"></script>
+    <script src="__PUBLIC__/js/app.js"></script>
+    <script src="__PUBLIC__/js/plus.js"></script>
+    <script src="__PUBLIC__/js/layer.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/moment.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/daterangepicker.js"></script>
+<script type="text/javascript">
+    $('#daterange-btn').daterangepicker({
+            ranges: {
+                '今天': [moment(), moment()],
+                '本周': [moment().startOf('week'), moment().endOf('week')],
+                '本月': [moment().startOf('month'), moment().endOf('month')],
+                '今年': [moment().startOf('year'), moment().endOf('year')]
+            },
+            startDate: moment().startOf('month'),
+            endDate: moment(),
+            opens:'left'
+        },
+        function(start, end) {
+            $('#daterange-btn span').html(start.format('YYYY-MM-DD') + ' To ' + end.format('YYYY-MM-DD'));
+
+            $("#hide_search_date").val(start.format('YYYY-MM-DD') + "To" + end.format('YYYY-MM-DD'));
+            // alert(start.format('YYYYMMDD') + " " + end.format('YYYYMMDD'));
+        }
+    );
+    //确定时间后搜索
+    function searchSubmit(name){
+        var search_date_value = $("#hide_search_date").val();
+        var money_status = $("#money_status").val();
+        var input_type_value = $("#input_type_value").val();
+        var search_value = $.trim($("#search_value").val());
+        
+        if(name == 'date'){
+            if(search_date_value == ''){
+                layer.msg("请选择日期！", {icon: 7,});
+                return false;
+            }
+            if(search_value == ''){
+                input_type_value = 0;
+            }
+        }else{
+            if(search_date_value == ''){
+                search_date_value = 0;
+            }
+        }
+        if(name == 'input'){
+            if(input_type_value == 0){
+                search_value = 0;
+            }else{
+                if(search_value == ''){
+                    layer.alert("搜索内容不能为空！", {icon: 5,});
+                    $("#search_value").focus();
+                    return false;
+                }
+            }
+        }else{
+            if(search_value == ''){
+                search_value = 0;
+            }
+        }
+        // alert(input_type_value);
+        // alert(search_value);exit;
+        location.href='__APP__/Order/exportProduct/search_date_value/'+search_date_value+'/money_status/'+money_status+'/search_value/'+search_value+'/input_type_value/'+input_type_value;
+    }
+
+    var inputWidth = $(".xg-search-input").width();
+    var menuWidth = inputWidth+2;
+    $(".xg-search-menu").width(menuWidth);
+    $(".xg-search-input input").focus(function(){
+        $(".xg-search-input").addClass("xg-search-input-active");
+    });
+    $(".xg-search-input input").blur(function(){
+        $(".xg-search-input").removeClass("xg-search-input-active");
+    });
+
+    // 输入搜索内容，获取相关内容
+    function finds(){
+        var search_value = $.trim($("#search_value").val());
+        // alert(search_value);
+        var input_type_value = $("#input_type_value").val();
+        // alert(input_type_value);
+        if(search_value.length >= 1){
+            $.post("__APP__/Order/searchInputInfo",{"search_value":search_value,"input_type_value":input_type_value},function(res){
+                // alert(res);return false;
+                var item = '';
+                $(".searchmore").empty();//清空原来的ul
+                if(res != ""){
+                    // $.each(res,function(i,res){//循环加入到ul中去
+                    //     item = "<li>"+res+"<li>";
+                    //     $(".searchmore").append(item);
+                    // })
+                    $(".searchmore").html(res);;
+
+                    $(".searchmore").show();
+                }else{
+                    $(".searchmore").hide();
+                }
+            })
+        }else{
+            $(".searchmore").hide();
+        }
+
+        $(document).on("click", ".searchmore li", function(){
+            // $(".user_loadq").val(trim($(this).text()));
+            $("#search_value").val(trim($(this).text()));
+            $(".searchmore").hide();
+        });
+    }
+
+    function searchCustomerName(pipei_date_value){
+        $("#search_value").val(pipei_date_value);
+        $(".searchmore").empty();//清空原来的ul
+    }
+</script>
+<script type="text/javascript">
+    function exportProductForS(type){
+        if(type=="all"){
+            var search_date_value = $("#hide_search_date").val();
+            var money_status = $("#money_status").val();
+            var input_type_value = $("#input_type_value").val();
+            var search_value = $.trim($("#search_value").val());
+            if(search_date_value == ""){
+                search_date_value=0;
+            }
+            if(money_status == ""){
+                money_status=0;
+            }
+            if(input_type_value == 0){
+                search_value = 0;
+            }
+            if(search_value == ""){
+                search_value=0;
+            }
+            location.href="__APP__/Order/exportProductForS/type/"+type+"/money_status/"+money_status+"/input_type_value/"+input_type_value+"/search_value/"+search_value+"/search_date_value/"+search_date_value;
+        }else if(type=="selected"){
+            var inputs = $(".xg-table-tr").find("input[type='checkbox']");
+            if($("input:checkbox[name='product_id']:checked").length == 0){
+                layer.msg("请先选择要导出的数据！",{time:1500});
+            }else{
+                var product_id_str = "";
+                $("input:checkbox[name='product_id']:checked").each(function(){
+                    product_id_str+=$(this).val()+",";
+                });
+                location.href="__APP__/Order/exportProductForS/type/"+type+"/product_id_str/"+product_id_str;
+            }
+        }
+    }
+</script>
+
+</body>
+
+</html>

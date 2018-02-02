@@ -137,6 +137,16 @@ class RbacController extends BaseController {
 			echo 0;
 		}
 	}
+	// 删除职位信息
+	public function deleteDuty(){
+		$id=$_POST["id"];
+		$res = D("XgDuty")->deleteDuty($id);
+		if($res){
+			echo 1;
+		}else{
+			echo 0;
+		}
+	}
 }
 
 

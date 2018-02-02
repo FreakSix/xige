@@ -41,26 +41,24 @@
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
                     <div class="caption font-green bold">订单列表</div>
-                        <div class="tpl-portlet-input tpl-fz-ml">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <button type="button" class="btn btn-default " id="daterange-btn">
-                                        <span>
-                                            <if condition="$get['search_date_value'] != '' ">
-                                                {$get['search_date_value']}
-                                            <else/>
-                                                <i class="fa fa-calendar"></i> 日期选择
-                                            </if>
-                                        </span>
-                                            <i class="fa fa-caret-down"></i>
-                                        </button>
-                                        <button type="button" onclick="searchSubmit('date')" class="am-btn pull-right am-btn-success"></span> 确定</button>
-                                    </div>
-
-                                    <input type="hidden" value="{$get['search_date_value']}" id="hide_search_date" />
-
-                                </div>
+                    <div class="tpl-portlet-input tpl-fz-ml">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <button type="button" class="btn btn-default " id="daterange-btn">
+                                <span>
+                                    <if condition="$get['search_date_value'] != '' ">
+                                        {$get['search_date_value']}
+                                    <else/>
+                                        <i class="fa fa-calendar"></i> 日期选择
+                                    </if>
+                                </span>
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                                <button type="button" onclick="searchSubmit('date')" class="am-btn pull-right am-btn-success"> 确定</button>
+                            </div>
+                            <input type="hidden" value="{$get['search_date_value']}" id="hide_search_date" />
                         </div>
+                    </div>
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
@@ -190,10 +188,8 @@
                                                 <td>
                                                     <div class="am-btn-toolbar">
                                                         <div class="am-btn-group am-btn-group-xs">
-                                                            
-                                                                <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateOrder({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                                <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteOrder({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
-
+                                                            <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateOrder({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                            <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteOrder({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -206,17 +202,11 @@
                                         <div class="am-dropdown xg-export-option" data-am-dropdown="{boundary: '.am-topbar'}">
                                             <button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm am-dropdown-toggle" data-am-dropdown-toggle>导出对账单 <span class="am-icon-caret-down"></span></button>
                                             <ul class="am-dropdown-content">
-                                              <li><a href="javascript:;" onclick="exportOrder('all')">导出检索出的全部数据（客户）</a></li>
-                                              <li><a href="javascript:;" onclick="exportOrder('selected')">导出选中的数据（客户）</a></li>
-                                              <li><a href="javascript:;" onclick="exportOrder('supplier')">导出对账单（供应商）</a></li>
+                                                <li><a href="javascript:;" onclick="exportOrder('all')">导出检索出的全部数据（客户）</a></li>
+                                                <li><a href="javascript:;" onclick="exportOrder('selected')">导出选中的数据（客户）</a></li>
+                                                <li><a href="javascript:;" onclick="exportOrder('supplier')">导出对账单（供应商）</a></li>
                                             </ul>
-                                          </div>
-                                        <!-- <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button type="button" onclick="exportOrderForC()" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 导出对账单（客户）</button>
-                                                <button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-save"></span> 导出对账单（供应商）</button>
-                                            </div>
-                                        </div> -->
+                                        </div>
                                     </div>
                                     <div class="am-fr">
                                         {$pageStr}
@@ -248,8 +238,9 @@
                 '本月': [moment().startOf('month'), moment().endOf('month')],
                 '今年': [moment().startOf('year'), moment().endOf('year')]
             },
-            startDate: moment(),
-            endDate: moment().endOf('month')
+            startDate: moment().startOf('month'),
+            endDate: moment(),
+            opens:'left'
         },
         function(start, end) {
             $('#daterange-btn span').html(start.format('YYYY-MM-DD') + ' To ' + end.format('YYYY-MM-DD'));
@@ -319,139 +310,162 @@
         location.href='__APP__/Order/index/order_status/'+order_status+'/money_status/'+money_status+'/search_value/'+search_value+'/search_date_value/'+search_date_value;
     }
     // 新增订单
-    function addOrder(){
-        location.href='__APP__/Order/addOrder';
-         // layer.open({
-         //            type: 2,
-         //            offset: '20px',
-         //            shadeClose : false,
-         //            title: '新增订单',
-         //            shade: 0.8,
-         //            area: ['75%', '90%'],
-         //            btn: ['关闭'],
-         //            content: '__APP__/Order/addOrder' //iframe的url
-         //        });
-        
+    function addOrder(){var powerName = 'addOrder';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                location.href='__APP__/Order/addOrder';
+            }
+        });
     }
     //客户付款详情
     var layerIndexObject = {};
 
     function customerMoneyInfo(id){
-        // alert(id);
-        layerIndexObject['A'] = layer.open({
+        var powerName = 'customerMoney';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layerIndexObject['A'] = layer.open({
                     type: 2,
                     closeBtn: 0,
                     shadeClose : false,
                     title: '客户回款记录', 
                     shade: 0.8,
                     area: ['70%', '80%'],
-                    // btn: ['关闭'],
-                    content: '__APP__/Order/customerMoneyInfo/id/'+id, //iframe的url
-
+                    content: '__APP__/Order/customerMoneyInfo/id/'+id,
                 });
+            }
+        });
+        
     }
 
     //新增客户回款额
     function addCustomerMoney(id){
-        // alert(id);
-        layer.open({
+        var powerName = 'addCustomerM';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                layer.open({
                     type: 2,
                     shadeClose : false,
                     title: '客户回款记录', 
                     shade: 0.8,
                     area: ['600px', '360px'],
-                    // btn: ['关闭'],
-                    content: '__APP__/Order/addCustomerMoney/id/'+id, //iframe的url
-
+                    content: '__APP__/Order/addCustomerMoney/id/'+id,
                 });
+            }
+        });
     }
 
     //修改订单信息
     function updateOrder(id){
-        location.href='__APP__/Order/update/id/'+id;
-        // layer.open({
-        //             type: 2,
-        //             shadeClose : false,
-        //             title: '修改订单', 
-        //             shade: 0.8,
-        //             area: ['75%', '90%'],
-        //             btn: ['关闭'],
-        //             content: '__APP__/Order/update/id/'+id, //iframe的url
-
-        //         });
+        var powerName = 'updateOrder';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                location.href='__APP__/Order/update/id/'+id;
+            }
+        });
+        
     }
 
     //删除订单信息
     function deleteOrder(id){
-        layer.confirm('您确定要删除该订单信息？', {
-                icon: 3,
-                anim:5,
-                title:'提示',
-                btn: ['确定','取消'] //按钮
-            }, function(){
-                if(id){
-                    $.ajax({
-                        url:'__APP__/Order/deleteOrderInfo',
-                        data:'id='+id,
-                        type:'post',
-                        dataType:'json',
-                        success:function(res){
-                            layer.confirm(res, {
-                                icon: 1,
-                                anim:5,
-                                title:'提示',
-                                btn: ['确定'] //按钮
-                            }, function(){
-                                window.location.reload();       
-                            });
-                        }
-                    });
-
-                }else{
-                    layer.alert('删除失败！', {icon: 1,title:'提示'});
-                }          
-            }, function(){
-                // layer.msg('删除已取消！', {
-                //     time: 2000, //20s后自动关闭
-                //     
-                //     // title:'提示'
-                // });
-            });
-    }
-    // 导出对账单（客户）
-    function exportOrder(type){
-        if(type=="all"){
-            var order_status = $("#order_status").val();
-            var money_status = $("#money_status").val();
-            var search_value = $.trim($("#search_value").val());
-            var search_date_value = $("#hide_search_date").val();
-            if(search_date_value == ""){
-                search_date_value=0;
-            }
-            if(order_status == ""){
-                order_status=0;
-            }
-            if(money_status == ""){
-                money_status=0;
-            }
-            if(search_value == ""){
-                search_value=0;
-            }
-            location.href="__APP__/Order/exportOrder/type/"+type+"/order_status/"+order_status+"/money_status/"+money_status+"/search_value/"+search_value+"/search_date_value/"+search_date_value;
-        }else if(type=="selected"){
-            var inputs = $(".xg-table-tr").find("input[type='checkbox']");
-            if($("input:checkbox[name='order_id']:checked").length == 0){
-                layer.msg("请先选择要导出的数据！",{time:1500});
+        var powerName = 'updateOrder';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
             }else{
-                var order_id_str = "";
-                $("input:checkbox[name='order_id']:checked").each(function(){
-                    order_id_str+=$(this).val()+",";
+                layer.confirm('您确定要删除该订单信息？', {
+                    icon: 3,
+                    anim:5,
+                    title:'提示',
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    if(id){
+                        $.ajax({
+                            url:'__APP__/Order/deleteOrderInfo',
+                            data:'id='+id,
+                            type:'post',
+                            dataType:'json',
+                            success:function(res){
+                                if(res==1){
+                                    layer.msg("删除订单成功！", {icon: 1,});
+                                    window.location.reload(); 
+                                }else if(res==0){
+                                    layer.alert("删除订单信息失败！",{icon:7,title:"提示"});
+                                }
+                            }
+                        });
+                    }else{
+                        layer.alert('删除失败！', {icon: 7,title:'提示'});
+                    }          
                 });
-                location.href="__APP__/Order/exportOrder/type/"+type+"/order_id_str/"+order_id_str;
             }
-        }else if(type=="supplier"){
-            alert(1);
-        }
+        });
+        
+    }
+    // 导出对账单
+    function exportOrder(type){
+        var powerName = 'exportOrder';
+        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            if(res == 0){
+                layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                return false;
+            }else{
+                if(type=="all"){
+                    var order_status = $("#order_status").val();
+                    var money_status = $("#money_status").val();
+                    var search_value = $.trim($("#search_value").val());
+                    var search_date_value = $("#hide_search_date").val();
+                    if(search_date_value == ""){
+                        search_date_value=0;
+                    }
+                    if(order_status == ""){
+                        order_status=0;
+                    }
+                    if(money_status == ""){
+                        money_status=0;
+                    }
+                    if(search_value == ""){
+                        search_value=0;
+                    }
+                    location.href="__APP__/Order/exportOrder/type/"+type+"/order_status/"+order_status+"/money_status/"+money_status+"/search_value/"+search_value+"/search_date_value/"+search_date_value;
+                }else if(type=="selected"){
+                    var inputs = $(".xg-table-tr").find("input[type='checkbox']");
+                    if($("input:checkbox[name='order_id']:checked").length == 0){
+                        layer.msg("请先选择要导出的数据！",{time:1500});
+                    }else{
+                        var order_id_str = "";
+                        $("input:checkbox[name='order_id']:checked").each(function(){
+                            order_id_str+=$(this).val()+",";
+                        });
+                        location.href="__APP__/Order/exportOrder/type/"+type+"/order_id_str/"+order_id_str;
+                    }
+                }else if(type=="supplier"){
+                    layer.open({
+                            type: 2,
+                            shadeClose : false,
+                            title: '导出对账单（供应商）', 
+                            shade: 0.8,
+                            area: ['80%', '80%'],
+                            btn: ['关闭'],
+                            content: '__APP__/Order/exportProduct',
+                        });
+                }
+            }
+        });
+        
     }
 </script>
 
@@ -473,7 +487,6 @@
                 var item = '';
                 $(".searchmore").empty();//清空原来的ul
                 if(res != ""){
-                    alert($res);return false;
                     // $.each(res,function(i,res){//循环加入到ul中去
                     //     item = "<li>"+res+"<li>";
                     //     $(".searchmore").append(item);
@@ -505,7 +518,37 @@
         $(".searchmore").empty();//清空原来的ul
     }
 
-            
+            // $(document).ready(function(){
+            //     $(".user_loadq").keyup(function(){//搜索
+            //         var uname = trim($(this).val());
+            //         if(uname.length >= 1){
+            //             $.getJSON('action/theaction.php?type=search&q='+uname,null,function (data) {
+            //                 var item;
+            //                 $(".searchmore").empty();//清空原来的ul
+            //                 if(data.res !=null){
+            //                     $.each(data.res,function(i,res){//循环加入到ul中去
+            //                         item = "<li>"+res+"<li>";
+            //                         $(".searchmore").append(item);
+            //                     })
+            //                     $(".searchmore").show();
+            //                 }else{
+            //                     $(".searchmore").hide();
+            //                 }
+            //             });
+            //         }else{
+            //             $(".searchmore").hide();
+            //         }
+            //     })
+            //     $(document).on("click", ".searchmore li", function(){
+            //         $(".user_loadq").val(trim($(this).text()));
+            //         $(".searchmore").hide();
+            //     });
+
+            //     $(".searchinput").mouseleave(function(){
+            //         $(".searchmore").hide();
+            //     })
+
+            // })
 </script>
 </body>
 </html>

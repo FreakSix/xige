@@ -17,7 +17,7 @@
 	 		
 			$level = M("xg_customer_level");
 			//客户等级信息
-			$levelInfos = $level->order("level asc")->select();
+			$levelInfos = $level->order("id asc")->select();
 			$linkman = M("xg_customer_linkman");
 			if(!empty($customerInfo)){
 				foreach ($customerInfo as $k => $v) {
@@ -164,7 +164,7 @@
 	 		// $customerInfo = $customerInfo['0'];
 			$customerInfo = D("XgCustomer")->getCustomerInfo($_GET['customer_id']);
 			//得到客户等级名称
-			$levelInfo = D("XgCustomer")->getCustomerLevelInfo($customerInfo["rank"]);
+			$levelInfo = D("XgCustomer")->getCustomerLevelInfo($customerInfo["level_id"]);
 			$customerInfo["level_name"] = $levelInfo["name"];
 
 			if($customerInfo["local_procode"] != 0){
@@ -233,7 +233,7 @@
 	    	}
 	    	$this->assign("productType",$productType);
 			//客户等级信息
-			$levelInfo = M("xg_customer_level")->order("level asc")->select();
+			$levelInfo = M("xg_customer_level")->order("id asc")->select();
 			//获取省份信息
 			$provinceInfo = $this->getProvince("0");
 			//得到城市名称
@@ -337,9 +337,14 @@
 					$result_2 = D("XgCustomerLinkman")->updateCustomerLinkInfo($post);
 				}
 				//根据数据添加的情况来判断页面跳转
-				if($result_1 && $result_2){
+				if($result_1){
 					$this->redirect("Customer/index");
 				}else{
+					//查询客户公司信息
+					$customerInfo = D("XgCustomer")->getCustomerInfo($post['customer_id']);
+					//客户公司联系人信息 
+					$linkmanInfo = D("XgCustomerLinkman")->getCustomerLinkInfo($customerInfo['id']);
+
 					$this->assign("customerInfo",$customerInfo);
 					$this->assign("linkmanInfo",$linkmanInfo);
 					$this->assign("rank",$levelInfo);
@@ -349,15 +354,17 @@
 
 					$this -> display("update");
 				}
+			}else{
+				$this->assign("customerInfo",$customerInfo);
+				$this->assign("linkmanInfo",$linkmanInfo);
+				$this->assign("rank",$levelInfo);
+				$this->assign("province",$provinceInfo);
+				$this->assign("city",$cityInfo);
+				$this->assign("area",$areaInfo);
+		 		
+				$this->display();
 			}
-			$this->assign("customerInfo",$customerInfo);
-			$this->assign("linkmanInfo",$linkmanInfo);
-			$this->assign("rank",$levelInfo);
-			$this->assign("province",$provinceInfo);
-			$this->assign("city",$cityInfo);
-			$this->assign("area",$areaInfo);
-	 		
-			$this->display();
+			
 		}
 
 		//删除客户及联系人信息

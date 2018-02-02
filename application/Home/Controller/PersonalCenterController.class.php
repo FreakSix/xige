@@ -374,9 +374,17 @@
 		public function createAccount(){
 			$this->display("create_account"); 
 		}
-		/**
-		 * 保存新添加的部门名称
-		 */
+		// 检查部门名称是否已存在
+		public function checkDepartName(){
+			$depart_name = $_POST["depart_name"];
+			$res = D("XgDepeartment")->getDepartByName($depart_name);
+			if($res){
+				echo 0;
+			}else{
+				echo 1;
+			}
+		}
+		// 保存新添加的部门名称
 		public function saveNewAddDepartment(){
 		    $depart_name = $_REQUEST['depart_name'];
 		    $departModel = D("XgDepeartment");
@@ -617,7 +625,7 @@
 		public function saveEditLevel(){
 			$id = $_REQUEST['id'];
 			$level_name = $_REQUEST['level_name'];
-			$level_level = $_REQUEST['level_level'];
+			$level_level = (float)$_REQUEST['level_level'];
 			$customerLevelModel = D("XgCustomerLevel");
 			$res = $customerLevelModel->updateCustomerLevel($id,$level_name,$level_level);
 			if($res){

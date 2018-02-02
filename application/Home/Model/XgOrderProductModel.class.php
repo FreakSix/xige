@@ -2,6 +2,17 @@
 	namespace Home\Model;
 	use Think\Model;
 	class XgOrderProductModel extends Model {
+		// 获取全部订单产品信息
+		public function getAllOrderProduct(){
+			$sql = "select * from xg_order_product";
+			$result = M()->query($sql);
+			return $result;
+		}
+		// 根据id获取订单产品数据
+		public function getOrderProductById($id){
+			$result = M("xg_order_product")->where("id =".$id)->find();
+			return $result;
+		}
 		//添加订单信息
 		public function addOrderProductInfo($data){
 			$res = M("xg_order_product")->data($data)->add();
@@ -38,6 +49,11 @@
 
 			$result = $query->select();
 			return $result;
+		}
+		//符合条件的订单产品总数
+		public function getOrderProductCount($condition){
+			$totalCount = M("xg_order_product")->where($condition['where'])->count();
+			return $totalCount;
 		}
 
 		

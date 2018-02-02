@@ -317,7 +317,7 @@
                                         {$orderInfo['add_manager_name']}
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">上一次修改人：</label>
-                                    <div class="am-u-sm-4"> 
+                                    <div class="am-u-sm-4 am-u-end"> 
                                         {$orderInfo['update_manager_name']}
                                     </div>
                                 </div>
@@ -486,41 +486,49 @@
 
         //删除产品信息
         function deleteOrderProduct(order_id,order_product_id){
-            layer.confirm('您确定要删除该商品信息？', {
-                icon: 3,
-                anim:5,
-                title:'提示',
-                btn: ['确定','取消'] //按钮
-            }, function(){
-                if(order_product_id){
-                    $.ajax({
-                        url:'__APP__/Order/deleteOrderProduct',
-                        // data:'order_id='+order_id+'order_product_id='+order_product_id,
-                        data:"order_id="+order_id+"&order_product_id="+order_product_id,
-                        type:'post',
-                        dataType:'json',
-                        success:function(res){
-                            layer.confirm(res, {
-                                icon: 1,
-                                anim:5,
-                                title:'提示',
-                                btn: ['确定'] //按钮
-                            }, function(){
-                                //刷新订单页面
-                                parent. location.reload();
-                                
-                                // var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-                                // parent.layer.close(index);
-                            });
-                        }
-                    });
-
+            $.post("__APP__/Order/checkOrderProductNum",{"order_id":order_id},function(res){
+                if(res == 1){
+                    layer.alert('订单的产品数量不能为空！', {icon: 5,title:'提示'});
                 }else{
-                    layer.alert('删除失败！', {icon: 1,title:'提示'});
-                }          
-            }, function(){
-                
-            });
+                    layer.confirm('您确定要删除该商品信息？', {
+                        icon: 3,
+                        anim:5,
+                        title:'提示',
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        if(order_product_id){
+                            $.ajax({
+                                url:'__APP__/Order/deleteOrderProduct',
+                                // data:'order_id='+order_id+'order_product_id='+order_product_id,
+                                data:"order_id="+order_id+"&order_product_id="+order_product_id,
+                                type:'post',
+                                dataType:'json',
+                                success:function(res){
+                                    layer.confirm(res, {
+                                        icon: 1,
+                                        anim:5,
+                                        title:'提示',
+                                        btn: ['确定'] //按钮
+                                    }, function(){
+                                        //刷新订单页面
+                                        parent. location.reload();
+                                        
+                                        // var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                        // parent.layer.close(index);
+                                    });
+                                }
+                            });
+
+                        }else{
+                            layer.alert('删除失败！', {icon: 1,title:'提示'});
+                        }          
+                    }, function(){
+                        
+                    });
+                }
+            })
+
+            
         }
 
         //添加商品信息按钮

@@ -34,10 +34,11 @@
 				$sql .= "name = '{$name}',";
 			}
 			if(!empty($level)){
-				$sql .= "level = '{$level}',";
+				$sql .= "level_price = '{$level}',";
 			}
 			$sql =  rtrim($sql,",");
 			$sql .= " where id = {$id}";
+			// echo $sql;exit();
 			$result = M()->execute($sql);
 			return $result;
 		}
