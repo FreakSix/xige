@@ -9,7 +9,13 @@
 		{
 			if(!isset($_SESSION['userInfo'])) {
 				$this->redirect('Login/index');
+			}else{
+				//删除订单中没有用到的产品信息
+				$endTime = time() - 86400;
+				$condition['where'] = "`order_id` IS NULL AND `order_num` IS NULL and add_time < '".$endTime."' ";
+				$res_del = D("XgOrderProduct")->deleteOrderProductInfoByCondition($condition);
 			}
+
 			// dump($_SESSION);
 			$id = $_SESSION["userInfo"]["id"];
 			// dump($id);
