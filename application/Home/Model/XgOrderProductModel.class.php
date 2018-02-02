@@ -53,6 +53,12 @@
 			$result = M("xg_order_product")->where("id = ".$id)->delete();
 			return $result;
 		}
+
+		//通过 条件 删除对应信息 
+		public function deleteOrderProductInfoByCondition($condition){
+			$result = M("xg_order_product")->where($condition['where'])->delete();
+			return $result;
+		}
 		
 		
 	}
