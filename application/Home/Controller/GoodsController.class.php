@@ -12,8 +12,12 @@
 			$productModel = D("XgProduct")->getProductByPid($pid);
 			//根据商品型号信息来默认获取第一种商品型号对应的商品规格信息
 			$productName = D("XgProductType")->getProduct($pid);
+			//查询该产品的分类
+			$productTypeInfo = D("XgProductType")->getProduct($productName['0']['pid']);
+
 			$parameterId = explode(",", $productName['0']['parameter_id_str']);
-			$supplierId = explode(",", $productName['0']['supplier_id_str']);
+			$supplierId = explode(",", $productName['0']['supplier_id_str']); 
+			$specialTecId = explode(",", $productName['0']['special_tec_str']);
 
 			if(!empty($parameterId)){
 				$spec_str = "";
@@ -58,6 +62,17 @@
 					}
 				}
 			}
+
+			//获取特殊工艺信息
+			$productSpecialTec = array();
+			if(!empty($specialTecId)){
+				foreach ($specialTecId as $kkk => $vvv) {
+					$specialTecInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($vvv);
+					if(!empty($specialTecInfo)){
+						$productSpecialTec[] = $specialTecInfo;
+					}
+				}
+			}
 			//对商品规格为空的数据进行提示处理
 			if(empty($specInfo)){
 				$specInfo['0']['parameter']['name'] = "商品规格";
@@ -71,10 +86,14 @@
 			if(empty($productModel)){
 				$productModel[]['name'] = "请先添加商品信息";
 			}
+			// dump($productSpecialTec);
+
+			$this->assign("productTypeInfo",$productTypeInfo);
 			$this->assign("productName",$productName);
 			$this->assign("productModel",$productModel);
 			$this->assign("specInfo",$specInfo);
-			$this->assign("productSupplier",$productSupplier);
+			$this->assign("productSupplier",$productSupplier); 
+			$this->assign("productSpecialTec",$productSpecialTec);
 			$this->assign("spec_str",$spec_str);
 
 			$this->display();
@@ -137,6 +156,29 @@
 			}else{
 				$supplierStr = $supplierStr."<li class='select-box'><a href='javascript:;'>暂无供应商</a></li> </ul> </div> </div> ";
 			}
+
+
+			// //拼接特殊工艺信息
+			// //查询商品型号对应的商品名称
+			// $specialTecId = explode(",", $productName['0']['special_tec_str']);
+			// $specialTecStr = "<div class='am-u-sm-2'> <div class='goods-title'>特殊工艺</div> <div class='goods-name'> <ul class='goods-name-detail'> ";
+			// if(!empty($specialTecId)){
+			// 	$specialTecStrLi = "";
+			// 	foreach ($specialTecId as $k => $v) {
+			// 		//获取特殊工艺信息
+			// 		$specialTecInfo = D("XgProductSpecialTechnology")->getProductSpecialTechnologyById($v);
+					
+			// 		if(!empty($specialTecInfo)){
+			// 			$specialTecStrLi .= "<li class='select-box' id='special_tec_".$specialTecInfo['id']."'><a href='javascript:void(0);' onclick='changeSpecialTec(".$specialTecInfo['id'].")'>".$specialTecInfo['name']."</a></li>";
+			// 		}
+			// 	}
+			// }
+			// if($specialTecStrLi){
+			// 	$specialTecStr = $specialTecStr.$specialTecStrLi."</ul> </div> </div> ";
+			// 	$html = $parameterSpec.$supplierStr.$specialTecStr;
+			// }else{
+			// 	$html = $parameterSpec.$supplierStr;
+			// }
 
 			$html = $parameterSpec.$supplierStr;
 			echo $html;

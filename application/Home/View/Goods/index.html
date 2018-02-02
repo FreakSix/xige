@@ -41,12 +41,12 @@
             </ol>
 
 
-            <div class="am-g">
+            <div class="am-g" style="background-color:white;">
                 <div class="goods-selection">
                     <div class="am-u-sm-2">
                         
                     </div>
-                    <div class="am-u-sm-2" id="product_model">
+                    <div class="am-u-sm-1" id="product_model">
                         <div class="goods-title">商品</div>
                         <div class="goods-name">
                             <ul class="goods-name-detail">
@@ -76,7 +76,11 @@
                             </div>
                         </foreach>
                     <!-- </div> -->
-                    <div class="am-u-sm-2">
+                    
+                    
+                    
+
+                    <div class="am-u-sm-2" id="supplier_div">
                         <div class="goods-title">供应商</div>
                         <div class="goods-name">
                             <ul class="goods-name-detail zhizhang">
@@ -87,7 +91,23 @@
                         </div>
                     </div>
 
+                    
+
                     <div id="limit"></div>
+
+                    <if condition="$productSpecialTec != null ">
+                        <div class="am-u-sm-1">
+                            <div class="goods-title">特殊工艺</div>
+                            <div class="goods-name">
+                                <ul class="goods-name-detail zhizhang">
+                                    <foreach name="productSpecialTec" item="v" key="k">
+                                        <li class="select-box" id="special_tec_{$v['id']}"><a href="javascript:void(0);" onclick="changeSpecialTec({$v['id']})">{$v['name']}</a></li>
+                                    </foreach>
+                                </ul>
+                            </div>
+                        </div>
+                    </if>
+
                 </div>
 
                 <input type="hidden" value="{$spec_str}" id="spec_str" name="spec_str"/>
@@ -98,8 +118,14 @@
 
             </div>
             <div>
-                <input type="button" onclick="getSupplierPrice()" value="获取供应商价格" style="float:left;margin-left:500px;margin-top:100px;"/>
-                <!-- <div style="display:none;float:left;margin-left:100px;margin-top:100px;" class="gongyingshangprice"></div> -->
+                
+
+                <if condition="$productTypeInfo['0']['have_price'] == 1">
+                   <input type="button" onclick="getSupplierPrice()" value="获取供应商价格" style="float:left;margin-left:500px;margin-top:100px;"/>
+                <else/>
+                   <!-- <option value="{$v['id']}" >{$v['type_name']}</option> -->
+                </if>
+
             </div>
         </div>
     </div>
@@ -114,7 +140,8 @@
 
 function changeProductModel(model_id){
     //点击的时候控制边框样式
-    $("#product_model_"+model_id).css("border","1px solid red").siblings('li').css("border","0px");
+    $("#product_model_"+model_id).css({"border":"2px solid red","background-color":"#ccc"}).siblings('li').css({"border":"0px solid red","background-color":"white"});
+    // $("#product_model_"+model_id).css("background-color","green").siblings('li').css("border","0px");
     //将该商品的型号放入影藏域中
     $("#hide_product_model").val(model_id);
     //重新渲染商品型号对应的规格和供应商信息
@@ -123,7 +150,8 @@ function changeProductModel(model_id){
         {'product_model_id':model_id,'product_name_id':product_name_id},
         function(res){
             $("#product_model~.am-u-sm-2").empty();
-            $("#product_model").after(res);
+            // $("#product_model").after(res);
+            $("#limit").before(res);
             //重新对隐藏域中的值赋值
             var new_hide_value = '';
             // $("#hide_product_model").val(new_hide_value);
@@ -143,13 +171,19 @@ function changeProductModel(model_id){
 
 function changeSupplier(supplier_id){
     //点击的时候控制边框样式
-    $("#supplier_"+supplier_id).css("border","1px solid red").siblings('li').css("border","0px");
+    $("#supplier_"+supplier_id).css({"border":"2px solid red","background-color":"#ccc"}).siblings('li').css({"border":"0px solid red","background-color":"white"});
     $("#hide_product_supplier").val(supplier_id);
+}
+
+function changeSpecialTec(id){
+     //点击的时候控制边框样式
+    $("#special_tec_"+id).css({"border":"2px solid red","background-color":"#ccc"}).siblings('li').css({"border":"0px solid red","background-color":"white"});
+    // $("#hide_product_supplier").val(supplier_id);
 }
 
 function changeProductSpec(spec_id){
     //点击的时候控制边框样式
-    $("#product_spec_"+spec_id).css("border","1px solid red").siblings('li').css("border","0px");
+    $("#product_spec_"+spec_id).css({"border":"2px solid red","background-color":"#ccc"}).siblings('li').css({"border":"0px solid red","background-color":"white"});
 
     var hide_parameter_spec = $("#hide_product_spec").val();
     var hide_parameter_value = $("#hide_parameter_value_"+spec_id+"").val();
@@ -275,7 +309,6 @@ function getSupplierPrice(){
                                 title:'提示',
                                 btn: ['确定','取消'] //按钮
                             }, function(){
-
                                 location.href='__APP__/Goods/productPrice';
 
                             }, function(){
@@ -293,7 +326,7 @@ function getSupplierPrice(){
                                 title:'提示',
                                 btn: ['确定','取消'] //按钮
                             }, function(){
-
+                                location.href='__APP__/Goods/productPrice';
 
                             }, function(){
 
