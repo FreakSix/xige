@@ -424,8 +424,8 @@
     // 导出对账单
     function exportOrder(type){
         var powerName = 'exportOrder';
-        var type = "ajax";
-        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
+        var power_type = "ajax";
+        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":power_type},function(res){
             if(res == 0){
                 layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                 return false;
