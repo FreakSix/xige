@@ -335,7 +335,7 @@
             }else{
                 layerIndexObject['A'] = layer.open({
                     type: 2,
-                    // closeBtn: 0,
+                    closeBtn: 0,
                     shadeClose : false,
                     title: '客户回款记录', 
                     shade: 0.8,
@@ -528,5 +528,15 @@
     }
 
 </script>
+
+<script type="text/javascript">
+    $(function(){
+        $("#search_value").blur(function(){
+            $(".searchmore").hide();
+        }); 
+    })
+
+</script>
+
 </body>
 </html>

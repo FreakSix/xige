@@ -131,8 +131,13 @@
                                     <div class="am-u-sm-1">
                                         <button type="button"  onclick="getOrderAllMoney()" class="am-btn am-btn-default">自动计算</button>
                                     </div>
-                                    <div class="am-u-sm-3 am-u-end" id="order_all_money">
+                                    <div class="am-u-sm-4" id="order_all_money">
                                         <input type="text" name="order_money" id="order_money" value=''   >
+                                    </div>
+
+                                    <label for="user-name" class="am-u-sm-2 am-form-label">下单日期：</label>
+                                    <div class="am-u-sm-3 am-u-end">
+                                        <input type="text" id="create_order_time" class="am-form-field" placeholder="默认为当前日期" data-am-datepicker readonly required />
                                     </div> 
 
                                 </div>
@@ -196,11 +201,13 @@
             layer.alert("请填写订单总价！", {icon: 5,});
             exit;
         }
+        
+        var create_order_time = $("#create_order_time").val();
 
         var order_remarks = $.trim($("#order_remarks").val());
 
         //添加订单信息
-        $.post("__APP__/Order/addOrderInfo",{"customer_id":customer_id,"trade_time":trade_time,"linkman_name":lxr_name,"linkman_tel":lxr_phone,"link_address":lxr_address,"order_product_id":order_product_id,"order_money":order_money,"order_remarks":order_remarks},function(res){
+        $.post("__APP__/Order/addOrderInfo",{"customer_id":customer_id,"trade_time":trade_time,"linkman_name":lxr_name,"linkman_tel":lxr_phone,"link_address":lxr_address,"order_product_id":order_product_id,"order_money":order_money,"create_order_time":create_order_time,"order_remarks":order_remarks},function(res){
                 if(res > 0 ){
                     layer.alert('订单添加成功！', {
                                                         icon: 1,

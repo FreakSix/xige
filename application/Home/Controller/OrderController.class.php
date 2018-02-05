@@ -868,7 +868,12 @@
 			$data = array();
 			if(!empty($post)){
 				//获取订单编号
-				$today =  date("Y-m-d",time());
+				if($post['create_order_time']){
+					$today =  $post['create_order_time'];
+				}else{
+					$today =  date("Y-m-d",time());
+				}
+				
 				$todayDate = str_replace('-','',$today);
 				$condition['where'] = "order_id like '".$todayDate."%'";
 				$condition['order'] = "id desc";
@@ -888,6 +893,12 @@
 				$customerName = $customerInfo['cname'];
 				//对交货日期进行处理
 				$trade_time = strtotime($post['trade_time']);
+				//对下单日期进行处理
+				if($post['create_order_time']){
+					$order_add_time =  strtotime($post['create_order_time']);
+				}else{
+					$order_add_time =  time();
+				}
 				//获取联系人姓名
 				$customerLinkmanInfo = D("XgCustomerLinkman")->getCustomerLinkInfoByid($post['linkman_name']);
 				$linkmanName = $customerLinkmanInfo['name'];
@@ -902,7 +913,7 @@
 				$data['order_product_id'] = $post['order_product_id'];
 				$data['order_money'] = $post['order_money'];
 				$data['order_remarks'] = $post['order_remarks'];
-				$data['add_time'] = time();
+				$data['add_time'] = $order_add_time;
 				$data['add_manager_name'] = $_SESSION['userInfo']['truename'];
 
 				$res = D("XgOrder")->addOrderInfo($data);
@@ -1621,6 +1632,13 @@
 			//根据订单ID查询出订单信息，取需要的数据如表
 			$orderInfo = D("XgOrder")->getOrderInfoById($post['order_id']);
 			if(!empty($orderInfo)){
+				//对回款时间进行处理
+				if($post['add_money_time']){
+                    $add_money_time =  strtotime($post['add_money_time']) + 3601;
+                }else{
+                    $add_money_time =  time();
+                }
+
 				$data['order_id'] = $post['order_id'];
 				$data['order_num'] = $orderInfo['order_id'];
 				$data['customer_id'] = $orderInfo['customer_id'];
@@ -1628,7 +1646,7 @@
 				$data['money'] = $post['money'];
 				$data['remark'] = $post['remark'];
 				$data['manager_name'] = $_SESSION['userInfo']['truename'];
-				$data['add_time'] = time();
+				$data['add_time'] = $add_money_time;
 
 				$res = D("XgCustomerAccount")->addCusromerAccountInfo($data);
 				//如果数据添加成功，则对订单中的客户回款数据及回款状态进行修改
@@ -1697,15 +1715,15 @@
 						}
 					}
 
-					if($customerMoney >= $orderInfo['end_money']){
+					if($customerMoney >= $orderInfo['order_money']){
 						$moneyStatus = 3;
-					}elseif (($customerMoney < $orderInfo['end_money']) && $customerMoney > 0 ) {
+					}elseif (($customerMoney < $orderInfo['order_money']) && $customerMoney > 0 ) {
 						$moneyStatus = 2;
 					}else{
 						$moneyStatus = 1;
 					}
 
-					$orderData['money_status'] = $moneyStatus;
+					$orderData['customer_money_status'] = $moneyStatus;
 					$orderData['customer_money'] = $customerMoney;
 
 					$res2 = D("XgOrder")->updateOrderInfo($orderData,$oldCustomerAccount['order_id']);
@@ -1995,6 +2013,13 @@
 			$orderProductInfo = D("XgOrderProduct")->getOrderProductInfoById($post['order_product_id']);
 
 			if(!empty($orderInfo)){
+				//对付款时间进行处理
+                if($post['add_money_time']){
+                    $add_money_time =  strtotime($post['add_money_time']) + 3601;
+                }else{
+                    $add_money_time =  time();
+                }
+
 				$data['order_id'] = $post['order_id'];
 				$data['order_num'] = $orderInfo['order_id'];
 				$data['order_product_id'] = $post['order_product_id'];
@@ -2004,7 +2029,7 @@
 				$data['money'] = $post['money'];
 				$data['remark'] = $post['remark'];
 				$data['manager_name'] = $_SESSION['userInfo']['truename'];
-				$data['add_time'] = time();
+				$data['add_time'] = $add_money_time;
 
 				$res = D("XgSupplierAccount")->addSupplierAccountInfo($data);
 				//如果数据添加成功，则对订单产品的 向供应商付款数据及回款状态进行修改

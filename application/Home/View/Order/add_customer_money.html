@@ -27,6 +27,20 @@
                 <div class="am-u-sm-12">
                     <form class="am-form">
                         <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-3 am-form-label">回款日期：</label>
+                            <div class="am-u-sm-9">
+                                <input type="text" id="add_money_time" class="am-form-field" placeholder="默认为当前日期" data-am-datepicker readonly required />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="am-g">
+                <div class="am-u-sm-12">
+                    <form class="am-form">
+                        <div class="am-form-group">
                             <label for="contact-department" class="am-u-sm-3 am-form-label">本次回款：</label>
                             <div class="am-u-sm-9" id="">
                                 <input type="text" name="money" id="money" value="">
@@ -34,8 +48,8 @@
                         </div>
                     </form>
                 </div>
-
             </div>
+            
             <div class="am-g">
                 <div class="am-u-sm-12">
                     <form class="am-form">
@@ -75,6 +89,8 @@
     <script type="text/javascript">
         function addCustomerMoney(order_id){
             // alert(order_id);
+            var add_money_time = $("#add_money_time").val();
+
             var money = $.trim($("#money").val());
             if(money == ''){
                 parent.layer.alert("回款金额不能为空！", {icon: 5,});
@@ -82,7 +98,7 @@
             }
             var remark = $.trim($("#remark").val());
             //添加订单信息
-            $.post("__APP__/Order/addCustomerMoneyInfo",{"order_id":order_id,"money":money,"remark":remark},function(res){
+            $.post("__APP__/Order/addCustomerMoneyInfo",{"order_id":order_id,"add_money_time":add_money_time,"money":money,"remark":remark},function(res){
                     if(res > 0 ){
                         parent.layer.msg('添加成功！', {icon: 1,});
                         //刷新订单页面
