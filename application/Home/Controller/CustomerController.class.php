@@ -220,6 +220,12 @@
 
 		//添加客户信息
 		public function addCustomer(){
+			// 权限判断
+			$powerName = "addCustomer";
+			$power = $this->isPower($powerName,"controller");
+			if(!$power){
+				$this->redirect("index");
+			}
 			// 左侧菜单
 			$productTypeModel = D("XgProductType");
 	    	// 获取商品分类
@@ -300,6 +306,12 @@
 		}
 		//修改客户信息
 		public function update(){
+			// 权限判断
+			$powerName = "updateCustomer";
+			$power = $this->isPower($powerName,"controller");
+			if(!$power){
+				$this->redirect("index");
+			}
 			// 左侧菜单
 			$productTypeModel = D("XgProductType");
 	    	// 获取商品分类
@@ -364,7 +376,6 @@
 		 		
 				$this->display();
 			}
-			
 		}
 
 		//删除客户及联系人信息

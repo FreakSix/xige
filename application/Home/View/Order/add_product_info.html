@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>新建订单-细格订单管理系统</title>
+    <title>新建订单 - 细格订单管理系统</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,14 +31,6 @@
                         <div class="am-form-group">
                             <label for="contact-name" class="am-u-sm-2 am-form-label">服务类型：</label>
                             <div class="am-u-sm-4">
-                                <!-- <select id="doc-select-1" class="product_type">
-                                    <option value="">请选择服务类型</option>
-	                                <if condition="$productTypeFirst != ''">
-		                                <foreach name="productTypeFirst" item="item" key="key">
-		                                    <option value="{$item.id}" onclick="getProductName({$item.id},{$item.have_price})">{$item.type_name}</option>
-		                                </foreach>
-	                                </if>
-                                </select> -->
                                 <select id="product_type" name="product_type" class="product_type" onchange="getProductName()" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}" >
                                     <option value="0" checked="checked">全部服务</option>
                                     <if condition="$productTypeFirst != ''">
@@ -47,7 +39,6 @@
                                         </foreach>
                                     </if>
                                 </select>
-
                                 <!-- 在循环一次产品服务，把下拉框中需要的值放在隐藏域中 -->
                                 <input type="hidden" value="0" id="hide_item_have_price_0" />
                                 <if condition="$productTypeFirst != ''">
@@ -55,20 +46,10 @@
                                         <input type="hidden" value="{$v.have_price}" id="hide_item_have_price_{$v.id}" />
                                     </foreach>
                                 </if>
-
-
                                 <input type="hidden" value="" id="hide_have_price_value_2" /> 
                             </div>
                             <label for="contact-name" class="am-u-sm-2 am-form-label">产品名称：</label>
                             <div class="am-u-sm-4">
-                                <!-- <select id="doc-select-1" class="product_name">
-                                    <option value="">请选择产品名称</option>
-                                    <if condition="$productNameFirst != ''">
-                                        <foreach name="productNameFirst" item="item" key="key">
-                                            <option value="{$item.id}" onclick="getProductModel('{$item.id}','{$item.type_name}')">{$item.type_name}</option>
-                                        </foreach>
-                                    </if>
-                                </select> -->
                                 <select id="product_name" class="product_name" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}" onchange="getProductModel()">
                                     <option value="0" checked="checked">请选择产品名称</option>
                                     <if condition="$productNameFirst != ''">
@@ -258,10 +239,7 @@
                     }
                 });
                 var special_techmology_str = special_techmology_arr.join(',');
-                // var special_techmology_name_str = special_techmology_name_arr.join(' ');
-                // alert(special_techmology_str);
-                // alert(special_techmology_name_str);
-                // //将商品规格和特殊工艺拼接起来
+                //将商品规格和特殊工艺拼接起来
                 // hide_index_spec_name_value = hide_index_spec_name_value+special_techmology_name_str;
                 hide_index_spec_name_value = hide_index_spec_name_value.join('-')+"-"+special_techmology_name_arr.join('-');
             }else{
@@ -273,11 +251,6 @@
             // hide_index_spec_name_value =  hide_index_spec_name_arr_value.join('-');
             
             var product_cost_price = $.trim($("#product_cost_price").val());
-            // if(product_cost_price == '' ){
-            //     layer.alert("请填写成本单价！", {icon: 5,offset: '200px',});
-            //     $("#product_cost_price").focus();
-            //     exit;
-            // }
             //若该商品没有填写报价，则该处取该商品的成本单价为0
             var hide_have_price_value_2 = $.trim($("#product_cost_price_2").val());
             if(hide_have_price_value_2 == 2){
@@ -312,20 +285,6 @@
                 exit;
             } 
             var product_remark = $.trim($("#product_remark").val());
-            
-            // //添加的商品信息行的ID值
-            // var tr_id = $("#add_tr_id").val();
-            // var new_tr_id = (tr_id*1)+1;
-
-            // var delete_button = "<div class='am-btn-toolbar'> <div class='am-btn-group am-btn-group-xs'> <button type='button' id='btn-del' class='am-btn am-btn-default am-btn-xs am-text-danger' onclick='deleteProduct("+tr_id+")'><span class='am-icon-trash-o'></span> 删除</button> </div> </div>";
-
-            // var html = "<tr id="+tr_id+" name="+tr_id+"> <th>"+hide_product_name_value+"</th> <th>"+hide_index_spec_name_value+"</th> <th>"+product_supplier_name+"</th> <th>"+product_num+"</th> <th>"+product_cost_price+"</th> <th>"+product_end_price_one+"</th> <th>"+product_end_price+"</th> <td>"+delete_button+"</td> </tr> <input type='hidden' value='1' id='order_product_id' name='order_product_id' /> ";
-            
-            // parent.$('#add_product_info_tr').append(html);
-            // alert(new_tr_id);
-            // parent.$("#add_tr_id").val(new_tr_id);
-            // var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-            // parent.layer.close(index);
 
             //添加订单商品信息
             $.post("__APP__/Order/addOrderProductInfo",{"product_type":product_type_id,"product_name":product_name_id,"product_model":product_model_id,"product_spec_id_str":product_spec_str,"special_technologyh_id_str":special_techmology_str,"supplier_id":product_supplier_id,"supplier_name":product_supplier_name,"num":product_num,"product_material_link":product_material_link,"cost_money":product_cost_money,"discount_money":product_discount_money,"end_money":product_end_price,"end_price":product_end_price_one,"cost_price":product_cost_price,"product_remark":product_remark},function(res){
@@ -700,22 +659,6 @@
             }
 
             var product_supplier_id = $("#select_supplier_id").val();
-            // var product_num = $(".product_num").val();
-            // var product_cost_price = $("#product_cost_price").val();
-
-            // var hide_have_price_value = $("#hide_have_price_value").val();
-            
-            // if(product_cost_price == ''){
-            //     if(hide_have_price_value == 2){
-            //         layer.alert("请输入产品成本单价！", {icon: 5,offset: '200px',});
-            //         $("#product_cost_price").focus();
-            //         exit;
-            //     }
-
-            //     product_cost_price = 0;
-            // }
-            
-            // alert(product_cost_price); 
 
             //获取参考信息
             $.post("__APP__/Order/getOrderReferInfo",{"product_type_id":product_type_id,"product_name_id":product_name_id,"product_model_id":product_model_id,"product_spec_str":product_spec_str,"product_supplier_id":product_supplier_id},function(res){
@@ -781,12 +724,6 @@
             if(product_type == 0 ){
                 layer.alert("请选择服务类型！", {icon: 5,});
                 $(".product_type").focus();
-                // //重新对商品名称的内容进行渲染
-                // var product_type_id = $("#hide_product_type_value").val();
-                // $.post("__APP__/Order/getProductNameByProductType",{"id":product_type_id},function(res){
-                //     $(".product_name").html('');
-                //     $(".product_name").html(res);
-                // })
                 exit;
                 // return false;
             }

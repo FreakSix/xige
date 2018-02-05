@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>员工管理 - 细格订单管理系统</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,7 +30,7 @@
         </div>
         <!-- 右侧主要内容 -->
         <div class="tpl-content-wrapper">
-            <ol class="am-breadcrumb">
+            <ol class="am-breadcrumb" style="margin: 5px">
                 <li><a href="__APP__/Index" class="am-icon-home">首页</a></li>
                 <li><a href="__APP__/PersonalCenter">个人中心</a></li>
                 <li class="am-active">员工管理</li>
@@ -38,7 +38,7 @@
             <!-- 部门信息 -->
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
-                    <div class="caption font-green bold">员工信息</div>
+                    <div class="caption font-green bold">员工信息列表</div>
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
@@ -76,17 +76,26 @@
                                             <td>{$item.depart_name}</td>
                                             <td>{$item.tel}</td>
                                             <td>
-                                            <if condition="$item.state == 1">
-                                            	<a href="javascript:void(0);" onclick="deleteAccount({$item.id})">[注销帐号]</a>
+                                            <if condition="$item['department_id'] eq 0">
+                                                已开通，不可注销
                                             <else/>
-                                            	<a href="javascript:void(0);" onclick="kaitongAccount({$item.id})">[开通帐号]</a>
+                                                <if condition="$item.state == 1">
+                                                	<a href="javascript:void(0);" onclick="deleteAccount({$item.id})">[注销帐号]</a>
+                                                <else/>
+                                                	<a href="javascript:void(0);" onclick="kaitongAccount({$item.id})">[开通帐号]</a>
+                                                </if>
                                             </if>
                                             </td>
                                             <td>
                                                 <div class="am-btn-toolbar">
                                                     <div class="am-btn-group am-btn-group-xs">
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateStaff({$item.id})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteStaff({$item.id})"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        <if condition="$item['department_id'] eq 0">
+                                                            <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateStaff({$item.id})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                        <else/>
+                                                            <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateStaff({$item.id})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                            <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteStaff({$item.id})"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        </if>
+                                                        
                                                     </div>
                                                 </div>
                                             </td>

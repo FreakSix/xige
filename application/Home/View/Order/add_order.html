@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>新增订单</title>
-    <meta name="description" content="这是一个 index 页面">
+    <title>新增订单 - 细格订单管理系统</title>
+    <meta name="description" content="">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
@@ -221,7 +221,6 @@
         
     }
 
-
     function selectCustomerInfo(){
         var customer_id = $(".customer_name").val();
         $.post("__APP__/Order/getLxrByCustomerId",{"customer_id":customer_id},function(res){
@@ -256,7 +255,7 @@
                     shadeClose : false,
                     title: '新增商品信息',
                     shade: 0.8,
-                    area: ['75%', '90%'],
+                    area: ['80%', '90%'],
                     btn: ['关闭'],
                     content: '__APP__/Order/addProductInfo/customer_id/'+customer_id+'/add_tr_id/'+add_tr_id, //iframe的url
                 });

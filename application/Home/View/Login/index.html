@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Amaze UI Admin index Examples</title>
-  <meta name="description" content="这是一个 index 页面">
+  <title>登录 - 细格订单管理系统</title>
+  <meta name="description" content="">
   <meta name="keywords" content="index">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="renderer" content="webkit">
@@ -30,7 +30,7 @@
 	<div class="myapp-login-logo-block  tpl-login-max">
 		<div class="myapp-login-logo-text">
 			<div class="myapp-login-logo-text">
-				Amaze UI<span> Login</span> <i class="am-icon-skyatlas"></i>
+				细格订单管理系统<span> Login</span> <i class="am-icon-skyatlas"></i>
 				
 			</div>
 		</div>
@@ -45,7 +45,7 @@
 						<input type="text" class="user" name="user" id="doc-ipt-email-1" placeholder="输入用户名或者手机号">
 					</div>
 					<div class="am-form-group">
-						<input type="password" class="pass" name="pass" id="doc-ipt-pwd-1" placeholder="输入密码吧">
+						<input type="password" class="pass" name="pass" id="doc-ipt-pwd-1" placeholder="输入密码">
 					</div>
 					<div class="am-form-group codes">
 						<input type="text" class="code" id="doc-ipt-code-1" placeholder="验证码">
@@ -73,7 +73,7 @@
 		var pass = $("input[name=pass]").val();
 		var code = $(".code").val();
 		if(user == ''){
-			layer.msg ("请输入应户名！",{icon:7,offset:'200px',time:'2000'});
+			layer.msg ("请输入用户名！",{icon:7,offset:'200px',time:'2000'});
 			$("input[name=user]").focus();
 			return false;
 		}

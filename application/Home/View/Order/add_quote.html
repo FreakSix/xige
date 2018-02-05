@@ -19,6 +19,7 @@
     <style>
         h4 { margin: .5rem 0; }
         hr { margin: 0; }
+        .xg-quote-customer { position: relative; }
     </style>
 </head>
 <body data-type="generalComponents">
@@ -31,11 +32,19 @@
                         <h4>客户信息</h4>
                         <div class="am-form-group">
                             <label class="am-u-sm-2 am-form-label">客户名称：</label>
-                            <div class="am-u-sm-4">
-                                <input type="text" id="customer_name" value="">
+                            <div class="am-u-sm-4 xg-quote-customer">
+                                <!-- <div class="xg-search-input"> -->
+                                    <input style=" " type="text" value="" id="customer_name" onkeyup="finds()">
+                                <!-- </div> -->
+                                <div class="xg-search-menu">
+                                    <ul class="searchmore" id="searchmore">
+                                    </ul>
+                                </div>
                             </div>
+                            
+
                             <label for="user-name" class="am-u-sm-2 am-form-label">客户等级：</label>
-                            <div class="am-u-sm-2 am-u-end">
+                            <div class="am-u-sm-2 am-u-end" id="customer_level_div">
                                 <select id="customer_level_discount">
                                     <option value="">请选择客户等级</option>
                                     <if condition="$customerLevelInfo != ''">
@@ -48,7 +57,7 @@
                         </div>
                         <div class="am-form-group">
                             <label class="am-u-sm-2 am-form-label">联系人：</label>
-                            <div class="am-u-sm-4">
+                            <div class="am-u-sm-4" id="linkman_name_div">
                                 <input type="text" id="linkman_name" value="">
                             </div>
                             <label class="am-u-sm-2 am-form-label">联系电话：</label>
@@ -68,16 +77,6 @@
                         <div class="am-form-group">
                             <label for="contact-name" class="am-u-sm-2 am-form-label">服务类型：</label>
                             <div class="am-u-sm-2" >
-                                <!-- <select id="product_type" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}" onchange="getProductName()">
-                                    <option value="0">请选择产品分类</option>
-                                    <input type="hidden" value="0" id="hide_item_have_price_0" />
-                                    <if condition="$productTypeInfo != ''">
-                                        <foreach name="productTypeInfo" item="item" key="key">
-                                            <option value="{$item.id}">{$item.type_name}</option>
-                                            <input type="hidden" value="{$item.have_price}" id="hide_item_have_price_{$item.id}" />
-                                        </foreach>
-                                    </if>
-                                </select> -->
                                 <select id="product_type" name="product_type" onchange="getProductName()" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}" >
                                     <option value="0" checked="checked">全部服务</option>
                                     <if condition="$productTypeInfo != ''">
@@ -841,6 +840,91 @@
         }
 
     </script>
+
+    <script type="text/javascript">
+        var inputWidth = $(".xg-quote-customer").width();
+        var menuWidth = inputWidth;
+        $(".xg-search-menu").width(menuWidth);
+        function finds(){
+            var search_value = $.trim($("#customer_name").val());
+            // alert(search_value);exit;
+            if(search_value.length >= 1){
+                $.post("__APP__/Order/searchCustomerInfo",{"search_value":search_value},function(res){
+                    $(".searchmore").empty();//清空原来的ul
+                    if(res != ""){
+                        $(".searchmore").html(res);;
+
+                        $(".searchmore").show();
+                    }else{
+                        $(".searchmore").hide();
+                    }
+                })
+            }else{
+                $(".searchmore").hide();
+            }
+
+            $(document).on("click", ".searchmore li", function(){
+                $("#customer_name").val(trim($(this).text()));
+                $(".searchmore").hide();
+            });
+
+        }
+
+        function searchCustomerName(customer_name){
+            $("#customer_name").val(customer_name);
+            $(".searchmore").empty();//清空原来的ul
+            $(".searchmore").hide();
+            //替换原来的客户等级的下拉选择
+            if(customer_name.length >= 1){
+                $.post("__APP__/Order/searchCustomerInfoIsHaveLevel",{"customer_name":customer_name},function(res){
+                    $("#customer_level_div").html(res);;
+                })
+            }
+            //替换原来的客户等级的下拉选择
+            if(customer_name.length >= 1){
+                $.post("__APP__/Order/searchCustomerInfoIsHavelLinkman",{"customer_name":customer_name},function(res){
+                    $("#linkman_name_div").html(res);;
+                    
+                })
+            }
+        }
+
+        function getLxrByCustomerId(){
+            var lxr_id = $("#linkman_name").val();
+
+            $.post("__APP__/Order/getTelByLxrId",{"lxr_id":lxr_id},function(res){
+                var data = eval("(" + res + ")");
+                $("#linkman_phone").val(data.phone);
+            })
+        }
+    </script>
+    <script type="text/javascript">
+        $(function(){
+            $("#customer_name").blur(function(){
+                $(".searchmore").hide();
+                var customer_name = $.trim($("#customer_name").val());
+                if(customer_name.length >= 1){
+                    $.post("__APP__/Order/searchCustomerInfoIsHaveLevel",{"customer_name":customer_name},function(res){
+                        //替换原来的客户等级的下拉选择
+                        $("#customer_level_div").html(res);;
+                        
+                    })
+                }
+
+                //替换原来的客户等级的下拉选择
+                if(customer_name.length >= 1){
+                    $.post("__APP__/Order/searchCustomerInfoIsHavelLinkman",{"customer_name":customer_name},function(res){
+                        $("#linkman_name_div").html(res);;
+                        
+                    })
+                }
+
+                
+            }); 
+        })
+
+    </script>
+
 </body>
 
 </html>

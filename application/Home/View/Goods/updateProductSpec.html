@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>修改产品规格</title>
-    <meta name="description" content="这是一个 index 页面">
+    <title>修改产品规格 - 细格订单管理系统</title>
+    <meta name="description" content="">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
@@ -36,16 +36,11 @@
                                         <span id="sname_notice" style="color:#FF0000"> *</span> 
                                 </label>
                                 <div class="am-u-sm-8">
-                                    <select id="product_type" name="product_type" data-am-selected="{btnWidth:'200px',maxHeight: 100,searchBox: 1}" onchange="getProductNameInfo();">
-                                       <option value="0" >请选择服务类型</option>
-                                        <foreach name="productTypeInfo" item="v">
-                                            <if condition="$productSpecInfo['0']['product_type_id'] == $v['id']">
-                                                <option value="{$v[id]}" selected="selected">{$v['type_name']}</option>
-                                            <else/>
-                                                <option value="{$v['id']}" >{$v['type_name']}</option>
-                                            </if>
-                                        </foreach>
-                                    </select>
+                                    <foreach name="productTypeInfo" item="v">
+                                        <if condition="$productSpecInfo['0']['product_type_id'] == $v['id']">
+                                            <span>{$v['type_name']}</span>
+                                        </if>
+                                    </foreach>
                                 </div>
                             </div>
                             <div class="am-form-group">
@@ -53,16 +48,11 @@
                                         <span id="sname_notice" style="color:#FF0000"> *</span> 
                                 </label>
                                 <div class="am-u-sm-8">
-                                    <select id="product" name="product" data-am-selected="{btnWidth:'200px',maxHeight: 100,searchBox: 1}" onchange="changeProductNameInfo();" >
-                                       <option value="0" >请选择产品名称</option>
-                                        <foreach name="productNameInfo" item="v">
-                                            <if condition="$productSpecInfo['0']['product_id'] == $v['id']">
-                                                <option value="{$v[id]}" selected="selected">{$v['type_name']}</option>
-                                            <else/>
-                                                <option value="{$v['id']}" >{$v['type_name']}</option>
-                                            </if>
-                                        </foreach>
-                                    </select>
+                                    <foreach name="productNameInfo" item="v">
+                                        <if condition="$productSpecInfo['0']['product_id'] == $v['id']">
+                                            <span>{$v['type_name']}</span>
+                                        </if>
+                                    </foreach>
                                 </div>
                             </div>
                             <div class="am-form-group">
@@ -70,16 +60,11 @@
                                         <span id="sname_notice" style="color:#FF0000"> *</span> 
                                 </label>
                                 <div class="am-u-sm-8">
-                                    <select id="product_model" name="product_model" data-am-selected="{btnWidth:'200px',maxHeight: 100,searchBox: 1}" >
-                                       <option value="0" >请选择产品型号</option>
-                                        <foreach name="productModelInfo" item="v">
-                                            <if condition="$productSpecInfo['0']['product_model_id'] == $v['id']">
-                                                <option value="{$v[id]}" selected="selected">{$v['name']}</option>
-                                            <else/>
-                                                <option value="{$v['id']}" >{$v['name']}</option>
-                                            </if>
-                                        </foreach>
-                                    </select>
+                                    <foreach name="productModelInfo" item="v">
+                                        <if condition="$productSpecInfo['0']['product_model_id'] == $v['id']">
+                                            <span>{$v['name']}</span>
+                                        </if>
+                                    </foreach>
                                 </div>
                             </div>
                             <div class="am-form-group">
@@ -87,17 +72,11 @@
                                         <span id="sname_notice" style="color:#FF0000"> *</span> 
                                 </label>
                                 <div class="am-u-sm-8">
-                                    <select id="product_parameter" name="product_parameter" data-am-selected="{btnWidth:'200px',maxHeight: 100,searchBox: 1}" >
-                                       <option value="" >请选择规格名称</option>
-                                        <foreach name="productParameterInfo" item="v">
-                                            
-                                            <if condition="$productSpecInfo['0']['parameter_id'] == $v['id']">
-                                                <option value="{$v[id]}" selected="selected">{$v['name']}</option>
-                                            <else/>
-                                                <option value="{$v['id']}" >{$v['name']}</option>
-                                            </if>
-                                        </foreach>
-                                    </select>
+                                    <foreach name="productParameterInfo" item="v">
+                                        <if condition="$productSpecInfo['0']['parameter_id'] == $v['id']">
+                                            <span>{$v['name']}</span>
+                                        </if>
+                                    </foreach>
                                 </div>
                             </div>
                             <div class="am-form-group">
@@ -139,33 +118,8 @@
             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
             
             var spec_id = $("#id").val();
+            var spec_value = $.trim($("#spec").val());
 
-            var type_id = $("#product_type").val();
-            var id = $("#product").val();
-            var model_id = $("#product_model").val();
-            var parameter_id = $("#product_parameter").val();
-            var spec_value = $("#spec").val();
-
-            if(type_id == ''){
-                layer.msg('请选择服务类型！', {icon: 5});
-                $("#product_type").focus();
-                return false;
-            }
-            if(id == ''){
-                layer.msg('请选择产品名称！', {icon: 5});
-                $("#product").focus();
-                return false;
-            }
-            if(model_id == ''){
-                layer.msg('请选择产品型号！', {icon: 5});
-                $("#product_model").focus();
-                return false;
-            }
-            if(parameter_id == ''){
-                layer.msg('请选择规格名称！', {icon: 5});
-                $("#product_parameter").focus();
-                return false;
-            }
             if(spec_value == ''){
                 layer.msg('请输入产品规格！', {icon: 5});
                 $("#spec").focus();
@@ -175,7 +129,7 @@
             $.ajax({
                 url:'__APP__/Goods/updateProductSpec',
                 type:'post',
-                data:'type_id='+type_id+'&id='+id+'&model_id='+model_id+'&parameter_id='+parameter_id+'&spec_value='+spec_value+'&spec_id='+spec_id,
+                data:'spec_value='+spec_value+'&spec_id='+spec_id,
                 dataType:'json',
                 success:function(res){
                     if(res > 0 ){
@@ -199,115 +153,6 @@
     });
 </script>
 
-<script type="text/javascript">
-
-//改变服务类型时触发
-function getProductNameInfo(){
-    
-    var type_id = $("#product_type").val();
-    $.ajax({
-        url:'__APP__/Goods/getProductNames',
-        data:'type_id='+type_id,
-        type:'post',
-        dataType:'json',
-        success:function(re){
-
-            var product_id = '';
-            var product_name = '';
-            $("#product").empty();
-            $("#product").append("<option value=''>请选择产品名称</option>"); 
-            for (var k in re){
-
-                product_id = re[k].id;
-                product_name = re[k].type_name;
-                $("#product").append("<option value='"+product_id+"'>"+product_name+"</option>");  
-            }
-            //重新加载商品型号
-            $.ajax({
-                url:'__APP__/Goods/getProductModelAll',
-                data:'id= 0',
-                type:'post',
-                dataType:'json',
-                success:function(re){
-                    var product_id = '';
-                    var product_name = '';
-
-                    $("#product_model").empty();
-                    $("#product_model").append("<option value=''>请选择产品型号</option>"); 
-                    for (var k in re){
-                        product_id = re[k].id;
-                        product_name = re[k].name;
-                        $("#product_model").append("<option value='"+product_id+"'>"+product_name+"</option>"); 
-                    }
-                    //重新加载商品规格
-                    $.ajax({
-                        url:'__APP__/Goods/getProductParameterAll',
-                        data:'id= 0',
-                        type:'post',
-                        dataType:'json',
-                        success:function(re){
-                            var product_id = '';
-                            var product_name = '';
-
-                            $("#product_parameter").empty();
-                            $("#product_parameter").append("<option value=''>请选择规格名称</option>"); 
-                            for (var k in re){
-                                product_id = re[k].id;
-                                product_name = re[k].name;
-                                $("#product_parameter").append("<option value='"+product_id+"'>"+product_name+"</option>"); 
-                            }
-                        }
-                    });
-                }
-            });
-        }
-    })
-}
-
-//改变产品名称时触发
-function changeProductNameInfo(){
-    var id = $("#product").val();
-    //重新渲染商品型号下拉选择框的内容
-    $.ajax({
-        url:'__APP__/Goods/getProductModel',
-        data:'id='+id,
-        type:'post',
-        dataType:'json',
-        success:function(re){
-            var product_id = '';
-            var product_name = '';
-
-            $("#product_model").empty();
-            $("#product_model").append("<option value=''>请选择产品型号</option>"); 
-            for (var k in re){
-                product_id = re[k].id;
-                product_name = re[k].name;
-                $("#product_model").append("<option value='"+product_id+"'>"+product_name+"</option>"); 
-            }
-        }
-    });
-    //重新渲染商品规格下拉选择框的内容
-    $.ajax({
-        url:'__APP__/Goods/getProductParameter',
-        data:'product_id='+id,
-        type:'post',
-        dataType:'json',
-        success:function(re){
-            var product_id = '';
-            var product_name = '';
-
-            $("#product_parameter").empty();
-            $("#product_parameter").append("<option value=''>请选择规格名称</option>"); 
-            for (var k in re){
-                product_id = re[k].id;
-                product_name = re[k].name;
-                $("#product_parameter").append("<option value='"+product_id+"'>"+product_name+"</option>"); 
-            }
-        }
-    });
-}
-
-</script>
 
 </body>
 

@@ -841,47 +841,16 @@
 
 		// 新增订单页面
 		public function addOrder(){
+			// 权限判断
+			$powerName = "addOrder";
+			$power = $this->isPower($powerName,"controller");
+			if(!$power){
+				$this->redirect("index");
+			}
 			$customerModel = D("XgCustomer");
 			$customerList = $customerModel->getCustomerInfos('');
 			$productTypeModel = D("XgProductType");
 			$productTypeFirst = $productTypeModel->getProductTypeByPid(0);
-			// $parameterStr = "";
-			// if(!empty($productTypeFirst)){
-			// 	//默认的商品名称信息
-			// 	$productNameFirst = D("XgProductType")->getProductTypeByPid($productTypeFirst[0]['id']);
-			// 	if(!empty($productNameFirst)){
-			// 		//默认的商品型号信息
-			// 		$productModelFirst = D("XgProduct")->getProductByPid($productNameFirst[0]['id']);
-			// 		//默认的商品规格信息
-			// 		$parameterId = explode(",", $productNameFirst[0]['parameter_id_str']);
-			// 		if(!empty($parameterId)){
-			// 			foreach ($parameterId as $k => $v) {
-			// 				//获取商品规格名称信息
-			// 				$productParameter = D("XgProductParameter")->getProductParameterById($v);
-			// 				//获取该商品型号对应的商品规格信息
-			// 				$condition['where'] = "parameter_id = '".$v."' and product_id = '".$productNameFirst[0]['id']."' and product_model_id = '".$productModelFirst['0']['id']."'";
-			// 				$productSpec = D("XgProductSpec")->getProductSpecInfo($condition);
-			// 				//拼接该商品下第一种商品型号对应的商品规格信息
-			// 				if(!empty($productParameter['0'])){
-			// 					$specInfo[$k]['parameter'] = $productParameter['0'];
-			// 					$parameterStr .= $productParameter['0']['id']."-".$productParameter['0']['name'].",";
-			// 					if(!empty($productSpec)){
-			// 						$specInfo[$k]['spec'] = $productSpec;
-			// 					}
-			// 				}
-			// 			}
-			// 		}
-			// 		//默认的供应商信息
-			// 		$supplierId = explode(",", $productNameFirst[0]['supplier_id_str']);
-			// 		if(!empty($supplierId)){
-			// 			foreach ($supplierId as $kk => $vv) {
-			// 				$productSupplierFirst[] = D("XgSupplier")->getSupplierInfo($vv);
-			// 			}
-			// 		}
-			// 	}
-				
-			// }
-			// $parameterStr = rtrim($parameterStr,",");
 			//全部产品名称
 			$condition['where'] = "pid > 0";
 			$productNameFirst = D("XgProductType")->getProductInfo($condition);
@@ -889,10 +858,6 @@
 			$this->assign("customerList",$customerList);
 			$this->assign("productTypeFirst",$productTypeFirst);
 			$this->assign("productNameFirst",$productNameFirst);
-			// $this->assign("productModelFirst",$productModelFirst);
-			// $this->assign("specInfo",$specInfo);
-			// $this->assign("productSupplierFirst",$productSupplierFirst);
-			// $this->assign("parameterStr",$parameterStr);
 
 			$this->display("add_order");
 		}		
@@ -1197,6 +1162,12 @@
 		}
 		// 修改订单信息页面
 		public function update(){
+			// 权限判断
+			$powerName = "updateOrder";
+			$power = $this->isPower($powerName,"controller");
+			if(!$power){
+				$this->redirect("index");
+			}
 			// 左侧菜单
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
@@ -1287,17 +1258,11 @@
 
 				$this -> display();
 			}
-			
 		}
-
 		//删除订单信息（修改订单状态为4）
 		public function deleteOrderInfo(){
 			$post = $_POST;
 			$res = D("XgOrder")->deleteOrderInfoById($post['id']);
-
-			// $data['order_status'] = 4; 
-			// $res = D("XgOrder")->updateOrderInfo($data,$post['id']);
-
 			if($res > 0){
 				$res = 1;
 			}else{
@@ -1850,6 +1815,48 @@
 			echo $html;
 
 		}
+		//把报价记录中搜索获取信息
+		public function searchQuoteInfo(){
+			$post = $_POST;
+			$html = "";
+
+			if($post['search_value']){
+				if($post['input_type_value'] == 'product'){
+					$condition['where'] = "type_name like '%".$post['search_value']."%'";
+					$productInfo = D("XgProductType")->getProductInfo($condition);
+					
+					if(!empty($productInfo)){
+						foreach($productInfo as $k=>$v){
+							$html .= "<li onclick=searchCustomerName('".$v['type_name']."')>".$v['type_name']."</li>";
+						}
+					}
+				}else if($post['input_type_value'] == 'customer'){
+					$condition['where'] = "cname like '%".$post['search_value']."%'";
+					$customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+
+					if(!empty($customerInfo)){
+						foreach($customerInfo as $k=>$v){
+							$html .= "<li onclick=searchCustomerName('".$v['cname']."')>".$v['cname']."</li>";
+						}
+					}
+				}else if($post['input_type_value'] == 'manager_name'){
+					$condition['where'] = "truename like '%".$post['search_value']."%'";
+					$managerInfo = D("XgManager")->getManagerInfo($condition);
+
+					if(!empty($managerInfo)){
+						foreach($managerInfo as $k=>$v){
+							$html .= "<li onclick=searchCustomerName('".$v['truename']."')>".$v['truename']."</li>";
+						}
+					}
+				}else{
+					$html .= "<li onclick=searchCustomerName(' ')>没有相关搜索内容！</li>";
+				}
+			}else{
+				$html .= "<li onclick=searchCustomerName(' ')>请输入搜索内容！</li>";
+			}
+			echo $html;
+
+		}
 		//订单产品信息处理
 		public function dellOrderProductInfo($orderInfo){
 			//订单产品信息查询
@@ -2327,6 +2334,12 @@
 		}
 		// 新增报价记录页面
 		public function addQuote(){
+			// 权限判断
+			$powerName = "addQuote";
+			$power = $this->isPower($powerName,"controller");
+			if(!$power){
+				$this->redirect("index");
+			}
 			//客户等级信息
 			$customerLevelInfo = D("XgCustomer")->getCustomerLevelInfo();
 			// dump($customerLevelInfo);
@@ -2396,12 +2409,15 @@
 		}
 		//修改报价记录信息
 		public function updateQuote(){
+			// 权限判断
+			$powerName = "updateQuote";
+			$power = $this->isPower($powerName,"controller");
+			if(!$power){
+				$this->redirect("index");
+			}
 			$get = $_GET;
 			$post = $_POST;
-			// dump($get);
-
 			if(!empty($post)){
-				// dump($post);
 				$id = $post['quote_id'];
 
 				$data['customer_name'] = $post['customer_name'];
@@ -2420,7 +2436,7 @@
 		    	// dump($orderInfo);
 		    	if(!empty($quoteInfo)){
 					//客户等级信息
-					$customerLevelInfo = D("XgCustomerLevel")->getCustomerLevelInfo();;
+					$customerLevelInfo = D("XgCustomerLevel")->getCustomerLevelInfo();
 					//商品规格信息处理
 					$productParameterSpecArr = explode(",", $quoteInfo['product_spec_id_str']);
 					if(!empty($productParameterSpecArr)){
@@ -2560,8 +2576,6 @@
 		}
 		// 导出处理
 		public function exportHandle($exportInfo){
-			// ob_end_clean();
-			// ob_start();
 			// import("Org.Util.PHPExcel");
 			// import("Org.Util.PHPExcel.IOFactory",'','.php');
 	  		// import("Org.Util.PHPExcel.Writer.Excel5",'','.php');
@@ -2652,23 +2666,7 @@
 			$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 			// $objWriter = new \PHPExcel_Writer_Excel5($objPHPExcel);
 			$objWriter->save('php://output');
-			exit;
-			
-			// header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-			// header('Content-Disposition: attachment;filename="报价记录统计.xlsx"');   // 设置输出文件的名称
-			// header('Cache-Control: max-age=0');   // 禁止缓存
-			// $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
-			// $objWriter->save("php://output");
-
-			// $name='example_export.xlsx';
-			// header('Content-Type: application/vnd.ms-excel');
-			// header('Content-Disposition: attachment; filename='.$name);
-			// header('Cache-Control: max-age=0');
-			// import("Org.Util.PHPExcel.IOFactory");
-			// $ExcelWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-			// $ExcelWriter->save('php://output');
 		}
-
 
 
 		//获取产品名字并返回给页面
@@ -2677,7 +2675,6 @@
 
 			echo $productInfo['0']['type_name'];
 		}
-
 
 		//删除订单中的产品时 判断该订单的产品数量是否大于一
 		public function checkOrderProductNum(){
@@ -2692,6 +2689,64 @@
 
 		}
 
+		//新增报价记录时查询该客户名称是否存在，若存在，则修改客户等级的显示
+		public function searchCustomerInfoIsHaveLevel(){
+			$post = $_POST;
+			$condition['where'] = "cname = '".$post['customer_name']."'";
+			$customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+
+			$html = "<select id='customer_level_discount'> ";
+			if(!empty($customerInfo)){
+				$customerLevelInfo = D("XgCustomerLevel")->getLevelInfoById($customerInfo['0']['level_id']);
+				if(!empty($customerLevelInfo)){
+					$html .= "<option value='".$customerLevelInfo['id']."'>".$customerLevelInfo['name']."</option>";
+				}else{
+					$html .= "<option value=''>请选择客户等级</option>";
+				}
+			}else{
+				//如果没有客户名称,则返回全部客户等级信息
+				$customerLevelInfo = D("XgCustomerLevel")->getCustomerLevelInfo();
+				if(!empty($customerLevelInfo)){
+					$html .= "<option value=''>请选择客户等级</option>";
+					foreach ($customerLevelInfo as $k => $v) {
+						$html .= "<option value='".$v['id']."'>".$v['name']."</option>";
+					}
+				}
+			}
+
+			$html .= "</select>";
+			echo $html;
+
+		}
+
+
+		//新增报价记录时查询该客户名称是否存在，若存在，则修改客户联系人c的显示
+		public function searchCustomerInfoIsHavelLinkman(){
+			$post = $_POST;
+			$condition['where'] = "cname = '".$post['customer_name']."'";
+			$customerInfo = D("XgCustomer")->getCustomerInfos($condition);
+
+			
+			if(!empty($customerInfo)){
+				$customerLinkmanInfo = D("XgCustomerLinkman")->getCustomerLinkInfo($customerInfo['0']['id']);
+
+				$html = "<select class='lxr_select' id='linkman_name' data-am-selected={btnWidth:'100%',maxHeight: 370,searchBox: 1} onchange='getLxrByCustomerId()'> <option value='0'>请选择联系人</option> ";
+
+				if(!empty($customerLinkmanInfo)){
+					foreach ($customerLinkmanInfo as $k => $v) {
+						$html .= "<option value='".$v['id']."' >".$v['name']."</option>";
+					}
+				}
+
+				$html .= "</select>";
+			}else{
+				//如果没有客户名称,则返回 输入框
+				$html = "<input type='text' id='linkman_name' value=''>";
+			}
+
+			
+			echo $html;
+		}
 
 
 

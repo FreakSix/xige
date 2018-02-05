@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>新建订单-细格订单管理系统</title>
-    <meta name="description" content="这是一个 index 页面">
+    <title>新建订单 - 细格订单管理系统</title>
+    <meta name="description" content="">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
@@ -31,14 +31,6 @@
                         <div class="am-form-group">
                             <label for="contact-name" class="am-u-sm-2 am-form-label">服务类型：</label>
                             <div class="am-u-sm-4">
-                                <!-- <select id="doc-select-1" class="product_type">
-                                    <option value="">请选择服务类型</option>
-	                                <if condition="$productTypeFirst != ''">
-		                                <foreach name="productTypeFirst" item="item" key="key">
-		                                    <option value="{$item.id}" onclick="getProductName({$item.id},{$item.have_price})">{$item.type_name}</option>
-		                                </foreach>
-	                                </if>
-                                </select> -->
                                 <select id="product_type" name="product_type" class="product_type" onchange="getProductName()" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}" >
                                     <option value="0" checked="checked">全部服务</option>
                                     <if condition="$productTypeFirst != ''">
@@ -61,14 +53,6 @@
                             </div>
                             <label for="contact-name" class="am-u-sm-2 am-form-label">产品名称：</label>
                             <div class="am-u-sm-4">
-                                <!-- <select id="doc-select-1" class="product_name">
-                                    <option value="">请选择产品名称</option>
-                                    <if condition="$productNameFirst != ''">
-                                        <foreach name="productNameFirst" item="item" key="key">
-                                            <option value="{$item.id}" onclick="getProductModel('{$item.id}','{$item.type_name}')">{$item.type_name}</option>
-                                        </foreach>
-                                    </if>
-                                </select> -->
                                 <select id="product_name" class="product_name" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}" onchange="getProductModel()">
                                     <option value="0" checked="checked">请选择产品名称</option>
                                     <if condition="$productNameFirst != ''">

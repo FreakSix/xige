@@ -94,4 +94,21 @@
 			$result = M()->query($sql);
 			return $result;
 		}
+		//根据条件查出管理员信息
+		public function getManagerInfo($condition){
+			$query = M("xg_manager");
+			if($condition['where']){
+				// var_dump($condition['where']);
+				$query = $query->where($condition['where']);
+			}
+			if($condition['order']){
+				$query = $query->order($condition['order']);
+			}
+			if($condition['limit']){
+				$query = $query->limit($condition['limit']['firstRow'],$condition['limit']['pageSize']);
+			}
+
+			$result = $query->select();
+			return $result;
+		}
 	}

@@ -8,7 +8,7 @@
 		// 获取今天以后公共备忘录信息
 		public function getPublicMemoByDate($date){
 			$table = M("xg_public_memo");
-			$result = $table->where("memo_time > ".$date)->order("memo_time asc,memo_level desc")->select();
+			$result = $table->where("memo_time >= ".$date)->order("memo_time asc,memo_level desc")->select();
 			return $result;
 		}
 		// 根据备忘录ID获取该条备忘录信息

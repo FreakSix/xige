@@ -7,10 +7,10 @@
 		public function index(){
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
-			//根据商品pid来获取对应的商品型号
+			//根据产品pid来获取对应的产品型号
 			$pid = $_GET['type_id'];
 			$productModel = D("XgProduct")->getProductByPid($pid);
-			//根据商品型号信息来默认获取第一种商品型号对应的商品规格信息
+			//根据产品型号信息来默认获取第一种产品型号对应的产品规格信息
 			$productName = D("XgProductType")->getProduct($pid);
 			//查询该产品的分类
 			$productTypeInfo = D("XgProductType")->getProduct($productName['0']['pid']);
@@ -22,9 +22,9 @@
 			if(!empty($parameterId)){
 				$spec_str = "";
 				foreach ($parameterId as $k => $v) {
-					//获取商品规格名称信息
+					//获取产品规格名称信息
 					$productParameter = D("XgProductParameter")->getProductParameterById($v);
-					//获取该商品型号对应的商品规格信息
+					//获取该产品型号对应的产品规格信息
 					$condition['where'] = "parameter_id = '".$v."' and product_id = '".$pid."' and product_model_id = '".$productModel['0']['id']."'";
 					$productSpec = D("XgProductSpec")->getProductSpecInfo($condition);
 					if(!empty($productSpec)){
@@ -38,7 +38,7 @@
 						$spec_str .= $v."-".$productParameter['0']['name']."@".$spec_id_str.",";
 					}
 					
-					//拼接该商品下第一种商品型号对应的商品规格信息
+					//拼接该产品下第一种产品型号对应的产品规格信息
 					if(!empty($productParameter['0'])){
 						$specInfo[$k]['parameter'] = $productParameter['0'];
 
@@ -73,18 +73,18 @@
 					}
 				}
 			}
-			//对商品规格为空的数据进行提示处理
+			//对产品规格为空的数据进行提示处理
 			if(empty($specInfo)){
-				$specInfo['0']['parameter']['name'] = "商品规格";
-				$specInfo['0']['spec']['0']['spec_value'] = "请先添加该商品的规格信息！";
+				$specInfo['0']['parameter']['name'] = "产品规格";
+				$specInfo['0']['spec']['0']['spec_value'] = "请先添加该产品的规格信息！";
 			}
 			//对供应商为空的数据进行提示处理
 			if(empty($productSupplier)){
 				$productSupplier[]['supplier_name'] = "暂无供应商";
 			}
-			//对商品为空的数据进行提示处理
+			//对产品为空的数据进行提示处理
 			if(empty($productModel)){
-				$productModel[]['name'] = "请先添加商品信息";
+				$productModel[]['name'] = "请先添加产品信息";
 			}
 			// dump($productSpecialTec);
 
@@ -100,18 +100,18 @@
 		}
 		public function getProductSpec(){
 			$post = $_POST;
-			//查询商品型号对应的商品名称
+			//查询产品型号对应的产品名称
 			$productName = D("XgProductType")->getProduct($post['product_name_id']);
 			$parameterId = explode(",", $productName['0']['parameter_id_str']);
 			$parameterSpec = "";
 			if(!empty($parameterId)){
 				foreach ($parameterId as $k => $v) {
-					//获取商品规格名称信息
+					//获取产品规格名称信息
 					$productParameter = D("XgProductParameter")->getProductParameterById($v);
-					//获取该商品型号对应的商品规格信息
+					//获取该产品型号对应的产品规格信息
 					$condition['where'] = "parameter_id = '".$v."' and product_id = '".$productName['0']['id']."' and product_model_id = '".$post['product_model_id']."'";
 					$productSpec = D("XgProductSpec")->getProductSpecInfo($condition);
-					//拼接该商品下第一种商品型号对应的商品规格信息
+					//拼接该产品下第一种产品型号对应的产品规格信息
 					if(!empty($productParameter['0'])){
 						// $specInfo[$k]['parameter'] = $productParameter['0'];
 						$parameterSpec .= "<div class='am-u-sm-2'> <div class='goods-title'>".$productParameter['0']['name']."</div> 
@@ -131,12 +131,12 @@
 				}
 			}
 			if($parameterSpec == ''){
-				$parameterSpec = "<div class='am-u-sm-2'> <div class='goods-title'>商品规格</div> 
-								<div class='goods-name'> <ul class='goods-name-detail'> <li class='select-box'><a href='javascript:;'>请先添加该商品的规格信息！</a></li> </ul> </div> </div> ";
+				$parameterSpec = "<div class='am-u-sm-2'> <div class='goods-title'>产品规格</div> 
+								<div class='goods-name'> <ul class='goods-name-detail'> <li class='select-box'><a href='javascript:;'>请先添加该产品的规格信息！</a></li> </ul> </div> </div> ";
 			}
 
 			//拼接供应商信息
-			//查询商品型号对应的商品名称
+			//查询产品型号对应的产品名称
 			$supplierId = explode(",", $productName['0']['supplier_id_str']);
 			$supplierStr = "<div class='am-u-sm-2'> <div class='goods-title'>供应商</div> <div class='goods-name'> <ul class='goods-name-detail'> ";
 			if(!empty($supplierId)){
@@ -159,7 +159,7 @@
 
 
 			// //拼接特殊工艺信息
-			// //查询商品型号对应的商品名称
+			// //查询产品型号对应的产品名称
 			// $specialTecId = explode(",", $productName['0']['special_tec_str']);
 			// $specialTecStr = "<div class='am-u-sm-2'> <div class='goods-title'>特殊工艺</div> <div class='goods-name'> <ul class='goods-name-detail'> ";
 			// if(!empty($specialTecId)){
@@ -184,7 +184,7 @@
 			echo $html;
 		}
 
-		//添加商品价格
+		//添加产品价格
 		public function productPrice(){
 
 			$productType = $this->menu();
@@ -194,13 +194,13 @@
 			// $condition['yinshua']['where'] = "pid = '0' and type_name = '印刷服务' ";
 			// $yinshua = D("XgProductType")->getProductInfo($condition['yinshua']);
 			// $yinshuaId = $yinshua['0']['id'];
-			//获取商品的分类
+			//获取产品的分类
 			$condition['type']['where'] = "	have_price = 1 ";
 			$productTypeInfo = D("XgProductType")->getProductInfo($condition['type']);
-			// //获取全部商品名称
+			// //获取全部产品名称
 			// $condition['name']['where'] = "pid > 0  and pid != ".$yinshuaId."";
 			// $productInfo = D("XgProductType")->getProductInfo($condition['name']);
-			//获取商品的型号
+			//获取产品的型号
 			$productModelInfo = D("XgProduct")->getProductModelInfo();
 	 		
 			$this->assign("productSpecInfo",$productSpecInfo);
@@ -258,16 +258,16 @@
 		// 删除服务类型
 		public function deleteProductType(){
 			$post = $_POST;
-			//删除商品分类对应的规格信息
+			//删除产品分类对应的规格信息
 			$res_spec = D("XgProductSpec")->deleteProductSpecByProduct_Id($post['type_id']);
-			//删除商品分类对应的型号信息
+			//删除产品分类对应的型号信息
 			$product = D("XgProductType")->getProductTypeByPid($post['type_id']);
 			foreach ($product as $k => $v) {
 				$res_model[$v['id']] = D("XgProduct")->deleteProductModelByPid($v['id']);
 			}
-			//删除商品分类对应的名称信息
+			//删除产品分类对应的名称信息
 			$res_name = D("XgProductType")->deleteProductByPid($post['type_id']);
-			//删除商品分类信息
+			//删除产品分类信息
 			$res_type = D("XgProductType")->deleteProductById($post['type_id']);
 			if($res_type > 0 ){
 				$res_str = "删除成功！";
@@ -386,7 +386,7 @@
 			// exit;
 			//删除产品对应的详细规格信息
 			$res_spec = D("XgProductSpec")->deleteProductSpecByParameter_id($post['parameter_id']);
-			//删除商品规格名称信息
+			//删除产品规格名称信息
 			$res_parameter = D("XgProductParameter")->deleteProductParameterById($post['parameter_id']);
 			if($res_parameter > 0 ){
 				$res_str = 1;
@@ -424,7 +424,7 @@
 	 		$pageStr = $page->show();
 	 		//总页数
 	 		$totalPage = $page->totalPages;
-	 		//查询商品名称
+	 		//查询产品名称
 	 		$condition['order'] = "id desc";
 	 		$condition['limit']['firstRow'] = $firstRow;
 	 		$condition['limit']['pageSize'] = $pageSize;
@@ -520,7 +520,7 @@
 				$res = D("XgProductType")->updateProductTypeInfo($product,$id);
 				echo json_encode($res);
 			}else{
-				//查询出全部的商品分类信息
+				//查询出全部的产品分类信息
 				$productType = D("XgProductType")->getProductType();
 				//查询出对应的信息
 				$productTypeInfo = D("XgProductType")->getProduct($get['name_id']);
@@ -543,11 +543,11 @@
 		// 删除产品名称及其相关数据
 		public function deleteProductName(){
 			$post = $_POST;
-			//删除商品名称对应的规格信息
+			//删除产品名称对应的规格信息
 			$res_spec = D("XgProductSpec")->deleteProductSpecByProduct_Id($post['name_id']);
-			//删除商品名称对应的型号信息
+			//删除产品名称对应的型号信息
 			$res_model = D("XgProduct")->deleteProductModelByPid($post['name_id']);
-			//删除商品名称信息
+			//删除产品名称信息
 			$res_name = D("XgProductType")->deleteProductById($post['name_id']);
 			if($res_name > 0 ){
 				$res_str = "删除成功！";
@@ -563,7 +563,7 @@
 			$productType = $this->menu();
 			$this->assign("productType",$productType);
 			$get = $_GET;
-			//获取商品的分类
+			//获取产品的分类
 			$productTypeInfo = D("XgProductType")->getProductType();
 			// 条件搜索产品型号信息
 			if($get['product_type'] || $get['product']){
@@ -575,7 +575,7 @@
 				if($get['product']){
 					$condition['where'] = "pid = '".$get['product']."'";
 					if(empty($get['product_type'])){
-						//获取全部商品
+						//获取全部产品
 						$condition['product']['where'] = "pid > 0 ";
 						$productInfo = D("XgProductType")->getProductInfo($condition['product']);
 					}
@@ -604,7 +604,7 @@
 	 		//总页数
 	 		$totalPage = $page->totalPages;
 	 		
-	 		//查询商品名称
+	 		//查询产品名称
 	 		$condition['order'] = "id desc";
 	 		$condition['limit']['firstRow'] = $firstRow;
 	 		$condition['limit']['pageSize'] = $pageSize;
@@ -613,11 +613,11 @@
 	 		
 	 		if(!empty($productModelInfo)){
 	 			foreach ($productModelInfo as $k => $v) {
-		 			//获取商品名称
+		 			//获取产品名称
 		 			$product = D("XgProductType")->getProduct($v['pid']);
 		 			// dump($product);exit;
 		 			$productModelInfo[$k]["product"] = $product["0"];
-		 			//获取商品类型
+		 			//获取产品类型
 		 			if(!empty($product)){
 		 				$productType = D("XgProductType")->getProduct($product["0"]["pid"]);
 		 				$productModelInfo[$k]["product_type"] = $productType["0"];
@@ -652,7 +652,7 @@
 				$this->display();
 			}		
 		}
-		// 修改商品型号
+		// 修改产品型号
 		public function updateProductModel(){
 			$post = $_POST;
 			$get = $_GET;
@@ -667,14 +667,14 @@
 
 				echo json_encode($res);
 			}else{
-				//查询出全部的商品分类信息
+				//查询出全部的产品分类信息
 				$productType = D("XgProductType")->getProductType();
-				//查询出全部的商品名称
+				//查询出全部的产品名称
 				$condition['product']['where'] = "pid > 0 ";
 				$productNameInfo = D("XgProductType")->getProductInfo($condition['product']);
-				//查询出对应的商品型号信息
+				//查询出对应的产品型号信息
 				$productModelInfo = D("XgProduct")->getProductById($get['model_id']);
-				//商品型号对应的商品信息
+				//产品型号对应的产品信息
 				$productTypeId = D("XgProductType")->getProduct($productModelInfo['0']['pid']);
 				
 				$this->assign("productType",$productType);
@@ -718,15 +718,15 @@
 				//如果有产品分类
 				if($get['product_type']){
 					$whereArr[] = "product_type_id = '".$get['product_type']."'";
-					//根据所选商品分类来查询对应的商品分类信息
+					//根据所选产品分类来查询对应的产品分类信息
 					$productInfo = D("XgProductType")->getProductTypeByPid($get['product_type']);
 				}
 				//如果有产品名称
 				if($get['product']){
 					$whereArr[] = "product_id = '".$get['product']."'";
-					//根据产品名称来查询对应的商品型号信息
+					//根据产品名称来查询对应的产品型号信息
 					$productModelInfo = D("XgProduct")->getProductByPid($get['product']);
-					//根据产品名称来查询对应的商品规格信息
+					//根据产品名称来查询对应的产品规格信息
 					$product = D("XgProductType")->getProduct($get['product']);
 					// $parameter_id_str = rtrim($product['0']['parameter_id_str'], ',');
 					// $parameter_id_arr = explode(",",$parameter_id_str);
@@ -757,7 +757,7 @@
 	 		//总页数
 	 		$totalPage = $page->totalPages;
 	 		
-	 		//查询商品名称
+	 		//查询产品名称
 	 		$condition['spec']['order'] = "id desc";
 	 		$condition['spec']['limit']['firstRow'] = $firstRow;
 	 		$condition['spec']['limit']['pageSize'] = $pageSize;
@@ -766,16 +766,16 @@
 	 		
 	 		if(!empty($productSpecInfo)){
 	 			foreach ($productSpecInfo as $k => $v) {
-		 			//获取商品名称
+		 			//获取产品名称
 		 			$product = D("XgProductType")->getProduct($v['product_id']);
 		 			$productSpecInfo[$k]["product"] = $product["0"];
-		 			//获取商品类型
+		 			//获取产品类型
 		 			$productType = D("XgProductType")->getProduct($v["product_type_id"]);
 		 			$productSpecInfo[$k]["product_type"] = $productType["0"];
-		 			//获取商品型号
+		 			//获取产品型号
 		 			$productModel = D("XgProduct")->getProductById($v["product_model_id"]);
 		 			$productSpecInfo[$k]["product_model"] = $productModel["0"];
-		 			//获取商品规格名
+		 			//获取产品规格名
 		 			$productParameter = D("XgProductParameter")->getProductParameterById($v["parameter_id"]);
 		 			$productSpecInfo[$k]["product_parameter"] = $productParameter["0"];
 		 		}
@@ -792,18 +792,18 @@
 
 			$this->display();
 		}
-		// 添加商品规格
+		// 添加产品规格
 		public function addProductSpec(){
 			$post = $_POST;
 
-			//获取商品的分类
+			//获取产品的分类
 			$productTypeInfo = D("XgProductType")->getProductType();
-			//获取全部商品名称
+			//获取全部产品名称
 			$condition['product']['where'] = "pid > 0 ";
 			$productInfo = D("XgProductType")->getProductInfo($condition['product']);
-			//获取商品的型号
+			//获取产品的型号
 			$productModelInfo = D("XgProduct")->getProductModelInfo();
-			//获取商品的规格名
+			//获取产品的规格名
 			$productParameterInfo = D("XgProductParameter")->getProductParameter();
 			if(!empty($post)){
 				$spec['spec_value']=$post['spec_value'];
@@ -852,10 +852,6 @@
 				$id = $post['spec_id'];
 
 				$spec['spec_value']=$post['spec_value'];
-				$spec['parameter_id']=$post['parameter_id'];
-				$spec['product_type_id']=$post['type_id'];
-				$spec['product_id']=$post['id'];
-				$spec['product_model_id']=$post['model_id'];
 				
 				$res = D("XgProductSpec")->updateProductSpecInfo($spec,$id);
 
@@ -957,7 +953,7 @@
 			}
 		}
 
-		/*修改商品规格*/
+		/*修改产品规格*/
 		public function updateProductPrice(){
 			$post = $_POST;
 			$get = $_GET;
@@ -972,19 +968,19 @@
 			}else{
 				//根据ID获取表XgSupplierProductRel中的信息
 				$supplierProductPrice = D("XgSupplierProductRel")->getProductSupplierPriceInfoById($get['product_price_id']);
-				//商品型号
+				//产品型号
 				$productModel = D("XgProduct")->getProductById($supplierProductPrice['0']['product_id']);
-				//商品名称
-				$productName = D("XgProductType")->getProductTypeByPid($productModel['0']['pid']);
-				//商品分类
+				//产品名称
+				$productName = D("XgProductType")->getProduct($productModel['0']['pid']);
+				//服务类型
 				$productType = D("XgProductType")->getProduct($productName['0']['pid']);
-				//商品规格信息处理
+				//产品规格信息处理
 				if(!empty($supplierProductPrice['0']['spec_id_str'])){
 					$spec_arr = explode(",", $supplierProductPrice['0']['spec_id_str']);
 					foreach ($spec_arr as $k => $v) {
-						//商品规格值
+						//产品规格值
 						$productSpec = D("XgProductSpec")->getSpecById($v);
-						//商品规格名称
+						//产品规格名称
 						$productParameter = D("XgProductParameter")->getProductParameterById($productSpec['0']['parameter_id']);
 						$specInfo[$k]['parameter'] = $productParameter['0']['name'];
 						$specInfo[$k]['spec'] = $productSpec['0']['spec_value'];
@@ -992,7 +988,7 @@
 				}
 				//供应商
 				$productSupplier = D("XgSupplier")->getSupplierInfo($supplierProductPrice['0']['supplier_id']);
-				//商品价格
+				//产品价格
 				$productPrice['price'] = $get['product_price'];
 
 				$this->assign("productName",$productName);
@@ -1008,13 +1004,13 @@
 			}
 		}
 		
-		//Ajax获取商品分类下的商品名称
+		//Ajax获取产品分类下的产品名称
 		public function getProductNames(){
 			$post = $_POST;
 			$productInfo = D("XgProductType")->getProductTypeByPid($post['type_id']);
 			echo json_encode($productInfo);
 		}
-		//Ajax获取商品名称下的商品型号
+		//Ajax获取产品名称下的产品型号
 		public function getProductModel(){
 			$post = $_POST;
 			$productModelInfo = D("XgProduct")->getProductByPid($post['id']);
@@ -1023,7 +1019,7 @@
 			}
 			echo json_encode($productModel);
 		}
-		//Ajax获取商品名称对应的供应商
+		//Ajax获取产品名称对应的供应商
 		public function getProductSupplier(){
 			$post = $_POST;
 			$productNameInfo = D("XgProductType")->getSupplierIdStr($post['id']);
@@ -1036,27 +1032,27 @@
 			}
 			echo json_encode($supplierInfo);
 		}
-		//Ajax获取商品名称下的商品规格
+		//Ajax获取产品名称下的产品规格
 		public function getProductParameter(){
 			$post = $_POST;
-			//获取对应的商品信息
+			//获取对应的产品信息
 			$productInfo = D("XgProductType")->getProduct($post['product_id']);
 
 			// $parameter_id_str = rtrim($productInfo['0']['parameter_id_str'], ',');
 			$productParameterInfo = D("XgProductParameter")->getProductParameterByIdWhereIn($productInfo['0']['parameter_id_str']);
 			echo json_encode($productParameterInfo);
 		}
-		//Ajax获取对应商品型号的规格信息
+		//Ajax获取对应产品型号的规格信息
 		public function getProductSpecInfos(){
 			$post = $_POST;
-			//获取商品型号对应的商品信息
+			//获取产品型号对应的产品信息
 			$productNameInfo = D("XgProductType")->getProduct($post['product_id']);
-			//该商品拥有的规格名称ID字符串数组
+			//该产品拥有的规格名称ID字符串数组
 			$parameterIds = explode(",",$productNameInfo['0']['parameter_id_str']);
 			foreach ($parameterIds as $k => $v) {
-			 	//获取对应的商品规格名称信息
+			 	//获取对应的产品规格名称信息
 				$productParameterInfo = D("XgProductParameter")->getProductParameterById($v);
-				//获取商品型号对应的规格数据
+				//获取产品型号对应的规格数据
 				$condition['where'] = "parameter_id = ".$v." and product_model_id = ".$post['model_id']."";
 				$spec = D("XgProductSpec")->getProductSpecInfo($condition);
 				if(!empty($productParameterInfo)){
@@ -1068,23 +1064,23 @@
 			echo json_encode($productSpecInfo);	
 		}
 
-		//获取全部的商品型号信息
+		//获取全部的产品型号信息
 		public function getProductModelAll(){
 			$productModelInfoAll = D("XgProduct")->getProductModelInfo();
 			echo json_encode($productModelInfoAll);
 		}
-		//获取全部的商品规格信息
+		//获取全部的产品规格信息
 		public function getProductParameterAll(){
 			$productParameterInfoAll = D("XgProductParameter")->getProductParameter();
 			echo json_encode($productParameterInfoAll);
 		}
-		//验证添加的商品价格是否已经存在
+		//验证添加的产品价格是否已经存在
 		public function getProductPrice(){
 			$post = $_POST;
 
 			// dump($post);exit;
 			if(!empty($post)){
-				//商品规格信息处理
+				//产品规格信息处理
 				$spec_arr = array();
 				$product_spec_arr = explode(",", $post["product_spec_str"]);
 
@@ -1110,6 +1106,8 @@
 
 		// 产品特殊工艺页面
 		public function specialTechnology(){
+			$productType = $this->menu();
+			$this->assign("productType",$productType);
 			$specialTec = D("XgProductSpecialTechnology")->getProductSpecialTechnology();
 			// dump($specialTec);exit;
 			$this->assign("specialTec",$specialTec);

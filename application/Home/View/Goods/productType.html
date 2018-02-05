@@ -2,12 +2,11 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>服务类型管理</title>
+  <title>服务类型管理 - 细格订单管理系统</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="__PUBLIC__/css/layui/css/layui.css"  media="all">
-  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
   <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
   <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
   <link rel="stylesheet" href="__PUBLIC__/css/app.css" />
@@ -91,7 +90,8 @@
 <script type="text/javascript">
     function addProductType(){
         var powerName = 'addProductType';
-        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+        var type = "ajax";
+        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
             if(res == 0){
                 layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                 return false;
@@ -108,7 +108,8 @@
 
     function updateProductType(type_id){
         var powerName = 'updateProductType';
-        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+        var type = "ajax";
+        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
             if(res == 0){
                 layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                 return false;
@@ -125,7 +126,8 @@
 
     function deleteProductType(type_id){
         var powerName = 'deleteProductType';
-        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+        var type = "ajax";
+        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
             if(res == 0){
                 layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                 return false;

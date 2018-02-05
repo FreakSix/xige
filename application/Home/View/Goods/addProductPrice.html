@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
-    <meta name="description" content="这是一个 index 页面">
+    <title>添加产品报价信息 - 细格订单管理系统</title>
+    <meta name="description" content="">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
@@ -20,14 +20,11 @@
         h4 { margin: .5rem 0; }
         hr { margin: 0; }
     </style>
-    
 </head>
-
 <body data-type="generalComponents">
-            
     <div class="tpl-portlet-components xg-layer-size">
         <div class="portlet-title">
-            <div class="caption font-green bold">您将要添加的商品信息和价格如下所示：</div>
+            <div class="caption font-green bold">您将要添加的产品信息和价格如下所示：</div>
         </div>
         <div class="tpl-block ">
             <div class="am-g tpl-amazeui-form">
@@ -35,7 +32,7 @@
                     <form class="am-form am-form-horizontal">
                         <div class="contact">
                             <div class="am-form-group">
-                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">商品分类：</label>
+                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">服务类型：</label>
                                 <div class="am-u-sm-8">
                                     <label class="am-u-sm-12 am-form-label" style="font-size:18px;"></label>
                                     <span  style="font-size:18px;"> {$productType[0]['type_name']}</span> 
@@ -43,7 +40,7 @@
                                 </div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">商品：</label>
+                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">产品名称：</label>
                                 <div class="am-u-sm-8">
                                     <label class="am-u-sm-12 am-form-label" style="font-size:18px;">  </label>
                                     <span  style="font-size:18px;"> {$productName[0]['type_name']}</span>
@@ -51,7 +48,7 @@
                                 </div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">商品型号：</label>
+                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">产品型号：</label>
                                 <div class="am-u-sm-8">
                                     <label class="am-u-sm-12 am-form-label" style="font-size:18px;"> </label>
                                     <span  style="font-size:18px;"> {$productModel[0]['name']}</span>
@@ -76,7 +73,7 @@
                                 </div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">商品价格：</label>
+                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">产品价格：</label>
                                 <div class="am-u-sm-8">
                                     <label class="am-u-sm-12 am-form-label" style="font-size:18px;"> </label>
                                     <span  style="font-size:18px;">{$productPrice['price']}</span>
@@ -120,7 +117,7 @@
                 dataType:'json',
                 success:function(res){
                     if(res > 0 ){
-                        layer.confirm('添加成功！您要继续添加商品报价吗？', {
+                        layer.confirm('添加成功！您要继续添加产品报价吗？', {
                             icon: 3,
                             anim:5,
                             title:'提示',
@@ -143,112 +140,6 @@
             parent.layer.close(index);
         });
     });
-</script>
-
-<script type="text/javascript">
-
-//改变商品分类时触发
-function getProductNameInfo(){
-    
-    var type_id = $("#product_type").val();
-    $.ajax({
-        url:'__APP__/Goods/getProductNames',
-        data:'type_id='+type_id,
-        type:'post',
-        dataType:'json',
-        success:function(re){
-            var product_id = '';
-            var product_name = '';
-            $("#product").empty();
-            $("#product").append("<option value=''>请选择商品名称</option>"); 
-            for (var k in re){
-                product_id = re[k].id;
-                product_name = re[k].type_name;
-                $("#product").append("<option value='"+product_id+"'>"+product_name+"</option>");  
-            }
-            //重新加载商品型号
-            $.ajax({
-                url:'__APP__/Goods/getProductModelAll',
-                data:'id= 0',
-                type:'post',
-                dataType:'json',
-                success:function(re){
-                    var product_id = '';
-                    var product_name = '';
-                    $("#product_model").empty();
-                    $("#product_model").append("<option value=''>请选择商品型号</option>"); 
-                    for (var k in re){
-                        product_id = re[k].id;
-                        product_name = re[k].name;
-                        $("#product_model").append("<option value='"+product_id+"'>"+product_name+"</option>"); 
-                    }
-                    //重新加载商品规格
-                    $.ajax({
-                        url:'__APP__/Goods/getProductParameterAll',
-                        data:'id= 0',
-                        type:'post',
-                        dataType:'json',
-                        success:function(re){
-                            var product_id = '';
-                            var product_name = '';
-                            $("#product_parameter").empty();
-                            $("#product_parameter").append("<option value=''>请选择规格类型</option>"); 
-                            for (var k in re){
-                                product_id = re[k].id;
-                                product_name = re[k].name;
-                                $("#product_parameter").append("<option value='"+product_id+"'>"+product_name+"</option>"); 
-                            }
-                        }
-                    });
-                }
-            });
-        }
-    })
-}
-
-//改变商品名称时触发
-function changeProductNameInfo(){
-    var id = $("#product").val();
-    //重新渲染商品型号下拉选择框的内容
-    $.ajax({
-        url:'__APP__/Goods/getProductModel',
-        data:'id='+id,
-        type:'post',
-        dataType:'json',
-        success:function(re){
-            var product_id = '';
-            var product_name = '';
-
-            $("#product_model").empty();
-            $("#product_model").append("<option value=''>请选择商品型号</option>"); 
-            for (var k in re){
-                product_id = re[k].id;
-                product_name = re[k].name;
-                $("#product_model").append("<option value='"+product_id+"'>"+product_name+"</option>"); 
-            }
-        }
-    });
-    //重新渲染商品规格下拉选择框的内容
-    $.ajax({
-        url:'__APP__/Goods/getProductParameter',
-        data:'product_id='+id,
-        type:'post',
-        dataType:'json',
-        success:function(re){
-            var product_id = '';
-            var product_name = '';
-
-            $("#product_parameter").empty();
-            $("#product_parameter").append("<option value=''>请选择规格类型</option>"); 
-            for (var k in re){
-                product_id = re[k].id;
-                product_name = re[k].name;
-                $("#product_parameter").append("<option value='"+product_id+"'>"+product_name+"</option>"); 
-            }
-        }
-    });
-}
-
 </script>
 
 </body>

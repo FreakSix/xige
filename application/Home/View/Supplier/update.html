@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>修改供应商信息</title>
-    <meta name="description" content="这是一个 index 页面">
-    <meta name="keywords" content="index">
+    <title>修改供应商信息 - 细格订单管理系统</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
@@ -138,9 +138,9 @@
                                             <foreach name="productType[$key][productMenu]" key="ke" item="pm">
                                                 <label class="xg-checkbox">
                                                      <?php if(in_array($pm['id'],$productType[$key][productIdArr])){ ?>    
-                                                        <input type="checkbox" name="checkbox[]" value="{$pm.id}" checked="checked"> <?php echo $pm['id'].$pia; ?><?php echo $pm['type_name']; ?>
+                                                        <input type="checkbox" name="checkbox[]" value="{$pm.id}" checked="checked"> <?php echo $pm['type_name']; ?>
                                                     <?php }else{ ?>
-                                                        <input type="checkbox" name="checkbox[]" value="{$pm.id}"> <?php echo $pm['id'].$pia; ?><?php echo $pm['type_name']; ?>
+                                                        <input type="checkbox" name="checkbox[]" value="{$pm.id}"> <?php echo $pm['type_name']; ?>
                                                     <?php } ?>
                                                 </label>
                                             </foreach>

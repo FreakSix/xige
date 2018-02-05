@@ -110,6 +110,12 @@
 
 		// 添加供应商信息
 		public function addSupplier(){
+			// 权限判断
+			$powerName = "addSupplier";
+			$power = $this->isPower($powerName,"controller");
+			if(!$power){
+				$this->redirect("index");
+			}
 			// 左侧菜单
 			$productTypeModel = D("XgProductType");
 	    	// 获取商品分类
@@ -317,6 +323,12 @@
 
 		// 修改供应商信息页面
 		public function update(){
+			// 权限判断
+			$powerName = "updateSupplier";
+			$power = $this->isPower($powerName,"controller");
+			if(!$power){
+				$this->redirect("index");
+			}
 			// 左侧菜单
 			$productTypeModel = D("XgProductType");
 	    	// 获取商品分类
@@ -393,21 +405,15 @@
 				// 向产品分类表中添加供应商id
 				foreach ($post['checkbox'] as $key => $v) {
 					$supplierId = $post['supplier_id'];
-					echo $supplierId;
 					$id = $v;;
-					echo $id;
 					$supplierIdInfo = D("XgProductType")->getSupplierIdStr($id);
 					// dump($supplierIdInfo[0]['supplier_id_str']);
 					if($supplierIdArr == ""){
 						$supplierIdStr = $supplierId.",";
 					}else if(in_array($supplierId, $supplierIdArr) == FALSE){
 						$supplierIdStr = $supplierIdInfo[0]['supplier_id_str'].$supplierId.",";
-						echo $supplierIdStr;
 					}
 					$result_3 = D("XgProductType")->updateSupplierIdStr($id,$supplierIdStr);
-					if($result_3){
-						echo "<script>alert('厉害了')</script>";
-					}
 				}
 				
 				if($post['link_man']){

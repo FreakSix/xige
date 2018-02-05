@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>导出对账单（供应商）</title>
-    <meta name="description" content="这是一个 index 页面">
+    <meta name="description" content="">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
@@ -176,7 +176,7 @@
 <script type="text/javascript">
     $('#daterange-btn').daterangepicker({
             ranges: {
-                '今天': [moment(), moment()],
+                '全部': ['2013-01-01', moment()],
                 '本周': [moment().startOf('week'), moment().endOf('week')],
                 '本月': [moment().startOf('month'), moment().endOf('month')],
                 '今年': [moment().startOf('year'), moment().endOf('year')]

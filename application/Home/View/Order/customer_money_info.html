@@ -19,15 +19,9 @@
     <style>
     </style>
 </head>
-
 <body data-type="generalComponents">
     <div class="tpl-portlet-components">
-        <!-- <div class="portlet-title">
-            <div class="caption font-green bold">客户回款记录</div>
-                
-        </div> -->
         <div class="tpl-block">
-
             <div class="am-g">
                 <div class="am-u-sm-12">
                     <form class="am-form">
@@ -57,11 +51,8 @@
                                         <td>
                                             <div class="am-btn-toolbar">
                                                 <div class="am-btn-group am-btn-group-xs">
-                                                    
-                                                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateCustomerMoney({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                        <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteCustomerMoney({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
-
-
+                                                    <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="updateCustomerMoney({$v['id']})"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                    <button type="button" id="btn-del" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteCustomerMoney({$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
                                                 </div>
                                             </div>
                                         </td>
@@ -90,7 +81,6 @@
                 
             </div>
     </div>
-
     <script src="__PUBLIC__/js/jquery.min.js"></script>
     <script src="__PUBLIC__/js/amazeui.min.js"></script>
     <script src="__PUBLIC__/js/app.js"></script>
@@ -99,11 +89,15 @@
     
     <script type="text/javascript">
         function updateCustomerMoney(id){
-            // // alert(id);
-
-            parent.layerIndexObject['B'] = parent.layer.open({
+            var powerName = 'updateCustomerM';
+            var type = "ajax";
+            $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
+                if(res == 0){
+                    layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                    return false;
+                }else{
+                    parent.layerIndexObject['B'] = parent.layer.open({
                                                             type: 2,
-                                                            // offset: '20px',
                                                             shadeClose : false,
                                                             title: '修改客户回款记录',
                                                             shade: 0.8,
@@ -111,43 +105,48 @@
                                                             btn: ['关闭'],
                                                             content: '__APP__/Order/updateCustomerMoneyInfo/id/'+id //iframe的url
                                                         });
-            
+                }
+            });
         }
 
         function deleteCustomerMoney(id){
-            layer.confirm('您确定要删除该条客户回款信息？', {
-                icon: 3,
-                anim:5,
-                title:'提示',
-                btn: ['确定','取消'] //按钮
-            }, function(){
-                if(id){
-                    $.ajax({
-                        url:'__APP__/Order/deleteCustomerAccountInfo',
-                        data:'id='+id,
-                        type:'post',
-                        dataType:'json',
-                        success:function(res){
-                            layer.confirm(res, {
-                                icon: 1,
-                                anim:5,
-                                title:'提示',
-                                btn: ['确定'] //按钮
-                            }, function(){
-                                window.location.reload();       
-                            });
-                        }
-                    });
-
+            var powerName = 'deleteCustomerM';
+            var type = "ajax";
+            $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
+                if(res == 0){
+                    layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
+                    return false;
                 }else{
-                    layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
-                }          
-            }, function(){
-                layer.msg('删除已取消！', {
-                time: 2000, //20s后自动关闭
-                // title:'提示'
-                });
+                    layer.confirm('您确定要删除该条客户回款信息？', {
+                        icon: 3,
+                        anim:5,
+                        title:'提示',
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        if(id){
+                            $.ajax({
+                                url:'__APP__/Order/deleteCustomerAccountInfo',
+                                data:'id='+id,
+                                type:'post',
+                                dataType:'json',
+                                success:function(res){
+                                    layer.confirm(res, {
+                                        icon: 1,
+                                        anim:5,
+                                        title:'提示',
+                                        btn: ['确定'] //按钮
+                                    }, function(){
+                                        window.location.reload();       
+                                    });
+                                }
+                            });
+                        }else{
+                            layer.alert('删除失败！', {icon: 1,offset: '200px',title:'提示'});
+                        }          
+                    });
+                }
             });
+            
         }
 
 

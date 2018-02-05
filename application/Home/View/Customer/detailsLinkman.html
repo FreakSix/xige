@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>客户联系人详细信息 - 细格订单管理系统</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -61,7 +61,8 @@
     </div>
 <script>
     function deletes(powerName,id){
-        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+        var type = "ajax";
+        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
             if(res == 0){
                 layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                 return false;

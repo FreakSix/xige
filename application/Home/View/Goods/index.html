@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>产品信息</title>
-    <meta name="description" content="这是一个 index 页面">
+    <title>产品信息 - 细格订单管理系统</title>
+    <meta name="description" content="">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
@@ -31,17 +31,17 @@
         </div>
         <!-- 右侧主要内容 -->
         <div class="tpl-content-wrapper">
-            <div class="tpl-content-page-title">
-                商品价格信息查询
-            </div>
-            <ol class="am-breadcrumb">
+            <!-- <div class="tpl-content-page-title">
+                产品价格信息查询
+            </div> -->
+            <ol class="am-breadcrumb" style="margin: 5px">
                 <li><a href="__APP__/Index/index" class="am-icon-home">首页</a></li>
                 <li><a href="#">产品信息</a></li>
                 <li class="am-active"><?php echo $productName[0][type_name] ?></li>
             </ol>
 
 
-            <div class="am-g" style="background-color:white;">
+            <div class="am-g" style="background-color:white;padding: 10px 0">
                 <div class="goods-selection">
                     <div class="am-u-sm-2">
                         
@@ -140,7 +140,7 @@
 
 function changeProductModel(model_id){
     //点击的时候控制边框样式
-    $("#product_model_"+model_id).css({"border":"2px solid red","background-color":"#ccc"}).siblings('li').css({"border":"0px solid red","background-color":"white"});
+    $("#product_model_"+model_id).addClass("select-box-selected").siblings('li').removeClass("select-box-selected");
     
     // 清除特殊工艺边框
     $(".special_tec_li").css({"border":"0px solid red","background-color":"white"});
@@ -173,19 +173,19 @@ function changeProductModel(model_id){
 
 function changeSupplier(supplier_id){
     //点击的时候控制边框样式
-    $("#supplier_"+supplier_id).css({"border":"2px solid red","background-color":"#ccc"}).siblings('li').css({"border":"0px solid red","background-color":"white"});
+    $("#supplier_"+supplier_id).addClass("select-box-selected").siblings('li').removeClass("select-box-selected");
     $("#hide_product_supplier").val(supplier_id);
 }
 
 function changeSpecialTec(id){
     //点击的时候控制边框样式
-    $("#special_tec_"+id).css({"border":"2px solid red","background-color":"#ccc"}).siblings('li').css({"border":"0px solid red","background-color":"white"});
+    $("#special_tec_"+id).addClass("select-box-selected").siblings('li').removeClass("select-box-selected");
     // $("#hide_product_supplier").val(supplier_id);
 }
 
 function changeProductSpec(spec_id){
     //点击的时候控制边框样式
-    $("#product_spec_"+spec_id).css({"border":"2px solid red","background-color":"#ccc"}).siblings('li').css({"border":"0px solid red","background-color":"white"});
+    $("#product_spec_"+spec_id).addClass("select-box-selected").siblings('li').removeClass("select-box-selected");
 
     var hide_parameter_spec = $("#hide_product_spec").val();
     var hide_parameter_value = $("#hide_parameter_value_"+spec_id+"").val();

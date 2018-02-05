@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>新建订单-细格订单管理系统</title>
+    <title>修改订单 - 细格订单管理系统</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -63,15 +63,6 @@
                                 <div class="am-form-group">
                                     <label class="am-u-sm-2 am-form-label">联系人：</label>
                                     <div class="am-u-sm-5">
-                                        <!-- <select id="linkman_name">
-                                            <foreach name="customerLinkManInfo" item="v" key="k">
-                                                <if condition="$orderInfo['linkman_name'] == $v['name']">
-                                                    <option value="{$v['id']}" selected="selected" onclick="getLinkmanPhone({$v['id']})" >{$v['name']}</option>
-                                                <else/>
-                                                    <option value="{$v['id']}" onclick="getLinkmanPhone({$v['id']})" >{$v['name']}</option>
-                                                </if>
-                                            </foreach>
-                                        </select> -->
                                         <select id="doc-select-1" class="lxr_select" data-am-selected="{btnWidth:'100%',maxHeight: 370,searchBox: 1}" onchange="getLinkmanPhone()">
                                             <option value="0">请选择联系人</option>
                                             <foreach name="customerLinkManInfo" item="v" key="k">

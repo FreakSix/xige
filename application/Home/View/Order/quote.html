@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>报价记录列表</title>
-    <meta name="description" content="这是一个 index 页面">
+    <title>报价记录列表 - 细格订单管理系统</title>
+    <meta name="description" content="">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
@@ -32,7 +32,7 @@
             <include file="Public:menu"/>
         </div>
         <div class="tpl-content-wrapper">
-            <ol class="am-breadcrumb">
+            <ol class="am-breadcrumb" style="margin: 5px">
             <li><a href="#" class="am-icon-home">首页</a></li>
             <li><a href="#">订单管理</a></li>
             <li class="am-active">报价记录</li>
@@ -57,14 +57,14 @@
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
-                        <div class="am-u-sm-4 am-u-md-4">
+                        <div class="am-u-sm-4">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
                                     <button type="button" onclick="addQuote()" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增报价</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="am-u-sm-5 am-u-md-5" >
+                        <div class="am-u-sm-4" >
                             <div class="am-form-group" style="margin-left:30px;text-align: right;">
                                 <span style="font-size: 16px; vertical-align: middle;">搜索条件：</span>
                                 <select data-am-selected="{btnSize: 'sm'}" id="input_type_value">
@@ -92,14 +92,26 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="am-u-sm-3 am-u-md-3 am-u-end">
+                        <div class="am-u-sm-4 xg-search-condition" style="min-width: 350px!important">
+                            <div class="xg-search-input">
+                                <input style=" " type="text" class="" placeholder="请输入搜索内容" value="{$get['search_value']}" id="search_value" onkeyup="finds()">
+                            </div>
+                            <span class="" style="border-radius: 0 5px 5px 0; float: left;">
+                                <button style="border-radius: 0 5px 5px 0; " class="am-btn am-btn-success tpl-am-btn-success am-icon-search" type="button"  onclick="searchSubmit('input');"></button>
+                            </span>
+                            <div class="xg-search-menu">
+                                <ul class="searchmore" id="searchmore">
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- <div class="am-u-sm-3 am-u-md-3 am-u-end">
                             <div class="am-input-group am-input-group-sm">
                                 <input type="text" class="am-form-field" placeholder="请先选择搜索类型" value="{$get['search_value']}" id="search_value">
                                 <span class="am-input-group-btn">
                                     <button class="am-btn am-btn-success tpl-am-btn-success am-icon-search" type="button"  onclick="searchSubmit('input');"></button>
                                 </span>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="am-g">
                         <div class="am-u-sm-12">
@@ -242,7 +254,8 @@
     // 新增报价记录
     function addQuote(){
         var powerName = 'addQuote';
-        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+        var type = "ajax";
+        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
             if(res == 0){
                 layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                 return false;
@@ -252,19 +265,19 @@
                     shadeClose : false,
                     title: '新增报价',
                     shade: 0.8,
-                    area: ['75%', '90%'],
+                    area: ['80%', '90%'],
                     btn: ['关闭'],
                     content: '__APP__/Order/addQuote' //iframe的url
                 });
             }
         });
-        
     }
 
     //修改报价记录信息
     function updateQuote(id){
         var powerName = 'updateQuote';
-        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+        var type = "ajax";
+        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
             if(res == 0){
                 layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                 return false;
@@ -274,7 +287,7 @@
                     shadeClose : false,
                     title: '修改报价记录', 
                     shade: 0.8,
-                    area: ['75%', '90%'],
+                    area: ['80%', '90%'],
                     btn: ['关闭'],
                     content: '__APP__/Order/updateQuote/id/'+id, //iframe的url
 
@@ -287,7 +300,8 @@
     //删除报价记录信息
     function deleteQuote(id){
         var powerName = 'deleteQuote';
-        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+        var type = "ajax";
+        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
             if(res == 0){
                 layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                 return false;
@@ -326,7 +340,8 @@
     // 导出检索出来的全部报价记录
     function exportAllQuote(){
         var powerName = 'exportQuote';
-        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+        var type = "ajax";
+        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
             if(res == 0){
                 layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                 return false;
@@ -353,6 +368,63 @@
     }
 
 </script>
+
+<script type="text/javascript">
+    var inputWidth = $(".xg-search-input").width();
+    var menuWidth = inputWidth+2;
+    $(".xg-search-menu").width(menuWidth);
+    $(".xg-search-input input").focus(function(){
+        $(".xg-search-input").addClass("xg-search-input-active");
+    });
+    $(".xg-search-input input").blur(function(){
+        $(".xg-search-input").removeClass("xg-search-input-active");
+    });
+
+    function finds(){
+        var input_type_value = $("#input_type_value").val();
+        if(input_type_value == 0){
+            layer.alert("请选搜索类型！", {icon: 5,});
+            return false;
+        }
+        var search_value = $.trim($("#search_value").val());
+        // alert(search_value);
+        if(search_value.length >= 1){
+            $.post("__APP__/Order/searchQuoteInfo",{"input_type_value":input_type_value,"search_value":search_value},function(res){
+                var item = '';
+                $(".searchmore").empty();//清空原来的ul
+                if(res != ""){
+                    $(".searchmore").html(res);;
+
+                    $(".searchmore").show();
+                }else{
+                    $(".searchmore").hide();
+                }
+            })
+        }else{
+            $(".searchmore").hide();
+        }
+
+        $(document).on("click", ".searchmore li", function(){
+            // $(".user_loadq").val(trim($(this).text()));
+            $("#search_value").val(trim($(this).text()));
+            $(".searchmore").hide();
+        });
+
+        // $(".searchinput").mouseleave(function(){
+        //     $(".searchmore").hide();
+        // })
+    }
+
+    function searchCustomerName(customer_name){
+        $("#search_value").val(customer_name);
+        $(".searchmore").empty();//清空原来的ul
+
+        $(".searchmore").hide();
+    }
+
+
+</script>
+
 </body>
 
 </html>

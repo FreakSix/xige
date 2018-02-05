@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>修改报价记录</title>
-    <meta name="description" content="这是一个 index 页面">
+    <title>修改报价记录 - 细格订单管理系统</title>
+    <meta name="description" content="">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
@@ -35,17 +35,14 @@
                         <div class="am-form-group">
                             <label class="am-u-sm-2 am-form-label">客户名称：</label>
                             <div class="am-u-sm-4">
-                                <input type="text" id="customer_name" value="{$quoteInfo['customer_name']}">
+                                <input type="text" id="customer_name" readonly value="{$quoteInfo['customer_name']}">
                             </div>
                             <label for="user-name" class="am-u-sm-2 am-form-label">客户等级：</label>
                             <div class="am-u-sm-2 am-u-end">
                                 <select id="customer_level">
-                                    <option value="">请选择客户等级</option>
                                     <foreach name="customerLevelInfo" item="v" key="k">
                                         <if condition="$quoteInfo['customer_level_id'] == $v['id']">
                                             <option value="{$v['id']}" selected="selected" >{$v['name']}</option>
-                                        <else/>
-                                            <option value="{$v['id']}" >{$v['name']}</option>
                                         </if>
                                     </foreach>
                                 </select>

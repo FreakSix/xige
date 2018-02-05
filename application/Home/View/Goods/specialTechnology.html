@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>产品特殊工艺名称管理</title>
+  <title>产品特殊工艺名称管理 - 细格订单管理系统</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -73,9 +73,6 @@
                                         </foreach>
                                     </tbody>
                                 </table>
-                                <!-- <div class="am-cf">
-                                    <div class="am-fr">{$pageStr}</div>
-                                </div> -->
                                 <hr>
                             </form>
                         </div>
@@ -94,7 +91,8 @@
     // 添加产品规格名称页面
     function addProductParameter(){
         var powerName = 'addSpecialTec';
-        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+        var type = "ajax";
+        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
             if(res == 0){
                 layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                 return false;
@@ -111,7 +109,8 @@
     // 修改产品规格名称页面
     function updateSpecialTec(tec_id){
         var powerName = 'updateSpecialTec';
-        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+        var type = "ajax";
+        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
             if(res == 0){
                 layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                 return false;
@@ -128,7 +127,8 @@
     // 删除产品规格名称
     function deleteSpecialTec(tec_id){
         var powerName = 'deleteSpecialTec';
-        $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+        var type = "ajax";
+        $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
             if(res == 0){
                 layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                 return false;
@@ -149,13 +149,13 @@
                                     layer.msg("删除产品特殊工艺名称成功！", {icon: 1,anim:5,});
                                     window.location.reload(); 
                                 }else if(res == 0){
-                                    layer.alert('删除失败，请稍后重试111！', {icon: 5,title:'提示'});
+                                    layer.alert('删除失败，请稍后重试！', {icon: 7,title:'提示'});
                                 }
                                 
                             }
                         });
                     }else{
-                        layer.alert('删除失败，请稍后重试！', {icon: 5,title:'提示'});
+                        layer.alert('删除失败，请稍后重试！', {icon: 7,title:'提示'});
                     }          
                 });
             }

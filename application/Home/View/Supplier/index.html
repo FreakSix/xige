@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>供应商管理</title>
-    <meta name="description" content="这是一个 index 页面">
-    <meta name="keywords" content="index">
+    <title>供应商管理 - 细格订单管理系统</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
@@ -39,14 +39,14 @@
                 </div>
                 <div class="tpl-block">
                     <div class="am-g">
-                        <div class="am-u-sm-1 am-u-lg-1" style="min-width: 110px;">
+                        <div class="am-u-sm-1" style="min-width: 110px;">
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
                                     <button type="button" onclick="checkPower('addSupplier','__APP__/Supplier/addSupplier')" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增供应商</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="am-u-sm-2 am-u-lg-2 xg-search-condition">
+                        <div class="am-u-sm-2 xg-search-condition">
                             <div class="am-form-group"> 
                                 省份信息： 
                                 <select data-am-selected="{maxHeight: 370,searchBox: 1,btnSize:'sm'}" id="province" onchange="searchSubmit('province');">
@@ -61,7 +61,7 @@
                                 </select>
                             </div>
                         </div> 
-                        <div class="am-u-sm-3 am-u-lg-3 xg-search-condition">
+                        <div class="am-u-sm-2 xg-search-condition">
                             <div class="am-form-group"> 
                                 城市信息： 
                                 <select data-am-selected="{maxHeight: 370,searchBox: 1,btnSize:'sm'}" id="city" onchange="searchSubmit('city');">
@@ -76,7 +76,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="am-u-sm-2 am-u-lg-3 xg-search-condition" style="text-align: right;">
+                        <div class="am-u-sm-2 xg-search-condition" style="text-align: right;">
                             <div class="am-form-group">
                                 搜索类型：
                                 <select data-am-selected="{btnSize: 'sm'}" id="input_type_value">
@@ -104,7 +104,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="am-u-sm-3 am-u-lg-3 am-u-end">
+                        <div class="am-u-sm-3 am-u-end">
                             <div class="am-input-group am-input-group-sm">
                                 <input type="text" class="am-form-field" placeholder="请先选择搜索类型" value="{$get['search_value']}" id="search_value">
                                 <span class="am-input-group-btn">
@@ -119,21 +119,21 @@
                                 <table class="am-table am-table-striped am-table-hover table-main ">
                                     <thead>
                                         <tr>
-                                            <th >序号</th>
-                                            <th class="xg-table-center table-name">供应商名称</th>
-                                            <th class="xg-table-center table-region">所在地区</th>
-                                            <th class="xg-table-center table-product">可做产品</th>
-                                            <th class="xg-table-center table-tel xg-hide">公司电话</th>
-                                            <th class="xg-table-center table-contact">联系人</th>
-                                            <th class="xg-table-center table-phone">联系电话</th>
-                                            <th class="xg-table-center table-set xg-hide">录入人</th>
-                                            <th class="xg-table-center table-set ">操作</th>
+                                            <th class="xg-hide">序号</th>
+                                            <th class="xg-table-center">供应商名称</th>
+                                            <th class="xg-table-center">所在地区</th>
+                                            <th class="xg-table-center">可做产品</th>
+                                            <th class="xg-table-center xg-hide">公司电话</th>
+                                            <th class="xg-table-center">联系人</th>
+                                            <th class="xg-table-center">联系电话</th>
+                                            <th class="xg-table-center xg-hide">录入人</th>
+                                            <th class="xg-table-center">操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <foreach name="supplierInfo" key="k" item="v">
                                         <tr class="xg-table-tr">
-                                            <td class="xg-table-center">{$k+1}</td> 
+                                            <td class="xg-table-center xg-hide">{$k+1}</td> 
                                             <td><a href="javascript:;" onclick="checkPower('detailSupplier','__APP__/Supplier/detail/supplier_id/{$v['supplier_id']}')">{$v['supplier_name']}</a></td>
                                             <td class="xg-table-center">{$v['local_name']}</td>
                                             <td>
@@ -217,7 +217,8 @@
         }
         // 权限验证
         function checkPower(powerName,url){
-            $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            var type = "ajax";
+            $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
                 if(res == 1){
                     window.location=url;
                 }else{
@@ -227,7 +228,8 @@
         }
         function deletes(powerName,supplier_id){
             // alert(supplier_id);
-            $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            var type = "ajax";
+            $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
                 if(res == 0){
                     layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                     return false;
@@ -267,7 +269,8 @@
 
         // 查看更多的联系人信息
         function linkMan(powerName,id){
-            $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            var type = "ajax";
+            $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
                 if(res == 0){
                     layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                     return false;
@@ -288,7 +291,8 @@
 
         // 添加供应商联系人信息
         function addLinkMan(powerName,id){
-            $.post("__APP__/Base/isPower",{"powerName":powerName},function(res){
+            var type = "ajax";
+            $.post("__APP__/Base/isPower",{"powerName":powerName,"type":type},function(res){
                 if(res == 0){
                     layer.alert("您暂时没有该操作的权限！",{icon:4,title:"提示"});
                     return false;
