@@ -1324,6 +1324,18 @@
 		 * 根据联系人的id获取联系人的地址和电话
 		 * @param unknown $lxr_id
 		 */
+		public function getTelByLxrId($lxr_id){
+			$customerLinkManModel = D("XgCustomerLinkman");
+			$linkManInfo = $customerLinkManModel->getCustomerLinkInfoById($lxr_id);
+			$data['phone'] = $linkManInfo['phone'];
+			$data['address'] = $linkManInfo['address'];
+			$data = json_encode($data);
+			echo $data;
+		}
+		/**
+		 * 根据联系人的姓名获取联系人的地址和电话
+		 * @param unknown $lxr_name
+		 */
 		public function getTelByLxrName($lxr_name){
 			$customerLinkManModel = D("XgCustomerLinkman");
 			$linkManInfo = $customerLinkManModel->getCustomerLinkInfoByName($lxr_name);
