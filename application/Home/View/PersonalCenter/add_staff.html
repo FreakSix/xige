@@ -21,7 +21,7 @@
 </head>
 
 <body data-type="generalComponents">
-    <div class="tpl-portlet-components">
+    <div class="tpl-portlet-components" style="min-width: 500px">
         <div class="tpl-block ">
             <div class="am-g tpl-amazeui-form">
                 <div class="am-u-sm-12">
@@ -32,12 +32,6 @@
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label">所属部门：</label>
                             <div class="am-u-sm-4 am-u-end">
-                                <!-- <select class="depart_option">
-                                <foreach name="departArr" item="item">
-                                    <option value="{$item.id}" onclick="changeDutyOption(this)">{$item.depart_name}</option>
-                                </foreach>
-                                    <option>销售部</option>
-                                </select> -->
                                 <select class="depart_option" data-am-selected="{btnWidth:'200px',maxHeight: 200,searchBox: 1}" onchange="changeDutyOption();">
                                     <option value="0" >选择部门</option>
                                     <foreach name="departArr" item="v">

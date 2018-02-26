@@ -8,7 +8,7 @@
 
 		//根据用户名获取用户的信息
 		public function getManageInfoByUsername($username){
-			$result = M("xg_manager")->where("username = '{$username}'")->find();
+			$result = M("xg_manager")->where("username = '".$username."'")->find();
 			return $result;
 		}
 		//根据用户名获取用户的信息

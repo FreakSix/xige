@@ -80,7 +80,6 @@
 
 	//添加新的权限
 	function addNewPower(){
-        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 		var duty_id = $("#hide_duty_id").val();
 		var children_select =[]; 
 		$('.z_power_select:checked').each(function(){ 
@@ -89,64 +88,17 @@
 		$.post("__APP__/Rbac/savePowerSubmit/",{"children_select":children_select,"duty_id":duty_id},function(res){
 			if(res == 1){
 				parent.layer.msg("修改权限成功！",{icon:1,time:2000});
-                parent.layer.close(index);
-				/* closeLayer(); */
+				closeLayer();
 			}else{
 				layer.alert("修改权限失败！请稍后重试或联系管理员");
 			}
 		})
 	}
-	/* function closeLayer(){
-		var index = parent.layer.getFrameIndex(window.name);
-		parent.layer.close(index);
-	} */
-    $(document).ready(function(){
-        // $("#submit2").click(function(){
-        //     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-        
-        //     var customer_id = $("#customer_id").val();
-        //     var link_address = $("#link_address").val();
-            
-        //     //联系人姓名验证
-        //     var link_name = $("#link_name").val();
-        //     if(link_name == ''){
-        //         parent.layer.msg('联系人姓名不能为空！');
-        //         $("#link_name").focus();
-        //         return false;
-        //     }
-        //     //联系人电话验证
-        //     var link_phone = $("#link_phone").val();
-        //     if(link_phone == ''){
-        //         parent.layer.msg('联系人电话不能为空！');
-        //         $("#link_phone").focus();
-        //         return false;
-        //     }
-            
-        //     $.ajax({
-        //         url:'__APP__/Customer/addCustomerLinkman',
-        //         type:'post',
-        //         data:'link_name='+link_name+'&link_phone='+link_phone+'&link_address='+link_address+'&customer_id='+customer_id,
-        //         dataType:'json',
-        //         success:function(res){
-        //             if(res == 1){
-        //                 parent.layer.alert('信息添加成功！', {
-        //                                                     icon: 1,
-        //                                                     offset: '200px',
-        //                                                     title:'提示',
-        //                                                 });
-        //                 parent.layer.close(index);
-        //             }
-        //             if(res == 2){
-        //                 parent.layer.alert('信息添加失败！', {
-        //                                                     icon: 5,
-        //                                                     offset: '200px',
-        //                                                     title:'提示',
-        //                                                 });
-        //             }
-        //         }
-        //     });
-        // });
-    });
+	function closeLayer(){
+        var index=parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+        window.parent.location.reload(); //刷新父页面
+    }
 </script>
 
 

@@ -174,7 +174,7 @@
 	    	// dump($orderInfo);exit;
 	    	if($orderInfo){
 	    		foreach ($orderInfo as $k => $v) {
-	    			$memoEvent = "明天是订单（编号：".$v['order_id']."， 客户：".$v['customer_name']."，商品名称：".$v['product_model']."）的交货时间，请注意及时处理！";
+	    			$memoEvent = "明天是订单（编号：".$v['order_id']."， 客户：".$v['customer_name']."）的交货时间，请注意及时处理！";
 	    			$originalData = D("XgPersonalMemo")->getPersoalMemoByEvent($memoEvent);
 	    			if($originalData == ""){
 	    				$data['memo_time'] = strtotime(date("Y-m-d"));

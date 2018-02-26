@@ -890,9 +890,9 @@
         }
 
         function getLxrByCustomerId(){
-            var lxr_id = $("#linkman_name").val();
+            var lxr_name = $("#linkman_name").val();
 
-            $.post("__APP__/Order/getTelByLxrId",{"lxr_id":lxr_id},function(res){
+            $.post("__APP__/Order/getTelByLxrName",{"lxr_name":lxr_name},function(res){
                 var data = eval("(" + res + ")");
                 $("#linkman_phone").val(data.phone);
             })
@@ -901,7 +901,7 @@
     <script type="text/javascript">
         $(function(){
             $("#customer_name").blur(function(){
-                $(".searchmore").hide();
+                // $(".searchmore").hide();
                 var customer_name = $.trim($("#customer_name").val());
                 if(customer_name.length >= 1){
                     $.post("__APP__/Order/searchCustomerInfoIsHaveLevel",{"customer_name":customer_name},function(res){

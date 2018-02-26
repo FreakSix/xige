@@ -183,6 +183,7 @@
                 }
             }
 
+            //如果有产品类型和名称搜索的话就需要下面的取值
             if(value == ' '){
                 var product_type = $("#product_type").val();
                 var product_name = 0;
@@ -196,9 +197,11 @@
                 }
                 
             }
-            // alert(customer_level);
+            // // alert(customer_level);
 
             location.href='__APP__/Count/costCount/type/'+type+'/search_date/'+search_date+'/product_type/'+product_type+'/product_name/'+product_name;
+
+            // location.href='__APP__/Count/costCount/type/'+type+'/search_date/'+search_date;
             
 
         }

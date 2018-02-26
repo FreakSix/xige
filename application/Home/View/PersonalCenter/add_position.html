@@ -21,7 +21,7 @@
 </head>
 
 <body data-type="generalComponents">
-    <div class="tpl-portlet-components">
+    <div class="tpl-portlet-components" style="min-height: 300px!important;min-width: 500px">
         <div class="tpl-block ">
             <div class="am-g tpl-amazeui-form">
                 <div class="am-u-sm-12">
@@ -94,7 +94,7 @@
 		 }
 		 $.post("__APP__/Rbac/saveNewDyty",{"depart_id":depart_id,"duty_name":duty_name,"is_manager":is_manager},function(res){
 			 if(res == 1){
-				 layer.msg("添加职位成功！",{icon:1});
+				 parent.layer.msg("添加职位成功！",{icon:1,});
                  closeLayer(); 
 			 }else{
 				 layer.alert("添加职位失败！",{icon:7,title:"提示"});

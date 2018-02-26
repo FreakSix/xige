@@ -48,7 +48,11 @@
 			return $result;
 		
 		}
-
+		// 根据订单ID删除客户回款记录
+		public function deleteCAccountByOrderId($order_id){
+			$result = D("xg_customer_account")->where("order_id = ".$order_id)->delete();
+			return $result;
+		}
 
 		
 	}

@@ -21,7 +21,7 @@
 </head>
 
 <body data-type="generalComponents">
-    <div class="tpl-portlet-components">
+    <div class="tpl-portlet-components" style="min-height: 200px!important;min-width: 600px">
         <div class="tpl-block ">
             <div class="am-g tpl-amazeui-form">
                 <div class="am-u-sm-12">
@@ -34,8 +34,8 @@
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label class="am-u-sm-3 am-form-label">重要程度：</label>
-                            <div class="am-u-sm-9" >
+                            <label class="am-u-sm-2 am-form-label">重要程度：</label>
+                            <div class="am-u-sm-9 am-u-end" >
                                 <if condition="$publicMemoInfo['memo_level'] == 0">
                                     <input type="radio" name="memo_level" value="0" checked> 普通 &nbsp;
                                     <input type="radio" name="memo_level" value="1"> 重要

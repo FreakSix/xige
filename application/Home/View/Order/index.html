@@ -339,7 +339,7 @@
                     shadeClose : false,
                     title: '客户回款记录', 
                     shade: 0.8,
-                    area: ['60%', '60%'],
+                    area: ['60%', '50%'],
                     content: '__APP__/Order/customerMoneyInfo/id/'+id,
                 });
             }
@@ -361,7 +361,7 @@
                     shadeClose : false,
                     title: '客户回款记录', 
                     shade: 0.8,
-                    area: ['40%', '40%'],
+                    area: ['40%', '50%'],
                     content: '__APP__/Order/addCustomerMoney/id/'+id,
                 });
             }
@@ -506,9 +506,8 @@
                 }
             })
         }else{
-            $(".searchmore").hide();
+            $(".searchmore li").hide();
         }
-
         $(document).on("click", ".searchmore li", function(){
             // $(".user_loadq").val(trim($(this).text()));
             $("#search_value").val(trim($(this).text()));
@@ -530,11 +529,11 @@
 </script>
 
 <script type="text/javascript">
-    $(function(){
-        $("#search_value").blur(function(){
-            $(".searchmore").hide();
-        }); 
-    })
+    // $(function(){
+    //     $("#search_value").blur(function(){
+    //         $(".searchmore").hide();
+    //     }); 
+    // })
 
 </script>
 

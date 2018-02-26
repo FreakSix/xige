@@ -54,7 +54,11 @@
 			return $result;
 		
 		}
-
+		// 根据订单ID删除向供应商付款记录
+		public function deleteSAccountByOrderId($order_id){
+			$result = D("xg_supplier_account")->where("order_id = ".$order_id)->delete();
+			return $result;
+		}
 
 		
 	}

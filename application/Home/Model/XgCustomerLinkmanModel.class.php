@@ -29,9 +29,9 @@
 			return $result;
 		}
 		//根据id查询客户联系人信息
-		public function getCustomerLinkInfoByid($id){
+		public function getCustomerLinkInfoByName($name){
 			$customer_link = M("xg_customer_linkman");
-			$result = $customer_link->where("id = ".$id)->find();
+			$result = $customer_link->where("name = '".$name."'")->find();
 			return $result;
 		}
 

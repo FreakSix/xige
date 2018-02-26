@@ -13,6 +13,11 @@
 			$typeArr = M()->query($sql);
 			return $typeArr;
 		}
+		// 根据产品型号名称查询信息
+		public function getProductModelByName($product_model){
+			$result = M("xg_product")->where("name = '".$product_model."'")->select();
+			return $result;
+		}
 		//查出商品对应的商品型号
 		public function getProductModelInfo($condition){
 			$query = M("xg_product");

@@ -900,7 +900,7 @@
 					$order_add_time =  time();
 				}
 				//获取联系人姓名
-				$customerLinkmanInfo = D("XgCustomerLinkman")->getCustomerLinkInfoByid($post['linkman_name']);
+				$customerLinkmanInfo = D("XgCustomerLinkman")->getCustomerLinkInfoByName($post['linkman_name']);
 				$linkmanName = $customerLinkmanInfo['name'];
 
 				$data['order_id']= $order_id;
@@ -923,6 +923,7 @@
 					foreach ($order_product_id_arr as $k => $v) {
 						$orderProductData['order_id'] = $res;
 						$orderProductData['order_num'] = $order_id;
+						$orderProductData['add_time'] = $order_add_time;
 
 						$res_2 = D("XgOrderProduct")->updateOrderProductInfo($orderProductData,$v);
 					}
@@ -1028,9 +1029,9 @@
 				$data['end_money'] = $post['end_money'];
 				$data['cost_price'] = $post['cost_price'];
 				$data['product_remarks'] = $post['product_remark'];
-				$data['add_time'] = time();
+				$data['add_time'] = $post['add_order_time'];
 
-				// dump($data);
+				// dump($data);exit;
 
 				$res = D("XgOrderProduct")->addOrderProductInfo($data);
 
@@ -1270,16 +1271,23 @@
 				$this -> display();
 			}
 		}
-		//删除订单信息（修改订单状态为4）
+		//删除订单信息
 		public function deleteOrderInfo(){
 			$post = $_POST;
-			$res = D("XgOrder")->deleteOrderInfoById($post['id']);
-			if($res > 0){
-				$res = 1;
+			// 删除供应商付款记录
+			$res_1 = D("XgSupplierAccount")->deleteSAccountByOrderId($post["id"]);
+			// 删除客户回款记录
+			$res_2 = D("XgCustomerAccount")->deleteCAccountByOrderId($post["id"]);
+			// 删除订单内产品信息
+			$res_3 = D("XgOrderProduct")->deleteOrderProductByOrderId($post["id"]);
+			// 删除订单信息
+			$res_4 = D("XgOrder")->deleteOrderInfoById($post['id']);
+			if($res_4 > 0){
+				$res_4 = 1;
 			}else{
-				$res = 0;
+				$res_4 = 0;
 			}
-			echo json_encode($res);
+			echo json_encode($res_4);
 		}
 
 		//获得全部的产品名称信息
@@ -1316,9 +1324,9 @@
 		 * 根据联系人的id获取联系人的地址和电话
 		 * @param unknown $lxr_id
 		 */
-		public function getTelByLxrId($lxr_id){
+		public function getTelByLxrName($lxr_name){
 			$customerLinkManModel = D("XgCustomerLinkman");
-			$linkManInfo = $customerLinkManModel->getCustomerLinkInfoByid($lxr_id);
+			$linkManInfo = $customerLinkManModel->getCustomerLinkInfoByName($lxr_name);
 			$data['phone'] = $linkManInfo['phone'];
 			$data['address'] = $linkManInfo['address'];
 			$data = json_encode($data);
@@ -2036,9 +2044,9 @@
 				if($res > 0){
 					//
 					$supplierMoney = $orderProductInfo['supplier_money'] + $post['money'];
-					if($supplierMoney >= $orderProductInfo['end_money']){
+					if($supplierMoney >= $orderProductInfo['cost_money']){
 						$moneyStatus = 3;
-					}elseif (($supplierMoney < $orderProductInfo['end_money']) && $supplierMoney > 0 ) {
+					}elseif (($supplierMoney < $orderProductInfo['cost_money']) && $supplierMoney > 0 ) {
 						$moneyStatus = 2;
 					}else{
 						$moneyStatus = 1;
@@ -2081,9 +2089,9 @@
 						}
 					}
 
-					if($supplierMoney >= $orderProductInfo['end_money']){
+					if($supplierMoney >= $orderProductInfo['cost_money']){
 						$moneyStatus = 3;
-					}elseif (($supplierMoney < $orderProductInfo['end_money']) && $supplierMoney > 0 ) {
+					}elseif (($supplierMoney < $orderProductInfo['cost_money']) && $supplierMoney > 0 ) {
 						$moneyStatus = 2;
 					}else{
 						$moneyStatus = 1;
@@ -2759,7 +2767,7 @@
 
 				if(!empty($customerLinkmanInfo)){
 					foreach ($customerLinkmanInfo as $k => $v) {
-						$html .= "<option value='".$v['id']."' >".$v['name']."</option>";
+						$html .= "<option value='".$v['name']."' >".$v['name']."</option>";
 					}
 				}
 

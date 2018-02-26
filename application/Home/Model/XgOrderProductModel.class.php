@@ -75,7 +75,10 @@
 			$result = M("xg_order_product")->where($condition['where'])->delete();
 			return $result;
 		}
-		
-		
+		// 根据订单ID删除产品信息
+		public function deleteOrderProductByOrderId($order_id){
+			$result = M("xg_order_product")->where("order_id = ".$order_id)->delete();
+			return $result;
+		}
 	}
 	

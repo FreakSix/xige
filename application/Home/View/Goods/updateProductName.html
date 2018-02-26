@@ -21,28 +21,23 @@
 </head>
 <body data-type="generalComponents">
             
-    <div class="tpl-portlet-components xg-layer-size">
+    <div class="tpl-portlet-components" style="min-height: 500px!important;min-width: 700px">
         <div class="portlet-title">
             <div class="caption font-green bold">修改商品名称</div>
         </div>
         <div class="tpl-block ">
             <div class="am-g tpl-amazeui-form">
-                <div class="am-u-sm-12 am-u-md-10">
+                <div class="am-u-sm-12">
                     <form class="am-form am-form-horizontal">
                         <div class="contact">
                             <div class="am-form-group">
                                 <label class="am-u-sm-4 am-form-label" style="font-size:18px;">服务类型</label>
-                                <div class="am-u-sm-4 am-u-end">
-                                    <select id="product_type" name="product_type" data-am-selected="{btnWidth:'200px',maxHeight: 370,searchBox: 1}" >
-                                       <option value="0" >请选择商品分类</option>
-                                        <foreach name="productType" item="v">
-                                            <if condition="$productTypeInfo['0']['pid'] == $v['id']">
-                                                <option value="{$v[id]}" selected="selected">{$v['type_name']}</option>
-                                            <else/>
-                                                <option value="{$v['id']}" >{$v['type_name']}</option>
-                                            </if>
-                                        </foreach>
-                                    </select>
+                                <div class="am-u-sm-4 am-u-end" style="height: 35px;font-size: 18px;padding-top: 10px">
+                                    <foreach name="productType" item="v">
+                                        <if condition="$productTypeInfo['0']['pid'] == $v['id']">
+                                            <span>{$v['type_name']}</span>
+                                        </if>
+                                    </foreach>
                                 </div>
                             </div>
                             <div class="am-form-group">
@@ -75,7 +70,7 @@
                             </div>
                             <div class="am-form-group">
                                 <label class="am-u-sm-4 am-form-label" style="font-size:18px;">请选择产品规格名称</label>
-                                <div class="am-u-sm-8">
+                                <div class="am-u-sm-8 am-u-end">
                                     <foreach name="productParameterInfo" item="v">
                                         <?php if(in_array($v['id'],$selectParameter)){ ?>
                                             <label class="am-checkbox-inline" style="font-size:16px;">
@@ -118,13 +113,6 @@
             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
             
             var id = $("#id").val();
-            //选择商品类型验证
-            var product_type = $("#product_type").val();
-            if(product_type == ''){
-                parent.layer.msg('请选择服务类型！');
-                $("#product_type").focus();
-                return false;
-            }
             //添加商品名称验证
             var product_name = $("#product_name").val();
             if(product_name == ''){
@@ -163,7 +151,7 @@
             $.ajax({
                 url:'__APP__/Goods/updateProductName',
                 type:'post',
-                data:'type_name='+product_name+'&pid='+product_type+'&parameter='+parameter+'&id='+id+'&specialTec='+specialTec+'&product_unit='+product_unit,
+                data:'type_name='+product_name+'&parameter='+parameter+'&id='+id+'&specialTec='+specialTec+'&product_unit='+product_unit,
                 dataType:'json',
                 success:function(res){
                     if(res > 0 ){

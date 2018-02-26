@@ -467,7 +467,7 @@
 
 			$this->display();
 		}
-		// 产品名称是否存在验证
+		// 产品名称及服务类型是否存在验证
 		public function checkProductName(){
 			if($_POST){
 				$name = $_POST['name'];
@@ -513,7 +513,7 @@
 			if(!empty($post)){
 				$id = $post['id'];
 				$product['type_name'] = $post['type_name'];
-				$product['pid'] = $post['pid'];
+				// $product['pid'] = $post['pid'];
 				$product['parameter_id_str'] = $post['parameter'];
 				$product['special_tec_str'] = $post['specialTec'];
 				$product['product_unit'] = $post['product_unit'];
@@ -633,6 +633,18 @@
 
 			$this->display();
 		}
+		// 验证产品型号是否已存在
+		public function checkProductModel(){
+			if($_POST){
+				$product_model = $_POST['product_model'];
+				$result = D("XgProduct")->getProductModelByName($product_model);
+				if(empty($result)){
+					echo 1;
+				}else{
+					echo 0;
+				}
+			}
+		}
 		// 添加产品型号
 		public function addProductModel(){
 			$post = $_POST;
@@ -661,7 +673,7 @@
 				$id = $post['id'];
 
 				$product['name'] = $post['model_name'];
-				$product['pid'] = $post['pid'];
+				// $product['pid'] = $post['pid'];
 				
 				$res = D("XgProduct")->updateProductModelInfo($product,$id);
 

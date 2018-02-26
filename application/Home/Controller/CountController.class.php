@@ -67,7 +67,7 @@
 			//供应商    本月   支出金额、   未付金额
 			$supplierAccountInfo = D("XgSupplierAccount")->supplierAccountInfo($condition['money']);
 			$supplierMoney = 0;    //支出
-			
+			// dump($supplierAccountInfo);
 			if(!empty($supplierAccountInfo)){
 				foreach ($supplierAccountInfo as $k => $v) {
 					$supplierMoney = $supplierMoney + (float)$v["money"];
@@ -75,17 +75,19 @@
 				}
 			}
 
-			$condition['orderProductSupplier']['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and order_id != '' and order_num != '' ";
+			$condition['orderProductSupplier']['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and `order_id` IS not NULL AND `order_num` IS not NULL ";
 			// $condition['orderProductSupplier']['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
 			$orderProductInfo = D("XgOrderProduct")->orderProductInfo($condition['orderProductSupplier']);
-
-			$toSupplierCostMoney = 0;		//给供应商的成本
+			// dump($orderProductInfo);
+			$toSupplierCostMoney = 0;		//应给供应商的成本
+			$productSupplierMoney = 0;		//本月订单中实际给供应商的金额
 			if(!empty($orderProductInfo)){
 				foreach ($orderProductInfo as $kk => $vv) {
 					$toSupplierCostMoney = $toSupplierCostMoney + (float)$vv["cost_money"];
+					$productSupplierMoney = $productSupplierMoney + (float)$vv["supplier_money"];
 				}
 			}
-			$supplierDebtMoney = $toSupplierCostMoney - $supplierMoney;		//未付
+			$supplierDebtMoney = $toSupplierCostMoney - $productSupplierMoney;		//未付
 
 			$data['supplierMoney'] = $supplierMoney;
 			$data['supplierDebtMoney'] = $supplierDebtMoney;
@@ -106,8 +108,10 @@
 					$orderProductInfoSupplier = D("XgOrderProduct")->getOrderProductInfo($condition['orderProduct']);
 					if(!empty($orderProductInfoSupplier)){
 						foreach ($orderProductInfoSupplier as $kk => $vv) {
+							// dump($vv['id']);
 							$supplierMoneyAll = $supplierMoneyAll + (float)$vv["supplier_money"];
-							$supplierDebtMoneyAll = $supplierDebtMoneyAll + ((float)$vv["end_money"] - (float)$vv["supplier_money"]);
+							$supplierDebtMoneyAll = $supplierDebtMoneyAll + ((float)$vv["cost_money"] - (float)$vv["supplier_money"]);
+							// $supplierDebtMoneyAll = $supplierDebtMoneyAll + (float)$vv["cost_money"];
 						}
 					}
 				}
@@ -214,9 +218,11 @@
 						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
 					}
 					$customerAccountInfo = D("XgCustomerAccount")->customerAccountInfo($condition);
+					// dump($customerAccountInfo);
 					$customerMoney = 0;  //客户回款
 					if(!empty($customerAccountInfo)){
 						foreach ($customerAccountInfo as $k => $v) {
+							// dump($v['order_id']);
 							$customerMoney = $customerMoney + (float)$v["money"];
 						}
 					}
@@ -532,7 +538,7 @@
 							if(!empty($orderProductInfo)){
 								foreach ($orderProductInfo as $kk => $vv) {
 									$supplierMoney = $supplierMoney + (float)$vv["supplier_money"];
-									$debtMoney = $debtMoney + ((float)$vv["end_money"] - (float)$vv["supplier_money"]);
+									$debtMoney = $debtMoney + ((float)$vv["cost_money"] - (float)$vv["supplier_money"]);
 								}
 							}
 						}
@@ -574,7 +580,7 @@
 							if(!empty($orderProductInfo)){
 								foreach ($orderProductInfo as $kk => $vv) {
 									$supplierMoney = $supplierMoney + (float)$vv["supplier_money"];
-									$debtMoney = $debtMoney + ((float)$vv["end_money"] - (float)$vv["supplier_money"]);
+									$debtMoney = $debtMoney + ((float)$vv["cost_money"] - (float)$vv["supplier_money"]);
 								}
 							}
 						}
@@ -612,7 +618,7 @@
 							if(!empty($orderProductInfo)){
 								foreach ($orderProductInfo as $kk => $vv) {
 									$supplierMoney = $supplierMoney + (float)$vv["supplier_money"];
-									$debtMoney = $debtMoney + ((float)$vv["end_money"] - (float)$vv["supplier_money"]);
+									$debtMoney = $debtMoney + ((float)$vv["cost_money"] - (float)$vv["supplier_money"]);
 								}
 							}
 						}
@@ -750,7 +756,7 @@
 
 			$get=$_GET;
 
-			$where = $this->getConditionInfo($get);
+			$where = $this->getProductConditionInfo($get);
 
 			if($get['type'] == 'days'){
 				if($get['search_date'] == ''){
@@ -767,11 +773,7 @@
 
 					$endTime=mktime(23,59,59,$dateTimeArr['1'],$i,$dateTimeArr['0'])+1;
 
-					if($where['where'] == ''){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
+					$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
 
 					$orderInfo = D("XgOrder")->orderInfo($condition);
 					//
@@ -782,7 +784,11 @@
 						foreach ($orderInfo as $k => $v) {
 							$money = $money + (float)$v["order_money"];
 							
-							$condition['orderProduct'] = "order_id = ".$v['id']."";
+							if($where['where'] == ''){
+								$condition['orderProduct'] = "order_id = ".$v['id']." ";
+							}else{
+								$condition['orderProduct'] = "order_id = ".$v['id']." and ".$where['where']." ";
+							}
 							$orderProductInfo = D("XgOrderProduct")->getOrderProductInfo($condition['orderProduct']);
 							if(!empty($orderProductInfo)){
 								foreach ($orderProductInfo as $kk => $vv) {
@@ -815,11 +821,7 @@
 
 					$endTime=mktime(23,59,59,$i,$dayNum,$get['search_date'])+1;
 
-					if($where['where'] == ''){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
+					$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
 
 					$orderInfo = D("XgOrder")->orderInfo($condition);
 					//
@@ -830,7 +832,11 @@
 						foreach ($orderInfo as $k => $v) {
 							$money = $money + (float)$v["order_money"];
 							
-							$condition['orderProduct'] = "order_id = ".$v['id']."";
+							if($where['where'] == ''){
+								$condition['orderProduct'] = "order_id = ".$v['id']." ";
+							}else{
+								$condition['orderProduct'] = "order_id = ".$v['id']." and ".$where['where']." ";
+							}
 							$orderProductInfo = D("XgOrderProduct")->getOrderProductInfo($condition['orderProduct']);
 							if(!empty($orderProductInfo)){
 								foreach ($orderProductInfo as $kk => $vv) {
@@ -858,11 +864,7 @@
 
 					$endTime=mktime(23,59,59,12,31,$i)+1;
 
-					if($where['where'] == ''){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
+					$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
 
 					$orderInfo = D("XgOrder")->orderInfo($condition);
 					//
@@ -873,7 +875,11 @@
 						foreach ($orderInfo as $k => $v) {
 							$money = $money + (float)$v["order_money"];
 							
-							$condition['orderProduct'] = "order_id = ".$v['id']."";
+							if($where['where'] == ''){
+								$condition['orderProduct'] = "order_id = ".$v['id']." ";
+							}else{
+								$condition['orderProduct'] = "order_id = ".$v['id']." and ".$where['where']." ";
+							}
 							$orderProductInfo = D("XgOrderProduct")->getOrderProductInfo($condition['orderProduct']);
 							if(!empty($orderProductInfo)){
 								foreach ($orderProductInfo as $kk => $vv) {
@@ -913,118 +919,7 @@
 
 
 		//交易客户数
-		public function transactionCustomerCount(){
-			// 左侧菜单
-			$productType = $this->menu();
-			$this->assign("productType",$productType);
-
-			$get=$_GET;
-
-			if($get['type'] == 'days'){
-				if($get['search_date'] == ''){
-					$get['search_date'] = date('Y-m');
-				}
-
-				$dateTimeArr = explode("-", $get['search_date']);
-				$yueTime=mktime(0,0,0,$dateTimeArr['1'],1,$dateTimeArr['0']);
-			 	$yue = date("Y-m-d",$yueTime);
-			 	$dayNum = date('t', strtotime($yue));
-			 	// dump($dayNum);
-			 	for ($i=1; $i<= $dayNum ;$i++) {
-			 		$starTime=mktime(0,0,0,$dateTimeArr['1'],$i,$dateTimeArr['0']);
-
-					$endTime=mktime(23,59,59,$dateTimeArr['1'],$i,$dateTimeArr['0'])+1;
-
-					if($where['where'] == ''){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
-					
-					$orderInfo = D("XgOrder")->orderInfo($condition);
-					$orderCustomerInfo = "";
-					$customerCount = 0;
-					if(!empty($orderInfo)){
-						foreach ($orderInfo as $k => $v) {
-							$orderCustomerInfo[$v['customer_id']] = $v['customer_name'];
-						}
-						$customerCount = count($orderCustomerInfo);
-					}
-					$data['customerCount'][] = $customerCount;
-			 	}
-				// 
-				$data['x_date'] = $this->x_date_day($dayNum);
-
-
-			}elseif($get['type'] == 'months'){
-				// var_dump($get['type']);
-				if($get['search_date'] == ''){
-					$get['search_date'] = date('Y');
-				}
-
-				for ($i=1; $i<13 ; $i++) { 
-				 	$starTime=mktime(0,0,0,$i,1,$get['search_date']);
-				 	$yue = date("Y-m-d",$starTime);
-
-				 	$dayNum = date('t', strtotime($yue));
-
-					$endTime=mktime(23,59,59,$i,$dayNum,$get['search_date'])+1;
-
-					if($where['where'] == ''){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
-
-					$orderInfo = D("XgOrder")->orderInfo($condition);
-					$orderCustomerInfo = "";
-					$customerCount = 0;
-					if(!empty($orderInfo)){
-						foreach ($orderInfo as $k => $v) {
-							$orderCustomerInfo[$v['customer_id']] = $v['customer_name'];
-						}
-						$customerCount = count($orderCustomerInfo);
-					}
-					$data['customerCount'][] = $customerCount;
-				 }
-				 $data['x_date'] = $this->x_date_month();
-
-			}else{
-				//第一条信息录入时间
-				$firstOrderInfo = D("XgOrder")->getOrderInfoByOrder("asc"); 
-				$firstTime = date("Y",$firstOrderInfo['add_time']);	
-
-				for ($i=$firstTime; $i<=date('Y') ; $i++) {
-				 	$starTime=mktime(0,0,0,1,1,$i);
-
-					$endTime=mktime(23,59,59,12,31,$i)+1;
-
-					if($where['where'] == ''){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
-
-					$orderInfo = D("XgOrder")->orderInfo($condition);
-					$orderCustomerInfo = "";
-					$customerCount = 0;
-					if(!empty($orderInfo)){
-						foreach ($orderInfo as $k => $v) {
-							$orderCustomerInfo[$v['customer_id']] = $v['customer_name'];
-						}
-						$customerCount = count($orderCustomerInfo);
-					}
-					$data['customerCount'][] = $customerCount;
-					$data['x_date'][] = $i."年";
-
-				}
-				 
-			}
-
-			$this->assign("data",$data);
-			$this->assign("get",$get);
-			$this -> display();
-		}
+		
 
 
 		//新增客户数
@@ -1119,130 +1014,7 @@
 
 
 		//客户订单数与交易额
-		public function customerOrderAndTransactionCount(){
-			// 左侧菜单
-			$productType = $this->menu();
-			$this->assign("productType",$productType);
-
-			$get=$_GET;
-
-			$where = $this->getConditionInfo($get);
-			
-			if($get['type'] == 'days'){
-				if($get['search_date'] == ''){
-					$get['search_date'] = date('Y-m');
-				}
-
-				$dateTimeArr = explode("-", $get['search_date']);
-				$yueTime=mktime(0,0,0,$dateTimeArr['1'],1,$dateTimeArr['0']);
-			 	$yue = date("Y-m-d",$yueTime);
-			 	$dayNum = date('t', strtotime($yue));
-			 	// dump($dayNum);
-			 	for ($i=1; $i<= $dayNum ;$i++) {
-			 		$starTime=mktime(0,0,0,$dateTimeArr['1'],$i,$dateTimeArr['0']);
-
-					$endTime=mktime(23,59,59,$dateTimeArr['1'],$i,$dateTimeArr['0'])+1;
-
-					if($where['where'] == ''){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
-					
-					//客户订单数
-					$orderCount = D("XgOrder")->getOrderCount($condition);
-					$data['orderCount'][] = $orderCount;
-					//客户交易额
-					$orderInfo = D("XgOrder")->orderInfo($condition);
-					$money = 0;		//交易额
-					if(!empty($orderInfo)){
-						foreach ($orderInfo as $k => $v) {
-							$money = $money + (float)$v['order_money'];
-						}
-					}
-					$data['money'][] = $money;
-			 	}
-				// 
-				$data['x_date'] = $this->x_date_day($dayNum);
-
-
-			}elseif($get['type'] == 'months'){
-				// var_dump($get['type']);
-				if($get['search_date'] == ''){
-					$get['search_date'] = date('Y');
-				}
-
-				for ($i=1; $i<13 ; $i++) { 
-				 	$starTime=mktime(0,0,0,$i,1,$get['search_date']);
-				 	$yue = date("Y-m-d",$starTime);
-
-				 	$dayNum = date('t', strtotime($yue));
-
-					$endTime=mktime(23,59,59,$i,$dayNum,$get['search_date'])+1;
-
-					if($where['where'] == ''){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
-
-					//客户订单数
-					$orderCount = D("XgOrder")->getOrderCount($condition);
-					$data['orderCount'][] = $orderCount;
-					//客户交易额
-					$orderInfo = D("XgOrder")->orderInfo($condition);
-					$money = 0;		//交易额
-					if(!empty($orderInfo)){
-						foreach ($orderInfo as $k => $v) {
-							$money = $money + (float)$v['order_money'];
-						}
-					}
-					$data['money'][] = $money;
-				 }
-				 $data['x_date'] = $this->x_date_month();
-
-			}else{
-				//第一条信息录入时间
-				$firstOrderInfo = D("XgOrder")->getOrderInfoByOrder("asc"); 
-				$firstTime = date("Y",$firstOrderInfo['add_time']);	
-
-				for ($i=$firstTime; $i<=date('Y') ; $i++) {
-				 	$starTime=mktime(0,0,0,1,1,$i);
-
-					$endTime=mktime(23,59,59,12,31,$i)+1;
-
-					if($where['where'] == ''){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
-					//客户订单数
-					$orderCount = D("XgOrder")->getOrderCount($condition);
-					$data['orderCount'][] = $orderCount;
-					//客户交易额
-					$orderInfo = D("XgOrder")->orderInfo($condition);
-					$money = 0;		//交易额
-					if(!empty($orderInfo)){
-						foreach ($orderInfo as $k => $v) {
-							$money = $money + (float)$v['order_money'];
-						}
-					}
-					$data['money'][] = $money;
-
-					$data['x_date'][] = $i."年";
-
-				}
-				 
-			}
-
-			//全部客户信息
-			$customerInfo = D("XgCustomer")->getCustomerInfos();
-
-			$this->assign("data",$data);
-			$this->assign("customerInfo",$customerInfo);
-			$this->assign("get",$get);
-			$this -> display();
-		}
+		
 
 
 		//客户订单数排行
@@ -1328,156 +1100,7 @@
 
 
 		//成交产品总数
-		public function productCount(){
-			// 左侧菜单
-			$productType = $this->menu();
-			$this->assign("productType",$productType);
-
-			$get=$_GET;
-
-			$where = $this->getConditionInfo($get);
-
-			if($get['type'] == 'days'){
-				if($get['search_date'] == ''){
-					$get['search_date'] = date('Y-m');
-				}
-
-				$dateTimeArr = explode("-", $get['search_date']);
-				$yueTime=mktime(0,0,0,$dateTimeArr['1'],1,$dateTimeArr['0']);
-			 	$yue = date("Y-m-d",$yueTime);
-			 	$dayNum = date('t', strtotime($yue));
-			 	// dump($dayNum);
-			 	for ($i=1; $i<= $dayNum ;$i++) {
-			 		$starTime=mktime(0,0,0,$dateTimeArr['1'],$i,$dateTimeArr['0']);
-
-					$endTime=mktime(23,59,59,$dateTimeArr['1'],$i,$dateTimeArr['0'])+1;
-
-					if($where['where'] == ''){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
-
-					$orderInfo = D("XgOrder")->orderInfo($condition);
-					//
-					$cutomerNum = 0;  //产品数
-					if(!empty($orderInfo)){
-						foreach ($orderInfo as $k => $v) {
-							$money = $money + (float)$v["order_money"];
-							
-							$condition['orderProduct'] = "order_id = ".$v['id']."";
-							$orderProductInfo = D("XgOrderProduct")->getOrderProductInfo($condition['orderProduct']);
-							if(!empty($orderProductInfo)){
-								foreach ($orderProductInfo as $kk => $vv) {
-									$cutomerNum = $cutomerNum + (float)$vv["num"];
-								}
-							}
-						}
-					}
-
-					$data['cutomerNum'][] = $cutomerNum;
-			 	}
-				
-				$data['x_date'] = $this->x_date_day($dayNum);
-
-
-			}elseif($get['type'] == 'months'){
-				if($get['search_date'] == ''){
-					$get['search_date'] = date('Y');
-				}
-
-				for ($i=1; $i<13 ; $i++) { 
-				 	$starTime=mktime(0,0,0,$i,1,$get['search_date']);
-				 	$yue = date("Y-m-d",$starTime);
-
-				 	$dayNum = date('t', strtotime($yue));
-
-					$endTime=mktime(23,59,59,$i,$dayNum,$get['search_date'])+1;
-
-					if($where['where'] == ''){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
-
-					$orderInfo = D("XgOrder")->orderInfo($condition);
-					//
-					$cutomerNum = 0;  //产品数
-					if(!empty($orderInfo)){
-						foreach ($orderInfo as $k => $v) {
-							$money = $money + (float)$v["order_money"];
-							
-							$condition['orderProduct'] = "order_id = ".$v['id']."";
-							$orderProductInfo = D("XgOrderProduct")->getOrderProductInfo($condition['orderProduct']);
-							if(!empty($orderProductInfo)){
-								foreach ($orderProductInfo as $kk => $vv) {
-									$cutomerNum = $cutomerNum + (float)$vv["num"];
-								}
-							}
-						}
-					}
-
-					$data['cutomerNum'][] = $cutomerNum;
-				 }
-				 $data['x_date'] = $this->x_date_month();
-
-			}else{
-				//第一条信息录入时间
-				$firstOrderInfo = D("XgOrder")->getOrderInfoByOrder("asc"); 
-				$firstTime = date("Y",$firstOrderInfo['add_time']);	
-
-				for ($i=$firstTime; $i<=date('Y') ; $i++) {
-				 	$starTime=mktime(0,0,0,1,1,$i);
-
-					$endTime=mktime(23,59,59,12,31,$i)+1;
-
-					if($where['where'] == ''){
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' ";
-					}else{
-						$condition['where'] = "add_time >= '".$starTime."' and add_time < '".$endTime."' and ".$where['where']." ";
-					}
-
-					$orderInfo = D("XgOrder")->orderInfo($condition);
-					//
-					$cutomerNum = 0;  //产品数
-					if(!empty($orderInfo)){
-						foreach ($orderInfo as $k => $v) {
-							$money = $money + (float)$v["order_money"];
-							
-							$condition['orderProduct'] = "order_id = ".$v['id']."";
-							$orderProductInfo = D("XgOrderProduct")->getOrderProductInfo($condition['orderProduct']);
-							if(!empty($orderProductInfo)){
-								foreach ($orderProductInfo as $kk => $vv) {
-									$cutomerNum = $cutomerNum + (float)$vv["num"];
-								}
-							}
-						}
-					}
-
-					$data['cutomerNum'][] = $cutomerNum;
-
-					$data['x_date'][] = $i."年";
-
-				}
-				
-			}
-
-			//商品全部分类
-			$productTypeInfo = D("XgProductType")->getProductType();
-			//商品全部名称
-			if(empty($get['product_type'])){
-				$condition['product']['where'] = "pid > 0 ";
-				$productNameInfo = D("XgProductType")->getProductInfo($condition['product']);
-			}else{
-				$productNameInfo = D("XgProductType")->getProductTypeByPid($get['product_type']);
-			}
-			
-			$this->assign("data",$data);
-			$this->assign("productTypeInfo",$productTypeInfo);
-			$this->assign("productNameInfo",$productNameInfo);
-			$this->assign("get",$get);
-			$this -> display();
-		}
+		
 
 
 		//产品销售额排行
@@ -1612,6 +1235,25 @@
 			$this->assign("webHeight",$webHeight);
 			$this->assign("data",$data);
 			$this -> display();
+		}
+
+
+		//如果有产品类型搜索
+		public function getProductConditionInfo($get){
+			$condition = array();
+
+			//如果有产品类型搜索
+			if($get['product_type']){
+				$whereArr[] = "product_type_id = ".$get['product_type']."";
+			}
+			//如果有产品名称搜索
+			if($get['product_name']){
+				$whereArr[] = "product_name_id = ".$get['product_name']."";
+			}
+
+			$where = implode(' and ',$whereArr);
+			$condition['where'] = $where;
+			return $condition;
 		}
 
 

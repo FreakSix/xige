@@ -79,8 +79,7 @@
                 </div>
 
                 <div class="tpl-block">
-                    <!-- <div class="am-g"> -->
-                        <div class="am-u-sm-2">
+                        <!-- <div class="am-u-sm-2">
                             <div class="am-btn-group am-btn-group-xs"> 
                                     产品分类：
                                 </div>
@@ -112,7 +111,7 @@
                                 </select>
                                 <span class="am-form-caret"></span>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="am-u-sm-7 ">
 
                             <if condition="$get['type'] == days ">
@@ -190,23 +189,25 @@
                 }
             }
 
-            if(value == ' '){
-                var product_type = $("#product_type").val();
-                var product_name = 0;
-            }else{
-                if(value == 'product_type'){
-                    var product_type = $("#product_type").val();
-                    var product_name = 0;
-                }else{
-                    var product_type = $("#product_type").val();
-                    var product_name = $("#product_name").val();
-                }
+            //如果有产品类型和名称搜索的话就需要下面的取值
+            // if(value == ' '){
+            //     var product_type = $("#product_type").val();
+            //     var product_name = 0;
+            // }else{
+            //     if(value == 'product_type'){
+            //         var product_type = $("#product_type").val();
+            //         var product_name = 0;
+            //     }else{
+            //         var product_type = $("#product_type").val();
+            //         var product_name = $("#product_name").val();
+            //     }
                 
-            }
+            // }
             
             // alert(customer_level);
 
-            location.href='__APP__/Count/orderCount/type/'+type+'/search_date/'+search_date+'/product_type/'+product_type+'/product_name/'+product_name;            
+            // location.href='__APP__/Count/orderCount/type/'+type+'/search_date/'+search_date+'/product_type/'+product_type+'/product_name/'+product_name;
+            location.href='__APP__/Count/orderCount/type/'+type+'/search_date/'+search_date;            
 
         }
     </script>

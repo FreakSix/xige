@@ -105,11 +105,9 @@
         function addPosition(){
             layer.open({
                 type: 2,
-                offset: '100px',
                 title: '添加职位信息',
-                shadeClose: true,
                 shade: 0.8,
-                area: ['50%', '70%'],
+                area: ['40%', '50%'],
                 btn: ['关闭'],
                 content: '__APP__/Rbac/addPosition' //iframe的url
             });
@@ -118,11 +116,9 @@
         function updatePosition(duty_id,depart_id){
             layer.open({
                 type: 2,
-                offset: '100px',
                 title: '修改职位信息',
-                shadeClose: true,
                 shade: 0.8,
-                area: ['40%', '60%'],
+                area: ['40%', '50%'],
                 btn: ['关闭'],
                 content: '__APP__/Rbac/updatePosition?duty_id='+duty_id+'&depart_id='+depart_id //iframe的url
             });
@@ -158,11 +154,10 @@
         function access(id){
             layer.open({
                 type: 2,
-                offset: '50px',
                 title: '分配权限',
                 shadeClose: false,
                 shade: 0.8,
-                area: ['60%', '85%'],
+                area: ['80%', '90%'],
                 btn: ['关闭'],
                 content: '__APP__/Rbac/access?id='+id //iframe的url
             });

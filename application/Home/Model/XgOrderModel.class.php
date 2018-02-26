@@ -71,7 +71,7 @@
 		}
 		// 查询订单录入人为当前登录用户且交货时间为明天的订单
 		public function getOrderByTime($tomorrow,$user){
-			$sql = "select order_id,customer_name,product_model from xg_order where trade_time = ".$tomorrow." AND manager_name = '".$user."' AND order_status != 4";
+			$sql = "select order_id,customer_name from xg_order where trade_time = ".$tomorrow." AND add_manager_name = '".$user."'";
 			$result = M()->query($sql);
 			return $result;
 		}

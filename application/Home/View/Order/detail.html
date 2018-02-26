@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
     <link rel="stylesheet" href="__PUBLIC__/css/app.css">
     <style>
+        .am-accordion-content .am-form-group { margin-bottom: 5px }
     </style>
 </head>
 
@@ -49,29 +50,29 @@
                             <form class="am-form am-form-horizontal">
                                 <!-- 公司信息 -->
                                 <h6>客户信息</h6>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">客户名称：</label>
                                     <div class="am-u-sm-5">
                                         {$orderInfo['customer_name']}
                                     </div>
                                     <label for="user-name" class="am-u-sm-2 am-form-label">交货日期：</label>
-                                    <div class="am-u-sm-3">
+                                    <div class="am-u-sm-3 am-u-end">
                                         {$orderInfo['trade_time_value']}
                                     </div>
                                 </div>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">联系人：</label>
                                     <div class="am-u-sm-5">
                                         {$orderInfo['linkman_name']}
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">联系电话：</label>
-                                    <div class="am-u-sm-3">
+                                    <div class="am-u-sm-3 am-u-end">
                                         {$orderInfo['linkman_tel']}
                                     </div>
                                 </div>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">收货地址：</label>
-                                    <div class="am-u-sm-10">
+                                    <div class="am-u-sm-10 am-u-end">
                                         {$orderInfo['link_address']}
                                     </div>
                                 </div>
@@ -83,19 +84,20 @@
                                     <if condition="$orderInfo['orderProductInfo'] != '' ">
                                         <foreach name="orderInfo['orderProductInfo']" item="v" key="k">
                                             <dl class="am-accordion-item ">
-                                                <dt class="am-accordion-title">
+                                                <dt class="am-accordion-title" style="padding: 0">
                                                     <!-- {$v['product_name']} -->
-                                                    <div class="am-form-group">
+                                                    <div class="am-form-group" style="margin-bottom: 0px">
                                                         <label class="am-u-sm-2 am-form-label">{$v['product_name']}</label>
                                                         <label class="am-u-sm-2 am-form-label">成交总价：</label>
-                                                        <div class="am-u-sm-2">
+                                                        <div class="am-u-sm-1" style="width: 120px">
                                                             <label class="am-form-label">{$v['end_money']} 元</label>
                                                         </div>
                                                         <label class="am-u-sm-2 am-form-label">向供应商付款：</label>
-                                                        <div class="am-u-sm-2">
+                                                        <div class="am-u-sm-1" style="width: 120px">
                                                             <label class="am-form-label">{$v['supplier_money']} 元</label>
                                                         </div>
-                                                        <label class="am-u-sm-2 am-form-label">{$v['supplier_money_status_value']}</label>
+                                                        <label class="am-u-sm-2 am-form-label">{$v['supplier_money_status_value']} </label>
+                                                        <div class="am-u-sm-1"></div>
                                                     </div>
                                                 </dt>
                                                 <dd class="am-accordion-bd am-collapse">
@@ -227,7 +229,7 @@
                                 <hr/>
                                 <!-- 其他信息 -->
                                 <h6>其他信息</h6>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">订单编号：</label>
                                     <div class="am-u-sm-4 ">
                                         {$orderInfo['order_id']}
@@ -237,7 +239,7 @@
                                         {$orderInfo['insert_time']}
                                     </div>
                                 </div>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">订单成交额：</label>
                                     <div class="am-u-sm-4">
                                         {$orderInfo['order_money']} 元
@@ -247,7 +249,7 @@
                                         {$orderInfo['customer_money']} 元
                                     </div>
                                 </div>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">订单状态：</label>
                                     <div class="am-u-sm-4">
                                         {$orderInfo['order_status_value']}
@@ -257,19 +259,19 @@
                                         {$orderInfo['money_status_value']}
                                     </div>
                                 </div>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">录入人：</label>
                                     <div class="am-u-sm-4">
                                         {$orderInfo['add_manager_name']}
                                     </div>
                                     <label class="am-u-sm-2 am-form-label">上一次修改人：</label>
-                                    <div class="am-u-sm-4"> 
+                                    <div class="am-u-sm-4 am-u-end"> 
                                         {$orderInfo['update_manager_name']}
                                     </div>
                                 </div>
-                                <div class="am-form-group">
+                                <div class="am-form-group xg-form-group">
                                     <label class="am-u-sm-2 am-form-label">订单备注：</label>
-                                    <div class="am-u-sm-10">
+                                    <div class="am-u-sm-10 am-u-end">
                                         {$orderInfo['order_remarks']}
                                     </div>
                                 </div>

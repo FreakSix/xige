@@ -16,38 +16,36 @@
     <link rel="stylesheet" href="__PUBLIC__/css/amazeui.min.css" />
     <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
     <link rel="stylesheet" href="__PUBLIC__/css/app.css">
-    
+    <style>
+        .xg-form-group label { min-width: 150px!important; font-size: 14px!important;margin-right: 15px; }
+    </style>
     
 </head>
 
 <body data-type="generalComponents">
             
-    <div class="tpl-portlet-components" style="min-height: 200px!important">
+    <div class="tpl-portlet-components" style="min-height: 200px!important;min-width: 550px">
         <div class="portlet-title">
             <div class="caption font-green bold">修改产品规格</div>
         </div>
         <div class="tpl-block ">
             <div class="am-g tpl-amazeui-form">
-                <div class="am-u-sm-12 am-u-md-9">
+                <div class="am-u-sm-12">
                     <form class="am-form am-form-horizontal">
                         <div class="contact">
-                            <div class="am-form-group">
-                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">服务类型
-                                        <span id="sname_notice" style="color:#FF0000"> *</span> 
-                                </label>
-                                <div class="am-u-sm-8">
+                            <div class="am-form-group xg-form-group">
+                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">服务类型</label>
+                                <div class="am-u-sm-8 am-u-end">
                                     <foreach name="productTypeInfo" item="v">
                                         <if condition="$productSpecInfo['0']['product_type_id'] == $v['id']">
-                                            <span>{$v['type_name']}</span>
+                                            {$v['type_name']}
                                         </if>
                                     </foreach>
                                 </div>
                             </div>
-                            <div class="am-form-group">
-                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">产品名称
-                                        <span id="sname_notice" style="color:#FF0000"> *</span> 
-                                </label>
-                                <div class="am-u-sm-8">
+                            <div class="am-form-group xg-form-group">
+                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">产品名称</label>
+                                <div class="am-u-sm-8 am-u-end">
                                     <foreach name="productNameInfo" item="v">
                                         <if condition="$productSpecInfo['0']['product_id'] == $v['id']">
                                             <span>{$v['type_name']}</span>
@@ -55,11 +53,9 @@
                                     </foreach>
                                 </div>
                             </div>
-                            <div class="am-form-group">
-                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">产品型号
-                                        <span id="sname_notice" style="color:#FF0000"> *</span> 
-                                </label>
-                                <div class="am-u-sm-8">
+                            <div class="am-form-group xg-form-group">
+                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">产品型号</label>
+                                <div class="am-u-sm-8 am-u-end">
                                     <foreach name="productModelInfo" item="v">
                                         <if condition="$productSpecInfo['0']['product_model_id'] == $v['id']">
                                             <span>{$v['name']}</span>
@@ -67,11 +63,9 @@
                                     </foreach>
                                 </div>
                             </div>
-                            <div class="am-form-group">
-                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">规格名称
-                                        <span id="sname_notice" style="color:#FF0000"> *</span> 
-                                </label>
-                                <div class="am-u-sm-8">
+                            <div class="am-form-group xg-form-group">
+                                <label class="am-u-sm-4 am-form-label" style="font-size:18px;">规格名称</label>
+                                <div class="am-u-sm-8 am-u-end">
                                     <foreach name="productParameterInfo" item="v">
                                         <if condition="$productSpecInfo['0']['parameter_id'] == $v['id']">
                                             <span>{$v['name']}</span>
@@ -79,11 +73,11 @@
                                     </foreach>
                                 </div>
                             </div>
-                            <div class="am-form-group">
+                            <div class="am-form-group xg-form-group">
                                 <label class="am-u-sm-4 am-form-label" style="font-size:18px;">请输入规格
                                     <span id="sname_notice" style="color:#FF0000"> *</span> 
                                 </label>
-                                <div class="am-u-sm-8">
+                                <div class="am-u-sm-8 am-u-end">
                                     <input type="text" id="spec" name="spec" value="{$productSpecInfo['0']['spec_value']}">
                                 </div>
                             </div>

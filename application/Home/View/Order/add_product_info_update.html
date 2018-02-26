@@ -165,7 +165,8 @@
                         <input type="hidden" value="{$get['customer_id']}" id="customer_id" />
                         <input type="hidden" value="{$get['add_tr_id']}" id="add_tr_id" />
                         <input type="hidden" value="{$get['order_id']}" id="order_id" /> 
-                        <input type="hidden" value="{$get['order_num']}" id="order_num" />  
+                        <input type="hidden" value="{$get['order_num']}" id="order_num" />
+                        <input type="hidden" value="{$get['add_time']}" id="add_order_time" />  
 
                         <hr/>
                         <div class="am-form-group">
@@ -196,6 +197,7 @@
 
             var order_num = $("#order_num").val();
             var order_id = $("#order_id").val();
+            var add_order_time = $("#add_order_time").val();
             
             var product_type_id = $(".product_type").val();
             var product_name_id = $(".product_name").val();
@@ -301,10 +303,10 @@
                 $("#end_price").focus();
                 exit;
             } 
-            var product_remark = $.trim($("#product_remark").val());
+            var product_remark = $.trim($("#product_remark").val()); 
             
             //添加订单商品信息
-            $.post("__APP__/Order/addOrderProductInfo_update",{"order_id":order_id,"order_num":order_num,"product_type":product_type_id,"product_name":product_name_id,"product_model":product_model_id,"product_spec_id_str":product_spec_str,"special_technologyh_id_str":special_techmology_str,"supplier_id":product_supplier_id,"supplier_name":product_supplier_name,"num":product_num,"product_material_link":product_material_link,"cost_money":product_cost_money,"discount_money":product_discount_money,"end_money":product_end_price,"end_price":product_end_price_one,"cost_price":product_cost_price,"product_remark":product_remark},function(res){
+            $.post("__APP__/Order/addOrderProductInfo_update",{"order_id":order_id,"order_num":order_num,"add_order_time":add_order_time,"product_type":product_type_id,"product_name":product_name_id,"product_model":product_model_id,"product_spec_id_str":product_spec_str,"special_technologyh_id_str":special_techmology_str,"supplier_id":product_supplier_id,"supplier_name":product_supplier_name,"num":product_num,"product_material_link":product_material_link,"cost_money":product_cost_money,"discount_money":product_discount_money,"end_money":product_end_price,"end_price":product_end_price_one,"cost_price":product_cost_price,"product_remark":product_remark},function(res){
                     if(res > 0 ){ 
                         //刷新订单页面
                         parent. location.reload();

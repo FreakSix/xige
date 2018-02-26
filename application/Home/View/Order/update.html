@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="__PUBLIC__/css/admin.css">
     <link rel="stylesheet" href="__PUBLIC__/css/app.css">
     <style>
+        .am-accordion-content .am-form-group { margin-bottom: 5px }
     </style>
 </head>
 
@@ -30,7 +31,7 @@
             <include file="Public:menu"/>
         </div>
         <div class="tpl-content-wrapper">
-            <ol class="am-breadcrumb">
+            <ol class="am-breadcrumb" style="margin: 5px">
             <li><a href="#" class="am-icon-home">首页</a></li>
             <li><a href="#">订单列表</a></li>
             <li class="am-active">修改订单</li>
@@ -101,9 +102,9 @@
                                     <if condition="$orderInfo['orderProductInfo'] != '' ">
                                         <foreach name="orderInfo['orderProductInfo']" item="v" key="k">
                                             <dl class="am-accordion-item ">
-                                                <dt class="am-accordion-title">
+                                                <dt class="am-accordion-title" style="padding: 0">
                                                     <!-- {$v['product_name']} -->
-                                                    <div class="am-form-group">
+                                                    <div class="am-form-group" style="margin-bottom: 0px">
                                                         <label class="am-u-sm-1 am-form-label">{$v['product_name']}</label>
                                                         <label class="am-u-sm-2 am-form-label">成交总价：</label>
                                                         <div class="am-u-sm-2">
@@ -115,7 +116,7 @@
                                                         </div>
                                                         <!-- <label class="am-u-sm-2 am-form-label">{$v['supplier_money_status_value']}</label> -->
                                                         
-                                                        <div class="am-u-sm-1" style="margin-top:5px;">
+                                                        <div class="am-u-sm-1" style="margin-bottom:3px;">
                                                             <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger" onclick="deleteOrderProduct({$orderInfo['id']},{$v['id']})"><span class="am-icon-trash-o"></span> 删除</button>
                                                         </div>
                                                     </div>
@@ -267,6 +268,7 @@
                                     <label class="am-u-sm-2 am-form-label">录入时间：</label>
                                     <div class="am-u-sm-4 am-u-end">
                                         {$orderInfo['insert_time']}
+                                        <input type="hidden" value="{$orderInfo['add_time']}" id="add_time" />
                                     </div>
                                 </div>
                                 <div class="am-form-group">
@@ -527,6 +529,7 @@
             var customer_id = $("#customer_id").val(); 
             var order_id = $("#order_id").val();
             var order_num = $("#order_num").val();
+            var add_time = $("#add_time").val();
             layer.open({
                         type: 2,
                         shadeClose : false,
@@ -535,7 +538,7 @@
                         offset: '20px',
                         area: ['75%', '90%'],
                         btn: ['关闭'],
-                        content: '__APP__/Order/addProductInfo_update/customer_id/'+customer_id+'/order_id/'+order_id+'/order_num/'+order_num, //iframe的url
+                        content: '__APP__/Order/addProductInfo_update/customer_id/'+customer_id+'/add_time/'+add_time+'/order_id/'+order_id+'/order_num/'+order_num, //iframe的url
                     });
         }
 
