@@ -75,7 +75,6 @@
     		level_level = "";
     	}
     	$.post("__APP__/PersonalCenter/saveEditLevel",{"id":id,"level_name":level_name,"level_level":level_level},function(res){
-            alert(res);return false;
     		if(res == 1){
     			alert("修改客户登记信息成功！");
     			closeLayer();
