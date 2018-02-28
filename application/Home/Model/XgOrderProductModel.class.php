@@ -4,7 +4,7 @@
 	class XgOrderProductModel extends Model {
 		// 获取全部订单产品信息
 		public function getAllOrderProduct(){
-			$sql = "select * from xg_order_product";
+			$sql = "select * from xg_order_product order by add_time asc";
 			$result = M()->query($sql);
 			return $result;
 		}

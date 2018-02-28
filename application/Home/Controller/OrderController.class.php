@@ -59,7 +59,7 @@
 	 		$totalPage = $page->totalPages;
 	 		
 	 		//查询商品名称
-	 		$condition['order'] = "id desc";
+	 		$condition['order'] = "add_time desc";
 	 		$condition['limit']['firstRow'] = $firstRow;
 	 		$condition['limit']['pageSize'] = $pageSize;
 
@@ -152,6 +152,7 @@
 						}
 						$where = implode(' and ',$whereArr);
 						$condition['where'] = $where;
+						$condition['order'] = "add_time asc";
 						$orderInfo = D("XgOrder")->orderInfo($condition);
 						// dump($orderInfo);
 					}
@@ -441,7 +442,7 @@
 	 		$totalPage = $page->totalPages;
 	 		
 	 		//查询商品名称
-	 		$condition['order'] = "id desc";
+	 		$condition['order'] = "add_time desc";
 	 		$condition['limit']['firstRow'] = $firstRow;
 	 		$condition['limit']['pageSize'] = $pageSize;
 
@@ -553,6 +554,7 @@
 						}
 						$where = implode(' and ',$whereArr);
 						$condition['where'] = $where;
+						$condition['order'] = "add_time asc";
 						$orderProductInfo = D("XgOrderProduct")->orderProductInfo($condition);
 					}
 				}else if($type=="selected"){

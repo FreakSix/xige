@@ -4,7 +4,7 @@
 	class XgOrderModel extends Model {
 		// 获取全部订单的部分数据
 		public function getAllOrder(){
-			$sql = "select order_id,customer_name,order_money,customer_money,order_remarks,add_time from xg_order";
+			$sql = "select order_id,customer_name,order_money,customer_money,order_remarks,add_time from xg_order order by add_time asc";
 			$result = M()->query($sql);
 			return $result;
 		}
