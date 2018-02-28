@@ -9,6 +9,12 @@
 			$type = M()->query($sql);
 			return $type;
 		}
+		// 获取全部产品ID
+		public function getAllProductId(){
+			$sql = "select id from xg_product_type where pid != 0";
+			$result = M()->query($sql);
+			return $result;
+		}
 		// 根据pid查询产品分类下对应的产品
 		public function getProductTypeByPid($pid){
 			$sql = "select * from xg_product_type where pid = {$pid}";

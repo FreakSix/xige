@@ -182,12 +182,12 @@
 					$id = $post["checkbox"][$i];
 					// echo $id;
 					$data = $res_1;
-					$supplierIdStr = D("XgProductType")->getSupplierIdStr($id);
-					if($supplierIdStr[0]["supplier_id_str"] == ""){
+					$productInfo = D("XgProductType")->getSupplierIdStr($id);
+					if($productInfo[0]["supplier_id_str"] == ""){
 						$supplierIdStr = $data;
 						$result = D("XgProductType")->updateSupplierIdStr($id,$supplierIdStr);
 					}else{
-						$supplierIdStr = $supplierIdStr[0]["supplier_id_str"].",".$data;
+						$supplierIdStr = $productInfo[0]["supplier_id_str"].",".$data;
 						$result = D("XgProductType")->updateSupplierIdStr($id,$supplierIdStr);
 						// dump($supplierIdStr);
 					}
@@ -403,16 +403,50 @@
 				//更新供应商信息
 				$result_1 = D("XgSupplier")->updateSupplierInfo($supplierId,$supplier);
 				// 向产品分类表中添加供应商id
+				// 首先，先删除不能做某个产品的供应商ID
+				// 获取全部产品ID
+				$allProductId = D("XgProductType")->getAllProductId();
+				// 循环全部产品ID
+				foreach ($allProductId as $k => $v) {
+					$id = $v["id"];
+					// 判断产品ID是否是该供应商可做产品，如果不可以，删除该产品下的供应商ID
+					if(in_array($v["id"],$post["checkbox"]) == FALSE){
+						// 获取可做该产品的供应商字符串
+						$productInfo = D("XgProductType")->getSupplierIdStr($id);
+						if($productInfo[0]['supplier_id_str'] != ""){
+							$supplierIdArr = explode(",",$productInfo[0]['supplier_id_str']);
+							$supplierId = $post['supplier_id'];
+							if(in_array($supplierId, $supplierIdArr)){
+								foreach ($supplierIdArr as $k1 => $v1) {
+									if($v1 == $supplierId){
+										unset($supplierIdArr[$k1]);
+									}
+								}
+								if($supplierIdArr == ""){
+									$supplierIdStr = "";
+								}else{
+									$supplierIdStr = implode(",", $supplierIdArr);
+								}
+								$result_4 = D("XgProductType")->updateSupplierIdStr($id,$supplierIdStr);
+							}
+							
+						}
+					}
+				}
+				// exit;
 				foreach ($post['checkbox'] as $key => $v) {
 					$supplierId = $post['supplier_id'];
-					$id = $v;;
-					$supplierIdInfo = D("XgProductType")->getSupplierIdStr($id);
-					// dump($supplierIdInfo[0]['supplier_id_str']);
-					if($supplierIdArr == ""){
-						$supplierIdStr = $supplierId.",";
+					$id = $v;
+					$productInfo = D("XgProductType")->getSupplierIdStr($id);
+					$supplierIdArr = explode(",",$productInfo[0]['supplier_id_str']);
+					if($productInfo[0]['supplier_id_str'] == ""){
+						$supplierIdStr = $supplierId;
 					}else if(in_array($supplierId, $supplierIdArr) == FALSE){
-						$supplierIdStr = $supplierIdInfo[0]['supplier_id_str'].$supplierId.",";
+						$supplierIdStr = $productInfo[0]['supplier_id_str'].",".$supplierId;
+					}else{
+						$supplierIdStr = $productInfo[0]['supplier_id_str'];
 					}
+					// dump($supplierIdStr);exit;
 					$result_3 = D("XgProductType")->updateSupplierIdStr($id,$supplierIdStr);
 				}
 				
